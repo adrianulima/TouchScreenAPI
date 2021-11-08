@@ -39,20 +39,45 @@ namespace Lima.Fancy
       return new Vector2((float)x, (float)y);
     }
 
+    public static int GetSurfaceIndex(IMyTextSurfaceProvider provider, IMyTextSurface surface)
+    {
+      var count = provider.SurfaceCount;
+      for (int i = 0; i < count; i++)
+      {
+        if (provider.GetSurface(i) == surface)
+          return i;
+      }
+      return -1;
+    }
+
+    public static Vector3 LocalToGlobal(Vector3 localPos, MatrixD worldMatrix)
+    {
+      return Vector3D.Transform(localPos, worldMatrix);
+    }
+
+    public static Vector3 GlobalToLocal(Vector3D globalPos, MatrixD worldMatrix)
+    {
+      return Vector3D.TransformNormal(globalPos - worldMatrix.Translation, MatrixD.Transpose(worldMatrix));
+    }
+
+    public static Vector3 GlobalToLocalSlowerAlternative(Vector3D globalPos, MatrixD worldMatrixNormalizedInv)
+    {
+      return Vector3D.Transform(globalPos, worldMatrixNormalizedInv);
+    }
+
     public static Color Opac(Color color)
     {
       return new Color(color, 1);
     }
 
-    static Random random = new Random();
+    private static Random random = new Random();
     public static int GetRandomInt(int min, int max)
     {
       return random.Next(min, max);
     }
 
-
-    static MyKeys[] _keys;
-    static MyKeys[] Keys
+    private static MyKeys[] _keys;
+    private static MyKeys[] Keys
     {
       get
       {
@@ -99,6 +124,18 @@ namespace Lima.Fancy
         return !isInt && text.Length > 0 && !text.Contains(".");
 
       return char.IsDigit(ch);
+    }
+
+    public static Vector2 RotateScreenCoord(Vector2 coord, int rotate)
+    {
+      if (rotate == 0)
+        return coord;
+      else if (rotate == 1)
+        return new Vector2(coord.Y, 1 - coord.X);
+      else if (rotate == 2)
+        return new Vector2(1 - coord.X, 1 - coord.Y);
+      else
+        return new Vector2(1 - coord.Y, coord.X);
     }
   }
 }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Lima.Touch;
 using Sandbox.Game.Entities;
 using Sandbox.Game.GameSystems.TextSurfaceScripts;
 using Sandbox.ModAPI;
@@ -21,6 +22,7 @@ namespace Lima.Fancy
 
     MyCubeBlock _block;
     RectangleF _viewport;
+    TouchableScreen _screen;
 
     public MyTSSCommon Tss { get; private set; }
     public FancyTheme Theme { get; private set; }
@@ -35,9 +37,12 @@ namespace Lima.Fancy
         (tss.Surface.TextureSize - tss.Surface.SurfaceSize) / 2f,
         tss.Surface.SurfaceSize
       );
+      _screen = new TouchableScreen(_block, tss.Surface as Sandbox.ModAPI.IMyTextSurface);
+
+      TouchManager.Instance.Screens.Add(_screen);
 
       Theme = new FancyTheme(Tss);
-      _cursor = new FancyCursor(_block, _viewport, Theme);
+      _cursor = new FancyCursor(_screen, Theme);
       appManager = new FancyAppManager(Tss, _viewport, _cursor, Theme);
     }
 
@@ -59,6 +64,7 @@ namespace Lima.Fancy
 
     public void Dispose()
     {
+      TouchManager.Instance.Screens.Remove(_screen);
       sprites.Clear();
       _cursor.Dispose();
     }
