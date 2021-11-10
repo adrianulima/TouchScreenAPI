@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Lima.Fancy;
 using Sandbox.Game;
 using Sandbox.Game.Entities;
@@ -19,7 +20,7 @@ namespace Lima.Touch
   {
     public static SurfaceCoordsManager Instance;
 
-    public readonly Dictionary<string, SurfaceCoords> CoordsList = new Dictionary<string, SurfaceCoords>();
+    public readonly List<string> CoordsList = new List<string>();
 
     public SurfaceCoordsManager()
     {
@@ -57,16 +58,7 @@ namespace Lima.Touch
         "TOUCH:LargeBlockCockpitSeat:5:0.490973:-0.24806:-0.258088:0.438842:-0.309487:-0.167938:0.568511:-0.288212:-0.078457"
       };
 
-      foreach (var coord in coords)
-      {
-        var parsedCoord = SurfaceCoords.Parse(coord);
-        if (!parsedCoord.IsEmpty())
-        {
-          CoordsList[$"{parsedCoord.BuilderTypeString}:{parsedCoord.Index}"] = parsedCoord;
-
-          MyAPIGateway.Utilities.ShowNotification($"{parsedCoord}", 5000, "Green");
-        }
-      }
+      CoordsList.AddRange(coords);
     }
 
     public void UnloadData()
@@ -80,12 +72,17 @@ namespace Lima.Touch
 
       if (message.StartsWith(SurfaceCoords.Prefix.ToLower()))
       {
-        var parsedCoord = SurfaceCoords.Parse(message);
-        if (!parsedCoord.IsEmpty())
-          CoordsList[parsedCoord.BuilderTypeString] = parsedCoord;
+        AddSurfaceCoords(message);
 
         sendToOthers = false;
       }
+    }
+
+    public void AddSurfaceCoords(string coords)
+    {
+      var parsedCoord = SurfaceCoords.Parse(coords);
+      if (!parsedCoord.IsEmpty())
+        CoordsList.Add(parsedCoord.ToString());
     }
 
   }

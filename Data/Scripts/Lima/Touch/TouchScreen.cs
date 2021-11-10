@@ -1,26 +1,35 @@
 using System;
+using System.Linq;
 using Lima.Fancy;
 using Sandbox.ModAPI;
 using VRage.Game;
 using VRage.Game.Components;
 using VRage.Game.ModAPI;
-using VRage.ObjectBuilders;
 using VRage.Utils;
 using VRageMath;
 
 namespace Lima.Touch
 {
-  public class TouchableScreen
+  public class TouchScreen : ITouchScreen
   {
+    public bool Active { get; set; }
+
     public string SubtypeId { get { return Block.BlockDefinition.SubtypeId; } }
 
     public IMyCubeBlock Block { get; private set; }
+    public IMyTextSurface Surface { get; private set; }
     public int Index { get; private set; }
     public SurfaceCoords Coords { get; private set; }
     public RectangleF Viewport { get; private set; }
     public bool IsOnScreen { get; private set; }
     public Vector2 CursorPos { get; private set; }
     public Vector3 Intersection { get; private set; }
+    public float _interactiveDistance = TouchManager.Instance.DefaultInteractiveDistance;
+    public float InteractiveDistance
+    {
+      get { return _interactiveDistance; }
+      set { _interactiveDistance = MathHelper.Clamp(value, 0, TouchManager.Instance.MaxInteractiveDistance); }
+    }
 
     private int _rotate = -1;
     public int ScreenRotate
@@ -30,29 +39,36 @@ namespace Lima.Touch
         // TODO: Make this call happen again with some refresh command
         if (_rotate < 0)
         {
-          var builder = (Block.GetObjectBuilderCubeBlock() as Sandbox.Common.ObjectBuilders.MyObjectBuilder_TextPanel);
-          if (builder != null)
-            _rotate = (int)builder.SelectedRotationIndex;
-          else
-            _rotate = 0;
+          _rotate = 0;
+          if (Block is IMyTextPanel)
+          {
+            var builder = (Block.GetObjectBuilderCubeBlock() as Sandbox.Common.ObjectBuilders.MyObjectBuilder_TextPanel);
+            if (builder != null)
+            {
+              _rotate = (int)builder.SelectedRotationIndex;
+              return _rotate;
+            }
+          }
         }
         return _rotate;
       }
     }
 
-    public TouchableScreen(IMyCubeBlock block, IMyTextSurface surface)
+    public TouchScreen(IMyCubeBlock block, IMyTextSurface surface)
     {
       Block = block;
+      Surface = surface;
       Index = FancyUtils.GetSurfaceIndex(block as IMyTextSurfaceProvider, surface);
 
-      SurfaceCoords coords = SurfaceCoords.Zero;
-      SurfaceCoordsManager.Instance.CoordsList.TryGetValue($"{SubtypeId}:{Index}", out coords);
-
-      // MyAPIGateway.Utilities.ShowNotification($"{SubtypeId}:{Index}", 5000, "Green");
-
-      if (coords.IsEmpty())
+      var coordString = SurfaceCoordsManager.Instance.CoordsList.SingleOrDefault(c => c.StartsWith($"{SubtypeId}:{Index}"));
+      if (coordString == null)
         throw new Exception($"Can't find coords for {SubtypeId}:{Index}");
 
+      SurfaceCoords coords = SurfaceCoords.Parse(coordString);
+      if (coords.IsEmpty())
+        throw new Exception($"Failed to parse coords for {SubtypeId}:{Index}");
+
+      Active = true;
       Coords = coords;
       Viewport = new RectangleF(
         (surface.TextureSize - surface.SurfaceSize) * 0.5f,
@@ -60,18 +76,23 @@ namespace Lima.Touch
       );
     }
 
-    private MyStringId Material = MyStringId.GetOrCompute("Square");
-    void DrawPoint(Vector3D position)
+    public void ForceRotationUpdate()
     {
-      Color color = Color.Red;
-      MyTransparentGeometry.AddPointBillboard(Material, color, position, 0.05f, 0f);
+      _rotate = -1;
     }
 
-    void DrawLine(Vector3D position, Vector3D direction, float length, float lineThickness = 0.05f)
-    {
-      Color color = Color.Blue;
-      MyTransparentGeometry.AddLineBillboard(Material, color, position, direction, length, lineThickness);
-    }
+    // private MyStringId Material = MyStringId.GetOrCompute("Square");
+    // void DrawPoint(Vector3D position)
+    // {
+    //   Color color = Color.Red;
+    //   MyTransparentGeometry.AddPointBillboard(Material, color, position, 0.05f, 0f);
+    // }
+
+    // void DrawLine(Vector3D position, Vector3D direction, float length, float lineThickness = 0.05f)
+    // {
+    //   Color color = Color.Blue;
+    //   MyTransparentGeometry.AddLineBillboard(Material, color, position, direction, length, lineThickness);
+    // }
 
     public Vector3D CalculateIntersection(MatrixD cameraMatrix)
     {
@@ -86,13 +107,12 @@ namespace Lima.Touch
       // MyAPIGateway.Utilities.ShowNotification($"{headPos} {camPosition}", 1, "Green");
       Intersection = FancyUtils.GetLinePlaneIntersection(screenPosTL, screenNormal, camPosition, camDirection);
 
-
-      var screenPosBL = FancyUtils.LocalToGlobal(Coords.BottomLeft, Block.WorldMatrix);
-      var screenPosBR = FancyUtils.LocalToGlobal(Coords.BottomRight, Block.WorldMatrix);
-      // DrawPoint(Intersection);
-      DrawPoint(screenPosTL);
-      DrawPoint(screenPosBL);
-      DrawPoint(screenPosBR);
+      // var screenPosBL = FancyUtils.LocalToGlobal(Coords.BottomLeft, Block.WorldMatrix);
+      // var screenPosBR = FancyUtils.LocalToGlobal(Coords.BottomRight, Block.WorldMatrix);
+      // // DrawPoint(Intersection);
+      // DrawPoint(screenPosTL);
+      // DrawPoint(screenPosBL);
+      // DrawPoint(screenPosBR);
 
       return Intersection;
     }

@@ -19,7 +19,7 @@ namespace Lima.Fancy
   public class FancyCursor
   {
     protected readonly List<MySprite> sprites = new List<MySprite>();
-    private TouchableScreen _screen;
+    private TouchScreen _screen;
     private FancyTheme Theme;
 
     private MySprite cursorSprite;
@@ -29,7 +29,7 @@ namespace Lima.Fancy
 
     public bool Active = true;
 
-    public FancyCursor(TouchableScreen screen, FancyTheme theme)
+    public FancyCursor(TouchScreen screen, FancyTheme theme)
     {
       _screen = screen;
       Theme = theme;

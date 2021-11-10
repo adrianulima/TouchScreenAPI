@@ -22,7 +22,7 @@ namespace Lima.Fancy
 
     MyCubeBlock _block;
     RectangleF _viewport;
-    TouchableScreen _screen;
+    TouchScreen _screen;
 
     public MyTSSCommon Tss { get; private set; }
     public FancyTheme Theme { get; private set; }
@@ -37,7 +37,7 @@ namespace Lima.Fancy
         (tss.Surface.TextureSize - tss.Surface.SurfaceSize) / 2f,
         tss.Surface.SurfaceSize
       );
-      _screen = new TouchableScreen(_block, tss.Surface as Sandbox.ModAPI.IMyTextSurface);
+      _screen = new TouchScreen(_block, tss.Surface as Sandbox.ModAPI.IMyTextSurface);
 
       TouchManager.Instance.Screens.Add(_screen);
 

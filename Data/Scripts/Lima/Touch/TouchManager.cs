@@ -19,11 +19,12 @@ namespace Lima.Touch
   {
     public static TouchManager Instance;
 
-    public float InteractiveDistance = 10f;
+    public float MaxInteractiveDistance = 50f;
+    public float DefaultInteractiveDistance = 10f;
 
-    public readonly List<TouchableScreen> Screens = new List<TouchableScreen>();
+    public readonly List<TouchScreen> Screens = new List<TouchScreen>();
 
-    public TouchableScreen CurrentScreen;
+    public TouchScreen CurrentScreen;
 
     public TouchManager()
     {
@@ -53,13 +54,19 @@ namespace Lima.Touch
         float closestDist = -1;
         foreach (var screen in Screens)
         {
+          if (!screen.Active)
+            continue;
+
           var coords = screen.Coords;
           if (coords.IsEmpty())
             continue;
 
           Vector3D intersection = screen.CalculateIntersection(cameraMatrix);
+          if (intersection == Vector3D.Zero)
+            continue;
+
           var dist = Vector3.Distance(camPos, intersection);
-          if (dist >= InteractiveDistance)
+          if (dist > screen.InteractiveDistance)
             continue;
 
           screen.UpdateScreenCoord();
