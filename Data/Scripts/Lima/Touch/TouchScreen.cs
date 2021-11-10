@@ -60,7 +60,7 @@ namespace Lima.Touch
       Surface = surface;
       Index = FancyUtils.GetSurfaceIndex(block as IMyTextSurfaceProvider, surface);
 
-      var coordString = SurfaceCoordsManager.Instance.CoordsList.SingleOrDefault(c => c.StartsWith($"{SubtypeId}:{Index}"));
+      var coordString = SurfaceCoordsManager.Instance.CoordsList.SingleOrDefault(c => c.StartsWith($"{SurfaceCoords.Prefix}:{SubtypeId}:{Index}"));
       if (coordString == null)
         throw new Exception($"Can't find coords for {SubtypeId}:{Index}");
 
