@@ -38,12 +38,13 @@ namespace Lima.Touch
     {
       try
       {
+        CurrentScreen = null;
+
         if (!TouchSession.ModEnabled
         || MyAPIGateway.Session == null
         || !MyAPIGateway.Session.CameraController.IsInFirstPersonView
         || MyAPIGateway.Gui.IsCursorVisible)
         {
-          CurrentScreen = null;
           return;
         }
 

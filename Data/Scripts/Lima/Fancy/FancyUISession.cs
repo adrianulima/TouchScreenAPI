@@ -9,7 +9,7 @@ using VRage.Game;
 using VRage.Game.Components;
 using VRage.Utils;
 
-namespace Lima
+namespace Lima.Fancy
 {
   [MySessionComponentDescriptor(MyUpdateOrder.AfterSimulation)]
   public class FancyUISession : MySessionComponentBase

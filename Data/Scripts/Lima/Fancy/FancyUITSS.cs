@@ -22,7 +22,7 @@ using VRage.ObjectBuilders;
 using Sandbox.Common.ObjectBuilders;
 using Lima.Touch;
 
-namespace Lima
+namespace Lima.Fancy
 {
   [MyTextSurfaceScript("FancyUI", "FancyUI")]
   public class FancyUITSS : MyTSSCommon
@@ -37,7 +37,6 @@ namespace Lima
     int ticks = 0;
 
     public FancyUI fancyUI { get; private set; }
-    FancyUISettings settings = FancyUISettings.Zero;
 
     public FancyUITSS(IMyTextSurface surface, IMyCubeBlock block, Vector2 size) : base(surface, block, size)
     {
