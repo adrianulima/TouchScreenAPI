@@ -39,7 +39,7 @@ namespace Lima.Fancy
       return new Vector2((float)x, (float)y);
     }
 
-    public static int GetSurfaceIndex(IMyTextSurfaceProvider provider, IMyTextSurface surface)
+    public static int GetSurfaceIndex(Sandbox.ModAPI.Ingame.IMyTextSurfaceProvider provider, IMyTextSurface surface)
     {
       var count = provider.SurfaceCount;
       for (int i = 0; i < count; i++)

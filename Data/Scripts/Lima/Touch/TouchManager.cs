@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Lima.Fancy;
 using Sandbox.Game;
 using Sandbox.Game.Entities;
@@ -86,7 +87,13 @@ namespace Lima.Touch
         if (MyAPIGateway.Session?.Player != null)
           MyAPIGateway.Utilities.ShowNotification($"[ ERROR: {GetType().FullName}: {e.Message} ]", 5000, MyFontEnum.Red);
       }
+    }
 
+    public void RemoveScreen(IMyCubeBlock block, IMyTextSurface surface)
+    {
+      var screen = TouchManager.Instance.Screens.SingleOrDefault(s => s.CompareWithBlockAndSurface(block, surface));
+      if (screen != null)
+        Screens.Remove(screen);
     }
   }
 }

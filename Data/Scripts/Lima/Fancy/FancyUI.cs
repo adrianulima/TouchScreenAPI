@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Lima.Touch;
 using Sandbox.Game.Entities;
 using Sandbox.Game.GameSystems.TextSurfaceScripts;
@@ -39,6 +40,7 @@ namespace Lima.Fancy
       );
       _screen = new TouchScreen(_block, tss.Surface as Sandbox.ModAPI.IMyTextSurface);
 
+      TouchManager.Instance.RemoveScreen(_block, tss.Surface as Sandbox.ModAPI.IMyTextSurface);
       TouchManager.Instance.Screens.Add(_screen);
 
       Theme = new FancyTheme(Tss);

@@ -58,9 +58,7 @@ namespace Lima.Touch
 
     public static void RemoveTouchScreen(IMyCubeBlock block, IMyTextSurface surface)
     {
-      var screen = TouchManager.Instance.Screens.SingleOrDefault(s => s.Block == block && s.Surface == surface);
-      if (screen != null)
-        TouchManager.Instance.Screens.Remove(screen);
+      TouchManager.Instance.RemoveScreen(block, surface);
     }
 
     public static List<ITouchScreen> GetTouchScreensList()

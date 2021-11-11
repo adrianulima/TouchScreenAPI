@@ -58,7 +58,11 @@ namespace Lima.Touch
     {
       Block = block;
       Surface = surface;
-      Index = FancyUtils.GetSurfaceIndex(block as IMyTextSurfaceProvider, surface);
+
+      var provider = block as Sandbox.ModAPI.Ingame.IMyTextSurfaceProvider;
+      if (provider == null)
+        throw new Exception($"Block is not a IMyTextSurfaceProvider {block}");
+      Index = FancyUtils.GetSurfaceIndex(provider, surface);
 
       var coordString = SurfaceCoordsManager.Instance.CoordsList.SingleOrDefault(c => c.StartsWith($"{SurfaceCoords.Prefix}:{SubtypeId}:{Index}"));
       if (coordString == null)
@@ -117,7 +121,6 @@ namespace Lima.Touch
       return Intersection;
     }
 
-
     public Vector2 UpdateScreenCoord()
     {
       var screenPosTL = FancyUtils.LocalToGlobal(Coords.TopLeft, Block.WorldMatrix);
@@ -142,6 +145,16 @@ namespace Lima.Touch
       }
 
       return Vector2.Zero;
+    }
+
+    public bool CompareWithBlockAndSurface(IMyCubeBlock block, IMyTextSurface surface)
+    {
+      var provider = block as Sandbox.ModAPI.Ingame.IMyTextSurfaceProvider;
+      if (provider == null)
+        throw new Exception($"Block is not a IMyTextSurfaceProvider {block}");
+      var i = FancyUtils.GetSurfaceIndex(provider, surface);
+
+      return Block == block && (Surface == surface || Index == i);
     }
   }
 }
