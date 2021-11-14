@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Lima.Fancy;
+using Lima.Utils;
 using Sandbox.Game;
 using Sandbox.Game.Entities;
 using Sandbox.Game.GameSystems.TextSurfaceScripts;
@@ -48,9 +49,9 @@ namespace Lima.Touch
 
     public Vector3D CalculateNormal(MatrixD blockWorldMatrix)
     {
-      var A = FancyUtils.LocalToGlobal(TopLeft, blockWorldMatrix);
-      var B = FancyUtils.LocalToGlobal(BottomLeft, blockWorldMatrix);
-      var C = FancyUtils.LocalToGlobal(BottomRight, blockWorldMatrix);
+      var A = MathUtils.LocalToGlobal(TopLeft, blockWorldMatrix);
+      var B = MathUtils.LocalToGlobal(BottomLeft, blockWorldMatrix);
+      var C = MathUtils.LocalToGlobal(BottomRight, blockWorldMatrix);
       return Vector3.Normalize(Vector3.Cross(B - A, C - A));
     }
 

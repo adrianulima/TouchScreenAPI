@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Lima.Utils;
 using Microsoft.VisualBasic;
 using Sandbox.Game.Entities;
 using Sandbox.Game.GameSystems.TextSurfaceScripts;
@@ -96,7 +97,7 @@ namespace Lima.Fancy.Elements
       get
       {
         if (_debugDrawColor == Color.Transparent)
-          _debugDrawColor = new Color(FancyUtils.GetRandomInt(30, 100), FancyUtils.GetRandomInt(30, 80), FancyUtils.GetRandomInt(20, 60), 200);
+          _debugDrawColor = new Color(MathUtils.GetRandomInt(30, 100), MathUtils.GetRandomInt(30, 80), MathUtils.GetRandomInt(20, 60), 200);
         return _debugDrawColor;
       }
     }

@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using Lima.Fancy;
+using Lima.Utils;
 using Sandbox.ModAPI;
 using VRage.Game;
 using VRage.Game.Components;
@@ -64,7 +65,7 @@ namespace Lima.Touch
       var provider = block as Sandbox.ModAPI.Ingame.IMyTextSurfaceProvider;
       if (provider == null)
         throw new Exception($"Block is not a IMyTextSurfaceProvider {block}");
-      Index = FancyUtils.GetSurfaceIndex(provider, surface);
+      Index = SurfaceUtils.GetSurfaceIndex(provider, surface);
 
       var coordString = SurfaceCoordsManager.Instance.CoordsList.SingleOrDefault(c => c.StartsWith($"{SurfaceCoords.Prefix}:{SubtypeId}:{Index}"));
       if (coordString == null)
@@ -107,14 +108,14 @@ namespace Lima.Touch
       var camPosition = cameraMatrix.Translation;
       var camDirection = cameraMatrix.Forward;
 
-      var screenPosTL = FancyUtils.LocalToGlobal(Coords.TopLeft, Block.WorldMatrix);
+      var screenPosTL = MathUtils.LocalToGlobal(Coords.TopLeft, Block.WorldMatrix);
       var screenNormal = Coords.CalculateNormal(Block.WorldMatrix);
 
       // MyAPIGateway.Utilities.ShowNotification($"{headPos} {camPosition}", 1, "Green");
-      Intersection = FancyUtils.GetLinePlaneIntersection(screenPosTL, screenNormal, camPosition, camDirection);
+      Intersection = MathUtils.GetLinePlaneIntersection(screenPosTL, screenNormal, camPosition, camDirection);
 
-      // var screenPosBL = FancyUtils.LocalToGlobal(Coords.BottomLeft, Block.WorldMatrix);
-      // var screenPosBR = FancyUtils.LocalToGlobal(Coords.BottomRight, Block.WorldMatrix);
+      // var screenPosBL = MathUtils.LocalToGlobal(Coords.BottomLeft, Block.WorldMatrix);
+      // var screenPosBR = MathUtils.LocalToGlobal(Coords.BottomRight, Block.WorldMatrix);
       // // DrawPoint(Intersection);
       // DrawPoint(screenPosTL);
       // DrawPoint(screenPosBL);
@@ -125,19 +126,19 @@ namespace Lima.Touch
 
     public Vector2 UpdateScreenCoord()
     {
-      var screenPosTL = FancyUtils.LocalToGlobal(Coords.TopLeft, Block.WorldMatrix);
-      var screenPosBL = FancyUtils.LocalToGlobal(Coords.BottomLeft, Block.WorldMatrix);
-      var screenPosBR = FancyUtils.LocalToGlobal(Coords.BottomRight, Block.WorldMatrix);
+      var screenPosTL = MathUtils.LocalToGlobal(Coords.TopLeft, Block.WorldMatrix);
+      var screenPosBL = MathUtils.LocalToGlobal(Coords.BottomLeft, Block.WorldMatrix);
+      var screenPosBR = MathUtils.LocalToGlobal(Coords.BottomRight, Block.WorldMatrix);
       var screenUp = Vector3.Normalize(screenPosTL - screenPosBL);
       var screenRight = Vector3.Normalize(screenPosBL - screenPosBR);
 
-      Vector2 screenCoord = FancyUtils.GetPointOnPlane(Intersection, screenPosTL, screenUp, screenRight);
+      Vector2 screenCoord = MathUtils.GetPointOnPlane(Intersection, screenPosTL, screenUp, screenRight);
       var width = Vector3.Distance(screenPosBL, screenPosBR);
       var height = Vector3.Distance(screenPosBL, screenPosTL);
 
       if (screenCoord.X >= 0 && screenCoord.X <= width && screenCoord.Y >= 0 && screenCoord.Y <= height)
       {
-        var rotatedCoord = FancyUtils.RotateScreenCoord(new Vector2(((screenCoord.X / width)), ((screenCoord.Y / height))), ScreenRotate);
+        var rotatedCoord = SurfaceUtils.RotateScreenCoord(new Vector2(((screenCoord.X / width)), ((screenCoord.Y / height))), ScreenRotate);
         var pX = rotatedCoord.X * Viewport.Width + Viewport.X;
         var pY = rotatedCoord.Y * Viewport.Height + Viewport.Y;
 
@@ -154,7 +155,7 @@ namespace Lima.Touch
       var provider = block as Sandbox.ModAPI.Ingame.IMyTextSurfaceProvider;
       if (provider == null)
         throw new Exception($"Block is not a IMyTextSurfaceProvider {block}");
-      var i = FancyUtils.GetSurfaceIndex(provider, surface);
+      var i = SurfaceUtils.GetSurfaceIndex(provider, surface);
 
       return Block == block && (Surface == surface || Index == i);
     }

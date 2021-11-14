@@ -21,6 +21,7 @@ using VRageRender.ExternalApp;
 using VRage.ObjectBuilders;
 using Sandbox.Common.ObjectBuilders;
 using Lima.Touch;
+using Lima.Utils;
 
 namespace Lima.Fancy
 {
@@ -44,9 +45,9 @@ namespace Lima.Fancy
       _surface = surface;
       _terminalBlock = (IMyTerminalBlock)block;
 
-      int c = FancyUtils.GetRandomInt(0, FancyTheme.colors.Count - 1);
+      int c = MathUtils.GetRandomInt(0, ColorUtils.colors.Count - 1);
       surface.ScriptBackgroundColor = Color.Black;
-      Surface.ScriptForegroundColor = FancyTheme.colors[c];
+      Surface.ScriptForegroundColor = ColorUtils.colors[c];
     }
 
     public void Init()

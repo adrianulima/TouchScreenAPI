@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Lima.Utils;
 using Sandbox.Game;
 using Sandbox.Game.Entities;
 using Sandbox.Game.GameSystems.TextSurfaceScripts;
@@ -77,7 +78,7 @@ namespace Lima.Fancy.Elements
 
       if (IsNumeric)
       {
-        return FancyUtils.CheckNumericInput(Text, ch, AllowNegative, IsInteger);
+        return InputUtils.CheckNumericInput(Text, ch, AllowNegative, IsInteger);
       }
 
       return ch >= ' ';
@@ -93,7 +94,7 @@ namespace Lima.Fancy.Elements
       if (!_edit)
         _action(Text);
 
-      FancyUtils.SetPlayerKeyboardBlacklistState(_edit);
+      InputUtils.SetPlayerKeyboardBlacklistState(_edit);
     }
 
     public void UpdateFast()

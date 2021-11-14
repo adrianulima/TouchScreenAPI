@@ -12,6 +12,7 @@ using VRage.Utils;
 using VRageMath;
 using Lima.Fancy;
 using Lima.Fancy.Elements;
+using Lima.Utils;
 
 namespace Lima
 {
@@ -138,9 +139,9 @@ namespace Lima
         Pixels = new Vector2(0, 16)
       };
 
-      var selector = new FancySelector(FancyTheme.colorNames, (int i, string color) =>
+      var selector = new FancySelector(ColorUtils.colorNames, (int i, string color) =>
       {
-        AppManager.Surface.ScriptForegroundColor = FancyTheme.colors[i];
+        AppManager.Surface.ScriptForegroundColor = ColorUtils.colors[i];
       })
       {
         Position = new Vector2(0, 0),
