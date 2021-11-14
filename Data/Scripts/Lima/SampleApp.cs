@@ -30,7 +30,7 @@ namespace Lima
         Scale = new Vector2(1, 1)
       };
 
-      var windowBar = new FancyWindowBar(AppManager.Tss.Block.DisplayNameText)
+      var windowBar = new FancyWindowBar(AppManager.Block.DisplayNameText)
       // var windowBar = new FancyWindowBar("Sample App")
       {
         Position = new Vector2(0, 0),
@@ -138,9 +138,9 @@ namespace Lima
         Pixels = new Vector2(0, 16)
       };
 
-      var selector = new FancySelector(ColorsList.names, (int i, string color) =>
+      var selector = new FancySelector(FancyTheme.colorNames, (int i, string color) =>
       {
-        AppManager.Tss.Surface.ScriptForegroundColor = ColorsList.colors[i];
+        AppManager.Surface.ScriptForegroundColor = FancyTheme.colors[i];
       })
       {
         Position = new Vector2(0, 0),

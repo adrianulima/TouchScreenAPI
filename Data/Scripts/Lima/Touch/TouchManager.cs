@@ -57,19 +57,31 @@ namespace Lima.Touch
         foreach (var screen in Screens)
         {
           if (!screen.Active)
+          {
+            screen.UpdateAfterSimulation();
             continue;
+          }
 
           var coords = screen.Coords;
           if (coords.IsEmpty())
+          {
+            screen.UpdateAfterSimulation();
             continue;
+          }
 
           Vector3D intersection = screen.CalculateIntersection(cameraMatrix);
           if (intersection == Vector3D.Zero)
+          {
+            screen.UpdateAfterSimulation();
             continue;
+          }
 
           var dist = Vector3.Distance(camPos, intersection);
           if (dist > screen.InteractiveDistance)
+          {
+            screen.UpdateAfterSimulation();
             continue;
+          }
 
           screen.UpdateScreenCoord();
 
@@ -78,6 +90,8 @@ namespace Lima.Touch
             closestDist = dist;
             CurrentScreen = screen;
           }
+
+          screen.UpdateAfterSimulation();
         }
       }
       catch (Exception e)
@@ -93,7 +107,10 @@ namespace Lima.Touch
     {
       var screen = TouchManager.Instance.Screens.SingleOrDefault(s => s.CompareWithBlockAndSurface(block, surface));
       if (screen != null)
+      {
+        screen.Dispose();
         Screens.Remove(screen);
+      }
     }
   }
 }

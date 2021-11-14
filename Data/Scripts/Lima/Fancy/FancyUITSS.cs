@@ -36,7 +36,7 @@ namespace Lima.Fancy
     bool _init = false;
     int ticks = 0;
 
-    public FancyUI fancyUI { get; private set; }
+    public FancyAppManager fancyUI { get; private set; }
 
     public FancyUITSS(IMyTextSurface surface, IMyCubeBlock block, Vector2 size) : base(surface, block, size)
     {
@@ -44,9 +44,9 @@ namespace Lima.Fancy
       _surface = surface;
       _terminalBlock = (IMyTerminalBlock)block;
 
-      int c = FancyUtils.GetRandomInt(0, ColorsList.colors.Count - 1);
+      int c = FancyUtils.GetRandomInt(0, FancyTheme.colors.Count - 1);
       surface.ScriptBackgroundColor = Color.Black;
-      Surface.ScriptForegroundColor = ColorsList.colors[c];
+      Surface.ScriptForegroundColor = FancyTheme.colors[c];
     }
 
     public void Init()
@@ -55,16 +55,14 @@ namespace Lima.Fancy
         return;
       _init = true;
 
-      fancyUI = new FancyUI(this);
+      fancyUI = new FancyAppManager(this.Block as MyCubeBlock, this.Surface as IMyTextSurface);
 
-      SampleApp sampleApp = fancyUI.appManager.AddApp<SampleApp>();
+      SampleApp sampleApp = fancyUI.AddApp<SampleApp>();
       sampleApp.CreateElements();
       sampleApp.InitElements();
-      fancyUI.appManager.Current = sampleApp;
+      fancyUI.Current = sampleApp;
 
       _terminalBlock.OnMarkForClose += BlockMarkedForClose;
-
-      FancyUISession.Instance?.AddSurfaceUI(_surface, fancyUI);
     }
 
     public override void Dispose()
@@ -73,7 +71,6 @@ namespace Lima.Fancy
       fancyUI?.Dispose();
 
       _terminalBlock.OnMarkForClose -= BlockMarkedForClose;
-      FancyUISession.Instance?.RemoveSurfaceUI(_surface);
     }
 
     void BlockMarkedForClose(IMyEntity ent)

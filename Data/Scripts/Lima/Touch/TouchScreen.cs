@@ -14,6 +14,8 @@ namespace Lima.Touch
   {
     public bool Active { get; set; }
 
+    public event Action UpdateEvent;
+
     public string SubtypeId { get { return Block.BlockDefinition.SubtypeId; } }
 
     public IMyCubeBlock Block { get; private set; }
@@ -155,6 +157,16 @@ namespace Lima.Touch
       var i = FancyUtils.GetSurfaceIndex(provider, surface);
 
       return Block == block && (Surface == surface || Index == i);
+    }
+
+    public void UpdateAfterSimulation()
+    {
+      UpdateEvent?.Invoke();
+    }
+
+    public void Dispose()
+    {
+      UpdateEvent = null;
     }
   }
 }

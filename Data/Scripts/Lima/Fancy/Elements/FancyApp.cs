@@ -67,5 +67,11 @@ namespace Lima.Fancy
       return base.GetSprites();
     }
 
+    public override void Dispose()
+    {
+      base.Dispose();
+      UpdateEvent = null;
+    }
+
   }
 }
