@@ -20,7 +20,6 @@ namespace Lima.Fancy
   {
     protected readonly List<MySprite> sprites = new List<MySprite>();
     private TouchScreen _screen;
-    private FancyTheme Theme;
 
     private MySprite cursorSprite;
 
@@ -29,10 +28,9 @@ namespace Lima.Fancy
 
     public bool Active = true;
 
-    public FancyCursor(TouchScreen screen, FancyTheme theme)
+    public FancyCursor(TouchScreen screen)
     {
       _screen = screen;
-      Theme = theme;
 
       cursorSprite = new MySprite()
       {
@@ -40,7 +38,7 @@ namespace Lima.Fancy
         Data = "Textures\\FactionLogo\\Builders\\BuilderIcon_6.dds",
         Position = Vector2.Zero,
         RotationOrScale = -0.55f,
-        Color = Color.White,// Theme.White
+        Color = Color.White,
         Size = new Vector2(16, 26)
       };
     }

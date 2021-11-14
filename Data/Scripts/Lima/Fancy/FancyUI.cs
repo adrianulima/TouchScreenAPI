@@ -44,7 +44,7 @@ namespace Lima.Fancy
       TouchManager.Instance.Screens.Add(_screen);
 
       Theme = new FancyTheme(Tss);
-      _cursor = new FancyCursor(_screen, Theme);
+      _cursor = new FancyCursor(_screen);
       appManager = new FancyAppManager(Tss, _viewport, _cursor, Theme);
     }
 
