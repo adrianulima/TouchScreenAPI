@@ -16,7 +16,6 @@ namespace Lima.API
     private const long _channel = 123;
     private bool _apiInit;
     private bool _isRegistered;
-
     public bool IsReady { get; private set; }
 
     private Func<float> _getMaxInteractiveDistance;
@@ -145,6 +144,21 @@ namespace Lima.API
       AssignMethod(delegates, "FancyTheme_GetColorMain", ref FancyTheme._getColorMain);
       AssignMethod(delegates, "FancyTheme_GetColorMainDarker", ref FancyTheme._getColorMainDarker);
       AssignMethod(delegates, "FancyTheme_MeasureStringInPixels", ref FancyTheme._measureStringInPixels);
+      AssignMethod(delegates, "FancyTheme_GetScale", ref FancyTheme._getScale);
+      AssignMethod(delegates, "FancyTheme_SetScale", ref FancyTheme._setScale);
+
+      AssignMethod(delegates, "FancyButtonBase_GetHitArea", ref FancyButtonBase._getHitArea);
+      AssignMethod(delegates, "FancyButtonBase_SetHitArea", ref FancyButtonBase._setHitArea);
+      AssignMethod(delegates, "FancyButtonBase_IsMouseReleased", ref FancyButtonBase._isMouseReleased);
+      AssignMethod(delegates, "FancyButtonBase_IsMouseOver", ref FancyButtonBase._isMouseOver);
+      AssignMethod(delegates, "FancyButtonBase_IsMousePressed", ref FancyButtonBase._isMousePressed);
+      AssignMethod(delegates, "FancyButtonBase_JustReleased", ref FancyButtonBase._justReleased);
+      AssignMethod(delegates, "FancyButtonBase_JustPressed", ref FancyButtonBase._justPressed);
+
+      AssignMethod(delegates, "FancyButton_New", ref FancyButton._new);
+      AssignMethod(delegates, "FancyButton_GetText", ref FancyButton._getText);
+      AssignMethod(delegates, "FancyButton_SetText", ref FancyButton._setText);
+      AssignMethod(delegates, "FancyButton_SetAction", ref FancyButton._setAction);
     }
 
     private void AssignMethod<T>(IReadOnlyDictionary<string, Delegate> delegates, string name, ref T field) where T : class
@@ -306,8 +320,8 @@ namespace Lima.API
     static public Func<object, Color> _getColorMain;
     static public Func<object, int, Color> _getColorMainDarker;
     static public Func<object, String, string, float, Vector2> _measureStringInPixels;
-    static public Func<object, bool> _isBgDark;
-    static public Func<object, bool> _isMainDark;
+    static public Func<object, float> _getScale;
+    static public Action<object, float> _setScale;
 
     protected object _internalObj;
     public FancyTheme(object internalObject) { _internalObj = internalObject; }
@@ -317,5 +331,43 @@ namespace Lima.API
     public Color GetColorMain() => _getColorMain.Invoke(_internalObj);
     public Color GetColorMainDarker(int value) => _getColorMainDarker.Invoke(_internalObj, value);
     public Vector2 MeasureStringInPixels(String text, string font, float scale) => _measureStringInPixels.Invoke(_internalObj, text, font, scale);
+    public float GetScale() => _getScale.Invoke(_internalObj);
+    public void SetScale(float scale) => _setScale.Invoke(_internalObj, scale);
+  }
+
+  public class FancyButtonBase : FancyElementBase
+  {
+    static public Func<object, Vector4> _getHitArea;
+    static public Action<object, Vector4> _setHitArea;
+    static public Func<object, bool> _isMouseReleased;
+    static public Func<object, bool> _isMouseOver;
+    static public Func<object, bool> _isMousePressed;
+    static public Func<object, bool> _justReleased;
+    static public Func<object, bool> _justPressed;
+
+    public FancyButtonBase(object internalObject) : base(internalObject) { }
+
+    public Vector4 GetHitArea() => _getHitArea.Invoke(_internalObj);
+    public void SetHitArea(Vector4 hitArea) => _setHitArea.Invoke(_internalObj, hitArea);
+    public bool IsMouseReleased() => _isMouseReleased.Invoke(_internalObj);
+    public bool IsMouseOver() => _isMouseOver.Invoke(_internalObj);
+    public bool IsMousePressed() => _isMousePressed.Invoke(_internalObj);
+    public bool JustReleased() => _justReleased.Invoke(_internalObj);
+    public bool JustPressed() => _justPressed.Invoke(_internalObj);
+  }
+
+  public class FancyButton : FancyButtonBase
+  {
+    static public Func<string, Action, object> _new;
+    static public Func<object, string> _getText;
+    static public Action<object, string> _setText;
+    static public Action<object, Action> _setAction;
+
+    public FancyButton(string text, Action action) : base(_new(text, action)) { }
+    public FancyButton(object internalObject) : base(internalObject) { }
+
+    public string GetText() => _getText.Invoke(_internalObj);
+    public void SetText(string text) => _setText.Invoke(_internalObj, text);
+    public void SetAction(Action action) => _setAction.Invoke(_internalObj, action);
   }
 }

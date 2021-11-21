@@ -93,6 +93,21 @@ namespace Lima.Touch
       dict.Add("FancyTheme_GetColorMain", new Func<object, Color>(FancyTheme_GetColorMain));
       dict.Add("FancyTheme_GetColorMainDarker", new Func<object, int, Color>(FancyTheme_GetColorMainDarker));
       dict.Add("FancyTheme_MeasureStringInPixels", new Func<object, String, string, float, Vector2>(FancyTheme_MeasureStringInPixels));
+      dict.Add("FancyTheme_GetScale", new Func<object, float>(FancyTheme_GetScale));
+      dict.Add("FancyTheme_SetScale", new Action<object, float>(FancyTheme_SetScale));
+
+      dict.Add("FancyButtonBase_GetHitArea", new Func<object, Vector4>(FancyButtonBase_GetHitArea));
+      dict.Add("FancyButtonBase_SetHitArea", new Action<object, Vector4>(FancyButtonBase_SetHitArea));
+      dict.Add("FancyButtonBase_IsMouseReleased", new Func<object, bool>(FancyButtonBase_IsMouseReleased));
+      dict.Add("FancyButtonBase_IsMouseOver", new Func<object, bool>(FancyButtonBase_IsMouseOver));
+      dict.Add("FancyButtonBase_IsMousePressed", new Func<object, bool>(FancyButtonBase_IsMousePressed));
+      dict.Add("FancyButtonBase_JustReleased", new Func<object, bool>(FancyButtonBase_JustReleased));
+      dict.Add("FancyButtonBase_JustPressed", new Func<object, bool>(FancyButtonBase_JustPressed));
+
+      dict.Add("FancyButton_New", new Func<string, Action, object>(FancyButton_New));
+      dict.Add("FancyButton_GetText", new Func<object, string>(FancyButton_GetText));
+      dict.Add("FancyButton_SetText", new Action<object, string>(FancyButton_SetText));
+      dict.Add("FancyButton_SetAction", new Action<object, Action>(FancyButton_SetAction));
 
       return dict;
     }
@@ -181,5 +196,20 @@ namespace Lima.Touch
       return theme.Main_90;
     }
     static public Vector2 FancyTheme_MeasureStringInPixels(object obj, String text, string font, float scale) => (obj as FancyTheme).MeasureStringInPixels(text, font, scale);
+    static public float FancyTheme_GetScale(object obj) => (obj as FancyTheme).Scale;
+    static public void FancyTheme_SetScale(object obj, float scale) => (obj as FancyTheme).Scale = scale;
+
+    static public Vector4 FancyButtonBase_GetHitArea(object obj) => (obj as FancyButtonBase).hitArea;
+    static public void FancyButtonBase_SetHitArea(object obj, Vector4 hitArea) => (obj as FancyButtonBase).hitArea = hitArea;
+    static public bool FancyButtonBase_IsMouseReleased(object obj) => (obj as FancyButtonBase).IsMouseReleased;
+    static public bool FancyButtonBase_IsMouseOver(object obj) => (obj as FancyButtonBase).IsMouseOver;
+    static public bool FancyButtonBase_IsMousePressed(object obj) => (obj as FancyButtonBase).IsMousePressed;
+    static public bool FancyButtonBase_JustReleased(object obj) => (obj as FancyButtonBase).JustReleased;
+    static public bool FancyButtonBase_JustPressed(object obj) => (obj as FancyButtonBase).JustPressed;
+
+    static public FancyButton FancyButton_New(string text, Action action) => new FancyButton(text, action);
+    static public string FancyButton_GetText(object obj) => (obj as FancyButton).Text;
+    static public void FancyButton_SetText(object obj, string text) => (obj as FancyButton).Text = text;
+    static public void FancyButton_SetAction(object obj, Action action) => (obj as FancyButton)._action = action;
   }
 }

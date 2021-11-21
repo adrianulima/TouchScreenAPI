@@ -16,6 +16,10 @@ namespace Lima.Fancy.Elements
     {
       Text = text;
       _action = action;
+
+      Scale = new Vector2(1, 0);
+      Margin = new Vector4(8, 8, 8, 0);
+      Pixels = new Vector2(0, 24);
     }
 
     public override void Update()

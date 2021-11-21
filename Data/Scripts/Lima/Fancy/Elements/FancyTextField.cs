@@ -29,6 +29,10 @@ namespace Lima.Fancy.Elements
       _action = action;
 
       _inputHandler = new TextInputHandler(AddChar, RemoveLastChar, OnInput);
+
+      Scale = new Vector2(1, 0);
+      Margin = new Vector4(8, 8, 8, 0);
+      Pixels = new Vector2(0, 16);
     }
 
     public override void InitElements()

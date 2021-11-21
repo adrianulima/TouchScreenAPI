@@ -17,6 +17,10 @@ namespace Lima.Fancy.Elements
     public FancySliderRange(float min, float max, Action<float, float> action = null) : base(min, max)
     {
       _actionR = action;
+
+      Scale = new Vector2(1, 0);
+      Margin = new Vector4(8, 0, 8, 0);
+      Pixels = new Vector2(0, 24);
     }
 
     protected override void UpdateValue(float value)

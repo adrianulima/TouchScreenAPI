@@ -44,7 +44,7 @@ namespace Lima.Fancy.Elements
     protected Vector2 _size = Vector2.Zero;
     public Vector2 Size
     {
-      get { return this.Parent != null ? new Vector2(-Margin.X - Margin.Z + Pixels.X, Pixels.Y) + Parent.Size * Scale : _size; }
+      get { return this.Parent != null ? new Vector2(-Margin.X - Margin.Z + Pixels.X * ThemeScale, Pixels.Y * ThemeScale) + Parent.Size * Scale : _size; }
     }
 
     protected RectangleF _viewport;
