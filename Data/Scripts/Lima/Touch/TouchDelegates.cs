@@ -11,7 +11,7 @@ using VRageMath;
 
 namespace Lima.Touch
 {
-  public static class TouchMessages
+  public static class TouchDelegates
   {
     // TODO: Replace with proper TouchAPI mod id
     private const long _channel = 123;
@@ -26,7 +26,7 @@ namespace Lima.Touch
     // TODO: Register this method
     private static void HandleMessage(object msg)
     {
-      if ((msg as string) == "TouchApiEndpointRequest")
+      if ((msg as string) == "ApiEndpointRequest")
         MyAPIGateway.Utilities.SendModMessage(_channel, GetApiDictionary());
     }
 

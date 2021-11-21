@@ -34,7 +34,7 @@ namespace Lima.Touch
       {
         CurrentScreen = null;
 
-        if (!TouchSession.ModEnabled
+        if (!TouchSession.Instance.ModEnabled
         || MyAPIGateway.Session == null
         || !MyAPIGateway.Session.CameraController.IsInFirstPersonView
         || MyAPIGateway.Gui.IsCursorVisible)

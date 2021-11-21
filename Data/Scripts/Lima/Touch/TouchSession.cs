@@ -9,10 +9,8 @@ namespace Lima.Touch
   [MySessionComponentDescriptor(MyUpdateOrder.AfterSimulation)]
   public class TouchSession : MySessionComponentBase
   {
-    public static bool ModEnabled = true;
-    public static string ModVersion = "0.0.1";
-
     public static TouchSession Instance;
+    public bool ModEnabled = true;
 
     public SurfaceCoordsManager SurfaceCoordsMan = new SurfaceCoordsManager();
     public TouchManager TouchMan = new TouchManager();
@@ -46,12 +44,12 @@ namespace Lima.Touch
       if (!ModEnabled)
         return;
 
-      TouchMessages.SendApiToMods();
+      TouchDelegates.SendApiToMods();
     }
 
     public override void UpdateAfterSimulation()
     {
-      if (MyAPIGateway.Utilities?.IsDedicated == true)
+      if (!ModEnabled)
         return;
 
       try

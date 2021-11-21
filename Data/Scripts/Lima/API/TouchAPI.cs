@@ -43,7 +43,7 @@ namespace Lima.API
         MyAPIGateway.Utilities.RegisterMessageHandler(_channel, HandleMessage);
       }
       if (!IsReady)
-        MyAPIGateway.Utilities.SendModMessage(_channel, "TouchApiEndpointRequest");
+        MyAPIGateway.Utilities.SendModMessage(_channel, "ApiEndpointRequest");
 
       return IsReady;
     }
