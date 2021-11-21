@@ -1,17 +1,6 @@
-using System;
 using System.Collections.Generic;
 using Lima.Touch;
-using Sandbox.Common.ObjectBuilders;
-using Sandbox.Game;
-using Sandbox.Game.Entities;
-using Sandbox.Game.GameSystems.TextSurfaceScripts;
-using Sandbox.ModAPI;
-using VRage.Game;
 using VRage.Game.GUI.TextPanel;
-using VRage.Game.ModAPI;
-using VRage.Game.ModAPI.Interfaces;
-using VRage.ModAPI;
-using VRage.Utils;
 using VRageMath;
 
 namespace Lima.Fancy

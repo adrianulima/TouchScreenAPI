@@ -3,14 +3,7 @@ using System.Collections.Generic;
 using Lima.Fancy.Elements;
 using Lima.Touch;
 using Sandbox.Game.Entities;
-using Sandbox.Game.GameSystems.TextSurfaceScripts;
-using Sandbox.ModAPI.Ingame;
-using VRage.Game;
 using VRage.Game.GUI.TextPanel;
-using VRage.Game.ModAPI;
-using VRage.Game.ModAPI.Interfaces;
-using VRage.ModAPI;
-using VRage.Utils;
 using VRageMath;
 
 namespace Lima.Fancy
