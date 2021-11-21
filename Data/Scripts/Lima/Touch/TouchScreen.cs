@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using Lima.API;
 using Lima.Fancy;
 using Lima.Utils;
 using Sandbox.ModAPI;
@@ -11,7 +12,7 @@ using VRageMath;
 
 namespace Lima.Touch
 {
-  public class TouchScreen : ITouchScreen
+  public class TouchScreen
   {
     public bool Active { get; set; }
 

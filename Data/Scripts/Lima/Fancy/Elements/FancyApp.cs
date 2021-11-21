@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Lima.Fancy.Elements;
+using Lima.Touch;
 using Sandbox.Game.Entities;
 using Sandbox.Game.GameSystems.TextSurfaceScripts;
 using Sandbox.ModAPI.Ingame;
@@ -20,17 +21,27 @@ namespace Lima.Fancy
 
     public event Action UpdateEvent;
 
-    public FancyAppManager AppManager;
-    public FancyCursor Cursor { get { return AppManager.Cursor; } }
-    public FancyTheme Theme { get { return AppManager.Theme; } }
+    public TouchScreen Screen { get; private set; }
+    public FancyCursor Cursor { get; private set; }
+    public FancyTheme Theme { get; private set; }
 
     public FancyApp() { _app = this; }
 
-    public virtual void InitApp(FancyAppManager appManager)
+    public virtual void InitApp(MyCubeBlock block, Sandbox.ModAPI.Ingame.IMyTextSurface surface)
     {
-      AppManager = appManager;
+      Screen = new TouchScreen(block, surface as Sandbox.ModAPI.IMyTextSurface);
+      TouchManager.Instance.RemoveScreen(block, surface as Sandbox.ModAPI.IMyTextSurface);
+      TouchManager.Instance.Screens.Add(Screen);
+      Screen.UpdateEvent += UpdateAfterSimulation;
 
-      _viewport = appManager.Viewport;
+      Cursor = new FancyCursor(Screen);
+      Theme = new FancyTheme(surface);
+
+      _viewport = new RectangleF(
+        (surface.TextureSize - surface.SurfaceSize) / 2f,
+        surface.SurfaceSize
+      );
+
       _size = new Vector2(_viewport.Width, _viewport.Height);
       Position = new Vector2(_viewport.X / _size.X, _viewport.Y / _size.Y);
     }
@@ -64,13 +75,22 @@ namespace Lima.Fancy
     public override List<MySprite> GetSprites()
     {
       Update();
-      return base.GetSprites();
+      base.GetSprites();
+
+      sprites.AddRange(Cursor.GetSprites());
+
+      return sprites;
     }
 
     public override void Dispose()
     {
-      base.Dispose();
+      Screen.UpdateEvent -= UpdateAfterSimulation;
+      Screen.Dispose();
+      Cursor.Dispose();
+      TouchManager.Instance.Screens.Remove(Screen);
       UpdateEvent = null;
+
+      base.Dispose();
     }
 
   }
