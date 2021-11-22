@@ -11,7 +11,7 @@ namespace Lima.Fancy.Elements
       Column = 2
     }
 
-    public ViewDirection Direction = ViewDirection.None;
+    public ViewDirection Direction = ViewDirection.Column;
 
     public FancyView(ViewDirection direction = ViewDirection.Column)
     {

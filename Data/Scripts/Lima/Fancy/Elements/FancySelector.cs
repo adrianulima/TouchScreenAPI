@@ -16,7 +16,7 @@ namespace Lima.Fancy.Elements
 
     public int Selected = 0;
     public List<string> Labels;
-    protected Action<int, string> _action;
+    public Action<int, string> _action;
     protected bool _loop;
 
     public FancySelector(List<string> labels, Action<int, string> action, bool loop = true)

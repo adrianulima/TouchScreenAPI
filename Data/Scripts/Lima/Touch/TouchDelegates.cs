@@ -74,6 +74,7 @@ namespace Lima.Touch
       dict.Add("FancyElementContainerBase_AddChild", new Action<object, object>(FancyElementContainerBase_AddChild));
       dict.Add("FancyElementContainerBase_RemoveChild", new Action<object, object>(FancyElementContainerBase_RemoveChild));
 
+      dict.Add("FancyView_NewV", new Func<int, FancyView>(FancyView_NewV));
       dict.Add("FancyView_GetDirection", new Func<object, int>(FancyView_GetDirection));
       dict.Add("FancyView_SetDirection", new Action<object, int>(FancyView_SetDirection));
 
@@ -108,6 +109,62 @@ namespace Lima.Touch
       dict.Add("FancyButton_GetText", new Func<object, string>(FancyButton_GetText));
       dict.Add("FancyButton_SetText", new Action<object, string>(FancyButton_SetText));
       dict.Add("FancyButton_SetAction", new Action<object, Action>(FancyButton_SetAction));
+
+      dict.Add("FancyLabel_New", new Func<string, float, object>(FancyLabel_New));
+      dict.Add("FancyLabel_GetText", new Func<object, string>(FancyLabel_GetText));
+      dict.Add("FancyLabel_SetText", new Action<object, string>(FancyLabel_SetText));
+      dict.Add("FancyLabel_SetFontSize", new Action<object, float>(FancyLabel_SetFontSize));
+
+      dict.Add("FancyPanel_New", new Func<object>(FancyPanel_New));
+
+      dict.Add("FancyProgressBar_New", new Func<float, float, bool, object>(FancyProgressBar_New));
+      dict.Add("FancyProgressBar_GetValue", new Func<object, float>(FancyProgressBar_GetValue));
+      dict.Add("FancyProgressBar_SetValue", new Action<object, float>(FancyProgressBar_SetValue));
+
+      dict.Add("FancySelector_New", new Func<List<string>, Action<int, string>, bool, object>(FancySelector_New));
+      dict.Add("FancySelector_SetAction", new Action<object, Action<int, string>>(FancySelector_SetAction));
+
+      dict.Add("FancySeparator_New", new Func<object>(FancySeparator_New));
+
+      dict.Add("FancySlider_New", new Func<float, float, Action<float>, object>(FancySlider_New));
+      dict.Add("FancySlider_GetRange", new Func<object, Vector2>(FancySlider_GetRange));
+      dict.Add("FancySlider_SetRange", new Action<object, Vector2>(FancySlider_SetRange));
+      dict.Add("FancySlider_GetValue", new Func<object, float>(FancySlider_GetValue));
+      dict.Add("FancySlider_SetValue", new Action<object, float>(FancySlider_SetValue));
+      dict.Add("FancySlider_SetAction", new Action<object, Action<float>>(FancySlider_SetAction));
+      dict.Add("FancySlider_GetIsInteger", new Func<object, bool>(FancySlider_GetIsInteger));
+      dict.Add("FancySlider_SetIsInteger", new Action<object, bool>(FancySlider_SetIsInteger));
+      dict.Add("FancySlider_GetAllowInput", new Func<object, bool>(FancySlider_GetAllowInput));
+      dict.Add("FancySlider_SetAllowInput", new Action<object, bool>(FancySlider_SetAllowInput));
+
+      dict.Add("FancySliderRange_NewR", new Func<float, float, Action<float, float>, object>(FancySliderRange_NewR));
+      dict.Add("FancySliderRange_GetValueLower", new Func<object, float>(FancySliderRange_GetValueLower));
+      dict.Add("FancySliderRange_SetValueLower", new Action<object, float>(FancySliderRange_SetValueLower));
+      dict.Add("FancySliderRange_SetActionR", new Action<object, Action<float, float>>(FancySliderRange_SetActionR));
+
+      dict.Add("FancySwitch_New", new Func<Action<bool>, string, string, object>(FancySwitch_New));
+      dict.Add("FancySwitch_GetTextOn", new Func<object, string>(FancySwitch_GetTextOn));
+      dict.Add("FancySwitch_SetTextOn", new Action<object, string>(FancySwitch_SetTextOn));
+      dict.Add("FancySwitch_GetTextOff", new Func<object, string>(FancySwitch_GetTextOff));
+      dict.Add("FancySwitch_SetTextOff", new Action<object, string>(FancySwitch_SetTextOff));
+      dict.Add("FancySwitch_GetValue", new Func<object, bool>(FancySwitch_GetValue));
+      dict.Add("FancySwitch_SetValue", new Action<object, bool>(FancySwitch_SetValue));
+      dict.Add("FancySwitch_SetAction", new Action<object, Action<bool>>(FancySwitch_SetAction));
+
+      dict.Add("FancyTextField_New", new Func<string, Action<string>, object>(FancyTextField_New));
+      dict.Add("FancyTextField_GetText", new Func<object, string>(FancyTextField_GetText));
+      dict.Add("FancyTextField_SetText", new Action<object, string>(FancyTextField_SetText));
+      dict.Add("FancyTextField_SetAction", new Action<object, Action<string>>(FancyTextField_SetAction));
+      dict.Add("FancyTextField_GetIsNumeric", new Func<object, bool>(FancyTextField_GetIsNumeric));
+      dict.Add("FancyTextField_SetIsNumeric", new Action<object, bool>(FancyTextField_SetIsNumeric));
+      dict.Add("FancyTextField_GetIsInteger", new Func<object, bool>(FancyTextField_GetIsInteger));
+      dict.Add("FancyTextField_SetIsInteger", new Action<object, bool>(FancyTextField_SetIsInteger));
+      dict.Add("FancyTextField_GetAllowNegative", new Func<object, bool>(FancyTextField_GetAllowNegative));
+      dict.Add("FancyTextField_SetAllowNegative", new Action<object, bool>(FancyTextField_SetAllowNegative));
+
+      dict.Add("FancyWindowBar_New", new Func<string, object>(FancyWindowBar_New));
+      dict.Add("FancyWindowBar_GetText", new Func<object, string>(FancyWindowBar_GetText));
+      dict.Add("FancyWindowBar_SetText", new Action<object, string>(FancyWindowBar_SetText));
 
       return dict;
     }
@@ -165,6 +222,7 @@ namespace Lima.Touch
     static public void FancyElementContainerBase_AddChild(object obj, object child) => (obj as FancyElementContainerBase).AddChild((FancyElementBase)child);
     static public void FancyElementContainerBase_RemoveChild(object obj, object child) => (obj as FancyElementContainerBase).RemoveChild((FancyElementBase)child);
 
+    static public FancyView FancyView_NewV(int direction) => new FancyView((FancyView.ViewDirection)direction);
     static public int FancyView_GetDirection(object obj) => (int)(obj as FancyView).Direction;
     static public void FancyView_SetDirection(object obj, int direction) => (obj as FancyView).Direction = (FancyView.ViewDirection)direction;
 
@@ -211,5 +269,61 @@ namespace Lima.Touch
     static public string FancyButton_GetText(object obj) => (obj as FancyButton).Text;
     static public void FancyButton_SetText(object obj, string text) => (obj as FancyButton).Text = text;
     static public void FancyButton_SetAction(object obj, Action action) => (obj as FancyButton)._action = action;
+
+    static public FancyLabel FancyLabel_New(string text, float fontSize = 0.5f) => new FancyLabel(text, fontSize);
+    static public string FancyLabel_GetText(object obj) => (obj as FancyLabel).Text;
+    static public void FancyLabel_SetText(object obj, string text) => (obj as FancyLabel).Text = text;
+    static public void FancyLabel_SetFontSize(object obj, float fontSize) => (obj as FancyLabel).FontSize = fontSize;
+
+    static public FancyPanel FancyPanel_New() => new FancyPanel();
+
+    static public FancyProgressBar FancyProgressBar_New(float min, float max, bool bars = true) => new FancyProgressBar(min, max, bars);
+    static public float FancyProgressBar_GetValue(object obj) => (obj as FancyProgressBar).Value;
+    static public void FancyProgressBar_SetValue(object obj, float value) => (obj as FancyProgressBar).Value = value;
+
+    static public FancySelector FancySelector_New(List<string> labels, Action<int, string> action, bool loop = true) => new FancySelector(labels, action, loop);
+    static public void FancySelector_SetAction(object obj, Action<int, string> action) => (obj as FancySelector)._action = action;
+
+    static public FancySeparator FancySeparator_New() => new FancySeparator();
+
+    static public FancySlider FancySlider_New(float min, float max, Action<float> action) => new FancySlider(min, max, action);
+    static public Vector2 FancySlider_GetRange(object obj) => (obj as FancySlider).Range;
+    static public void FancySlider_SetRange(object obj, Vector2 range) => (obj as FancySlider).Range = range;
+    static public float FancySlider_GetValue(object obj) => (obj as FancySlider).Value;
+    static public void FancySlider_SetValue(object obj, float value) => (obj as FancySlider).Value = value;
+    static public void FancySlider_SetAction(object obj, Action<float> action) => (obj as FancySlider)._action = action;
+    static public bool FancySlider_GetIsInteger(object obj) => (obj as FancySlider).IsInteger;
+    static public void FancySlider_SetIsInteger(object obj, bool interger) => (obj as FancySlider).IsInteger = interger;
+    static public bool FancySlider_GetAllowInput(object obj) => (obj as FancySlider).AllowInput;
+    static public void FancySlider_SetAllowInput(object obj, bool allowInput) => (obj as FancySlider).AllowInput = allowInput;
+
+    static public FancySliderRange FancySliderRange_NewR(float min, float max, Action<float, float> action) => new FancySliderRange(min, max, action);
+    static public float FancySliderRange_GetValueLower(object obj) => (obj as FancySliderRange).ValueLower;
+    static public void FancySliderRange_SetValueLower(object obj, float value) => (obj as FancySliderRange).ValueLower = value;
+    static public void FancySliderRange_SetActionR(object obj, Action<float, float> action) => (obj as FancySliderRange)._actionR = action;
+
+    static public FancySwitch FancySwitch_New(Action<bool> action, string textOn = "On", string textOff = "Off") => new FancySwitch(action, textOn, textOff);
+    static public string FancySwitch_GetTextOn(object obj) => (obj as FancySwitch).TextOn;
+    static public void FancySwitch_SetTextOn(object obj, string text) => (obj as FancySwitch).TextOn = text;
+    static public string FancySwitch_GetTextOff(object obj) => (obj as FancySwitch).TextOff;
+    static public void FancySwitch_SetTextOff(object obj, string text) => (obj as FancySwitch).TextOff = text;
+    static public bool FancySwitch_GetValue(object obj) => (obj as FancySwitch).Value;
+    static public void FancySwitch_SetValue(object obj, bool value) => (obj as FancySwitch).Value = value;
+    static public void FancySwitch_SetAction(object obj, Action<bool> action) => (obj as FancySwitch)._action = action;
+
+    static public FancyTextField FancyTextField_New(string text, Action<string> action) => new FancyTextField(text, action);
+    static public string FancyTextField_GetText(object obj) => (obj as FancyTextField).Text;
+    static public void FancyTextField_SetText(object obj, string text) => (obj as FancyTextField).Text = text;
+    static public void FancyTextField_SetAction(object obj, Action<string> action) => (obj as FancyTextField)._action = action;
+    static public bool FancyTextField_GetIsNumeric(object obj) => (obj as FancyTextField).IsNumeric;
+    static public void FancyTextField_SetIsNumeric(object obj, bool isNumeric) => (obj as FancyTextField).IsNumeric = isNumeric;
+    static public bool FancyTextField_GetIsInteger(object obj) => (obj as FancyTextField).IsInteger;
+    static public void FancyTextField_SetIsInteger(object obj, bool isInterger) => (obj as FancyTextField).IsInteger = isInterger;
+    static public bool FancyTextField_GetAllowNegative(object obj) => (obj as FancyTextField).AllowNegative;
+    static public void FancyTextField_SetAllowNegative(object obj, bool allowNegative) => (obj as FancyTextField).AllowNegative = allowNegative;
+
+    static public FancyWindowBar FancyWindowBar_New(string text) => new FancyWindowBar(text);
+    static public string FancyWindowBar_GetText(object obj) => (obj as FancyWindowBar).Text;
+    static public void FancyWindowBar_SetText(object obj, string text) => (obj as FancyWindowBar).Text = text;
   }
 }
