@@ -424,15 +424,15 @@ namespace Lima.API
     static public Action<object, bool> _setAllowInput;
     public FancySlider(float min, float max, Action<float> action) : base(_new(min, max, action)) { }
     public FancySlider(object internalObject) : base(internalObject) { }
-    public Vector2 GetRange(object obj) => _getRange.Invoke(obj);
-    public void SetRange(object obj, Vector2 range) => _setRange.Invoke(obj, range);
-    public float GetValue(object obj) => _getValue.Invoke(obj);
-    public void SetValue(object obj, float value) => _setValue.Invoke(obj, value);
-    public void SetAction(object obj, Action<float> action) => _setAction.Invoke(obj, action);
-    public bool GetIsInteger(object obj) => _getIsInteger.Invoke(obj);
-    public void SetIsInteger(object obj, bool isInterger) => _setIsInteger.Invoke(obj, isInterger);
-    public bool GetAllowInput(object obj) => _getAllowInput.Invoke(obj);
-    public void SetAllowInput(object obj, bool allowInput) => _setAllowInput.Invoke(obj, allowInput);
+    public Vector2 GetRange() => _getRange.Invoke(_internalObj);
+    public void SetRange(Vector2 range) => _setRange.Invoke(_internalObj, range);
+    public float GetValue() => _getValue.Invoke(_internalObj);
+    public void SetValue(float value) => _setValue.Invoke(_internalObj, value);
+    public void SetAction(Action<float> action) => _setAction.Invoke(_internalObj, action);
+    public bool GetIsInteger() => _getIsInteger.Invoke(_internalObj);
+    public void SetIsInteger(bool isInterger) => _setIsInteger.Invoke(_internalObj, isInterger);
+    public bool GetAllowInput() => _getAllowInput.Invoke(_internalObj);
+    public void SetAllowInput(bool allowInput) => _setAllowInput.Invoke(_internalObj, allowInput);
   }
   public class FancySliderRange : FancySlider
   {
@@ -442,9 +442,9 @@ namespace Lima.API
     static public Action<object, Action<float, float>> _setActionR;
     public FancySliderRange(float min, float max, Action<float, float> action) : base(_newR(min, max, action)) { }
     public FancySliderRange(object internalObject) : base(internalObject) { }
-    public float GetValueLower(object obj) => _getValueLower.Invoke(obj);
-    public void SetValueLower(object obj, float value) => _setValueLower.Invoke(obj, value);
-    public void SetActionRange(object obj, Action<float, float> action) => _setActionR.Invoke(obj, action);
+    public float GetValueLower() => _getValueLower.Invoke(_internalObj);
+    public void SetValueLower(float value) => _setValueLower.Invoke(_internalObj, value);
+    public void SetActionRange(Action<float, float> action) => _setActionR.Invoke(_internalObj, action);
   }
   public class FancySwitch : FancyButtonBase
   {
@@ -458,13 +458,13 @@ namespace Lima.API
     static public Action<object, Action<bool>> _setAction;
     public FancySwitch(Action<bool> action, string textOn = "On", string textOff = "Off") : base(_new(action, textOn, textOff)) { }
     public FancySwitch(object internalObject) : base(internalObject) { }
-    public string GetTextOn(object obj) => _getTextOn.Invoke(obj);
-    public void SetTextOn(object obj, string text) => _setTextOn.Invoke(obj, text);
-    public string GetTextOff(object obj) => _getTextOff.Invoke(obj);
-    public void SetTextOff(object obj, string text) => _setTextOff.Invoke(obj, text);
-    public bool GetValue(object obj) => _getValue.Invoke(obj);
-    public void SetValue(object obj, bool value) => _setValue.Invoke(obj, value);
-    public void SetAction(object obj, Action<bool> action) => _setAction.Invoke(obj, action);
+    public string GetTextOn() => _getTextOn.Invoke(_internalObj);
+    public void SetTextOn(string text) => _setTextOn.Invoke(_internalObj, text);
+    public string GetTextOff() => _getTextOff.Invoke(_internalObj);
+    public void SetTextOff(string text) => _setTextOff.Invoke(_internalObj, text);
+    public bool GetValue() => _getValue.Invoke(_internalObj);
+    public void SetValue(bool value) => _setValue.Invoke(_internalObj, value);
+    public void SetAction(Action<bool> action) => _setAction.Invoke(_internalObj, action);
   }
   public class FancyTextField : FancyButtonBase
   {
@@ -480,15 +480,15 @@ namespace Lima.API
     static public Action<object, bool> _setAllowNegative;
     public FancyTextField(string text, Action<string> action) : base(_new(text, action)) { }
     public FancyTextField(object internalObject) : base(internalObject) { }
-    public string GetText(object obj) => _getText.Invoke(obj);
-    public void SetText(object obj, string text) => _setText.Invoke(obj, text);
-    public void SetAction(object obj, Action<string> action) => _setAction.Invoke(obj, action);
-    public bool GetIsNumeric(object obj) => _getIsNumeric.Invoke(obj);
-    public void SetIsNumeric(object obj, bool isNumeric) => _setIsNumeric.Invoke(obj, isNumeric);
-    public bool GetIsInteger(object obj) => _getIsInteger.Invoke(obj);
-    public void SetIsInteger(object obj, bool isInterger) => _setIsInteger.Invoke(obj, isInterger);
-    public bool GetAllowNegative(object obj) => _getAllowNegative.Invoke(obj);
-    public void SetAllowNegative(object obj, bool allowNegative) => _setAllowNegative.Invoke(obj, allowNegative);
+    public string GetText() => _getText.Invoke(_internalObj);
+    public void SetText(string text) => _setText.Invoke(_internalObj, text);
+    public void SetAction(Action<string> action) => _setAction.Invoke(_internalObj, action);
+    public bool GetIsNumeric() => _getIsNumeric.Invoke(_internalObj);
+    public void SetIsNumeric(bool isNumeric) => _setIsNumeric.Invoke(_internalObj, isNumeric);
+    public bool GetIsInteger() => _getIsInteger.Invoke(_internalObj);
+    public void SetIsInteger(bool isInterger) => _setIsInteger.Invoke(_internalObj, isInterger);
+    public bool GetAllowNegative() => _getAllowNegative.Invoke(_internalObj);
+    public void SetAllowNegative(bool allowNegative) => _setAllowNegative.Invoke(_internalObj, allowNegative);
   }
   public class FancyWindowBar : FancyElementBase
   {
@@ -497,7 +497,7 @@ namespace Lima.API
     static public Action<object, string> _setText;
     public FancyWindowBar(string text) : base(_new(text)) { }
     public FancyWindowBar(object internalObject) : base(internalObject) { }
-    public string GetText(object obj) => _getText.Invoke(obj);
-    public void SetText(object obj, string text) => _setText.Invoke(obj, text);
+    public string GetText() => _getText.Invoke(_internalObj);
+    public void SetText(string text) => _setText.Invoke(_internalObj, text);
   }
 }
