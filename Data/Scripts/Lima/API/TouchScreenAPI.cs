@@ -143,10 +143,14 @@ namespace Lima.API
       AssignMethod(delegates, "FancyButton_GetText", ref FancyButton._getText);
       AssignMethod(delegates, "FancyButton_SetText", ref FancyButton._setText);
       AssignMethod(delegates, "FancyButton_SetAction", ref FancyButton._setAction);
+      AssignMethod(delegates, "FancyButton_GetAlignment", ref FancyButton._getAlignment);
+      AssignMethod(delegates, "FancyButton_SetAlignment", ref FancyButton._setAlignment);
       AssignMethod(delegates, "FancyLabel_New", ref FancyLabel._new);
       AssignMethod(delegates, "FancyLabel_GetText", ref FancyLabel._getText);
       AssignMethod(delegates, "FancyLabel_SetText", ref FancyLabel._setText);
       AssignMethod(delegates, "FancyLabel_SetFontSize", ref FancyLabel._setFontSize);
+      AssignMethod(delegates, "FancyLabel_GetAlignment", ref FancyLabel._getAlignment);
+      AssignMethod(delegates, "FancyLabel_SetAlignment", ref FancyLabel._setAlignment);
       AssignMethod(delegates, "FancyPanel_New", ref FancyPanel._new);
       AssignMethod(delegates, "FancyProgressBar_New", ref FancyProgressBar._new);
       AssignMethod(delegates, "FancyProgressBar_GetValue", ref FancyProgressBar._getValue);
@@ -186,6 +190,8 @@ namespace Lima.API
       AssignMethod(delegates, "FancyTextField_SetIsInteger", ref FancyTextField._setIsInteger);
       AssignMethod(delegates, "FancyTextField_GetAllowNegative", ref FancyTextField._getAllowNegative);
       AssignMethod(delegates, "FancyTextField_SetAllowNegative", ref FancyTextField._setAllowNegative);
+      AssignMethod(delegates, "FancyTextField_GetAlignment", ref FancyTextField._getAlignment);
+      AssignMethod(delegates, "FancyTextField_SetAlignment", ref FancyTextField._setAlignment);
       AssignMethod(delegates, "FancyWindowBar_New", ref FancyWindowBar._new);
       AssignMethod(delegates, "FancyWindowBar_GetText", ref FancyWindowBar._getText);
       AssignMethod(delegates, "FancyWindowBar_SetText", ref FancyWindowBar._setText);
@@ -377,11 +383,15 @@ namespace Lima.API
     static public Func<object, string> _getText;
     static public Action<object, string> _setText;
     static public Action<object, Action> _setAction;
+    static public Func<object, TextAlignment> _getAlignment;
+    static public Action<object, TextAlignment> _setAlignment;
     public FancyButton(string text, Action action) : base(_new(text, action)) { }
     public FancyButton(object internalObject) : base(internalObject) { }
     public string GetText() => _getText.Invoke(_internalObj);
     public void SetText(string text) => _setText.Invoke(_internalObj, text);
     public void SetAction(Action action) => _setAction.Invoke(_internalObj, action);
+    public TextAlignment GetAlignment() => _getAlignment.Invoke(_internalObj);
+    public void SetAlignment(TextAlignment alignment) => _setAlignment.Invoke(_internalObj, alignment);
   }
   public class FancyLabel : FancyElementBase
   {
@@ -389,11 +399,15 @@ namespace Lima.API
     static public Func<object, string> _getText;
     static public Action<object, string> _setText;
     static public Action<object, float> _setFontSize;
+    static public Func<object, TextAlignment> _getAlignment;
+    static public Action<object, TextAlignment> _setAlignment;
     public FancyLabel(string text, float fontSize = 0.5f) : base(_new(text, fontSize)) { }
     public FancyLabel(object internalObject) : base(internalObject) { }
     public string GetText() => _getText.Invoke(_internalObj);
     public void SetText(string text) => _setText.Invoke(_internalObj, text);
     public void SetFontSize(float fontSize) => _setFontSize.Invoke(_internalObj, fontSize);
+    public TextAlignment GetAlignment() => _getAlignment.Invoke(_internalObj);
+    public void SetAlignment(TextAlignment alignment) => _setAlignment.Invoke(_internalObj, alignment);
   }
   public class FancyPanel : FancyView
   {
@@ -493,6 +507,8 @@ namespace Lima.API
     static public Action<object, bool> _setIsInteger;
     static public Func<object, bool> _getAllowNegative;
     static public Action<object, bool> _setAllowNegative;
+    static public Func<object, TextAlignment> _getAlignment;
+    static public Action<object, TextAlignment> _setAlignment;
     public FancyTextField(string text, Action<string> action) : base(_new(text, action)) { }
     public FancyTextField(object internalObject) : base(internalObject) { }
     public string GetText() => _getText.Invoke(_internalObj);
@@ -504,6 +520,8 @@ namespace Lima.API
     public void SetIsInteger(bool isInterger) => _setIsInteger.Invoke(_internalObj, isInterger);
     public bool GetAllowNegative() => _getAllowNegative.Invoke(_internalObj);
     public void SetAllowNegative(bool allowNegative) => _setAllowNegative.Invoke(_internalObj, allowNegative);
+    public TextAlignment GetAlignment() => _getAlignment.Invoke(_internalObj);
+    public void SetAlignment(TextAlignment alignment) => _setAlignment.Invoke(_internalObj, alignment);
   }
   public class FancyWindowBar : FancyElementBase
   {

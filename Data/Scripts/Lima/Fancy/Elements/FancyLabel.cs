@@ -8,6 +8,7 @@ namespace Lima.Fancy.Elements
     protected MySprite textSprite;
     public string Text;
     public float FontSize;
+    public TextAlignment Alignment = TextAlignment.CENTER;
 
     public FancyLabel(string text, float fontSize = 0.5f)
     {
@@ -29,11 +30,16 @@ namespace Lima.Fancy.Elements
         Data = Text,
         RotationOrScale = FontSize * App.Theme.Scale,
         Color = App.Theme.White,//Theme.Main,
-        Alignment = TextAlignment.CENTER,
+        Alignment = Alignment,
         FontId = App.Theme.Font
       };
 
-      textSprite.Position = Position + new Vector2(Size.X / 2, 0);
+      if (Alignment == TextAlignment.LEFT)
+        textSprite.Position = Position;
+      else if (Alignment == TextAlignment.RIGHT)
+        textSprite.Position = Position + new Vector2(Size.X, 0);
+      else
+        textSprite.Position = Position + new Vector2(Size.X / 2, 0);
 
       sprites.Clear();
 

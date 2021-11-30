@@ -11,6 +11,7 @@ namespace Lima.Fancy.Elements
 
     public string Text;
     public Action _action;
+    public TextAlignment Alignment = TextAlignment.CENTER;
 
     public FancyButton(string text, Action action)
     {
@@ -42,7 +43,7 @@ namespace Lima.Fancy.Elements
         Data = Text,
         RotationOrScale = 0.6f * App.Theme.Scale,
         Color = App.Theme.White,
-        Alignment = TextAlignment.CENTER,
+        Alignment = Alignment,
         FontId = App.Theme.Font
       };
 
@@ -73,8 +74,12 @@ namespace Lima.Fancy.Elements
       bgSprite.Position = Position + new Vector2(0, Size.Y / 2);
       bgSprite.Size = Size;
 
-      textSprite.Position = Position + new Vector2(Size.X / 2, Size.Y * 0.5f - (Size.Y / 2.4f));
-      // textSprite.Size = Size;
+      if (Alignment == TextAlignment.LEFT)
+        textSprite.Position = Position + new Vector2(0, Size.Y * 0.5f - (Size.Y / 2.4f));
+      else if (Alignment == TextAlignment.RIGHT)
+        textSprite.Position = Position + new Vector2(Size.X, Size.Y * 0.5f - (Size.Y / 2.4f));
+      else
+        textSprite.Position = Position + new Vector2(Size.X / 2, Size.Y * 0.5f - (Size.Y / 2.4f));
 
       sprites.Add(bgSprite);
       sprites.Add(textSprite);

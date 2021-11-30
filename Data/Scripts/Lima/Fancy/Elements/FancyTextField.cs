@@ -22,6 +22,7 @@ namespace Lima.Fancy.Elements
     public bool IsNumeric = false;
     public bool IsInteger = false;
     public bool AllowNegative = true;
+    public TextAlignment Alignment = TextAlignment.CENTER;
 
     public FancyTextField(string text, Action<string> action)
     {
@@ -114,7 +115,7 @@ namespace Lima.Fancy.Elements
         Data = Text,
         RotationOrScale = 0.6f * App.Theme.Scale,
         Color = App.Theme.White,//Theme.Main,
-        Alignment = TextAlignment.CENTER,
+        Alignment = Alignment,
         FontId = App.Theme.Font
       };
 
@@ -165,7 +166,14 @@ namespace Lima.Fancy.Elements
         caretX = 0;
       }
 
-      textSprite.Position = Position + new Vector2(Size.X / 2 - caretX, Size.Y * 0.5f - (Size.Y / 2.4f));
+
+      if (Alignment == TextAlignment.LEFT)
+        textSprite.Position = Position + new Vector2(0, Size.Y * 0.5f - (Size.Y / 2.4f));
+      else if (Alignment == TextAlignment.RIGHT)
+        textSprite.Position = Position + new Vector2(Size.X - caretX * 2, Size.Y * 0.5f - (Size.Y / 2.4f));
+      else
+        textSprite.Position = Position + new Vector2(Size.X / 2 - caretX, Size.Y * 0.5f - (Size.Y / 2.4f));
+
 
       sprites.Add(bgSprite);
       sprites.Add(textSprite);

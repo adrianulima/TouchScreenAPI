@@ -113,11 +113,15 @@ namespace Lima.Touch
       dict.Add("FancyButton_GetText", new Func<object, string>(FancyButton_GetText));
       dict.Add("FancyButton_SetText", new Action<object, string>(FancyButton_SetText));
       dict.Add("FancyButton_SetAction", new Action<object, Action>(FancyButton_SetAction));
+      dict.Add("FancyButton_GetAlignment", new Func<object, TextAlignment>(FancyButton_GetAlignment));
+      dict.Add("FancyButton_SetAlignment", new Action<object, TextAlignment>(FancyButton_SetAlignment));
 
       dict.Add("FancyLabel_New", new Func<string, float, object>(FancyLabel_New));
       dict.Add("FancyLabel_GetText", new Func<object, string>(FancyLabel_GetText));
       dict.Add("FancyLabel_SetText", new Action<object, string>(FancyLabel_SetText));
       dict.Add("FancyLabel_SetFontSize", new Action<object, float>(FancyLabel_SetFontSize));
+      dict.Add("FancyLabel_GetAlignment", new Func<object, TextAlignment>(FancyLabel_GetAlignment));
+      dict.Add("FancyLabel_SetAlignment", new Action<object, TextAlignment>(FancyLabel_SetAlignment));
 
       dict.Add("FancyPanel_New", new Func<object>(FancyPanel_New));
 
@@ -165,6 +169,8 @@ namespace Lima.Touch
       dict.Add("FancyTextField_SetIsInteger", new Action<object, bool>(FancyTextField_SetIsInteger));
       dict.Add("FancyTextField_GetAllowNegative", new Func<object, bool>(FancyTextField_GetAllowNegative));
       dict.Add("FancyTextField_SetAllowNegative", new Action<object, bool>(FancyTextField_SetAllowNegative));
+      dict.Add("FancyTextField_GetAlignment", new Func<object, TextAlignment>(FancyTextField_GetAlignment));
+      dict.Add("FancyTextField_SetAlignment", new Action<object, TextAlignment>(FancyTextField_SetAlignment));
 
       dict.Add("FancyWindowBar_New", new Func<string, object>(FancyWindowBar_New));
       dict.Add("FancyWindowBar_GetText", new Func<object, string>(FancyWindowBar_GetText));
@@ -277,11 +283,15 @@ namespace Lima.Touch
     static public string FancyButton_GetText(object obj) => (obj as FancyButton).Text;
     static public void FancyButton_SetText(object obj, string text) => (obj as FancyButton).Text = text;
     static public void FancyButton_SetAction(object obj, Action action) => (obj as FancyButton)._action = action;
+    static public TextAlignment FancyButton_GetAlignment(object obj) => (obj as FancyButton).Alignment;
+    static public void FancyButton_SetAlignment(object obj, TextAlignment alignment) => (obj as FancyButton).Alignment = alignment;
 
     static public FancyLabel FancyLabel_New(string text, float fontSize = 0.5f) => new FancyLabel(text, fontSize);
     static public string FancyLabel_GetText(object obj) => (obj as FancyLabel).Text;
     static public void FancyLabel_SetText(object obj, string text) => (obj as FancyLabel).Text = text;
     static public void FancyLabel_SetFontSize(object obj, float fontSize) => (obj as FancyLabel).FontSize = fontSize;
+    static public TextAlignment FancyLabel_GetAlignment(object obj) => (obj as FancyLabel).Alignment;
+    static public void FancyLabel_SetAlignment(object obj, TextAlignment alignment) => (obj as FancyLabel).Alignment = alignment;
 
     static public FancyPanel FancyPanel_New() => new FancyPanel();
 
@@ -329,6 +339,8 @@ namespace Lima.Touch
     static public void FancyTextField_SetIsInteger(object obj, bool isInterger) => (obj as FancyTextField).IsInteger = isInterger;
     static public bool FancyTextField_GetAllowNegative(object obj) => (obj as FancyTextField).AllowNegative;
     static public void FancyTextField_SetAllowNegative(object obj, bool allowNegative) => (obj as FancyTextField).AllowNegative = allowNegative;
+    static public TextAlignment FancyTextField_GetAlignment(object obj) => (obj as FancyTextField).Alignment;
+    static public void FancyTextField_SetAlignment(object obj, TextAlignment alignment) => (obj as FancyTextField).Alignment = alignment;
 
     static public FancyWindowBar FancyWindowBar_New(string text) => new FancyWindowBar(text);
     static public string FancyWindowBar_GetText(object obj) => (obj as FancyWindowBar).Text;
