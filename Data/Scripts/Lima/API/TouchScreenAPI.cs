@@ -118,10 +118,13 @@ namespace Lima.API
       AssignMethod(delegates, "FancyApp_GetCursor", ref FancyApp._getCursor);
       AssignMethod(delegates, "FancyApp_GetTheme", ref FancyApp._getTheme);
       AssignMethod(delegates, "FancyApp_InitApp", ref FancyApp._initApp);
+      AssignMethod(delegates, "FancyCursor_New", ref FancyCursor._new);
       AssignMethod(delegates, "FancyCursor_GetActive", ref FancyCursor._getActive);
       AssignMethod(delegates, "FancyCursor_SetActive", ref FancyCursor._setActive);
       AssignMethod(delegates, "FancyCursor_GetPosition", ref FancyCursor._getPosition);
       AssignMethod(delegates, "FancyCursor_IsInsideArea", ref FancyCursor._isInsideArea);
+      AssignMethod(delegates, "FancyCursor_GetSprites", ref FancyCursor._getSprites);
+      AssignMethod(delegates, "FancyCursor_Dispose", ref FancyCursor._dispose);
       AssignMethod(delegates, "FancyTheme_GetColorBg", ref FancyTheme._getColorBg);
       AssignMethod(delegates, "FancyTheme_GetColorWhite", ref FancyTheme._getColorWhite);
       AssignMethod(delegates, "FancyTheme_GetColorMain", ref FancyTheme._getColorMain);
@@ -340,16 +343,22 @@ namespace Lima.API
   }
   public class FancyCursor
   {
+    static public Func<object, object> _new;
     static public Func<object, bool> _getActive;
     static public Action<object, bool> _setActive;
     static public Func<object, Vector2> _getPosition;
     static public Func<object, float, float, float, float, bool> _isInsideArea;
+    static public Func<object, List<MySprite>> _getSprites;
+    static public Action<object> _dispose;
     internal object _internalObj;
+    public FancyCursor(TouchScreen screen) { _internalObj = _new(screen._internalObj); }
     public FancyCursor(object internalObject) { _internalObj = internalObject; }
     public bool GetActive() => _getActive.Invoke(_internalObj);
     public void SetActive(bool active) => _setActive.Invoke(_internalObj, active);
     public Vector2 GetPosition() => _getPosition.Invoke(_internalObj);
     public bool IsInsideArea(float x, float y, float z, float w) => _isInsideArea.Invoke(_internalObj, x, y, z, w);
+    public List<MySprite> GetSprites() => _getSprites.Invoke(_internalObj);
+    public void Dispose() => _dispose.Invoke(_internalObj);
   }
   public class FancyTheme
   {

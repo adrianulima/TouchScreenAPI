@@ -84,10 +84,13 @@ namespace Lima.Touch
       dict.Add("FancyApp_GetTheme", new Func<object, FancyTheme>(FancyApp_GetTheme));
       dict.Add("FancyApp_InitApp", new Action<object, MyCubeBlock, Sandbox.ModAPI.Ingame.IMyTextSurface>(FancyApp_InitApp));
 
+      dict.Add("FancyCursor_New", new Func<object, FancyCursor>(FancyCursor_New));
       dict.Add("FancyCursor_GetActive", new Func<object, bool>(FancyCursor_GetActive));
       dict.Add("FancyCursor_SetActive", new Action<object, bool>(FancyCursor_SetActive));
       dict.Add("FancyCursor_GetPosition", new Func<object, Vector2>(FancyCursor_GetPosition));
       dict.Add("FancyCursor_IsInsideArea", new Func<object, float, float, float, float, bool>(FancyCursor_IsInsideArea));
+      dict.Add("FancyCursor_GetSprites", new Func<object, List<MySprite>>(FancyCursor_GetSprites));
+      dict.Add("FancyCursor_Dispose", new Action<object>(FancyCursor_Dispose));
 
       dict.Add("FancyTheme_GetColorBg", new Func<object, Color>(FancyTheme_GetColorBg));
       dict.Add("FancyTheme_GetColorWhite", new Func<object, Color>(FancyTheme_GetColorWhite));
@@ -242,10 +245,13 @@ namespace Lima.Touch
     static public FancyTheme FancyApp_GetTheme(object obj) => (obj as FancyApp).Theme;
     static public void FancyApp_InitApp(object obj, MyCubeBlock block, Sandbox.ModAPI.Ingame.IMyTextSurface surface) => (obj as FancyApp).InitApp(block, surface);
 
+    static public FancyCursor FancyCursor_New(object screen) => new FancyCursor(screen as TouchScreen);
     static public bool FancyCursor_GetActive(object obj) => (obj as FancyCursor).Active;
     static public void FancyCursor_SetActive(object obj, bool active) => (obj as FancyCursor).Active = active;
     static public Vector2 FancyCursor_GetPosition(object obj) => (obj as FancyCursor).Position;
     static public bool FancyCursor_IsInsideArea(object obj, float x, float y, float z, float w) => (obj as FancyCursor).IsInsideArea(x, y, z, w);
+    static public List<MySprite> FancyCursor_GetSprites(object obj) => (obj as FancyCursor).GetSprites();
+    static public void FancyCursor_Dispose(object obj) => (obj as FancyCursor).Dispose();
 
     static public Color FancyTheme_GetColorBg(object obj) => (obj as FancyTheme).Bg;
     static public Color FancyTheme_GetColorWhite(object obj) => (obj as FancyTheme).White;
