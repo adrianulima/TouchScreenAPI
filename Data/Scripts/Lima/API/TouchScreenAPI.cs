@@ -7,13 +7,11 @@ using VRage.Game.ModAPI;
 using VRage.Utils;
 using VRageMath;
 
-//Change namespace to your mod's namespace
 namespace Lima.API
 {
   public class TouchScreenAPI
   {
-    // TODO: Replace with proper TouchScreenAPI mod id
-    private const long _channel = 123;
+    private const long _channel = 2668820525;
     private bool _apiInit;
     private bool _isRegistered;
     public bool IsReady { get; private set; }
@@ -40,7 +38,7 @@ namespace Lima.API
         _isRegistered = true;
         MyAPIGateway.Utilities.RegisterMessageHandler(_channel, HandleMessage);
       }
-      if (!IsReady)
+      if (!IsReady && !_apiInit)
         MyAPIGateway.Utilities.SendModMessage(_channel, "ApiEndpointRequest");
       return IsReady;
     }
@@ -90,6 +88,29 @@ namespace Lima.API
       AssignMethod(delegates, "TouchScreen_GetScreenRotate", ref TouchScreen._getScreenRotate);
       AssignMethod(delegates, "TouchScreen_CompareWithBlockAndSurface", ref TouchScreen._compareWithBlockAndSurface);
       AssignMethod(delegates, "TouchScreen_Dispose", ref TouchScreen._dispose);
+      AssignMethod(delegates, "ClickHandler_New", ref ClickHandler._new);
+      AssignMethod(delegates, "ClickHandler_GetHitArea", ref ClickHandler._getHitArea);
+      AssignMethod(delegates, "ClickHandler_SetHitArea", ref ClickHandler._setHitArea);
+      AssignMethod(delegates, "ClickHandler_IsMouseReleased", ref ClickHandler._isMouseReleased);
+      AssignMethod(delegates, "ClickHandler_IsMouseOver", ref ClickHandler._isMouseOver);
+      AssignMethod(delegates, "ClickHandler_IsMousePressed", ref ClickHandler._isMousePressed);
+      AssignMethod(delegates, "ClickHandler_JustReleased", ref ClickHandler._justReleased);
+      AssignMethod(delegates, "ClickHandler_JustPressed", ref ClickHandler._justPressed);
+      AssignMethod(delegates, "ClickHandler_UpdateStatus", ref ClickHandler._updateStatus);
+      AssignMethod(delegates, "FancyCursor_New", ref FancyCursor._new);
+      AssignMethod(delegates, "FancyCursor_GetActive", ref FancyCursor._getActive);
+      AssignMethod(delegates, "FancyCursor_SetActive", ref FancyCursor._setActive);
+      AssignMethod(delegates, "FancyCursor_GetPosition", ref FancyCursor._getPosition);
+      AssignMethod(delegates, "FancyCursor_IsInsideArea", ref FancyCursor._isInsideArea);
+      AssignMethod(delegates, "FancyCursor_GetSprites", ref FancyCursor._getSprites);
+      AssignMethod(delegates, "FancyCursor_Dispose", ref FancyCursor._dispose);
+      AssignMethod(delegates, "FancyTheme_GetColorBg", ref FancyTheme._getColorBg);
+      AssignMethod(delegates, "FancyTheme_GetColorWhite", ref FancyTheme._getColorWhite);
+      AssignMethod(delegates, "FancyTheme_GetColorMain", ref FancyTheme._getColorMain);
+      AssignMethod(delegates, "FancyTheme_GetColorMainDarker", ref FancyTheme._getColorMainDarker);
+      AssignMethod(delegates, "FancyTheme_MeasureStringInPixels", ref FancyTheme._measureStringInPixels);
+      AssignMethod(delegates, "FancyTheme_GetScale", ref FancyTheme._getScale);
+      AssignMethod(delegates, "FancyTheme_SetScale", ref FancyTheme._setScale);
       AssignMethod(delegates, "FancyElementBase_GetPosition", ref FancyElementBase._getPosition);
       AssignMethod(delegates, "FancyElementBase_SetPosition", ref FancyElementBase._setPosition);
       AssignMethod(delegates, "FancyElementBase_GetMargin", ref FancyElementBase._getMargin);
@@ -118,30 +139,7 @@ namespace Lima.API
       AssignMethod(delegates, "FancyApp_GetCursor", ref FancyApp._getCursor);
       AssignMethod(delegates, "FancyApp_GetTheme", ref FancyApp._getTheme);
       AssignMethod(delegates, "FancyApp_InitApp", ref FancyApp._initApp);
-      AssignMethod(delegates, "FancyCursor_New", ref FancyCursor._new);
-      AssignMethod(delegates, "FancyCursor_GetActive", ref FancyCursor._getActive);
-      AssignMethod(delegates, "FancyCursor_SetActive", ref FancyCursor._setActive);
-      AssignMethod(delegates, "FancyCursor_GetPosition", ref FancyCursor._getPosition);
-      AssignMethod(delegates, "FancyCursor_IsInsideArea", ref FancyCursor._isInsideArea);
-      AssignMethod(delegates, "FancyCursor_GetSprites", ref FancyCursor._getSprites);
-      AssignMethod(delegates, "FancyCursor_Dispose", ref FancyCursor._dispose);
-      AssignMethod(delegates, "FancyTheme_GetColorBg", ref FancyTheme._getColorBg);
-      AssignMethod(delegates, "FancyTheme_GetColorWhite", ref FancyTheme._getColorWhite);
-      AssignMethod(delegates, "FancyTheme_GetColorMain", ref FancyTheme._getColorMain);
-      AssignMethod(delegates, "FancyTheme_GetColorMainDarker", ref FancyTheme._getColorMainDarker);
-      AssignMethod(delegates, "FancyTheme_MeasureStringInPixels", ref FancyTheme._measureStringInPixels);
-      AssignMethod(delegates, "FancyTheme_GetScale", ref FancyTheme._getScale);
-      AssignMethod(delegates, "FancyTheme_SetScale", ref FancyTheme._setScale);
       AssignMethod(delegates, "FancyButtonBase_GetHandler", ref FancyButtonBase._getHandler);
-      AssignMethod(delegates, "ClickHandler_New", ref ClickHandler._new);
-      AssignMethod(delegates, "ClickHandler_GetHitArea", ref ClickHandler._getHitArea);
-      AssignMethod(delegates, "ClickHandler_SetHitArea", ref ClickHandler._setHitArea);
-      AssignMethod(delegates, "ClickHandler_IsMouseReleased", ref ClickHandler._isMouseReleased);
-      AssignMethod(delegates, "ClickHandler_IsMouseOver", ref ClickHandler._isMouseOver);
-      AssignMethod(delegates, "ClickHandler_IsMousePressed", ref ClickHandler._isMousePressed);
-      AssignMethod(delegates, "ClickHandler_JustReleased", ref ClickHandler._justReleased);
-      AssignMethod(delegates, "ClickHandler_JustPressed", ref ClickHandler._justPressed);
-      AssignMethod(delegates, "ClickHandler_UpdateStatus", ref ClickHandler._updateStatus);
       AssignMethod(delegates, "FancyButton_New", ref FancyButton._new);
       AssignMethod(delegates, "FancyButton_GetText", ref FancyButton._getText);
       AssignMethod(delegates, "FancyButton_SetText", ref FancyButton._setText);
@@ -262,6 +260,44 @@ namespace Lima.API
     public bool JustPressed() => _justPressed.Invoke(_internalObj);
     public void UpdateStatus(TouchScreen screen) => _updateStatus.Invoke(_internalObj, screen._internalObj);
   }
+  public class FancyCursor
+  {
+    static public Func<object, object> _new;
+    static public Func<object, bool> _getActive;
+    static public Action<object, bool> _setActive;
+    static public Func<object, Vector2> _getPosition;
+    static public Func<object, float, float, float, float, bool> _isInsideArea;
+    static public Func<object, List<MySprite>> _getSprites;
+    static public Action<object> _dispose;
+    internal object _internalObj;
+    public FancyCursor(TouchScreen screen) { _internalObj = _new(screen._internalObj); }
+    public FancyCursor(object internalObject) { _internalObj = internalObject; }
+    public bool GetActive() => _getActive.Invoke(_internalObj);
+    public void SetActive(bool active) => _setActive.Invoke(_internalObj, active);
+    public Vector2 GetPosition() => _getPosition.Invoke(_internalObj);
+    public bool IsInsideArea(float x, float y, float z, float w) => _isInsideArea.Invoke(_internalObj, x, y, z, w);
+    public List<MySprite> GetSprites() => _getSprites.Invoke(_internalObj);
+    public void Dispose() => _dispose.Invoke(_internalObj);
+  }
+  public class FancyTheme
+  {
+    static public Func<object, Color> _getColorBg;
+    static public Func<object, Color> _getColorWhite;
+    static public Func<object, Color> _getColorMain;
+    static public Func<object, int, Color> _getColorMainDarker;
+    static public Func<object, String, string, float, Vector2> _measureStringInPixels;
+    static public Func<object, float> _getScale;
+    static public Action<object, float> _setScale;
+    internal object _internalObj;
+    public FancyTheme(object internalObject) { _internalObj = internalObject; }
+    public Color GetColorBg() => _getColorBg.Invoke(_internalObj);
+    public Color GetColorWhite() => _getColorWhite.Invoke(_internalObj);
+    public Color GetColorMain() => _getColorMain.Invoke(_internalObj);
+    public Color GetColorMainDarker(int value) => _getColorMainDarker.Invoke(_internalObj, value);
+    public Vector2 MeasureStringInPixels(String text, string font, float scale) => _measureStringInPixels.Invoke(_internalObj, text, font, scale);
+    public float GetScale() => _getScale.Invoke(_internalObj);
+    public void SetScale(float scale) => _setScale.Invoke(_internalObj, scale);
+  }
   public class FancyElementBase
   {
     static public Func<object, Vector2> _getPosition;
@@ -340,44 +376,6 @@ namespace Lima.API
     public FancyCursor GetCursor() { if (_cursor == null) _cursor = new FancyCursor(_getCursor.Invoke(_internalObj)); return _cursor; }
     public FancyTheme GetTheme() { if (_theme == null) _theme = new FancyTheme(_getTheme.Invoke(_internalObj)); return _theme; }
     public void InitApp(MyCubeBlock block, Sandbox.ModAPI.Ingame.IMyTextSurface surface) => _initApp.Invoke(_internalObj, block, surface);
-  }
-  public class FancyCursor
-  {
-    static public Func<object, object> _new;
-    static public Func<object, bool> _getActive;
-    static public Action<object, bool> _setActive;
-    static public Func<object, Vector2> _getPosition;
-    static public Func<object, float, float, float, float, bool> _isInsideArea;
-    static public Func<object, List<MySprite>> _getSprites;
-    static public Action<object> _dispose;
-    internal object _internalObj;
-    public FancyCursor(TouchScreen screen) { _internalObj = _new(screen._internalObj); }
-    public FancyCursor(object internalObject) { _internalObj = internalObject; }
-    public bool GetActive() => _getActive.Invoke(_internalObj);
-    public void SetActive(bool active) => _setActive.Invoke(_internalObj, active);
-    public Vector2 GetPosition() => _getPosition.Invoke(_internalObj);
-    public bool IsInsideArea(float x, float y, float z, float w) => _isInsideArea.Invoke(_internalObj, x, y, z, w);
-    public List<MySprite> GetSprites() => _getSprites.Invoke(_internalObj);
-    public void Dispose() => _dispose.Invoke(_internalObj);
-  }
-  public class FancyTheme
-  {
-    static public Func<object, Color> _getColorBg;
-    static public Func<object, Color> _getColorWhite;
-    static public Func<object, Color> _getColorMain;
-    static public Func<object, int, Color> _getColorMainDarker;
-    static public Func<object, String, string, float, Vector2> _measureStringInPixels;
-    static public Func<object, float> _getScale;
-    static public Action<object, float> _setScale;
-    internal object _internalObj;
-    public FancyTheme(object internalObject) { _internalObj = internalObject; }
-    public Color GetColorBg() => _getColorBg.Invoke(_internalObj);
-    public Color GetColorWhite() => _getColorWhite.Invoke(_internalObj);
-    public Color GetColorMain() => _getColorMain.Invoke(_internalObj);
-    public Color GetColorMainDarker(int value) => _getColorMainDarker.Invoke(_internalObj, value);
-    public Vector2 MeasureStringInPixels(String text, string font, float scale) => _measureStringInPixels.Invoke(_internalObj, text, font, scale);
-    public float GetScale() => _getScale.Invoke(_internalObj);
-    public void SetScale(float scale) => _setScale.Invoke(_internalObj, scale);
   }
   public class FancyButtonBase : FancyElementBase
   {

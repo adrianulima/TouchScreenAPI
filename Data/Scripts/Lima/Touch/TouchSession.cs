@@ -23,6 +23,7 @@ namespace Lima.Touch
 
       Instance = this;
       SurfaceCoordsMan.LoadData();
+      TouchDelegates.Load();
     }
 
     public override void Init(MyObjectBuilder_SessionComponent sessionComponent)
@@ -36,15 +37,8 @@ namespace Lima.Touch
     protected override void UnloadData()
     {
       SurfaceCoordsMan.UnloadData();
+      TouchDelegates.Unload();
       Instance = null;
-    }
-
-    public override void BeforeStart()
-    {
-      if (!ModEnabled)
-        return;
-
-      TouchDelegates.SendApiToMods();
     }
 
     public override void UpdateAfterSimulation()

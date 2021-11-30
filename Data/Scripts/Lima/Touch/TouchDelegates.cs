@@ -13,17 +13,32 @@ namespace Lima.Touch
 {
   public static class TouchDelegates
   {
-    // TODO: Replace with proper TouchScreenAPI mod id
-    private const long _channel = 123;
+    private const long _channel = 2668820525;
+    private static bool _isRegistered;
+    public static bool IsReady { get; private set; }
 
-    public static void SendApiToMods()
+    public static void Load()
     {
-      //Create a dictionary of delegates that point to methods in the Touch API code
-      //Send the dictionary to other mods that registered to this ID
+      if (!_isRegistered)
+      {
+        _isRegistered = true;
+        MyAPIGateway.Utilities.RegisterMessageHandler(_channel, HandleMessage);
+      }
+      IsReady = true;
       MyAPIGateway.Utilities.SendModMessage(_channel, GetApiDictionary());
     }
 
-    // TODO: Register this method
+    public static void Unload()
+    {
+      if (_isRegistered)
+      {
+        _isRegistered = false;
+        MyAPIGateway.Utilities.UnregisterMessageHandler(_channel, HandleMessage);
+      }
+      IsReady = false;
+      MyAPIGateway.Utilities.SendModMessage(_channel, new Dictionary<string, Delegate>());
+    }
+
     private static void HandleMessage(object msg)
     {
       if ((msg as string) == "ApiEndpointRequest")
