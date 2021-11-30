@@ -7,3 +7,4 @@ TouchScreenAPI is a ModAPI for Space Engineers game. It allow modders to impleme
 ![fancyUI_Adriano_textfield_gif](https://user-images.githubusercontent.com/13324869/143987989-53ea6aaa-ef02-48b0-aa5c-6bfb4ff418d7.gif)
 
 Modders guide coming soon...
+See some touch app examples at https://github.com/adrianulima/TouchScreenAPI_Examples
