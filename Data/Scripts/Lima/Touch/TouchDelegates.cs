@@ -13,7 +13,7 @@ namespace Lima.Touch
 {
   public static class TouchDelegates
   {
-    // TODO: Replace with proper TouchAPI mod id
+    // TODO: Replace with proper TouchScreenAPI mod id
     private const long _channel = 123;
 
     public static void SendApiToMods()
@@ -97,13 +97,17 @@ namespace Lima.Touch
       dict.Add("FancyTheme_GetScale", new Func<object, float>(FancyTheme_GetScale));
       dict.Add("FancyTheme_SetScale", new Action<object, float>(FancyTheme_SetScale));
 
-      dict.Add("FancyButtonBase_GetHitArea", new Func<object, Vector4>(FancyButtonBase_GetHitArea));
-      dict.Add("FancyButtonBase_SetHitArea", new Action<object, Vector4>(FancyButtonBase_SetHitArea));
-      dict.Add("FancyButtonBase_IsMouseReleased", new Func<object, bool>(FancyButtonBase_IsMouseReleased));
-      dict.Add("FancyButtonBase_IsMouseOver", new Func<object, bool>(FancyButtonBase_IsMouseOver));
-      dict.Add("FancyButtonBase_IsMousePressed", new Func<object, bool>(FancyButtonBase_IsMousePressed));
-      dict.Add("FancyButtonBase_JustReleased", new Func<object, bool>(FancyButtonBase_JustReleased));
-      dict.Add("FancyButtonBase_JustPressed", new Func<object, bool>(FancyButtonBase_JustPressed));
+      dict.Add("FancyButtonBase_GetHandler", new Func<object, ClickHandler>(FancyButtonBase_GetHandler));
+
+      dict.Add("ClickHandler_New", new Func<object>(ClickHandler_New));
+      dict.Add("ClickHandler_GetHitArea", new Func<object, Vector4>(ClickHandler_GetHitArea));
+      dict.Add("ClickHandler_SetHitArea", new Action<object, Vector4>(ClickHandler_SetHitArea));
+      dict.Add("ClickHandler_IsMouseReleased", new Func<object, bool>(ClickHandler_IsMouseReleased));
+      dict.Add("ClickHandler_IsMouseOver", new Func<object, bool>(ClickHandler_IsMouseOver));
+      dict.Add("ClickHandler_IsMousePressed", new Func<object, bool>(ClickHandler_IsMousePressed));
+      dict.Add("ClickHandler_JustReleased", new Func<object, bool>(ClickHandler_JustReleased));
+      dict.Add("ClickHandler_JustPressed", new Func<object, bool>(ClickHandler_JustPressed));
+      dict.Add("ClickHandler_UpdateStatus", new Action<object, object>(ClickHandler_UpdateStatus));
 
       dict.Add("FancyButton_New", new Func<string, Action, object>(FancyButton_New));
       dict.Add("FancyButton_GetText", new Func<object, string>(FancyButton_GetText));
@@ -257,13 +261,17 @@ namespace Lima.Touch
     static public float FancyTheme_GetScale(object obj) => (obj as FancyTheme).Scale;
     static public void FancyTheme_SetScale(object obj, float scale) => (obj as FancyTheme).Scale = scale;
 
-    static public Vector4 FancyButtonBase_GetHitArea(object obj) => (obj as FancyButtonBase).hitArea;
-    static public void FancyButtonBase_SetHitArea(object obj, Vector4 hitArea) => (obj as FancyButtonBase).hitArea = hitArea;
-    static public bool FancyButtonBase_IsMouseReleased(object obj) => (obj as FancyButtonBase).IsMouseReleased;
-    static public bool FancyButtonBase_IsMouseOver(object obj) => (obj as FancyButtonBase).IsMouseOver;
-    static public bool FancyButtonBase_IsMousePressed(object obj) => (obj as FancyButtonBase).IsMousePressed;
-    static public bool FancyButtonBase_JustReleased(object obj) => (obj as FancyButtonBase).JustReleased;
-    static public bool FancyButtonBase_JustPressed(object obj) => (obj as FancyButtonBase).JustPressed;
+    static public ClickHandler FancyButtonBase_GetHandler(object obj) => (obj as FancyButtonBase).handler;
+
+    static public ClickHandler ClickHandler_New() => new ClickHandler();
+    static public Vector4 ClickHandler_GetHitArea(object obj) => (obj as ClickHandler).hitArea;
+    static public void ClickHandler_SetHitArea(object obj, Vector4 hitArea) => (obj as ClickHandler).hitArea = hitArea;
+    static public bool ClickHandler_IsMouseReleased(object obj) => (obj as ClickHandler).IsMouseReleased;
+    static public bool ClickHandler_IsMouseOver(object obj) => (obj as ClickHandler).IsMouseOver;
+    static public bool ClickHandler_IsMousePressed(object obj) => (obj as ClickHandler).IsMousePressed;
+    static public bool ClickHandler_JustReleased(object obj) => (obj as ClickHandler).JustReleased;
+    static public bool ClickHandler_JustPressed(object obj) => (obj as ClickHandler).JustPressed;
+    static public void ClickHandler_UpdateStatus(object obj, object screen) => (obj as ClickHandler).UpdateStatus(screen as TouchScreen);
 
     static public FancyButton FancyButton_New(string text, Action action) => new FancyButton(text, action);
     static public string FancyButton_GetText(object obj) => (obj as FancyButton).Text;

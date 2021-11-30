@@ -58,7 +58,7 @@ namespace Lima.Fancy
       if (!IsOnScreen || !Active)
         return false;
 
-      return Position.X >= x && Position.Y >= y && Position.X <= z && Position.Y <= w;
+      return _screen.IsInsideArea(x, y, z, w);
     }
   }
 }

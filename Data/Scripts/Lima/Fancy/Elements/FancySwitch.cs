@@ -29,7 +29,7 @@ namespace Lima.Fancy.Elements
 
     public override void Update()
     {
-      hitArea = new Vector4(Position.X, Position.Y, Position.X + Size.X, Position.Y + Size.Y);
+      handler.hitArea = new Vector4(Position.X, Position.Y, Position.X + Size.X, Position.Y + Size.Y);
 
       base.Update();
 
@@ -69,11 +69,11 @@ namespace Lima.Fancy.Elements
         FontId = App.Theme.Font
       };
 
-      if (IsMousePressed)
+      if (handler.IsMousePressed)
       {
         bgSprite.Color = App.Theme.Main_20;
       }
-      else if (IsMouseOver)
+      else if (handler.IsMouseOver)
       {
         bgSprite.Color = App.Theme.Main_20;
       }
@@ -82,7 +82,7 @@ namespace Lima.Fancy.Elements
         bgSprite.Color = App.Theme.Main_10;
       }
 
-      if (JustReleased)
+      if (handler.JustReleased)
       {
         Value = !Value;
         _action(Value);

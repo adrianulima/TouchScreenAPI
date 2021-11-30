@@ -35,7 +35,6 @@ namespace Lima.Touch
     {
       get
       {
-        // TODO: Make this call happen again with some refresh command
         if (_rotate < 0)
         {
           _rotate = 0;
@@ -164,6 +163,14 @@ namespace Lima.Touch
     public void Dispose()
     {
       UpdateEvent = null;
+    }
+
+    public bool IsInsideArea(float x, float y, float z, float w)
+    {
+      if (!IsOnScreen || !Active)
+        return false;
+
+      return CursorPos.X >= x && CursorPos.Y >= y && CursorPos.X <= z && CursorPos.Y <= w;
     }
   }
 }
