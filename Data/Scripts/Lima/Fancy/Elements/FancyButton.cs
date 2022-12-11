@@ -6,8 +6,8 @@ namespace Lima.Fancy.Elements
 {
   public class FancyButton : FancyButtonBase
   {
-    private MySprite bgSprite;
-    private MySprite textSprite;
+    private MySprite _bgSprite;
+    private MySprite _textSprite;
 
     public string Text;
     public Action OnChange;
@@ -29,7 +29,7 @@ namespace Lima.Fancy.Elements
 
       base.Update();
 
-      bgSprite = new MySprite()
+      _bgSprite = new MySprite()
       {
         Type = SpriteType.TEXTURE,
         Data = "SquareSimple",
@@ -37,7 +37,7 @@ namespace Lima.Fancy.Elements
         Color = App.Theme.Main_30
       };
 
-      textSprite = new MySprite()
+      _textSprite = new MySprite()
       {
         Type = SpriteType.TEXT,
         Data = Text,
@@ -49,18 +49,18 @@ namespace Lima.Fancy.Elements
 
       if (handler.IsMousePressed)
       {
-        textSprite.Color = App.Theme.Main_30;
-        bgSprite.Color = App.Theme.Main_70;
+        _textSprite.Color = App.Theme.Main_30;
+        _bgSprite.Color = App.Theme.Main_70;
       }
       else if (handler.IsMouseOver)
       {
-        textSprite.Color = App.Theme.White;
-        bgSprite.Color = App.Theme.Main_40;
+        _textSprite.Color = App.Theme.White;
+        _bgSprite.Color = App.Theme.Main_40;
       }
       else
       {
-        textSprite.Color = App.Theme.White;
-        bgSprite.Color = App.Theme.Main_30;
+        _textSprite.Color = App.Theme.White;
+        _bgSprite.Color = App.Theme.Main_30;
       }
 
       if (handler.JustReleased)
@@ -72,18 +72,18 @@ namespace Lima.Fancy.Elements
 
       sprites.Clear();
 
-      bgSprite.Position = Position + new Vector2(0, Size.Y / 2);
-      bgSprite.Size = Size;
+      _bgSprite.Position = Position + new Vector2(0, Size.Y / 2);
+      _bgSprite.Size = Size;
 
       if (Alignment == TextAlignment.LEFT)
-        textSprite.Position = Position + new Vector2(0, Size.Y * 0.5f - (textSprite.RotationOrScale * 16.6f));
+        _textSprite.Position = Position + new Vector2(0, Size.Y * 0.5f - (_textSprite.RotationOrScale * 16.6f));
       else if (Alignment == TextAlignment.RIGHT)
-        textSprite.Position = Position + new Vector2(Size.X, Size.Y * 0.5f - (textSprite.RotationOrScale * 16.6f));
+        _textSprite.Position = Position + new Vector2(Size.X, Size.Y * 0.5f - (_textSprite.RotationOrScale * 16.6f));
       else
-        textSprite.Position = Position + new Vector2(Size.X / 2, Size.Y * 0.5f - (textSprite.RotationOrScale * 16.6f));
+        _textSprite.Position = Position + new Vector2(Size.X / 2, Size.Y * 0.5f - (_textSprite.RotationOrScale * 16.6f));
 
-      sprites.Add(bgSprite);
-      sprites.Add(textSprite);
+      sprites.Add(_bgSprite);
+      sprites.Add(_textSprite);
     }
 
   }

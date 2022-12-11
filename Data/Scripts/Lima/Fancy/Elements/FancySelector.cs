@@ -7,12 +7,12 @@ namespace Lima.Fancy.Elements
 {
   public class FancySelector : FancyButtonBase
   {
-    private MySprite bgSprite;
-    private MySprite arrowSprite;
-    private MySprite arrowBgSprite;
-    private MySprite arrow2Sprite;
-    private MySprite arrow2BgSprite;
-    private MySprite textSprite;
+    private MySprite _bgSprite;
+    private MySprite _arrowSprite;
+    private MySprite _arrowBgSprite;
+    private MySprite _arrow2Sprite;
+    private MySprite _arrow2BgSprite;
+    private MySprite _textSprite;
 
     public int Selected = 0;
     public List<string> Labels;
@@ -36,7 +36,7 @@ namespace Lima.Fancy.Elements
 
       base.Update();
 
-      bgSprite = new MySprite()
+      _bgSprite = new MySprite()
       {
         Type = SpriteType.TEXTURE,
         Data = "SquareSimple",
@@ -44,7 +44,7 @@ namespace Lima.Fancy.Elements
         Color = App.Theme.Main_10
       };
 
-      arrowBgSprite = new MySprite()
+      _arrowBgSprite = new MySprite()
       {
         Type = SpriteType.TEXTURE,
         Data = "SquareSimple",
@@ -52,7 +52,7 @@ namespace Lima.Fancy.Elements
         Color = App.Theme.Main_30
       };
 
-      arrow2BgSprite = new MySprite()
+      _arrow2BgSprite = new MySprite()
       {
         Type = SpriteType.TEXTURE,
         Data = "SquareSimple",
@@ -60,7 +60,7 @@ namespace Lima.Fancy.Elements
         Color = App.Theme.Main_30
       };
 
-      arrowSprite = new MySprite()
+      _arrowSprite = new MySprite()
       {
         Type = SpriteType.TEXTURE,
         Data = "AH_BoreSight",
@@ -68,7 +68,7 @@ namespace Lima.Fancy.Elements
         Color = App.Theme.White
       };
 
-      arrow2Sprite = new MySprite()
+      _arrow2Sprite = new MySprite()
       {
         Type = SpriteType.TEXTURE,
         Data = "AH_BoreSight",
@@ -76,7 +76,7 @@ namespace Lima.Fancy.Elements
         Color = App.Theme.White
       };
 
-      textSprite = new MySprite()
+      _textSprite = new MySprite()
       {
         Type = SpriteType.TEXT,
         Data = Labels[Selected],
@@ -92,22 +92,22 @@ namespace Lima.Fancy.Elements
         if (handler.IsMousePressed)
         {
           if (mouseX < Size.Y)
-            arrowBgSprite.Color = App.Theme.Main_70;
+            _arrowBgSprite.Color = App.Theme.Main_70;
           else if (mouseX > Size.X - Size.Y)
-            arrow2BgSprite.Color = App.Theme.Main_70;
+            _arrow2BgSprite.Color = App.Theme.Main_70;
         }
         else
         {
           if (mouseX < Size.Y)
-            arrowBgSprite.Color = App.Theme.Main_40;
+            _arrowBgSprite.Color = App.Theme.Main_40;
           else if (mouseX > Size.X - Size.Y)
-            arrow2BgSprite.Color = App.Theme.Main_40;
+            _arrow2BgSprite.Color = App.Theme.Main_40;
         }
       }
       else
       {
-        arrowBgSprite.Color = App.Theme.Main_30;
-        arrow2BgSprite.Color = App.Theme.Main_30;
+        _arrowBgSprite.Color = App.Theme.Main_30;
+        _arrow2BgSprite.Color = App.Theme.Main_30;
       }
 
       if (handler.JustReleased)
@@ -132,24 +132,24 @@ namespace Lima.Fancy.Elements
 
       sprites.Clear();
 
-      bgSprite.Position = Position + new Vector2(0, Size.Y / 2);
-      bgSprite.Size = Size;
+      _bgSprite.Position = Position + new Vector2(0, Size.Y / 2);
+      _bgSprite.Size = Size;
 
-      arrowSprite.Position = arrowBgSprite.Position = Position + new Vector2(0, Size.Y / 2);
-      arrowSprite.Size = arrowBgSprite.Size = new Vector2(Size.Y, Size.Y);
+      _arrowSprite.Position = _arrowBgSprite.Position = Position + new Vector2(0, Size.Y / 2);
+      _arrowSprite.Size = _arrowBgSprite.Size = new Vector2(Size.Y, Size.Y);
 
-      arrow2Sprite.Position = arrow2BgSprite.Position = Position + new Vector2(Size.X - Size.Y, Size.Y / 2);
-      arrow2Sprite.Size = arrow2BgSprite.Size = new Vector2(Size.Y, Size.Y);
+      _arrow2Sprite.Position = _arrow2BgSprite.Position = Position + new Vector2(Size.X - Size.Y, Size.Y / 2);
+      _arrow2Sprite.Size = _arrow2BgSprite.Size = new Vector2(Size.Y, Size.Y);
 
-      textSprite.Position = Position + new Vector2(Size.X / 2, Size.Y * 0.5f - (textSprite.RotationOrScale * 16.6f));
+      _textSprite.Position = Position + new Vector2(Size.X / 2, Size.Y * 0.5f - (_textSprite.RotationOrScale * 16.6f));
       // textSprite.Size = Size;
 
-      sprites.Add(bgSprite);
-      sprites.Add(arrowBgSprite);
-      sprites.Add(arrow2BgSprite);
-      sprites.Add(arrowSprite);
-      sprites.Add(arrow2Sprite);
-      sprites.Add(textSprite);
+      sprites.Add(_bgSprite);
+      sprites.Add(_arrowBgSprite);
+      sprites.Add(_arrow2BgSprite);
+      sprites.Add(_arrowSprite);
+      sprites.Add(_arrow2Sprite);
+      sprites.Add(_textSprite);
     }
 
   }

@@ -6,10 +6,10 @@ namespace Lima.Fancy.Elements
 {
   public class FancySwitch : FancyButtonBase
   {
-    private MySprite bgSprite;
-    private MySprite handlerSprite;
-    private MySprite selectedSprite;
-    private MySprite[] textSprites;
+    private MySprite _bgSprite;
+    private MySprite _handlerSprite;
+    private MySprite _selectedSprite;
+    private MySprite[] _textSprites;
 
     public int Index;
     public readonly string[] TabNames;
@@ -20,7 +20,7 @@ namespace Lima.Fancy.Elements
       TabNames = tabNames;
       Index = index;
 
-      textSprites = new MySprite[TabNames.Length];
+      _textSprites = new MySprite[TabNames.Length];
 
       Scale = new Vector2(1, 0);
       Pixels = new Vector2(0, 24);
@@ -30,12 +30,12 @@ namespace Lima.Fancy.Elements
     {
       handler.HitArea = new Vector4(Position.X, Position.Y, Position.X + Size.X, Position.Y + Size.Y);
 
-      var width = Size.X / textSprites.Length;
+      var width = Size.X / _textSprites.Length;
       var halfWidth = width / 2f;
 
       base.Update();
 
-      bgSprite = new MySprite()
+      _bgSprite = new MySprite()
       {
         Type = SpriteType.TEXTURE,
         Data = "SquareSimple",
@@ -43,7 +43,7 @@ namespace Lima.Fancy.Elements
         Color = App.Theme.Main_10
       };
 
-      handlerSprite = new MySprite()
+      _handlerSprite = new MySprite()
       {
         Type = SpriteType.TEXTURE,
         Data = "SquareSimple",
@@ -51,7 +51,7 @@ namespace Lima.Fancy.Elements
         Color = App.Theme.Main_20
       };
 
-      selectedSprite = new MySprite()
+      _selectedSprite = new MySprite()
       {
         Type = SpriteType.TEXTURE,
         Data = "SquareSimple",
@@ -59,9 +59,9 @@ namespace Lima.Fancy.Elements
         Color = App.Theme.Main_60
       };
 
-      for (int i = 0; i < textSprites.Length; i++)
+      for (int i = 0; i < _textSprites.Length; i++)
       {
-        textSprites[i] = new MySprite()
+        _textSprites[i] = new MySprite()
         {
           Type = SpriteType.TEXT,
           Data = TabNames[i],
@@ -84,10 +84,10 @@ namespace Lima.Fancy.Elements
 
       sprites.Clear();
 
-      bgSprite.Position = Position + new Vector2(0, Size.Y / 2);
-      bgSprite.Size = Size;
+      _bgSprite.Position = Position + new Vector2(0, Size.Y / 2);
+      _bgSprite.Size = Size;
 
-      sprites.Add(bgSprite);
+      sprites.Add(_bgSprite);
 
       if (handler.IsMousePressed || handler.IsMouseOver)
       {
@@ -96,23 +96,23 @@ namespace Lima.Fancy.Elements
 
         if (p != Index)
         {
-          handlerSprite.Position = Position + new Vector2(width * p, Size.Y / 2);
-          handlerSprite.Size = new Vector2(width, Size.Y);
+          _handlerSprite.Position = Position + new Vector2(width * p, Size.Y / 2);
+          _handlerSprite.Size = new Vector2(width, Size.Y);
 
-          sprites.Add(handlerSprite);
+          sprites.Add(_handlerSprite);
         }
       }
 
-      selectedSprite.Position = Position + new Vector2(width * Index, Size.Y / 2);
-      selectedSprite.Size = new Vector2(width, Size.Y);
+      _selectedSprite.Position = Position + new Vector2(width * Index, Size.Y / 2);
+      _selectedSprite.Size = new Vector2(width, Size.Y);
 
-      sprites.Add(selectedSprite);
+      sprites.Add(_selectedSprite);
 
-      for (int j = 0; j < textSprites.Length; j++)
+      for (int j = 0; j < _textSprites.Length; j++)
       {
-        textSprites[j].Position = Position + new Vector2(j * width + halfWidth, Size.Y * 0.5f - (textSprites[j].RotationOrScale * 16.6f));
-        textSprites[j].Color = j == Index ? App.Theme.White : App.Theme.Main_40;
-        sprites.Add(textSprites[j]);
+        _textSprites[j].Position = Position + new Vector2(j * width + halfWidth, Size.Y * 0.5f - (_textSprites[j].RotationOrScale * 16.6f));
+        _textSprites[j].Color = j == Index ? App.Theme.White : App.Theme.Main_40;
+        sprites.Add(_textSprites[j]);
       }
     }
   }

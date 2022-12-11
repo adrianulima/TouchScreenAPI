@@ -10,7 +10,7 @@ namespace Lima.Fancy
     protected readonly List<MySprite> sprites = new List<MySprite>();
     private TouchScreen _screen;
 
-    private MySprite cursorSprite;
+    private MySprite _cursorSprite;
 
     public Vector2 Position { get { return _screen.CursorPos; } }
     public bool IsOnScreen { get { return _screen.IsOnScreen; } }
@@ -21,7 +21,7 @@ namespace Lima.Fancy
     {
       _screen = screen;
 
-      cursorSprite = new MySprite()
+      _cursorSprite = new MySprite()
       {
         Type = SpriteType.TEXTURE,
         Data = "Textures\\FactionLogo\\Builders\\BuilderIcon_6.dds",
@@ -47,8 +47,8 @@ namespace Lima.Fancy
       if (TouchSession.Instance.TouchMan.CurrentScreen != _screen)
         return sprites;
 
-      cursorSprite.Position = new Vector2(Position.X, Position.Y + 8);
-      sprites.Add(cursorSprite);
+      _cursorSprite.Position = new Vector2(Position.X, Position.Y + 8);
+      sprites.Add(_cursorSprite);
 
       return sprites;
     }

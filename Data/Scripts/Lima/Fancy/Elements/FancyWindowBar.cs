@@ -5,8 +5,8 @@ namespace Lima.Fancy.Elements
 {
   public class FancyWindowBar : FancyElementBase
   {
-    private MySprite bgSprite;
-    private MySprite textSprite;
+    private MySprite _bgSprite;
+    private MySprite _textSprite;
 
     public string Text;
 
@@ -22,7 +22,7 @@ namespace Lima.Fancy.Elements
     {
       base.Update();
 
-      bgSprite = new MySprite()
+      _bgSprite = new MySprite()
       {
         Type = SpriteType.TEXTURE,
         Data = "SquareSimple",
@@ -30,7 +30,7 @@ namespace Lima.Fancy.Elements
         Color = App.Theme.Main_10
       };
 
-      textSprite = new MySprite()
+      _textSprite = new MySprite()
       {
         Type = SpriteType.TEXT,
         Data = Text,
@@ -42,13 +42,13 @@ namespace Lima.Fancy.Elements
 
       sprites.Clear();
 
-      bgSprite.Position = Position + new Vector2(0, Size.Y / 2);
-      bgSprite.Size = Size;
+      _bgSprite.Position = Position + new Vector2(0, Size.Y / 2);
+      _bgSprite.Size = Size;
 
-      textSprite.Position = Position + new Vector2(10, Size.Y * 0.5f - Size.Y / 3);
+      _textSprite.Position = Position + new Vector2(10, Size.Y * 0.5f - Size.Y / 3);
 
-      sprites.Add(bgSprite);
-      sprites.Add(textSprite);
+      sprites.Add(_bgSprite);
+      sprites.Add(_textSprite);
     }
 
   }

@@ -5,7 +5,7 @@ namespace Lima.Fancy.Elements
 {
   public class FancySeparator : FancyElementBase
   {
-    private MySprite bgSprite;
+    private MySprite _bgSprite;
 
     public FancySeparator()
     {
@@ -18,7 +18,7 @@ namespace Lima.Fancy.Elements
     {
       base.Update();
 
-      bgSprite = new MySprite()
+      _bgSprite = new MySprite()
       {
         Type = SpriteType.TEXTURE,
         Data = "SquareSimple",
@@ -28,10 +28,10 @@ namespace Lima.Fancy.Elements
 
       sprites.Clear();
 
-      bgSprite.Position = Position + new Vector2(0, Size.Y / 2);
-      bgSprite.Size = Size;
+      _bgSprite.Position = Position + new Vector2(0, Size.Y / 2);
+      _bgSprite.Size = Size;
 
-      sprites.Add(bgSprite);
+      sprites.Add(_bgSprite);
     }
 
   }

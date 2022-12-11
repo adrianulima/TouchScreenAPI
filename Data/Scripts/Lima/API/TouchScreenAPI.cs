@@ -12,7 +12,7 @@ namespace Lima.API
   public class TouchScreenAPI
   {
     private const long _channel = 2668820525;
-    private bool ApiInit;
+    private bool _apiInit;
     private bool _isRegistered;
     public bool IsReady { get; private set; }
 
@@ -37,7 +37,7 @@ namespace Lima.API
         _isRegistered = true;
         MyAPIGateway.Utilities.RegisterMessageHandler(_channel, HandleMessage);
       }
-      if (!IsReady && !ApiInit)
+      if (!IsReady && !_apiInit)
         MyAPIGateway.Utilities.SendModMessage(_channel, "ApiEndpointRequest");
 
       DelegatorBase.SetApi(this);
@@ -49,13 +49,13 @@ namespace Lima.API
         MyAPIGateway.Utilities.UnregisterMessageHandler(_channel, HandleMessage);
       ApiDelegates(null);
       _isRegistered = false;
-      ApiInit = false;
+      _apiInit = false;
       IsReady = false;
       DelegatorBase.SetApi(null);
     }
     private void HandleMessage(object msg)
     {
-      if (ApiInit || msg is string)
+      if (_apiInit || msg is string)
         return;
       try
       {
@@ -73,7 +73,7 @@ namespace Lima.API
     }
     public void ApiDelegates(IReadOnlyDictionary<string, Delegate> delegates)
     {
-      ApiInit = delegates != null;
+      _apiInit = delegates != null;
       AssignMethod(delegates, "CreateTouchScreen", ref _createTouchScreen);
       AssignMethod(delegates, "RemoveTouchScreen", ref _removeTouchScreen);
       AssignMethod(delegates, "AddSurfaceCoords", ref _addSurfaceCoords);

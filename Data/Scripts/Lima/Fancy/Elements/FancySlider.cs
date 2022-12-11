@@ -14,7 +14,7 @@ namespace Lima.Fancy.Elements
     protected MySprite textSprite;
 
     private FancyTextField _innerTextField;
-    private FancyTextField InnerTextField
+    public FancyTextField InnerTextField
     {
       get
       {

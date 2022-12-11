@@ -8,13 +8,13 @@ namespace Lima.Fancy
   public class TextInputHandler
   {
     public Func<char, bool> OnInputAction;
-    private readonly Action<char> OnAppendAction;
-    private readonly Action OnBackspaceAction;
+    private readonly Action<char> _onAppendAction;
+    private readonly Action _onBackspaceAction;
 
     public TextInputHandler(Action<char> onAppendAction, Action onBackspaceAction, Func<char, bool> onInputAction = null)
     {
-      OnAppendAction = onAppendAction;
-      OnBackspaceAction = onBackspaceAction;
+      _onAppendAction = onAppendAction;
+      _onBackspaceAction = onBackspaceAction;
       OnInputAction = onInputAction;
     }
 
@@ -25,9 +25,9 @@ namespace Lima.Fancy
       for (int i = 0; i < input.Count; i++)
       {
         if (input[i] == '\b')
-          OnBackspaceAction?.Invoke();
+          _onBackspaceAction?.Invoke();
         else if (OnInputAction == null || OnInputAction(input[i]))
-          OnAppendAction?.Invoke(input[i]);
+          _onAppendAction?.Invoke(input[i]);
       }
     }
   }

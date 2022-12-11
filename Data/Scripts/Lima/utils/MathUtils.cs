@@ -43,10 +43,10 @@ namespace Lima.Utils
       return Vector3D.Transform(globalPos, worldMatrixNormalizedInv);
     }
 
-    private static Random random = new Random();
+    private static Random _random = new Random();
     internal static int GetRandomInt(int min, int max)
     {
-      return random.Next(min, max);
+      return _random.Next(min, max);
     }
   }
 }

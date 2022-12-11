@@ -10,7 +10,7 @@ namespace Lima.Utils
   internal static class InputUtils
   {
     private static MyKeys[] _keys;
-    private static MyKeys[] Keys
+    public static MyKeys[] Keys
     {
       get
       {
@@ -21,7 +21,7 @@ namespace Lima.Utils
     }
 
     private static List<string> _controlIDs;
-    private static List<string> ControlIDs
+    public static List<string> ControlIDs
     {
       get
       {

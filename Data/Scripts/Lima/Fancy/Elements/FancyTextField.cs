@@ -7,8 +7,8 @@ namespace Lima.Fancy.Elements
 {
   public class FancyTextField : FancyButtonBase
   {
-    private MySprite bgSprite;
-    private MySprite textSprite;
+    private MySprite _bgSprite;
+    private MySprite _textSprite;
 
     public string Text;
     public Action<string> OnChange;
@@ -98,7 +98,7 @@ namespace Lima.Fancy.Elements
 
       base.Update();
 
-      bgSprite = new MySprite()
+      _bgSprite = new MySprite()
       {
         Type = SpriteType.TEXTURE,
         Data = "SquareSimple",
@@ -106,7 +106,7 @@ namespace Lima.Fancy.Elements
         Color = App.Theme.Main_10
       };
 
-      textSprite = new MySprite()
+      _textSprite = new MySprite()
       {
         Type = SpriteType.TEXT,
         Data = Text,
@@ -119,15 +119,15 @@ namespace Lima.Fancy.Elements
       if (_edit)
       {
         Blink();
-        bgSprite.Color = _blink ? App.Theme.Main_20 : App.Theme.Main_10;
+        _bgSprite.Color = _blink ? App.Theme.Main_20 : App.Theme.Main_10;
       }
       else if (handler.IsMousePressed || handler.IsMouseOver)
       {
-        bgSprite.Color = App.Theme.Main_20;
+        _bgSprite.Color = App.Theme.Main_20;
       }
       else
       {
-        bgSprite.Color = App.Theme.Main_10;
+        _bgSprite.Color = App.Theme.Main_10;
       }
 
       if (handler.JustReleased)
@@ -141,39 +141,39 @@ namespace Lima.Fancy.Elements
 
       sprites.Clear();
 
-      bgSprite.Position = Position + new Vector2(0, Size.Y / 2);
-      bgSprite.Size = Size;
+      _bgSprite.Position = Position + new Vector2(0, Size.Y / 2);
+      _bgSprite.Size = Size;
 
       if (_maxText != Text)
       {
-        var tx = App.Theme.MeasureStringInPixels(Text, textSprite.FontId, textSprite.RotationOrScale).X;
+        var tx = App.Theme.MeasureStringInPixels(Text, _textSprite.FontId, _textSprite.RotationOrScale).X;
         if (tx <= Size.X)
           _maxText = Text.Substring(0, Math.Max(0, Text.Length - 3)) + "...";
         else
         {
-          textSprite.Data = _maxText;
-          bgSprite.Color = _blink ? App.Theme.Main_20 : Color.Red;
+          _textSprite.Data = _maxText;
+          _bgSprite.Color = _blink ? App.Theme.Main_20 : Color.Red;
         }
       }
 
       var caretX = 1.5f * App.Theme.Scale;
-      if (_edit && _blinkCaret && textSprite.Data != _maxText)
+      if (_edit && _blinkCaret && _textSprite.Data != _maxText)
       {
-        textSprite.Data = textSprite.Data + "|";
+        _textSprite.Data = _textSprite.Data + "|";
         caretX = 0;
       }
 
 
       if (Alignment == TextAlignment.LEFT)
-        textSprite.Position = Position + new Vector2(0, Size.Y * 0.5f - (textSprite.RotationOrScale * 16.6f));
+        _textSprite.Position = Position + new Vector2(0, Size.Y * 0.5f - (_textSprite.RotationOrScale * 16.6f));
       else if (Alignment == TextAlignment.RIGHT)
-        textSprite.Position = Position + new Vector2(Size.X - caretX * 2, Size.Y * 0.5f - (textSprite.RotationOrScale * 16.6f));
+        _textSprite.Position = Position + new Vector2(Size.X - caretX * 2, Size.Y * 0.5f - (_textSprite.RotationOrScale * 16.6f));
       else
-        textSprite.Position = Position + new Vector2(Size.X / 2 - caretX, Size.Y * 0.5f - (textSprite.RotationOrScale * 16.6f));
+        _textSprite.Position = Position + new Vector2(Size.X / 2 - caretX, Size.Y * 0.5f - (_textSprite.RotationOrScale * 16.6f));
 
 
-      sprites.Add(bgSprite);
-      sprites.Add(textSprite);
+      sprites.Add(_bgSprite);
+      sprites.Add(_textSprite);
     }
 
     private void Blink()

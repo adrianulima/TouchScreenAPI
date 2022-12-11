@@ -7,9 +7,9 @@ namespace Lima.Fancy.Elements
 {
   public class FancySliderRange : FancySlider
   {
-    private MySprite handlerLowerSprite;
-    private MySprite handlerInnerLowerSprite;
-    private MySprite bgLowerSprite;
+    private MySprite _handlerLowerSprite;
+    private MySprite _handlerInnerLowerSprite;
+    private MySprite _bgLowerSprite;
     public Action<float, float> OnChangeR;
 
     public float ValueLower = 0;
@@ -71,30 +71,30 @@ namespace Lima.Fancy.Elements
       if (input || skip)
         return;
 
-      handlerLowerSprite = handlerSprite;
-      handlerInnerLowerSprite = handlerInnerSprite;
-      bgLowerSprite = bgSprite;
+      _handlerLowerSprite = handlerSprite;
+      _handlerInnerLowerSprite = handlerInnerSprite;
+      _bgLowerSprite = bgSprite;
       if (handler.IsMousePressed || handler.IsMouseOver)
       {
-        bgLowerSprite.Color = App.Theme.Main_20;
+        _bgLowerSprite.Color = App.Theme.Main_20;
       }
       else
       {
-        bgLowerSprite.Color = App.Theme.Main_10;
+        _bgLowerSprite.Color = App.Theme.Main_10;
       }
 
       var ratio = (ValueLower - Range.X) / (Range.Y - Range.X);
       var prgW = Size.X * ratio;
 
       var handlerOffset = (Size.Y / 2) * ((ratio * 1.4f) + 0.3f);
-      handlerLowerSprite.Position = Position + new Vector2(prgW - handlerOffset, Size.Y - Size.Y / 2);
-      handlerLowerSprite.Size = new Vector2(Size.Y * 0.8f, Size.Y * 0.8f);
+      _handlerLowerSprite.Position = Position + new Vector2(prgW - handlerOffset, Size.Y - Size.Y / 2);
+      _handlerLowerSprite.Size = new Vector2(Size.Y * 0.8f, Size.Y * 0.8f);
 
-      handlerInnerLowerSprite.Position = Position + new Vector2(prgW - handlerOffset + Size.Y * 0.15f, Size.Y - Size.Y / 2);
-      handlerInnerLowerSprite.Size = new Vector2(Size.Y * 0.5f, Size.Y * 0.5f);
+      _handlerInnerLowerSprite.Position = Position + new Vector2(prgW - handlerOffset + Size.Y * 0.15f, Size.Y - Size.Y / 2);
+      _handlerInnerLowerSprite.Size = new Vector2(Size.Y * 0.5f, Size.Y * 0.5f);
 
-      bgLowerSprite.Position = Position + new Vector2(0, Size.Y - Size.Y / 2);
-      bgLowerSprite.Size = new Vector2(prgW, Size.Y / 2);
+      _bgLowerSprite.Position = Position + new Vector2(0, Size.Y - Size.Y / 2);
+      _bgLowerSprite.Size = new Vector2(prgW, Size.Y / 2);
 
       var ratioRange = (Value - ValueLower) / (Range.Y - Range.X);
       progressSprite.Position = Position + new Vector2(prgW, Size.Y - Size.Y / 2);
@@ -103,10 +103,10 @@ namespace Lima.Fancy.Elements
       sprites.Clear();
 
       sprites.Add(bgSprite);
-      sprites.Add(bgLowerSprite);
+      sprites.Add(_bgLowerSprite);
       sprites.Add(progressSprite);
-      sprites.Add(handlerLowerSprite);
-      sprites.Add(handlerInnerLowerSprite);
+      sprites.Add(_handlerLowerSprite);
+      sprites.Add(_handlerInnerLowerSprite);
       sprites.Add(handlerSprite);
       sprites.Add(handlerInnerSprite);
     }
