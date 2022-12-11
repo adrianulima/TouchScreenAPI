@@ -94,6 +94,10 @@ namespace Lima.Touch
         { "FancyView_SetDirection", new Action<object, int>(FancyView_SetDirection) },
         { "FancyView_GetBgColor", new Func<object, Color>(FancyView_GetBgColor) },
         { "FancyView_SetBgColor", new Action<object, Color>(FancyView_SetBgColor) },
+        { "FancyView_GetBorderColor", new Func<object, Color>(FancyView_GetBorderColor) },
+        { "FancyView_SetBorderColor", new Action<object, Color>(FancyView_SetBorderColor) },
+        { "FancyView_GetBorderWidth", new Func<object, Vector4>(FancyView_GetBorderWidth) },
+        { "FancyView_SetBorderWidth", new Action<object, Vector4>(FancyView_SetBorderWidth) },
 
         { "FancyApp_New", new Func<FancyApp>(FancyApp_New) },
         { "FancyApp_GetScreen", new Func<object, TouchScreen>(FancyApp_GetScreen) },
@@ -254,6 +258,10 @@ namespace Lima.Touch
     private void FancyView_SetDirection(object obj, int direction) => (obj as FancyView).Direction = (FancyView.ViewDirection)direction;
     private Color FancyView_GetBgColor(object obj) => (Color)(obj as FancyView).BgColor;
     private void FancyView_SetBgColor(object obj, Color bgColor) => (obj as FancyView).BgColor = bgColor;
+    private Color FancyView_GetBorderColor(object obj) => (Color)(obj as FancyView).BorderColor;
+    private void FancyView_SetBorderColor(object obj, Color borderColor) => (obj as FancyView).BorderColor = borderColor;
+    private Vector4 FancyView_GetBorderWidth(object obj) => (Vector4)(obj as FancyView).BorderWidth;
+    private void FancyView_SetBorderWidth(object obj, Vector4 borderWidth) => (obj as FancyView).BorderWidth = borderWidth;
 
     private FancyApp FancyApp_New() => new FancyApp();
     private TouchScreen FancyApp_GetScreen(object obj) => (obj as FancyApp).Screen;

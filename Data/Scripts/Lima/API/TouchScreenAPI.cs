@@ -138,6 +138,10 @@ namespace Lima.API
       AssignMethod(delegates, "FancyView_SetDirection", ref FancyView_SetDirection);
       AssignMethod(delegates, "FancyView_GetBgColor", ref FancyView_GetBgColor);
       AssignMethod(delegates, "FancyView_SetBgColor", ref FancyView_SetBgColor);
+      AssignMethod(delegates, "FancyView_GetBorderColor", ref FancyView_GetBorderColor);
+      AssignMethod(delegates, "FancyView_SetBorderColor", ref FancyView_SetBorderColor);
+      AssignMethod(delegates, "FancyView_GetBorderWidth", ref FancyView_GetBorderWidth);
+      AssignMethod(delegates, "FancyView_SetBorderWidth", ref FancyView_SetBorderWidth);
       AssignMethod(delegates, "FancyApp_New", ref FancyApp_New);
       AssignMethod(delegates, "FancyApp_GetScreen", ref FancyApp_GetScreen);
       AssignMethod(delegates, "FancyApp_GetCursor", ref FancyApp_GetCursor);
@@ -280,6 +284,10 @@ namespace Lima.API
     public Action<object, int> FancyView_SetDirection;
     public Func<object, Color> FancyView_GetBgColor;
     public Action<object, Color> FancyView_SetBgColor;
+    public Func<object, Color> FancyView_GetBorderColor;
+    public Action<object, Color> FancyView_SetBorderColor;
+    public Func<object, Vector4> FancyView_GetBorderWidth;
+    public Action<object, Vector4> FancyView_SetBorderWidth;
 
     public Func<object> FancyApp_New;
     public Func<object, object> FancyApp_GetScreen;
@@ -452,6 +460,10 @@ namespace Lima.API
     public void SetDirection(ViewDirection direction) => Api.FancyView_SetDirection.Invoke(internalObj, (int)direction);
     public Color GetBgColor() => (Color)Api.FancyView_GetBgColor.Invoke(internalObj);
     public void SetBgColor(Color bgColor) => Api.FancyView_SetBgColor.Invoke(internalObj, bgColor);
+    public Color GetBorderColor() => (Color)Api.FancyView_GetBorderColor.Invoke(internalObj);
+    public void SetBorderColor(Color borderColor) => Api.FancyView_SetBorderColor.Invoke(internalObj, borderColor);
+    public Color GetBorderWidth() => (Color)Api.FancyView_GetBorderWidth.Invoke(internalObj);
+    public void SetBorderWidth(Vector4 borderWidth) => Api.FancyView_SetBorderWidth.Invoke(internalObj, borderWidth);
   }
   public class FancyApp : FancyView
   {
