@@ -44,7 +44,7 @@ namespace Lima.Fancy
       if (!Active)
         return sprites;
 
-      if (TouchManager.Instance.CurrentScreen != _screen)
+      if (TouchSession.Instance.TouchMan.CurrentScreen != _screen)
         return sprites;
 
       cursorSprite.Position = new Vector2(Position.X, Position.Y + 8);

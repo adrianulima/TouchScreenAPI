@@ -23,11 +23,11 @@ namespace Lima.Touch
     public bool IsOnScreen { get; private set; }
     public Vector2 CursorPos { get; private set; }
     public Vector3 Intersection { get; private set; }
-    public float _interactiveDistance = TouchManager.Instance.DefaultInteractiveDistance;
+    public float _interactiveDistance = TouchSession.Instance.TouchMan.DefaultInteractiveDistance;
     public float InteractiveDistance
     {
       get { return _interactiveDistance; }
-      set { _interactiveDistance = MathHelper.Clamp(value, 0, TouchManager.Instance.MaxInteractiveDistance); }
+      set { _interactiveDistance = MathHelper.Clamp(value, 0, TouchSession.Instance.TouchMan.MaxInteractiveDistance); }
     }
 
     private int _rotate = -1;
@@ -62,7 +62,7 @@ namespace Lima.Touch
         throw new Exception($"Block is not a IMyTextSurfaceProvider {block}");
       Index = SurfaceUtils.GetSurfaceIndex(provider, surface);
 
-      var coordString = SurfaceCoordsManager.Instance.CoordsList.SingleOrDefault(c => c.StartsWith($"{SurfaceCoords.Prefix}:{SubtypeId}:{Index}"));
+      var coordString = TouchSession.Instance.SurfaceCoordsMan.CoordsList.SingleOrDefault(c => c.StartsWith($"{SurfaceCoords.Prefix}:{SubtypeId}:{Index}"));
       if (coordString == null)
         throw new Exception($"Can't find coords for {SubtypeId}:{Index}");
 

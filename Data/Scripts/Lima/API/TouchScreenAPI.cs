@@ -16,21 +16,20 @@ namespace Lima.API
     private bool _isRegistered;
     public bool IsReady { get; private set; }
 
+    private Func<IMyCubeBlock, IMyTextSurface, object> _createTouchScreen;
+    private Action<IMyCubeBlock, IMyTextSurface> _removeTouchScreen;
     private Func<float> _getMaxInteractiveDistance;
     private Action<float> _setMaxInteractiveDistance;
     private Action<string> _addSurfaceCoords;
     private Action<string> _removeSurfaceCoords;
-    private Func<IMyCubeBlock, IMyTextSurface, object> _createTouchScreen;
-    private Action<IMyCubeBlock, IMyTextSurface> _removeTouchScreen;
 
-    public float GetMaxInteractiveDistance() => _getMaxInteractiveDistance?.Invoke() ?? -1f;
-    public void SetMaxInteractiveDistance(float distance) => _setMaxInteractiveDistance?.Invoke(distance);
-    public void AddSurfaceCoords(string coords) => _addSurfaceCoords?.Invoke(coords);
-    public void RemoveSurfaceCoords(string coords) => _removeSurfaceCoords?.Invoke(coords);
     public object CreateTouchScreen(IMyCubeBlock block, IMyTextSurface surface) => _createTouchScreen?.Invoke(block, surface);
     public void RemoveTouchScreen(IMyCubeBlock block, IMyTextSurface surface) => _removeTouchScreen?.Invoke(block, surface);
+    public void AddSurfaceCoords(string coords) => _addSurfaceCoords?.Invoke(coords);
+    public void RemoveSurfaceCoords(string coords) => _removeSurfaceCoords?.Invoke(coords);
+    public float GetMaxInteractiveDistance() => _getMaxInteractiveDistance?.Invoke() ?? -1f;
+    public void SetMaxInteractiveDistance(float distance) => _setMaxInteractiveDistance?.Invoke(distance);
 
-    public TouchScreenAPI() { }
     public bool Load()
     {
       if (!_isRegistered)
@@ -72,12 +71,12 @@ namespace Lima.API
     public void ApiDelegates(IReadOnlyDictionary<string, Delegate> delegates)
     {
       _apiInit = delegates != null;
-      AssignMethod(delegates, "GetMaxInteractiveDistance", ref _getMaxInteractiveDistance);
-      AssignMethod(delegates, "SetMaxInteractiveDistance", ref _setMaxInteractiveDistance);
-      AssignMethod(delegates, "AddSurfaceCoords", ref _addSurfaceCoords);
-      AssignMethod(delegates, "RemoveSurfaceCoords", ref _removeSurfaceCoords);
       AssignMethod(delegates, "CreateTouchScreen", ref _createTouchScreen);
       AssignMethod(delegates, "RemoveTouchScreen", ref _removeTouchScreen);
+      AssignMethod(delegates, "AddSurfaceCoords", ref _addSurfaceCoords);
+      AssignMethod(delegates, "RemoveSurfaceCoords", ref _removeSurfaceCoords);
+      AssignMethod(delegates, "GetMaxInteractiveDistance", ref _getMaxInteractiveDistance);
+      AssignMethod(delegates, "SetMaxInteractiveDistance", ref _setMaxInteractiveDistance);
       AssignMethod(delegates, "TouchScreen_GetBlock", ref TouchScreen._getBlock);
       AssignMethod(delegates, "TouchScreen_GetSurface", ref TouchScreen._getSurface);
       AssignMethod(delegates, "TouchScreen_GetIndex", ref TouchScreen._getIndex);

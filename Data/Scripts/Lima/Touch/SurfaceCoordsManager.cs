@@ -5,17 +5,7 @@ namespace Lima.Touch
 {
   public class SurfaceCoordsManager
   {
-    public static SurfaceCoordsManager Instance;
-
     public readonly List<string> CoordsList = new List<string>();
-
-    public SurfaceCoordsManager()
-    {
-      if (Instance != null)
-        return;
-
-      Instance = this;
-    }
 
     public void Init()
     {

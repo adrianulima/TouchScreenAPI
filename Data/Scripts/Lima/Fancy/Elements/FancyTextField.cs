@@ -67,11 +67,8 @@ namespace Lima.Fancy.Elements
         return false;
       }
 
-
       if (IsNumeric)
-      {
         return InputUtils.CheckNumericInput(Text, ch, AllowNegative, IsInteger);
-      }
 
       return ch >= ' ';
     }

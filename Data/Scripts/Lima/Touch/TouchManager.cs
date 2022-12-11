@@ -11,22 +11,12 @@ namespace Lima.Touch
 {
   public class TouchManager
   {
-    public static TouchManager Instance;
-
     public float MaxInteractiveDistance = 50f;
     public float DefaultInteractiveDistance = 10f;
 
     public readonly List<TouchScreen> Screens = new List<TouchScreen>();
 
     public TouchScreen CurrentScreen;
-
-    public TouchManager()
-    {
-      if (Instance != null)
-        return;
-
-      Instance = this;
-    }
 
     public void Update()
     {
@@ -98,7 +88,7 @@ namespace Lima.Touch
 
     public void RemoveScreen(IMyCubeBlock block, IMyTextSurface surface)
     {
-      var screen = TouchManager.Instance.Screens.SingleOrDefault(s => s.CompareWithBlockAndSurface(block, surface));
+      var screen = TouchSession.Instance.TouchMan.Screens.SingleOrDefault(s => s.CompareWithBlockAndSurface(block, surface));
       if (screen != null)
       {
         screen.Dispose();

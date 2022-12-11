@@ -15,6 +15,8 @@ namespace Lima.Touch
     public SurfaceCoordsManager SurfaceCoordsMan = new SurfaceCoordsManager();
     public TouchManager TouchMan = new TouchManager();
 
+    private TouchDelegates _delegator;
+
     public override void LoadData()
     {
       ModEnabled = !MyAPIGateway.Utilities.IsDedicated;
@@ -22,8 +24,9 @@ namespace Lima.Touch
         return;
 
       Instance = this;
+      _delegator = new TouchDelegates();
       SurfaceCoordsMan.LoadData();
-      TouchDelegates.Load();
+      _delegator.Load();
     }
 
     public override void Init(MyObjectBuilder_SessionComponent sessionComponent)
@@ -37,7 +40,7 @@ namespace Lima.Touch
     protected override void UnloadData()
     {
       SurfaceCoordsMan.UnloadData();
-      TouchDelegates.Unload();
+      _delegator.Unload();
       Instance = null;
     }
 

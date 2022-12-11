@@ -23,8 +23,8 @@ namespace Lima.Fancy
     public virtual void InitApp(MyCubeBlock block, Sandbox.ModAPI.Ingame.IMyTextSurface surface)
     {
       Screen = new TouchScreen(block, surface as Sandbox.ModAPI.IMyTextSurface);
-      TouchManager.Instance.RemoveScreen(block, surface as Sandbox.ModAPI.IMyTextSurface);
-      TouchManager.Instance.Screens.Add(Screen);
+      TouchSession.Instance.TouchMan.RemoveScreen(block, surface as Sandbox.ModAPI.IMyTextSurface);
+      TouchSession.Instance.TouchMan.Screens.Add(Screen);
       Screen.UpdateEvent += UpdateAfterSimulation;
 
       Cursor = new FancyCursor(Screen);
@@ -80,7 +80,7 @@ namespace Lima.Fancy
       Screen.UpdateEvent -= UpdateAfterSimulation;
       Screen.Dispose();
       Cursor.Dispose();
-      TouchManager.Instance.Screens.Remove(Screen);
+      TouchSession.Instance.TouchMan.Screens.Remove(Screen);
       UpdateEvent = null;
 
       base.Dispose();

@@ -11,13 +11,13 @@ using VRageMath;
 
 namespace Lima.Touch
 {
-  public static class TouchDelegates
+  public class TouchDelegates
   {
     private const long _channel = 2668820525;
-    private static bool _isRegistered;
-    public static bool IsReady { get; private set; }
+    private bool _isRegistered;
+    public bool IsReady { get; private set; }
 
-    public static void Load()
+    public void Load()
     {
       if (!_isRegistered)
       {
@@ -28,7 +28,7 @@ namespace Lima.Touch
       MyAPIGateway.Utilities.SendModMessage(_channel, GetApiDictionary());
     }
 
-    public static void Unload()
+    public void Unload()
     {
       if (_isRegistered)
       {
@@ -39,22 +39,22 @@ namespace Lima.Touch
       MyAPIGateway.Utilities.SendModMessage(_channel, new Dictionary<string, Delegate>());
     }
 
-    private static void HandleMessage(object msg)
+    private void HandleMessage(object msg)
     {
       if ((msg as string) == "ApiEndpointRequest")
         MyAPIGateway.Utilities.SendModMessage(_channel, GetApiDictionary());
     }
 
-    public static Dictionary<string, Delegate> GetApiDictionary()
+    private Dictionary<string, Delegate> GetApiDictionary()
     {
       var dict = new Dictionary<string, Delegate>();
 
-      dict.Add("GetMaxInteractiveDistance", new Func<float>(GetMaxInteractiveDistance));
-      dict.Add("SetMaxInteractiveDistance", new Action<float>(SetMaxInteractiveDistance));
       dict.Add("CreateTouchScreen", new Func<IMyCubeBlock, IMyTextSurface, TouchScreen>(CreateTouchScreen));
       dict.Add("RemoveTouchScreen", new Action<IMyCubeBlock, IMyTextSurface>(RemoveTouchScreen));
       dict.Add("AddSurfaceCoords", new Action<string>(AddSurfaceCoords));
       dict.Add("RemoveSurfaceCoords", new Action<string>(RemoveSurfaceCoords));
+      dict.Add("GetMaxInteractiveDistance", new Func<float>(GetMaxInteractiveDistance));
+      dict.Add("SetMaxInteractiveDistance", new Action<float>(SetMaxInteractiveDistance));
 
       dict.Add("TouchScreen_GetBlock", new Func<object, IMyCubeBlock>(TouchScreen_GetBlock));
       dict.Add("TouchScreen_GetSurface", new Func<object, IMyTextSurface>(TouchScreen_GetSurface));
@@ -197,81 +197,80 @@ namespace Lima.Touch
       return dict;
     }
 
-    public static TouchScreen CreateTouchScreen(IMyCubeBlock block, IMyTextSurface surface)
+    private TouchScreen CreateTouchScreen(IMyCubeBlock block, IMyTextSurface surface)
     {
       var screen = new TouchScreen(block, surface);
-      TouchManager.Instance.Screens.Add(screen);
+      TouchSession.Instance.TouchMan.Screens.Add(screen);
       return screen;
     }
-
-    public static void RemoveTouchScreen(IMyCubeBlock block, IMyTextSurface surface) => TouchManager.Instance.RemoveScreen(block, surface);
-    public static List<TouchScreen> GetTouchScreensList() => TouchManager.Instance.Screens;
-    public static TouchScreen GetTargetTouchScreen() => TouchManager.Instance.CurrentScreen;
-    public static float GetMaxInteractiveDistance() => TouchManager.Instance.MaxInteractiveDistance;
-    public static void SetMaxInteractiveDistance(float distance) => TouchManager.Instance.MaxInteractiveDistance = distance;
-    public static void AddSurfaceCoords(string coords) => SurfaceCoordsManager.Instance.AddSurfaceCoords(coords);
-    public static void RemoveSurfaceCoords(string coords)
+    private void RemoveTouchScreen(IMyCubeBlock block, IMyTextSurface surface) => TouchSession.Instance.TouchMan.RemoveScreen(block, surface);
+    private List<TouchScreen> GetTouchScreensList() => TouchSession.Instance.TouchMan.Screens;
+    private TouchScreen GetTargetTouchScreen() => TouchSession.Instance.TouchMan.CurrentScreen;
+    private float GetMaxInteractiveDistance() => TouchSession.Instance.TouchMan.MaxInteractiveDistance;
+    private void SetMaxInteractiveDistance(float distance) => TouchSession.Instance.TouchMan.MaxInteractiveDistance = distance;
+    private void AddSurfaceCoords(string coords) => TouchSession.Instance.SurfaceCoordsMan.AddSurfaceCoords(coords);
+    private void RemoveSurfaceCoords(string coords)
     {
-      var index = SurfaceCoordsManager.Instance.CoordsList.IndexOf(coords);
+      var index = TouchSession.Instance.SurfaceCoordsMan.CoordsList.IndexOf(coords);
       if (index >= 0)
-        SurfaceCoordsManager.Instance.CoordsList.RemoveAt(index);
+        TouchSession.Instance.SurfaceCoordsMan.CoordsList.RemoveAt(index);
     }
 
-    static public IMyCubeBlock TouchScreen_GetBlock(object obj) => (obj as TouchScreen).Block;
-    static public IMyTextSurface TouchScreen_GetSurface(object obj) => (obj as TouchScreen).Surface;
-    static public int TouchScreen_GetIndex(object obj) => (obj as TouchScreen).Index;
-    static public bool TouchScreen_IsOnScreen(object obj) => (obj as TouchScreen).IsOnScreen;
-    static public Vector2 TouchScreen_GetCursorPosition(object obj) => (obj as TouchScreen).CursorPos;
-    static public float TouchScreen_GetInteractiveDistance(object obj) => (obj as TouchScreen).InteractiveDistance;
-    static public void TouchScreen_SetInteractiveDistance(object obj, float distance) => (obj as TouchScreen).InteractiveDistance = distance;
-    static public int TouchScreen_GetScreenRotate(object obj) => (obj as TouchScreen).ScreenRotate;
-    static public bool TouchScreen_CompareWithBlockAndSurface(object obj, IMyCubeBlock block, IMyTextSurface surface) => (obj as TouchScreen).CompareWithBlockAndSurface(block, surface);
-    static public void TouchScreen_Dispose(object obj) => (obj as TouchScreen).Dispose();
+    private IMyCubeBlock TouchScreen_GetBlock(object obj) => (obj as TouchScreen).Block;
+    private IMyTextSurface TouchScreen_GetSurface(object obj) => (obj as TouchScreen).Surface;
+    private int TouchScreen_GetIndex(object obj) => (obj as TouchScreen).Index;
+    private bool TouchScreen_IsOnScreen(object obj) => (obj as TouchScreen).IsOnScreen;
+    private Vector2 TouchScreen_GetCursorPosition(object obj) => (obj as TouchScreen).CursorPos;
+    private float TouchScreen_GetInteractiveDistance(object obj) => (obj as TouchScreen).InteractiveDistance;
+    private void TouchScreen_SetInteractiveDistance(object obj, float distance) => (obj as TouchScreen).InteractiveDistance = distance;
+    private int TouchScreen_GetScreenRotate(object obj) => (obj as TouchScreen).ScreenRotate;
+    private bool TouchScreen_CompareWithBlockAndSurface(object obj, IMyCubeBlock block, IMyTextSurface surface) => (obj as TouchScreen).CompareWithBlockAndSurface(block, surface);
+    private void TouchScreen_Dispose(object obj) => (obj as TouchScreen).Dispose();
 
-    static public Vector2 FancyElementBase_GetPosition(object obj) => (obj as FancyElementBase).Position;
-    static public void FancyElementBase_SetPosition(object obj, Vector2 position) => (obj as FancyElementBase).Position = position;
-    static public Vector4 FancyElementBase_GetMargin(object obj) => (obj as FancyElementBase).Margin;
-    static public void FancyElementBase_SetMargin(object obj, Vector4 margin) => (obj as FancyElementBase).Margin = margin;
-    static public Vector2 FancyElementBase_GetScale(object obj) => (obj as FancyElementBase).Scale;
-    static public void FancyElementBase_SetScale(object obj, Vector2 scale) => (obj as FancyElementBase).Scale = scale;
-    static public Vector2 FancyElementBase_GetPixels(object obj) => (obj as FancyElementBase).Pixels;
-    static public void FancyElementBase_SetPixels(object obj, Vector2 pixels) => (obj as FancyElementBase).Pixels = pixels;
-    static public Vector2 FancyElementBase_GetSize(object obj) => (obj as FancyElementBase).Size;
-    static public RectangleF FancyElementBase_GetViewport(object obj) => (obj as FancyElementBase).Viewport;
-    static public FancyApp FancyElementBase_GetApp(object obj) => (obj as FancyElementBase).App;
-    static public FancyElementContainerBase FancyElementBase_GetParent(object obj) => (obj as FancyElementBase).Parent;
-    static public Vector2 FancyElementBase_GetOffset(object obj) => (obj as FancyElementBase).Offset;
-    static public List<MySprite> FancyElementBase_GetSprites(object obj) => (obj as FancyElementBase).GetSprites();
-    static public void FancyElementBase_InitElements(object obj) => (obj as FancyElementBase).InitElements();
-    static public void FancyElementBase_Update(object obj) => (obj as FancyElementBase).Update();
-    static public void FancyElementBase_Dispose(object obj) => (obj as FancyElementBase).Dispose();
+    private Vector2 FancyElementBase_GetPosition(object obj) => (obj as FancyElementBase).Position;
+    private void FancyElementBase_SetPosition(object obj, Vector2 position) => (obj as FancyElementBase).Position = position;
+    private Vector4 FancyElementBase_GetMargin(object obj) => (obj as FancyElementBase).Margin;
+    private void FancyElementBase_SetMargin(object obj, Vector4 margin) => (obj as FancyElementBase).Margin = margin;
+    private Vector2 FancyElementBase_GetScale(object obj) => (obj as FancyElementBase).Scale;
+    private void FancyElementBase_SetScale(object obj, Vector2 scale) => (obj as FancyElementBase).Scale = scale;
+    private Vector2 FancyElementBase_GetPixels(object obj) => (obj as FancyElementBase).Pixels;
+    private void FancyElementBase_SetPixels(object obj, Vector2 pixels) => (obj as FancyElementBase).Pixels = pixels;
+    private Vector2 FancyElementBase_GetSize(object obj) => (obj as FancyElementBase).Size;
+    private RectangleF FancyElementBase_GetViewport(object obj) => (obj as FancyElementBase).Viewport;
+    private FancyApp FancyElementBase_GetApp(object obj) => (obj as FancyElementBase).App;
+    private FancyElementContainerBase FancyElementBase_GetParent(object obj) => (obj as FancyElementBase).Parent;
+    private Vector2 FancyElementBase_GetOffset(object obj) => (obj as FancyElementBase).Offset;
+    private List<MySprite> FancyElementBase_GetSprites(object obj) => (obj as FancyElementBase).GetSprites();
+    private void FancyElementBase_InitElements(object obj) => (obj as FancyElementBase).InitElements();
+    private void FancyElementBase_Update(object obj) => (obj as FancyElementBase).Update();
+    private void FancyElementBase_Dispose(object obj) => (obj as FancyElementBase).Dispose();
 
-    static public List<object> FancyElementContainerBase_GetChildren(object obj) => (obj as FancyElementContainerBase).children.Cast<object>().ToList();
-    static public void FancyElementContainerBase_AddChild(object obj, object child) => (obj as FancyElementContainerBase).AddChild((FancyElementBase)child);
-    static public void FancyElementContainerBase_RemoveChild(object obj, object child) => (obj as FancyElementContainerBase).RemoveChild((FancyElementBase)child);
+    private List<object> FancyElementContainerBase_GetChildren(object obj) => (obj as FancyElementContainerBase).children.Cast<object>().ToList();
+    private void FancyElementContainerBase_AddChild(object obj, object child) => (obj as FancyElementContainerBase).AddChild((FancyElementBase)child);
+    private void FancyElementContainerBase_RemoveChild(object obj, object child) => (obj as FancyElementContainerBase).RemoveChild((FancyElementBase)child);
 
-    static public FancyView FancyView_NewV(int direction) => new FancyView((FancyView.ViewDirection)direction);
-    static public int FancyView_GetDirection(object obj) => (int)(obj as FancyView).Direction;
-    static public void FancyView_SetDirection(object obj, int direction) => (obj as FancyView).Direction = (FancyView.ViewDirection)direction;
+    private FancyView FancyView_NewV(int direction) => new FancyView((FancyView.ViewDirection)direction);
+    private int FancyView_GetDirection(object obj) => (int)(obj as FancyView).Direction;
+    private void FancyView_SetDirection(object obj, int direction) => (obj as FancyView).Direction = (FancyView.ViewDirection)direction;
 
-    static public FancyApp FancyApp_New() => new FancyApp();
-    static public TouchScreen FancyApp_GetScreen(object obj) => (obj as FancyApp).Screen;
-    static public FancyCursor FancyApp_GetCursor(object obj) => (obj as FancyApp).Cursor;
-    static public FancyTheme FancyApp_GetTheme(object obj) => (obj as FancyApp).Theme;
-    static public void FancyApp_InitApp(object obj, MyCubeBlock block, Sandbox.ModAPI.Ingame.IMyTextSurface surface) => (obj as FancyApp).InitApp(block, surface);
+    private FancyApp FancyApp_New() => new FancyApp();
+    private TouchScreen FancyApp_GetScreen(object obj) => (obj as FancyApp).Screen;
+    private FancyCursor FancyApp_GetCursor(object obj) => (obj as FancyApp).Cursor;
+    private FancyTheme FancyApp_GetTheme(object obj) => (obj as FancyApp).Theme;
+    private void FancyApp_InitApp(object obj, MyCubeBlock block, Sandbox.ModAPI.Ingame.IMyTextSurface surface) => (obj as FancyApp).InitApp(block, surface);
 
-    static public FancyCursor FancyCursor_New(object screen) => new FancyCursor(screen as TouchScreen);
-    static public bool FancyCursor_GetActive(object obj) => (obj as FancyCursor).Active;
-    static public void FancyCursor_SetActive(object obj, bool active) => (obj as FancyCursor).Active = active;
-    static public Vector2 FancyCursor_GetPosition(object obj) => (obj as FancyCursor).Position;
-    static public bool FancyCursor_IsInsideArea(object obj, float x, float y, float z, float w) => (obj as FancyCursor).IsInsideArea(x, y, z, w);
-    static public List<MySprite> FancyCursor_GetSprites(object obj) => (obj as FancyCursor).GetSprites();
-    static public void FancyCursor_Dispose(object obj) => (obj as FancyCursor).Dispose();
+    private FancyCursor FancyCursor_New(object screen) => new FancyCursor(screen as TouchScreen);
+    private bool FancyCursor_GetActive(object obj) => (obj as FancyCursor).Active;
+    private void FancyCursor_SetActive(object obj, bool active) => (obj as FancyCursor).Active = active;
+    private Vector2 FancyCursor_GetPosition(object obj) => (obj as FancyCursor).Position;
+    private bool FancyCursor_IsInsideArea(object obj, float x, float y, float z, float w) => (obj as FancyCursor).IsInsideArea(x, y, z, w);
+    private List<MySprite> FancyCursor_GetSprites(object obj) => (obj as FancyCursor).GetSprites();
+    private void FancyCursor_Dispose(object obj) => (obj as FancyCursor).Dispose();
 
-    static public Color FancyTheme_GetColorBg(object obj) => (obj as FancyTheme).Bg;
-    static public Color FancyTheme_GetColorWhite(object obj) => (obj as FancyTheme).White;
-    static public Color FancyTheme_GetColorMain(object obj) => (obj as FancyTheme).Main;
-    static public Color FancyTheme_GetColorMainDarker(object obj, int value)
+    private Color FancyTheme_GetColorBg(object obj) => (obj as FancyTheme).Bg;
+    private Color FancyTheme_GetColorWhite(object obj) => (obj as FancyTheme).White;
+    private Color FancyTheme_GetColorMain(object obj) => (obj as FancyTheme).Main;
+    private Color FancyTheme_GetColorMainDarker(object obj, int value)
     {
       var theme = (obj as FancyTheme);
       if (value <= 1) return theme.Main_10;
@@ -284,87 +283,87 @@ namespace Lima.Touch
       else if (value <= 8) return theme.Main_80;
       return theme.Main_90;
     }
-    static public Vector2 FancyTheme_MeasureStringInPixels(object obj, String text, string font, float scale) => (obj as FancyTheme).MeasureStringInPixels(text, font, scale);
-    static public float FancyTheme_GetScale(object obj) => (obj as FancyTheme).Scale;
-    static public void FancyTheme_SetScale(object obj, float scale) => (obj as FancyTheme).Scale = scale;
+    private Vector2 FancyTheme_MeasureStringInPixels(object obj, String text, string font, float scale) => (obj as FancyTheme).MeasureStringInPixels(text, font, scale);
+    private float FancyTheme_GetScale(object obj) => (obj as FancyTheme).Scale;
+    private void FancyTheme_SetScale(object obj, float scale) => (obj as FancyTheme).Scale = scale;
 
-    static public ClickHandler FancyButtonBase_GetHandler(object obj) => (obj as FancyButtonBase).handler;
+    private ClickHandler FancyButtonBase_GetHandler(object obj) => (obj as FancyButtonBase).handler;
 
-    static public ClickHandler ClickHandler_New() => new ClickHandler();
-    static public Vector4 ClickHandler_GetHitArea(object obj) => (obj as ClickHandler).hitArea;
-    static public void ClickHandler_SetHitArea(object obj, Vector4 hitArea) => (obj as ClickHandler).hitArea = hitArea;
-    static public bool ClickHandler_IsMouseReleased(object obj) => (obj as ClickHandler).IsMouseReleased;
-    static public bool ClickHandler_IsMouseOver(object obj) => (obj as ClickHandler).IsMouseOver;
-    static public bool ClickHandler_IsMousePressed(object obj) => (obj as ClickHandler).IsMousePressed;
-    static public bool ClickHandler_JustReleased(object obj) => (obj as ClickHandler).JustReleased;
-    static public bool ClickHandler_JustPressed(object obj) => (obj as ClickHandler).JustPressed;
-    static public void ClickHandler_UpdateStatus(object obj, object screen) => (obj as ClickHandler).UpdateStatus(screen as TouchScreen);
+    private ClickHandler ClickHandler_New() => new ClickHandler();
+    private Vector4 ClickHandler_GetHitArea(object obj) => (obj as ClickHandler).hitArea;
+    private void ClickHandler_SetHitArea(object obj, Vector4 hitArea) => (obj as ClickHandler).hitArea = hitArea;
+    private bool ClickHandler_IsMouseReleased(object obj) => (obj as ClickHandler).IsMouseReleased;
+    private bool ClickHandler_IsMouseOver(object obj) => (obj as ClickHandler).IsMouseOver;
+    private bool ClickHandler_IsMousePressed(object obj) => (obj as ClickHandler).IsMousePressed;
+    private bool ClickHandler_JustReleased(object obj) => (obj as ClickHandler).JustReleased;
+    private bool ClickHandler_JustPressed(object obj) => (obj as ClickHandler).JustPressed;
+    private void ClickHandler_UpdateStatus(object obj, object screen) => (obj as ClickHandler).UpdateStatus(screen as TouchScreen);
 
-    static public FancyButton FancyButton_New(string text, Action action) => new FancyButton(text, action);
-    static public string FancyButton_GetText(object obj) => (obj as FancyButton).Text;
-    static public void FancyButton_SetText(object obj, string text) => (obj as FancyButton).Text = text;
-    static public void FancyButton_SetAction(object obj, Action action) => (obj as FancyButton)._action = action;
-    static public TextAlignment FancyButton_GetAlignment(object obj) => (obj as FancyButton).Alignment;
-    static public void FancyButton_SetAlignment(object obj, TextAlignment alignment) => (obj as FancyButton).Alignment = alignment;
+    private FancyButton FancyButton_New(string text, Action action) => new FancyButton(text, action);
+    private string FancyButton_GetText(object obj) => (obj as FancyButton).Text;
+    private void FancyButton_SetText(object obj, string text) => (obj as FancyButton).Text = text;
+    private void FancyButton_SetAction(object obj, Action action) => (obj as FancyButton)._action = action;
+    private TextAlignment FancyButton_GetAlignment(object obj) => (obj as FancyButton).Alignment;
+    private void FancyButton_SetAlignment(object obj, TextAlignment alignment) => (obj as FancyButton).Alignment = alignment;
 
-    static public FancyLabel FancyLabel_New(string text, float fontSize = 0.5f) => new FancyLabel(text, fontSize);
-    static public string FancyLabel_GetText(object obj) => (obj as FancyLabel).Text;
-    static public void FancyLabel_SetText(object obj, string text) => (obj as FancyLabel).Text = text;
-    static public void FancyLabel_SetFontSize(object obj, float fontSize) => (obj as FancyLabel).FontSize = fontSize;
-    static public TextAlignment FancyLabel_GetAlignment(object obj) => (obj as FancyLabel).Alignment;
-    static public void FancyLabel_SetAlignment(object obj, TextAlignment alignment) => (obj as FancyLabel).Alignment = alignment;
+    private FancyLabel FancyLabel_New(string text, float fontSize = 0.5f) => new FancyLabel(text, fontSize);
+    private string FancyLabel_GetText(object obj) => (obj as FancyLabel).Text;
+    private void FancyLabel_SetText(object obj, string text) => (obj as FancyLabel).Text = text;
+    private void FancyLabel_SetFontSize(object obj, float fontSize) => (obj as FancyLabel).FontSize = fontSize;
+    private TextAlignment FancyLabel_GetAlignment(object obj) => (obj as FancyLabel).Alignment;
+    private void FancyLabel_SetAlignment(object obj, TextAlignment alignment) => (obj as FancyLabel).Alignment = alignment;
 
-    static public FancyPanel FancyPanel_New() => new FancyPanel();
+    private FancyPanel FancyPanel_New() => new FancyPanel();
 
-    static public FancyProgressBar FancyProgressBar_New(float min, float max, bool bars = true) => new FancyProgressBar(min, max, bars);
-    static public float FancyProgressBar_GetValue(object obj) => (obj as FancyProgressBar).Value;
-    static public void FancyProgressBar_SetValue(object obj, float value) => (obj as FancyProgressBar).Value = value;
+    private FancyProgressBar FancyProgressBar_New(float min, float max, bool bars = true) => new FancyProgressBar(min, max, bars);
+    private float FancyProgressBar_GetValue(object obj) => (obj as FancyProgressBar).Value;
+    private void FancyProgressBar_SetValue(object obj, float value) => (obj as FancyProgressBar).Value = value;
 
-    static public FancySelector FancySelector_New(List<string> labels, Action<int, string> action, bool loop = true) => new FancySelector(labels, action, loop);
-    static public void FancySelector_SetAction(object obj, Action<int, string> action) => (obj as FancySelector)._action = action;
+    private FancySelector FancySelector_New(List<string> labels, Action<int, string> action, bool loop = true) => new FancySelector(labels, action, loop);
+    private void FancySelector_SetAction(object obj, Action<int, string> action) => (obj as FancySelector)._action = action;
 
-    static public FancySeparator FancySeparator_New() => new FancySeparator();
+    private FancySeparator FancySeparator_New() => new FancySeparator();
 
-    static public FancySlider FancySlider_New(float min, float max, Action<float> action) => new FancySlider(min, max, action);
-    static public Vector2 FancySlider_GetRange(object obj) => (obj as FancySlider).Range;
-    static public void FancySlider_SetRange(object obj, Vector2 range) => (obj as FancySlider).Range = range;
-    static public float FancySlider_GetValue(object obj) => (obj as FancySlider).Value;
-    static public void FancySlider_SetValue(object obj, float value) => (obj as FancySlider).Value = value;
-    static public void FancySlider_SetAction(object obj, Action<float> action) => (obj as FancySlider)._action = action;
-    static public bool FancySlider_GetIsInteger(object obj) => (obj as FancySlider).IsInteger;
-    static public void FancySlider_SetIsInteger(object obj, bool interger) => (obj as FancySlider).IsInteger = interger;
-    static public bool FancySlider_GetAllowInput(object obj) => (obj as FancySlider).AllowInput;
-    static public void FancySlider_SetAllowInput(object obj, bool allowInput) => (obj as FancySlider).AllowInput = allowInput;
+    private FancySlider FancySlider_New(float min, float max, Action<float> action) => new FancySlider(min, max, action);
+    private Vector2 FancySlider_GetRange(object obj) => (obj as FancySlider).Range;
+    private void FancySlider_SetRange(object obj, Vector2 range) => (obj as FancySlider).Range = range;
+    private float FancySlider_GetValue(object obj) => (obj as FancySlider).Value;
+    private void FancySlider_SetValue(object obj, float value) => (obj as FancySlider).Value = value;
+    private void FancySlider_SetAction(object obj, Action<float> action) => (obj as FancySlider)._action = action;
+    private bool FancySlider_GetIsInteger(object obj) => (obj as FancySlider).IsInteger;
+    private void FancySlider_SetIsInteger(object obj, bool interger) => (obj as FancySlider).IsInteger = interger;
+    private bool FancySlider_GetAllowInput(object obj) => (obj as FancySlider).AllowInput;
+    private void FancySlider_SetAllowInput(object obj, bool allowInput) => (obj as FancySlider).AllowInput = allowInput;
 
-    static public FancySliderRange FancySliderRange_NewR(float min, float max, Action<float, float> action) => new FancySliderRange(min, max, action);
-    static public float FancySliderRange_GetValueLower(object obj) => (obj as FancySliderRange).ValueLower;
-    static public void FancySliderRange_SetValueLower(object obj, float value) => (obj as FancySliderRange).ValueLower = value;
-    static public void FancySliderRange_SetActionR(object obj, Action<float, float> action) => (obj as FancySliderRange)._actionR = action;
+    private FancySliderRange FancySliderRange_NewR(float min, float max, Action<float, float> action) => new FancySliderRange(min, max, action);
+    private float FancySliderRange_GetValueLower(object obj) => (obj as FancySliderRange).ValueLower;
+    private void FancySliderRange_SetValueLower(object obj, float value) => (obj as FancySliderRange).ValueLower = value;
+    private void FancySliderRange_SetActionR(object obj, Action<float, float> action) => (obj as FancySliderRange)._actionR = action;
 
-    static public FancySwitch FancySwitch_New(Action<bool> action, string textOn = "On", string textOff = "Off") => new FancySwitch(action, textOn, textOff);
-    static public string FancySwitch_GetTextOn(object obj) => (obj as FancySwitch).TextOn;
-    static public void FancySwitch_SetTextOn(object obj, string text) => (obj as FancySwitch).TextOn = text;
-    static public string FancySwitch_GetTextOff(object obj) => (obj as FancySwitch).TextOff;
-    static public void FancySwitch_SetTextOff(object obj, string text) => (obj as FancySwitch).TextOff = text;
-    static public bool FancySwitch_GetValue(object obj) => (obj as FancySwitch).Value;
-    static public void FancySwitch_SetValue(object obj, bool value) => (obj as FancySwitch).Value = value;
-    static public void FancySwitch_SetAction(object obj, Action<bool> action) => (obj as FancySwitch)._action = action;
+    private FancySwitch FancySwitch_New(Action<bool> action, string textOn = "On", string textOff = "Off") => new FancySwitch(action, textOn, textOff);
+    private string FancySwitch_GetTextOn(object obj) => (obj as FancySwitch).TextOn;
+    private void FancySwitch_SetTextOn(object obj, string text) => (obj as FancySwitch).TextOn = text;
+    private string FancySwitch_GetTextOff(object obj) => (obj as FancySwitch).TextOff;
+    private void FancySwitch_SetTextOff(object obj, string text) => (obj as FancySwitch).TextOff = text;
+    private bool FancySwitch_GetValue(object obj) => (obj as FancySwitch).Value;
+    private void FancySwitch_SetValue(object obj, bool value) => (obj as FancySwitch).Value = value;
+    private void FancySwitch_SetAction(object obj, Action<bool> action) => (obj as FancySwitch)._action = action;
 
-    static public FancyTextField FancyTextField_New(string text, Action<string> action) => new FancyTextField(text, action);
-    static public string FancyTextField_GetText(object obj) => (obj as FancyTextField).Text;
-    static public void FancyTextField_SetText(object obj, string text) => (obj as FancyTextField).Text = text;
-    static public void FancyTextField_SetAction(object obj, Action<string> action) => (obj as FancyTextField)._action = action;
-    static public bool FancyTextField_GetIsNumeric(object obj) => (obj as FancyTextField).IsNumeric;
-    static public void FancyTextField_SetIsNumeric(object obj, bool isNumeric) => (obj as FancyTextField).IsNumeric = isNumeric;
-    static public bool FancyTextField_GetIsInteger(object obj) => (obj as FancyTextField).IsInteger;
-    static public void FancyTextField_SetIsInteger(object obj, bool isInterger) => (obj as FancyTextField).IsInteger = isInterger;
-    static public bool FancyTextField_GetAllowNegative(object obj) => (obj as FancyTextField).AllowNegative;
-    static public void FancyTextField_SetAllowNegative(object obj, bool allowNegative) => (obj as FancyTextField).AllowNegative = allowNegative;
-    static public TextAlignment FancyTextField_GetAlignment(object obj) => (obj as FancyTextField).Alignment;
-    static public void FancyTextField_SetAlignment(object obj, TextAlignment alignment) => (obj as FancyTextField).Alignment = alignment;
+    private FancyTextField FancyTextField_New(string text, Action<string> action) => new FancyTextField(text, action);
+    private string FancyTextField_GetText(object obj) => (obj as FancyTextField).Text;
+    private void FancyTextField_SetText(object obj, string text) => (obj as FancyTextField).Text = text;
+    private void FancyTextField_SetAction(object obj, Action<string> action) => (obj as FancyTextField)._action = action;
+    private bool FancyTextField_GetIsNumeric(object obj) => (obj as FancyTextField).IsNumeric;
+    private void FancyTextField_SetIsNumeric(object obj, bool isNumeric) => (obj as FancyTextField).IsNumeric = isNumeric;
+    private bool FancyTextField_GetIsInteger(object obj) => (obj as FancyTextField).IsInteger;
+    private void FancyTextField_SetIsInteger(object obj, bool isInterger) => (obj as FancyTextField).IsInteger = isInterger;
+    private bool FancyTextField_GetAllowNegative(object obj) => (obj as FancyTextField).AllowNegative;
+    private void FancyTextField_SetAllowNegative(object obj, bool allowNegative) => (obj as FancyTextField).AllowNegative = allowNegative;
+    private TextAlignment FancyTextField_GetAlignment(object obj) => (obj as FancyTextField).Alignment;
+    private void FancyTextField_SetAlignment(object obj, TextAlignment alignment) => (obj as FancyTextField).Alignment = alignment;
 
-    static public FancyWindowBar FancyWindowBar_New(string text) => new FancyWindowBar(text);
-    static public string FancyWindowBar_GetText(object obj) => (obj as FancyWindowBar).Text;
-    static public void FancyWindowBar_SetText(object obj, string text) => (obj as FancyWindowBar).Text = text;
+    private FancyWindowBar FancyWindowBar_New(string text) => new FancyWindowBar(text);
+    private string FancyWindowBar_GetText(object obj) => (obj as FancyWindowBar).Text;
+    private void FancyWindowBar_SetText(object obj, string text) => (obj as FancyWindowBar).Text = text;
   }
 }
