@@ -41,14 +41,14 @@ namespace Lima.Utils
         return _controlIDs;
       }
     }
-    public static void SetPlayerKeyboardBlacklistState(bool blocked)
+    internal static void SetPlayerKeyboardBlacklistState(bool blocked)
     {
       if (MyAPIGateway.Session?.Player != null)
         foreach (string control in ControlIDs)
           MyVisualScriptLogicProvider.SetPlayerInputBlacklistState(control, MyAPIGateway.Session.Player.IdentityId, !blocked);
     }
 
-    public static bool CheckNumericInput(string text, char ch, bool allowNegative = true, bool isInt = false)
+    internal static bool CheckNumericInput(string text, char ch, bool allowNegative = true, bool isInt = false)
     {
       if (ch == '-')
         return allowNegative && text.Length == 0;

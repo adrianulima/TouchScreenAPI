@@ -290,8 +290,8 @@ namespace Lima.Touch
     private ClickHandler FancyButtonBase_GetHandler(object obj) => (obj as FancyButtonBase).handler;
 
     private ClickHandler ClickHandler_New() => new ClickHandler();
-    private Vector4 ClickHandler_GetHitArea(object obj) => (obj as ClickHandler).hitArea;
-    private void ClickHandler_SetHitArea(object obj, Vector4 hitArea) => (obj as ClickHandler).hitArea = hitArea;
+    private Vector4 ClickHandler_GetHitArea(object obj) => (obj as ClickHandler).HitArea;
+    private void ClickHandler_SetHitArea(object obj, Vector4 hitArea) => (obj as ClickHandler).HitArea = hitArea;
     private bool ClickHandler_IsMouseReleased(object obj) => (obj as ClickHandler).IsMouseReleased;
     private bool ClickHandler_IsMouseOver(object obj) => (obj as ClickHandler).IsMouseOver;
     private bool ClickHandler_IsMousePressed(object obj) => (obj as ClickHandler).IsMousePressed;

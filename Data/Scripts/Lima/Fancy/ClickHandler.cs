@@ -7,7 +7,7 @@ namespace Lima.Fancy
   public class ClickHandler
   {
     private bool _wasPressed = false;
-    public Vector4 hitArea = Vector4.Zero;
+    public Vector4 HitArea = Vector4.Zero;
 
     private int _status = 0;
     public bool IsMouseReleased { get { return _status == 0; } }
@@ -27,13 +27,13 @@ namespace Lima.Fancy
       JustPressed = false;
       _status = 0;
 
-      if (hitArea != Vector4.Zero)
+      if (HitArea != Vector4.Zero)
       {
         if (screen.IsInsideArea(
-            hitArea.X,
-            hitArea.Y,
-            hitArea.Z,
-            hitArea.W
+            HitArea.X,
+            HitArea.Y,
+            HitArea.Z,
+            HitArea.W
           ))
         {
           // if (MyAPIGateway.Input.IsMousePressed(MyMouseButtonsEnum.Left))

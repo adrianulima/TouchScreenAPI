@@ -32,7 +32,7 @@ namespace Lima.Fancy.Elements
 
     public override void Update()
     {
-      handler.hitArea = new Vector4(Position.X, Position.Y, Position.X + Size.X, Position.Y + Size.Y);
+      handler.HitArea = new Vector4(Position.X, Position.Y, Position.X + Size.X, Position.Y + Size.Y);
 
       base.Update();
 
@@ -88,7 +88,7 @@ namespace Lima.Fancy.Elements
 
       if (handler.IsMouseOver)
       {
-        var mouseX = App.Cursor.Position.X - handler.hitArea.X;
+        var mouseX = App.Cursor.Position.X - handler.HitArea.X;
         if (handler.IsMousePressed)
         {
           if (mouseX < Size.Y)
@@ -113,7 +113,7 @@ namespace Lima.Fancy.Elements
 
       if (handler.JustReleased)
       {
-        var mouseX = App.Cursor.Position.X - handler.hitArea.X;
+        var mouseX = App.Cursor.Position.X - handler.HitArea.X;
         var prev = Selected;
         if (mouseX < Size.Y)
           Selected -= 1;

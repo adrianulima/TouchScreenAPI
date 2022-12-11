@@ -94,7 +94,7 @@ namespace Lima.Fancy.Elements
 
     public override void Update()
     {
-      handler.hitArea = new Vector4(Position.X, Position.Y, Position.X + Size.X, Position.Y + Size.Y);
+      handler.HitArea = new Vector4(Position.X, Position.Y, Position.X + Size.X, Position.Y + Size.Y);
 
       base.Update();
 

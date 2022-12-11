@@ -5,7 +5,7 @@ namespace Lima.Utils
 {
   internal static class SurfaceUtils
   {
-    public static int GetSurfaceIndex(Sandbox.ModAPI.Ingame.IMyTextSurfaceProvider provider, IMyTextSurface surface)
+    internal static int GetSurfaceIndex(Sandbox.ModAPI.Ingame.IMyTextSurfaceProvider provider, IMyTextSurface surface)
     {
       var count = provider.SurfaceCount;
       for (int i = 0; i < count; i++)
@@ -16,7 +16,7 @@ namespace Lima.Utils
       return -1;
     }
 
-    public static Vector2 RotateScreenCoord(Vector2 coord, int rotate)
+    internal static Vector2 RotateScreenCoord(Vector2 coord, int rotate)
     {
       if (rotate == 0)
         return coord;

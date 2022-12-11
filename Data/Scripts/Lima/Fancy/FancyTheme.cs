@@ -38,12 +38,12 @@ namespace Lima.Fancy
     public Color Main_90 { get { UpdateColors(); return _Main_90; } }
 
     public string Font = MyFontEnum.White;
-    public readonly StringBuilder strBuilder = new StringBuilder();
+    private readonly StringBuilder _strBuilder = new StringBuilder();
     public Vector2 MeasureStringInPixels(String text, string font, float scale)
     {
-      strBuilder.Clear();
-      strBuilder.Append(text);
-      return _surface.MeasureStringInPixels(strBuilder, font, scale);
+      _strBuilder.Clear();
+      _strBuilder.Append(text);
+      return _surface.MeasureStringInPixels(_strBuilder, font, scale);
     }
 
     public float Scale = 1f;
