@@ -10,13 +10,13 @@ namespace Lima.Fancy.Elements
     private MySprite handlerLowerSprite;
     private MySprite handlerInnerLowerSprite;
     private MySprite bgLowerSprite;
-    public Action<float, float> _actionR;
+    public Action<float, float> OnChangeR;
 
     public float ValueLower = 0;
 
-    public FancySliderRange(float min, float max, Action<float, float> action = null) : base(min, max)
+    public FancySliderRange(float min, float max, Action<float, float> onChange = null) : base(min, max)
     {
-      _actionR = action;
+      OnChangeR = onChange;
 
       Scale = new Vector2(1, 0);
       Margin = new Vector4(8, 0, 8, 0);
@@ -57,8 +57,8 @@ namespace Lima.Fancy.Elements
         ValueLower = (float)Math.Round(ValueLower);
       }
 
-      if (_actionR != null)
-        _actionR(ValueLower, Value);
+      if (OnChangeR != null)
+        OnChangeR(ValueLower, Value);
     }
 
     public override void Update()

@@ -10,13 +10,13 @@ namespace Lima.Fancy.Elements
     private MySprite textSprite;
 
     public string Text;
-    public Action _action;
+    public Action OnChange;
     public TextAlignment Alignment = TextAlignment.CENTER;
 
-    public FancyButton(string text, Action action)
+    public FancyButton(string text, Action onChange)
     {
       Text = text;
-      _action = action;
+      OnChange = onChange;
 
       Scale = new Vector2(1, 0);
       Margin = new Vector4(8, 8, 8, 0);
@@ -65,7 +65,7 @@ namespace Lima.Fancy.Elements
 
       if (handler.JustReleased)
       {
-        _action();
+        OnChange();
         // MyAPIGateway.Utilities.ShowNotification($"[ Button callback ]", 2000, MyFontEnum.Red);
       }
 

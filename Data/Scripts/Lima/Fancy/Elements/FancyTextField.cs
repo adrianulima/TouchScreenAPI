@@ -11,7 +11,7 @@ namespace Lima.Fancy.Elements
     private MySprite textSprite;
 
     public string Text;
-    public Action<string> _action;
+    public Action<string> OnChange;
 
     private TextInputHandler _inputHandler;
     private string _maxText;
@@ -24,10 +24,10 @@ namespace Lima.Fancy.Elements
     public bool AllowNegative = true;
     public TextAlignment Alignment = TextAlignment.CENTER;
 
-    public FancyTextField(string text, Action<string> action)
+    public FancyTextField(string text, Action<string> onChange)
     {
       Text = text;
-      _action = action;
+      OnChange = onChange;
       _inputHandler = new TextInputHandler(AddChar, RemoveLastChar, OnInput);
 
       Scale = new Vector2(1, 0);
@@ -81,7 +81,7 @@ namespace Lima.Fancy.Elements
         _edit = !_edit;
 
       if (!_edit)
-        _action(Text);
+        OnChange(Text);
 
       InputUtils.SetPlayerKeyboardBlacklistState(_edit);
     }

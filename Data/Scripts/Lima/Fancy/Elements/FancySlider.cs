@@ -27,18 +27,18 @@ namespace Lima.Fancy.Elements
 
     public Vector2 Range;
     public float Value = 0;
-    public Action<float> _action;
+    public Action<float> OnChange;
 
     public bool IsInteger = false;
     public bool AllowInput = true;
     protected bool _inputOpen = false;
     protected bool _skipNext = false;
 
-    public FancySlider(float min, float max, Action<float> action = null)
+    public FancySlider(float min, float max, Action<float> onChange = null)
     {
       Range = new Vector2(min, max);
       Value = MathHelper.Clamp(Value, min, max);
-      _action = action;
+      OnChange = onChange;
 
       Scale = new Vector2(1, 0);
       Margin = new Vector4(8, 0, 8, 0);
@@ -58,8 +58,8 @@ namespace Lima.Fancy.Elements
       if (IsInteger)
         Value = (float)Math.Round(Value);
 
-      if (_action != null)
-        _action(Value);
+      if (OnChange != null)
+        OnChange(Value);
     }
 
     public override void Update()

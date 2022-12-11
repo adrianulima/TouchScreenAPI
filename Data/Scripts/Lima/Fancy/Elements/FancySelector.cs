@@ -16,13 +16,13 @@ namespace Lima.Fancy.Elements
 
     public int Selected = 0;
     public List<string> Labels;
-    public Action<int, string> _action;
+    public Action<int, string> OnChange;
     protected bool _loop;
 
-    public FancySelector(List<string> labels, Action<int, string> action, bool loop = true)
+    public FancySelector(List<string> labels, Action<int, string> onChange, bool loop = true)
     {
       Labels = labels;
-      _action = action;
+      OnChange = onChange;
       _loop = loop;
 
       Scale = new Vector2(1, 0);
@@ -128,7 +128,7 @@ namespace Lima.Fancy.Elements
           Selected = _loop ? 0 : count - 1;
 
         if (prev != Selected)
-          _action(Selected, Labels[Selected]);
+          OnChange(Selected, Labels[Selected]);
       }
 
       sprites.Clear();

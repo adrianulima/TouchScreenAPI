@@ -14,11 +14,11 @@ namespace Lima.Fancy.Elements
     public string TextOn;
     public string TextOff;
     public bool Value = false;
-    public Action<bool> _action;
+    public Action<bool> OnChange;
 
-    public FancySwitch(Action<bool> action, string textOn = "On", string textOff = "Off")
+    public FancySwitch(Action<bool> onChange, string textOn = "On", string textOff = "Off")
     {
-      _action = action;
+      OnChange = onChange;
       TextOn = textOn;
       TextOff = textOff;
 
@@ -85,7 +85,7 @@ namespace Lima.Fancy.Elements
       if (handler.JustReleased)
       {
         Value = !Value;
-        _action(Value);
+        OnChange(Value);
       }
 
       sprites.Clear();
