@@ -47,152 +47,152 @@ namespace Lima.Touch
 
     private Dictionary<string, Delegate> GetApiDictionary()
     {
-      var dict = new Dictionary<string, Delegate>();
+      var dict = new Dictionary<string, Delegate>
+      {
+        { "CreateTouchScreen", new Func<IMyCubeBlock, IMyTextSurface, TouchScreen>(CreateTouchScreen) },
+        { "RemoveTouchScreen", new Action<IMyCubeBlock, IMyTextSurface>(RemoveTouchScreen) },
+        { "AddSurfaceCoords", new Action<string>(AddSurfaceCoords) },
+        { "RemoveSurfaceCoords", new Action<string>(RemoveSurfaceCoords) },
+        { "GetMaxInteractiveDistance", new Func<float>(GetMaxInteractiveDistance) },
+        { "SetMaxInteractiveDistance", new Action<float>(SetMaxInteractiveDistance) },
 
-      dict.Add("CreateTouchScreen", new Func<IMyCubeBlock, IMyTextSurface, TouchScreen>(CreateTouchScreen));
-      dict.Add("RemoveTouchScreen", new Action<IMyCubeBlock, IMyTextSurface>(RemoveTouchScreen));
-      dict.Add("AddSurfaceCoords", new Action<string>(AddSurfaceCoords));
-      dict.Add("RemoveSurfaceCoords", new Action<string>(RemoveSurfaceCoords));
-      dict.Add("GetMaxInteractiveDistance", new Func<float>(GetMaxInteractiveDistance));
-      dict.Add("SetMaxInteractiveDistance", new Action<float>(SetMaxInteractiveDistance));
+        { "TouchScreen_GetBlock", new Func<object, IMyCubeBlock>(TouchScreen_GetBlock) },
+        { "TouchScreen_GetSurface", new Func<object, IMyTextSurface>(TouchScreen_GetSurface) },
+        { "TouchScreen_GetIndex", new Func<object, int>(TouchScreen_GetIndex) },
+        { "TouchScreen_IsOnScreen", new Func<object, bool>(TouchScreen_IsOnScreen) },
+        { "TouchScreen_GetCursorPosition", new Func<object, Vector2>(TouchScreen_GetCursorPosition) },
+        { "TouchScreen_GetInteractiveDistance", new Func<object, float>(TouchScreen_GetInteractiveDistance) },
+        { "TouchScreen_SetInteractiveDistance", new Action<object, float>(TouchScreen_SetInteractiveDistance) },
+        { "TouchScreen_GetScreenRotate", new Func<object, int>(TouchScreen_GetScreenRotate) },
+        { "TouchScreen_CompareWithBlockAndSurface", new Func<object, IMyCubeBlock, IMyTextSurface, bool>(TouchScreen_CompareWithBlockAndSurface) },
+        { "TouchScreen_Dispose", new Action<object>(TouchScreen_Dispose) },
 
-      dict.Add("TouchScreen_GetBlock", new Func<object, IMyCubeBlock>(TouchScreen_GetBlock));
-      dict.Add("TouchScreen_GetSurface", new Func<object, IMyTextSurface>(TouchScreen_GetSurface));
-      dict.Add("TouchScreen_GetIndex", new Func<object, int>(TouchScreen_GetIndex));
-      dict.Add("TouchScreen_IsOnScreen", new Func<object, bool>(TouchScreen_IsOnScreen));
-      dict.Add("TouchScreen_GetCursorPosition", new Func<object, Vector2>(TouchScreen_GetCursorPosition));
-      dict.Add("TouchScreen_GetInteractiveDistance", new Func<object, float>(TouchScreen_GetInteractiveDistance));
-      dict.Add("TouchScreen_SetInteractiveDistance", new Action<object, float>(TouchScreen_SetInteractiveDistance));
-      dict.Add("TouchScreen_GetScreenRotate", new Func<object, int>(TouchScreen_GetScreenRotate));
-      dict.Add("TouchScreen_CompareWithBlockAndSurface", new Func<object, IMyCubeBlock, IMyTextSurface, bool>(TouchScreen_CompareWithBlockAndSurface));
-      dict.Add("TouchScreen_Dispose", new Action<object>(TouchScreen_Dispose));
+        { "FancyElementBase_GetPosition", new Func<object, Vector2>(FancyElementBase_GetPosition) },
+        { "FancyElementBase_SetPosition", new Action<object, Vector2>(FancyElementBase_SetPosition) },
+        { "FancyElementBase_GetMargin", new Func<object, Vector4>(FancyElementBase_GetMargin) },
+        { "FancyElementBase_SetMargin", new Action<object, Vector4>(FancyElementBase_SetMargin) },
+        { "FancyElementBase_GetScale", new Func<object, Vector2>(FancyElementBase_GetScale) },
+        { "FancyElementBase_SetScale", new Action<object, Vector2>(FancyElementBase_SetScale) },
+        { "FancyElementBase_GetPixels", new Func<object, Vector2>(FancyElementBase_GetPixels) },
+        { "FancyElementBase_SetPixels", new Action<object, Vector2>(FancyElementBase_SetPixels) },
+        { "FancyElementBase_GetSize", new Func<object, Vector2>(FancyElementBase_GetSize) },
+        { "FancyElementBase_GetViewport", new Func<object, RectangleF>(FancyElementBase_GetViewport) },
+        { "FancyElementBase_GetApp", new Func<object, FancyApp>(FancyElementBase_GetApp) },
+        { "FancyElementBase_GetParent", new Func<object, FancyElementContainerBase>(FancyElementBase_GetParent) },
+        { "FancyElementBase_GetOffset", new Func<object, Vector2>(FancyElementBase_GetOffset) },
+        { "FancyElementBase_GetSprites", new Func<object, List<MySprite>>(FancyElementBase_GetSprites) },
+        { "FancyElementBase_InitElements", new Action<object>(FancyElementBase_InitElements) },
+        { "FancyElementBase_Update", new Action<object>(FancyElementBase_Update) },
+        { "FancyElementBase_Dispose", new Action<object>(FancyElementBase_Dispose) },
 
-      dict.Add("FancyElementBase_GetPosition", new Func<object, Vector2>(FancyElementBase_GetPosition));
-      dict.Add("FancyElementBase_SetPosition", new Action<object, Vector2>(FancyElementBase_SetPosition));
-      dict.Add("FancyElementBase_GetMargin", new Func<object, Vector4>(FancyElementBase_GetMargin));
-      dict.Add("FancyElementBase_SetMargin", new Action<object, Vector4>(FancyElementBase_SetMargin));
-      dict.Add("FancyElementBase_GetScale", new Func<object, Vector2>(FancyElementBase_GetScale));
-      dict.Add("FancyElementBase_SetScale", new Action<object, Vector2>(FancyElementBase_SetScale));
-      dict.Add("FancyElementBase_GetPixels", new Func<object, Vector2>(FancyElementBase_GetPixels));
-      dict.Add("FancyElementBase_SetPixels", new Action<object, Vector2>(FancyElementBase_SetPixels));
-      dict.Add("FancyElementBase_GetSize", new Func<object, Vector2>(FancyElementBase_GetSize));
-      dict.Add("FancyElementBase_GetViewport", new Func<object, RectangleF>(FancyElementBase_GetViewport));
-      dict.Add("FancyElementBase_GetApp", new Func<object, FancyApp>(FancyElementBase_GetApp));
-      dict.Add("FancyElementBase_GetParent", new Func<object, FancyElementContainerBase>(FancyElementBase_GetParent));
-      dict.Add("FancyElementBase_GetOffset", new Func<object, Vector2>(FancyElementBase_GetOffset));
-      dict.Add("FancyElementBase_GetSprites", new Func<object, List<MySprite>>(FancyElementBase_GetSprites));
-      dict.Add("FancyElementBase_InitElements", new Action<object>(FancyElementBase_InitElements));
-      dict.Add("FancyElementBase_Update", new Action<object>(FancyElementBase_Update));
-      dict.Add("FancyElementBase_Dispose", new Action<object>(FancyElementBase_Dispose));
+        { "FancyElementContainerBase_GetChildren", new Func<object, List<object>>(FancyElementContainerBase_GetChildren) },
+        { "FancyElementContainerBase_AddChild", new Action<object, object>(FancyElementContainerBase_AddChild) },
+        { "FancyElementContainerBase_RemoveChild", new Action<object, object>(FancyElementContainerBase_RemoveChild) },
 
-      dict.Add("FancyElementContainerBase_GetChildren", new Func<object, List<object>>(FancyElementContainerBase_GetChildren));
-      dict.Add("FancyElementContainerBase_AddChild", new Action<object, object>(FancyElementContainerBase_AddChild));
-      dict.Add("FancyElementContainerBase_RemoveChild", new Action<object, object>(FancyElementContainerBase_RemoveChild));
+        { "FancyView_NewV", new Func<int, FancyView>(FancyView_NewV) },
+        { "FancyView_GetDirection", new Func<object, int>(FancyView_GetDirection) },
+        { "FancyView_SetDirection", new Action<object, int>(FancyView_SetDirection) },
+        { "FancyView_GetBgColor", new Func<object, Color>(FancyView_GetBgColor) },
+        { "FancyView_SetBgColor", new Action<object, Color>(FancyView_SetBgColor) },
 
-      dict.Add("FancyView_NewV", new Func<int, FancyView>(FancyView_NewV));
-      dict.Add("FancyView_GetDirection", new Func<object, int>(FancyView_GetDirection));
-      dict.Add("FancyView_SetDirection", new Action<object, int>(FancyView_SetDirection));
-      dict.Add("FancyView_GetBgColor", new Func<object, Color>(FancyView_GetBgColor));
-      dict.Add("FancyView_SetBgColor", new Action<object, Color>(FancyView_SetBgColor));
+        { "FancyApp_New", new Func<FancyApp>(FancyApp_New) },
+        { "FancyApp_GetScreen", new Func<object, TouchScreen>(FancyApp_GetScreen) },
+        { "FancyApp_GetCursor", new Func<object, FancyCursor>(FancyApp_GetCursor) },
+        { "FancyApp_GetTheme", new Func<object, FancyTheme>(FancyApp_GetTheme) },
+        { "FancyApp_InitApp", new Action<object, MyCubeBlock, Sandbox.ModAPI.Ingame.IMyTextSurface>(FancyApp_InitApp) },
 
-      dict.Add("FancyApp_New", new Func<FancyApp>(FancyApp_New));
-      dict.Add("FancyApp_GetScreen", new Func<object, TouchScreen>(FancyApp_GetScreen));
-      dict.Add("FancyApp_GetCursor", new Func<object, FancyCursor>(FancyApp_GetCursor));
-      dict.Add("FancyApp_GetTheme", new Func<object, FancyTheme>(FancyApp_GetTheme));
-      dict.Add("FancyApp_InitApp", new Action<object, MyCubeBlock, Sandbox.ModAPI.Ingame.IMyTextSurface>(FancyApp_InitApp));
+        { "FancyCursor_New", new Func<object, FancyCursor>(FancyCursor_New) },
+        { "FancyCursor_GetActive", new Func<object, bool>(FancyCursor_GetActive) },
+        { "FancyCursor_SetActive", new Action<object, bool>(FancyCursor_SetActive) },
+        { "FancyCursor_GetPosition", new Func<object, Vector2>(FancyCursor_GetPosition) },
+        { "FancyCursor_IsInsideArea", new Func<object, float, float, float, float, bool>(FancyCursor_IsInsideArea) },
+        { "FancyCursor_GetSprites", new Func<object, List<MySprite>>(FancyCursor_GetSprites) },
+        { "FancyCursor_Dispose", new Action<object>(FancyCursor_Dispose) },
 
-      dict.Add("FancyCursor_New", new Func<object, FancyCursor>(FancyCursor_New));
-      dict.Add("FancyCursor_GetActive", new Func<object, bool>(FancyCursor_GetActive));
-      dict.Add("FancyCursor_SetActive", new Action<object, bool>(FancyCursor_SetActive));
-      dict.Add("FancyCursor_GetPosition", new Func<object, Vector2>(FancyCursor_GetPosition));
-      dict.Add("FancyCursor_IsInsideArea", new Func<object, float, float, float, float, bool>(FancyCursor_IsInsideArea));
-      dict.Add("FancyCursor_GetSprites", new Func<object, List<MySprite>>(FancyCursor_GetSprites));
-      dict.Add("FancyCursor_Dispose", new Action<object>(FancyCursor_Dispose));
+        { "FancyTheme_GetColorBg", new Func<object, Color>(FancyTheme_GetColorBg) },
+        { "FancyTheme_GetColorWhite", new Func<object, Color>(FancyTheme_GetColorWhite) },
+        { "FancyTheme_GetColorMain", new Func<object, Color>(FancyTheme_GetColorMain) },
+        { "FancyTheme_GetColorMainDarker", new Func<object, int, Color>(FancyTheme_GetColorMainDarker) },
+        { "FancyTheme_MeasureStringInPixels", new Func<object, String, string, float, Vector2>(FancyTheme_MeasureStringInPixels) },
+        { "FancyTheme_GetScale", new Func<object, float>(FancyTheme_GetScale) },
+        { "FancyTheme_SetScale", new Action<object, float>(FancyTheme_SetScale) },
 
-      dict.Add("FancyTheme_GetColorBg", new Func<object, Color>(FancyTheme_GetColorBg));
-      dict.Add("FancyTheme_GetColorWhite", new Func<object, Color>(FancyTheme_GetColorWhite));
-      dict.Add("FancyTheme_GetColorMain", new Func<object, Color>(FancyTheme_GetColorMain));
-      dict.Add("FancyTheme_GetColorMainDarker", new Func<object, int, Color>(FancyTheme_GetColorMainDarker));
-      dict.Add("FancyTheme_MeasureStringInPixels", new Func<object, String, string, float, Vector2>(FancyTheme_MeasureStringInPixels));
-      dict.Add("FancyTheme_GetScale", new Func<object, float>(FancyTheme_GetScale));
-      dict.Add("FancyTheme_SetScale", new Action<object, float>(FancyTheme_SetScale));
+        { "FancyButtonBase_GetHandler", new Func<object, ClickHandler>(FancyButtonBase_GetHandler) },
 
-      dict.Add("FancyButtonBase_GetHandler", new Func<object, ClickHandler>(FancyButtonBase_GetHandler));
+        { "ClickHandler_New", new Func<object>(ClickHandler_New) },
+        { "ClickHandler_GetHitArea", new Func<object, Vector4>(ClickHandler_GetHitArea) },
+        { "ClickHandler_SetHitArea", new Action<object, Vector4>(ClickHandler_SetHitArea) },
+        { "ClickHandler_IsMouseReleased", new Func<object, bool>(ClickHandler_IsMouseReleased) },
+        { "ClickHandler_IsMouseOver", new Func<object, bool>(ClickHandler_IsMouseOver) },
+        { "ClickHandler_IsMousePressed", new Func<object, bool>(ClickHandler_IsMousePressed) },
+        { "ClickHandler_JustReleased", new Func<object, bool>(ClickHandler_JustReleased) },
+        { "ClickHandler_JustPressed", new Func<object, bool>(ClickHandler_JustPressed) },
+        { "ClickHandler_UpdateStatus", new Action<object, object>(ClickHandler_UpdateStatus) },
 
-      dict.Add("ClickHandler_New", new Func<object>(ClickHandler_New));
-      dict.Add("ClickHandler_GetHitArea", new Func<object, Vector4>(ClickHandler_GetHitArea));
-      dict.Add("ClickHandler_SetHitArea", new Action<object, Vector4>(ClickHandler_SetHitArea));
-      dict.Add("ClickHandler_IsMouseReleased", new Func<object, bool>(ClickHandler_IsMouseReleased));
-      dict.Add("ClickHandler_IsMouseOver", new Func<object, bool>(ClickHandler_IsMouseOver));
-      dict.Add("ClickHandler_IsMousePressed", new Func<object, bool>(ClickHandler_IsMousePressed));
-      dict.Add("ClickHandler_JustReleased", new Func<object, bool>(ClickHandler_JustReleased));
-      dict.Add("ClickHandler_JustPressed", new Func<object, bool>(ClickHandler_JustPressed));
-      dict.Add("ClickHandler_UpdateStatus", new Action<object, object>(ClickHandler_UpdateStatus));
+        { "FancyButton_New", new Func<string, Action, object>(FancyButton_New) },
+        { "FancyButton_GetText", new Func<object, string>(FancyButton_GetText) },
+        { "FancyButton_SetText", new Action<object, string>(FancyButton_SetText) },
+        { "FancyButton_SetOnChange", new Action<object, Action>(FancyButton_SetOnChange) },
+        { "FancyButton_GetAlignment", new Func<object, TextAlignment>(FancyButton_GetAlignment) },
+        { "FancyButton_SetAlignment", new Action<object, TextAlignment>(FancyButton_SetAlignment) },
 
-      dict.Add("FancyButton_New", new Func<string, Action, object>(FancyButton_New));
-      dict.Add("FancyButton_GetText", new Func<object, string>(FancyButton_GetText));
-      dict.Add("FancyButton_SetText", new Action<object, string>(FancyButton_SetText));
-      dict.Add("FancyButton_SetOnChange", new Action<object, Action>(FancyButton_SetOnChange));
-      dict.Add("FancyButton_GetAlignment", new Func<object, TextAlignment>(FancyButton_GetAlignment));
-      dict.Add("FancyButton_SetAlignment", new Action<object, TextAlignment>(FancyButton_SetAlignment));
+        { "FancyLabel_New", new Func<string, float, object>(FancyLabel_New) },
+        { "FancyLabel_GetText", new Func<object, string>(FancyLabel_GetText) },
+        { "FancyLabel_SetText", new Action<object, string>(FancyLabel_SetText) },
+        { "FancyLabel_SetFontSize", new Action<object, float>(FancyLabel_SetFontSize) },
+        { "FancyLabel_GetAlignment", new Func<object, TextAlignment>(FancyLabel_GetAlignment) },
+        { "FancyLabel_SetAlignment", new Action<object, TextAlignment>(FancyLabel_SetAlignment) },
 
-      dict.Add("FancyLabel_New", new Func<string, float, object>(FancyLabel_New));
-      dict.Add("FancyLabel_GetText", new Func<object, string>(FancyLabel_GetText));
-      dict.Add("FancyLabel_SetText", new Action<object, string>(FancyLabel_SetText));
-      dict.Add("FancyLabel_SetFontSize", new Action<object, float>(FancyLabel_SetFontSize));
-      dict.Add("FancyLabel_GetAlignment", new Func<object, TextAlignment>(FancyLabel_GetAlignment));
-      dict.Add("FancyLabel_SetAlignment", new Action<object, TextAlignment>(FancyLabel_SetAlignment));
+        { "FancyProgressBar_New", new Func<float, float, bool, object>(FancyProgressBar_New) },
+        { "FancyProgressBar_GetValue", new Func<object, float>(FancyProgressBar_GetValue) },
+        { "FancyProgressBar_SetValue", new Action<object, float>(FancyProgressBar_SetValue) },
 
-      dict.Add("FancyProgressBar_New", new Func<float, float, bool, object>(FancyProgressBar_New));
-      dict.Add("FancyProgressBar_GetValue", new Func<object, float>(FancyProgressBar_GetValue));
-      dict.Add("FancyProgressBar_SetValue", new Action<object, float>(FancyProgressBar_SetValue));
+        { "FancySelector_New", new Func<List<string>, Action<int, string>, bool, object>(FancySelector_New) },
+        { "FancySelector_SetOnChange", new Action<object, Action<int, string>>(FancySelector_SetOnChange) },
 
-      dict.Add("FancySelector_New", new Func<List<string>, Action<int, string>, bool, object>(FancySelector_New));
-      dict.Add("FancySelector_SetOnChange", new Action<object, Action<int, string>>(FancySelector_SetOnChange));
+        { "FancySeparator_New", new Func<object>(FancySeparator_New) },
 
-      dict.Add("FancySeparator_New", new Func<object>(FancySeparator_New));
+        { "FancySlider_New", new Func<float, float, Action<float>, object>(FancySlider_New) },
+        { "FancySlider_GetRange", new Func<object, Vector2>(FancySlider_GetRange) },
+        { "FancySlider_SetRange", new Action<object, Vector2>(FancySlider_SetRange) },
+        { "FancySlider_GetValue", new Func<object, float>(FancySlider_GetValue) },
+        { "FancySlider_SetValue", new Action<object, float>(FancySlider_SetValue) },
+        { "FancySlider_SetOnChange", new Action<object, Action<float>>(FancySlider_SetOnChange) },
+        { "FancySlider_GetIsInteger", new Func<object, bool>(FancySlider_GetIsInteger) },
+        { "FancySlider_SetIsInteger", new Action<object, bool>(FancySlider_SetIsInteger) },
+        { "FancySlider_GetAllowInput", new Func<object, bool>(FancySlider_GetAllowInput) },
+        { "FancySlider_SetAllowInput", new Action<object, bool>(FancySlider_SetAllowInput) },
 
-      dict.Add("FancySlider_New", new Func<float, float, Action<float>, object>(FancySlider_New));
-      dict.Add("FancySlider_GetRange", new Func<object, Vector2>(FancySlider_GetRange));
-      dict.Add("FancySlider_SetRange", new Action<object, Vector2>(FancySlider_SetRange));
-      dict.Add("FancySlider_GetValue", new Func<object, float>(FancySlider_GetValue));
-      dict.Add("FancySlider_SetValue", new Action<object, float>(FancySlider_SetValue));
-      dict.Add("FancySlider_SetOnChange", new Action<object, Action<float>>(FancySlider_SetOnChange));
-      dict.Add("FancySlider_GetIsInteger", new Func<object, bool>(FancySlider_GetIsInteger));
-      dict.Add("FancySlider_SetIsInteger", new Action<object, bool>(FancySlider_SetIsInteger));
-      dict.Add("FancySlider_GetAllowInput", new Func<object, bool>(FancySlider_GetAllowInput));
-      dict.Add("FancySlider_SetAllowInput", new Action<object, bool>(FancySlider_SetAllowInput));
+        { "FancySliderRange_NewR", new Func<float, float, Action<float, float>, object>(FancySliderRange_NewR) },
+        { "FancySliderRange_GetValueLower", new Func<object, float>(FancySliderRange_GetValueLower) },
+        { "FancySliderRange_SetValueLower", new Action<object, float>(FancySliderRange_SetValueLower) },
+        { "FancySliderRange_SetOnChangeR", new Action<object, Action<float, float>>(FancySliderRange_SetOnChangeR) },
 
-      dict.Add("FancySliderRange_NewR", new Func<float, float, Action<float, float>, object>(FancySliderRange_NewR));
-      dict.Add("FancySliderRange_GetValueLower", new Func<object, float>(FancySliderRange_GetValueLower));
-      dict.Add("FancySliderRange_SetValueLower", new Action<object, float>(FancySliderRange_SetValueLower));
-      dict.Add("FancySliderRange_SetOnChangeR", new Action<object, Action<float, float>>(FancySliderRange_SetOnChangeR));
+        { "FancySwitch_New", new Func<string[], int, Action<int>, object>(FancySwitch_New) },
+        { "FancySwitch_GetIndex", new Func<object, int>(FancySwitch_GetIndex) },
+        { "FancySwitch_SetIndex", new Action<object, int>(FancySwitch_SetIndex) },
+        { "FancySwitch_GetTabNames", new Func<object, string[]>(FancySwitch_GetTabNames) },
+        { "FancySwitch_GetTabName", new Func<object, int, string>(FancySwitch_GetTabName) },
+        { "FancySwitch_SetTabName", new Action<object, int, string>(FancySwitch_SetTabName) },
+        { "FancySwitch_SetOnChange", new Action<object, Action<int>>(FancySwitch_SetOnChange) },
 
-      dict.Add("FancySwitch_New", new Func<Action<bool>, string, string, object>(FancySwitch_New));
-      dict.Add("FancySwitch_GetTextOn", new Func<object, string>(FancySwitch_GetTextOn));
-      dict.Add("FancySwitch_SetTextOn", new Action<object, string>(FancySwitch_SetTextOn));
-      dict.Add("FancySwitch_GetTextOff", new Func<object, string>(FancySwitch_GetTextOff));
-      dict.Add("FancySwitch_SetTextOff", new Action<object, string>(FancySwitch_SetTextOff));
-      dict.Add("FancySwitch_GetValue", new Func<object, bool>(FancySwitch_GetValue));
-      dict.Add("FancySwitch_SetValue", new Action<object, bool>(FancySwitch_SetValue));
-      dict.Add("FancySwitch_SetOnChange", new Action<object, Action<bool>>(FancySwitch_SetOnChange));
+        { "FancyTextField_New", new Func<string, Action<string>, object>(FancyTextField_New) },
+        { "FancyTextField_GetText", new Func<object, string>(FancyTextField_GetText) },
+        { "FancyTextField_SetText", new Action<object, string>(FancyTextField_SetText) },
+        { "FancyTextField_SetOnChange", new Action<object, Action<string>>(FancyTextField_SetOnChange) },
+        { "FancyTextField_GetIsNumeric", new Func<object, bool>(FancyTextField_GetIsNumeric) },
+        { "FancyTextField_SetIsNumeric", new Action<object, bool>(FancyTextField_SetIsNumeric) },
+        { "FancyTextField_GetIsInteger", new Func<object, bool>(FancyTextField_GetIsInteger) },
+        { "FancyTextField_SetIsInteger", new Action<object, bool>(FancyTextField_SetIsInteger) },
+        { "FancyTextField_GetAllowNegative", new Func<object, bool>(FancyTextField_GetAllowNegative) },
+        { "FancyTextField_SetAllowNegative", new Action<object, bool>(FancyTextField_SetAllowNegative) },
+        { "FancyTextField_GetAlignment", new Func<object, TextAlignment>(FancyTextField_GetAlignment) },
+        { "FancyTextField_SetAlignment", new Action<object, TextAlignment>(FancyTextField_SetAlignment) },
 
-      dict.Add("FancyTextField_New", new Func<string, Action<string>, object>(FancyTextField_New));
-      dict.Add("FancyTextField_GetText", new Func<object, string>(FancyTextField_GetText));
-      dict.Add("FancyTextField_SetText", new Action<object, string>(FancyTextField_SetText));
-      dict.Add("FancyTextField_SetOnChange", new Action<object, Action<string>>(FancyTextField_SetOnChange));
-      dict.Add("FancyTextField_GetIsNumeric", new Func<object, bool>(FancyTextField_GetIsNumeric));
-      dict.Add("FancyTextField_SetIsNumeric", new Action<object, bool>(FancyTextField_SetIsNumeric));
-      dict.Add("FancyTextField_GetIsInteger", new Func<object, bool>(FancyTextField_GetIsInteger));
-      dict.Add("FancyTextField_SetIsInteger", new Action<object, bool>(FancyTextField_SetIsInteger));
-      dict.Add("FancyTextField_GetAllowNegative", new Func<object, bool>(FancyTextField_GetAllowNegative));
-      dict.Add("FancyTextField_SetAllowNegative", new Action<object, bool>(FancyTextField_SetAllowNegative));
-      dict.Add("FancyTextField_GetAlignment", new Func<object, TextAlignment>(FancyTextField_GetAlignment));
-      dict.Add("FancyTextField_SetAlignment", new Action<object, TextAlignment>(FancyTextField_SetAlignment));
-
-      dict.Add("FancyWindowBar_New", new Func<string, object>(FancyWindowBar_New));
-      dict.Add("FancyWindowBar_GetText", new Func<object, string>(FancyWindowBar_GetText));
-      dict.Add("FancyWindowBar_SetText", new Action<object, string>(FancyWindowBar_SetText));
+        { "FancyWindowBar_New", new Func<string, object>(FancyWindowBar_New) },
+        { "FancyWindowBar_GetText", new Func<object, string>(FancyWindowBar_GetText) },
+        { "FancyWindowBar_SetText", new Action<object, string>(FancyWindowBar_SetText) }
+      };
 
       return dict;
     }
@@ -204,8 +204,8 @@ namespace Lima.Touch
       return screen;
     }
     private void RemoveTouchScreen(IMyCubeBlock block, IMyTextSurface surface) => TouchSession.Instance.TouchMan.RemoveScreen(block, surface);
-    private List<TouchScreen> GetTouchScreensList() => TouchSession.Instance.TouchMan.Screens;
-    private TouchScreen GetTargetTouchScreen() => TouchSession.Instance.TouchMan.CurrentScreen;
+    // private List<TouchScreen> GetTouchScreensList() => TouchSession.Instance.TouchMan.Screens;
+    // private TouchScreen GetTargetTouchScreen() => TouchSession.Instance.TouchMan.CurrentScreen;
     private float GetMaxInteractiveDistance() => TouchSession.Instance.TouchMan.MaxInteractiveDistance;
     private void SetMaxInteractiveDistance(float distance) => TouchSession.Instance.TouchMan.MaxInteractiveDistance = distance;
     private void AddSurfaceCoords(string coords) => TouchSession.Instance.SurfaceCoordsMan.AddSurfaceCoords(coords);
@@ -340,14 +340,13 @@ namespace Lima.Touch
     private void FancySliderRange_SetValueLower(object obj, float value) => (obj as FancySliderRange).ValueLower = value;
     private void FancySliderRange_SetOnChangeR(object obj, Action<float, float> onChange) => (obj as FancySliderRange).OnChangeR = onChange;
 
-    private FancySwitch FancySwitch_New(Action<bool> onChange, string textOn = "On", string textOff = "Off") => new FancySwitch(onChange, textOn, textOff);
-    private string FancySwitch_GetTextOn(object obj) => (obj as FancySwitch).TextOn;
-    private void FancySwitch_SetTextOn(object obj, string text) => (obj as FancySwitch).TextOn = text;
-    private string FancySwitch_GetTextOff(object obj) => (obj as FancySwitch).TextOff;
-    private void FancySwitch_SetTextOff(object obj, string text) => (obj as FancySwitch).TextOff = text;
-    private bool FancySwitch_GetValue(object obj) => (obj as FancySwitch).Value;
-    private void FancySwitch_SetValue(object obj, bool value) => (obj as FancySwitch).Value = value;
-    private void FancySwitch_SetOnChange(object obj, Action<bool> onChange) => (obj as FancySwitch).OnChange = onChange;
+    private FancySwitch FancySwitch_New(string[] tabNames, int index = 0, Action<int> onChange = null) => new FancySwitch(tabNames, index, onChange);
+    private int FancySwitch_GetIndex(object obj) => (obj as FancySwitch).Index;
+    private void FancySwitch_SetIndex(object obj, int index) => (obj as FancySwitch).Index = index;
+    private string[] FancySwitch_GetTabNames(object obj) => (obj as FancySwitch).TabNames;
+    private string FancySwitch_GetTabName(object obj, int index) => (obj as FancySwitch).TabNames[index];
+    private void FancySwitch_SetTabName(object obj, int index, string text) => (obj as FancySwitch).TabNames[index] = text;
+    private void FancySwitch_SetOnChange(object obj, Action<int> onChange) => (obj as FancySwitch).OnChange = onChange;
 
     private FancyTextField FancyTextField_New(string text, Action<string> onChange) => new FancyTextField(text, onChange);
     private string FancyTextField_GetText(object obj) => (obj as FancyTextField).Text;

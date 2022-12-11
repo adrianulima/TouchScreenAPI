@@ -106,7 +106,6 @@ namespace Lima.Fancy.Elements
       }
       else
       {
-
         arrowBgSprite.Color = App.Theme.Main_30;
         arrow2BgSprite.Color = App.Theme.Main_30;
       }
@@ -142,7 +141,7 @@ namespace Lima.Fancy.Elements
       arrow2Sprite.Position = arrow2BgSprite.Position = Position + new Vector2(Size.X - Size.Y, Size.Y / 2);
       arrow2Sprite.Size = arrow2BgSprite.Size = new Vector2(Size.Y, Size.Y);
 
-      textSprite.Position = Position + new Vector2(Size.X / 2, Size.Y * 0.5f - Size.Y / 2.4f);
+      textSprite.Position = Position + new Vector2(Size.X / 2, Size.Y * 0.5f - (textSprite.RotationOrScale * 16.6f));
       // textSprite.Size = Size;
 
       sprites.Add(bgSprite);

@@ -176,14 +176,15 @@ namespace Lima.API
       AssignMethod(delegates, "FancySliderRange_GetValueLower", ref FancySliderRange_GetValueLower);
       AssignMethod(delegates, "FancySliderRange_SetValueLower", ref FancySliderRange_SetValueLower);
       AssignMethod(delegates, "FancySliderRange_SetOnChangeR", ref FancySliderRange_SetOnChangeR);
+
       AssignMethod(delegates, "FancySwitch_New", ref FancySwitch_New);
-      AssignMethod(delegates, "FancySwitch_GetTextOn", ref FancySwitch_GetTextOn);
-      AssignMethod(delegates, "FancySwitch_SetTextOn", ref FancySwitch_SetTextOn);
-      AssignMethod(delegates, "FancySwitch_GetTextOff", ref FancySwitch_GetTextOff);
-      AssignMethod(delegates, "FancySwitch_SetTextOff", ref FancySwitch_SetTextOff);
-      AssignMethod(delegates, "FancySwitch_GetValue", ref FancySwitch_GetValue);
-      AssignMethod(delegates, "FancySwitch_SetValue", ref FancySwitch_SetValue);
+      AssignMethod(delegates, "FancySwitch_GetIndex", ref FancySwitch_GetIndex);
+      AssignMethod(delegates, "FancySwitch_SetIndex", ref FancySwitch_SetIndex);
+      AssignMethod(delegates, "FancySwitch_GetTabNames", ref FancySwitch_GetTabNames);
+      AssignMethod(delegates, "FancySwitch_GetTabName", ref FancySwitch_GetTabName);
+      AssignMethod(delegates, "FancySwitch_SetTabName", ref FancySwitch_SetTabName);
       AssignMethod(delegates, "FancySwitch_SetOnChange", ref FancySwitch_SetOnChange);
+
       AssignMethod(delegates, "FancyTextField_New", ref FancyTextField_New);
       AssignMethod(delegates, "FancyTextField_GetText", ref FancyTextField_GetText);
       AssignMethod(delegates, "FancyTextField_SetText", ref FancyTextField_SetText);
@@ -327,14 +328,13 @@ namespace Lima.API
     public Action<object, float> FancySliderRange_SetValueLower;
     public Action<object, Action<float, float>> FancySliderRange_SetOnChangeR;
 
-    public Func<Action<bool>, string, string, object> FancySwitch_New;
-    public Func<object, string> FancySwitch_GetTextOn;
-    public Action<object, string> FancySwitch_SetTextOn;
-    public Func<object, string> FancySwitch_GetTextOff;
-    public Action<object, string> FancySwitch_SetTextOff;
-    public Func<object, bool> FancySwitch_GetValue;
-    public Action<object, bool> FancySwitch_SetValue;
-    public Action<object, Action<bool>> FancySwitch_SetOnChange;
+    public Func<string[], int, Action<int>, object> FancySwitch_New;
+    public Func<object, int> FancySwitch_GetIndex;
+    public Action<object, int> FancySwitch_SetIndex;
+    public Func<object, string[]> FancySwitch_GetTabNames;
+    public Func<object, int, string> FancySwitch_GetTabName;
+    public Action<object, int, string> FancySwitch_SetTabName;
+    public Action<object, Action<int>> FancySwitch_SetOnChange;
 
     public Func<string, Action<string>, object> FancyTextField_New;
     public Func<object, string> FancyTextField_GetText;
@@ -533,15 +533,14 @@ namespace Lima.API
   }
   public class FancySwitch : FancyButtonBase
   {
-    public FancySwitch(Action<bool> onChange, string textOn = "On", string textOff = "Off") : base(Api.FancySwitch_New(onChange, textOn, textOff)) { }
+    public FancySwitch(string[] tabNames, int index = 0, Action<int> onChange = null) : base(Api.FancySwitch_New(tabNames, index, onChange)) { }
     public FancySwitch(object internalObject) : base(internalObject) { }
-    public string GetTextOn() => Api.FancySwitch_GetTextOn.Invoke(internalObj);
-    public void SetTextOn(string text) => Api.FancySwitch_SetTextOn.Invoke(internalObj, text);
-    public string GetTextOff() => Api.FancySwitch_GetTextOff.Invoke(internalObj);
-    public void SetTextOff(string text) => Api.FancySwitch_SetTextOff.Invoke(internalObj, text);
-    public bool GetValue() => Api.FancySwitch_GetValue.Invoke(internalObj);
-    public void SetValue(bool value) => Api.FancySwitch_SetValue.Invoke(internalObj, value);
-    public void SetOnChange(Action<bool> onChange) => Api.FancySwitch_SetOnChange.Invoke(internalObj, onChange);
+    public int GetIndex() => Api.FancySwitch_GetIndex.Invoke(internalObj);
+    public void SetIndex(int index) => Api.FancySwitch_SetIndex.Invoke(internalObj, index);
+    public string[] GetTabNames() => Api.FancySwitch_GetTabNames.Invoke(internalObj);
+    public string GetTabName(int index) => Api.FancySwitch_GetTabName.Invoke(internalObj, index);
+    public void SetTabName(int index, string text) => Api.FancySwitch_SetTabName.Invoke(internalObj, index, text);
+    public void SetOnChange(Action<int> onChange) => Api.FancySwitch_SetOnChange.Invoke(internalObj, onChange);
   }
   public class FancyTextField : FancyButtonBase
   {

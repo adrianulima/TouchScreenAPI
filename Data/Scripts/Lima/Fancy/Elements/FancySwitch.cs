@@ -8,28 +8,30 @@ namespace Lima.Fancy.Elements
   {
     private MySprite bgSprite;
     private MySprite handlerSprite;
-    private MySprite textOnSprite;
-    private MySprite textOffSprite;
+    private MySprite selectedSprite;
+    private MySprite[] textSprites;
 
-    public string TextOn;
-    public string TextOff;
-    public bool Value = false;
-    public Action<bool> OnChange;
+    public int Index;
+    public readonly string[] TabNames;
+    public Action<int> OnChange;
 
-    public FancySwitch(Action<bool> onChange, string textOn = "On", string textOff = "Off")
+    public FancySwitch(string[] tabNames, int index = 0, Action<int> onChange = null)
     {
-      OnChange = onChange;
-      TextOn = textOn;
-      TextOff = textOff;
+      TabNames = tabNames;
+      Index = index;
+
+      textSprites = new MySprite[TabNames.Length];
 
       Scale = new Vector2(1, 0);
-      Margin = new Vector4(8, 0, 8, 0);
       Pixels = new Vector2(0, 24);
     }
 
     public override void Update()
     {
       handler.HitArea = new Vector4(Position.X, Position.Y, Position.X + Size.X, Position.Y + Size.Y);
+
+      var width = Size.X / textSprites.Length;
+      var halfWidth = width / 2f;
 
       base.Update();
 
@@ -46,46 +48,38 @@ namespace Lima.Fancy.Elements
         Type = SpriteType.TEXTURE,
         Data = "SquareSimple",
         RotationOrScale = 0,
-        Color = App.Theme.Main
+        Color = App.Theme.Main_20
       };
 
-      textOnSprite = new MySprite()
+      selectedSprite = new MySprite()
       {
-        Type = SpriteType.TEXT,
-        Data = TextOn,
-        RotationOrScale = 0.6f * App.Theme.Scale,
-        Color = App.Theme.White,//Theme.Main,
-        Alignment = TextAlignment.CENTER,
-        FontId = App.Theme.Font
+        Type = SpriteType.TEXTURE,
+        Data = "SquareSimple",
+        RotationOrScale = 0,
+        Color = App.Theme.Main_60
       };
 
-      textOffSprite = new MySprite()
+      for (int i = 0; i < textSprites.Length; i++)
       {
-        Type = SpriteType.TEXT,
-        Data = TextOff,
-        RotationOrScale = 0.6f * App.Theme.Scale,
-        Color = App.Theme.White,//Theme.Main,
-        Alignment = TextAlignment.CENTER,
-        FontId = App.Theme.Font
-      };
-
-      if (handler.IsMousePressed)
-      {
-        bgSprite.Color = App.Theme.Main_20;
-      }
-      else if (handler.IsMouseOver)
-      {
-        bgSprite.Color = App.Theme.Main_20;
-      }
-      else
-      {
-        bgSprite.Color = App.Theme.Main_10;
+        textSprites[i] = new MySprite()
+        {
+          Type = SpriteType.TEXT,
+          Data = TabNames[i],
+          RotationOrScale = 0.5f * App.Theme.Scale,
+          Color = App.Theme.White,//Theme.Main,
+          Alignment = TextAlignment.CENTER,
+          FontId = App.Theme.Font
+        };
       }
 
       if (handler.JustReleased)
       {
-        Value = !Value;
-        OnChange(Value);
+        var mouseX = App.Cursor.Position.X - handler.HitArea.X;
+        var prev = Index;
+        Index = (int)Math.Floor(mouseX / width);
+
+        if (OnChange != null && prev != Index)
+          OnChange(Index);
       }
 
       sprites.Clear();
@@ -93,23 +87,33 @@ namespace Lima.Fancy.Elements
       bgSprite.Position = Position + new Vector2(0, Size.Y / 2);
       bgSprite.Size = Size;
 
-      var gap = 2;
-      var dir = (Value ? 1 : 0);
-
-      handlerSprite.Position = Position + new Vector2(gap * (1 - dir) + (Size.X / 2) * dir, Size.Y / 2);
-      handlerSprite.Size = new Vector2(Size.X / 2 - gap, Size.Y - gap * 2);
-
-      textOnSprite.Position = Position + new Vector2(Size.X / 2f + Size.X / 4f, Size.Y * 0.5f - Size.Y / 2.4f);
-      textOffSprite.Position = Position + new Vector2(Size.X / 4f, Size.Y * 0.5f - Size.Y / 2.4f);
-
-      textOnSprite.Color = Value ? App.Theme.White : App.Theme.Main_40;
-      textOffSprite.Color = Value ? App.Theme.Main_40 : App.Theme.White;
-
       sprites.Add(bgSprite);
-      sprites.Add(handlerSprite);
-      sprites.Add(textOnSprite);
-      sprites.Add(textOffSprite);
-    }
 
+      if (handler.IsMousePressed || handler.IsMouseOver)
+      {
+        var mouseX = App.Cursor.Position.X - handler.HitArea.X;
+        var p = (int)Math.Floor(mouseX / width);
+
+        if (p != Index)
+        {
+          handlerSprite.Position = Position + new Vector2(width * p, Size.Y / 2);
+          handlerSprite.Size = new Vector2(width, Size.Y);
+
+          sprites.Add(handlerSprite);
+        }
+      }
+
+      selectedSprite.Position = Position + new Vector2(width * Index, Size.Y / 2);
+      selectedSprite.Size = new Vector2(width, Size.Y);
+
+      sprites.Add(selectedSprite);
+
+      for (int j = 0; j < textSprites.Length; j++)
+      {
+        textSprites[j].Position = Position + new Vector2(j * width + halfWidth, Size.Y * 0.5f - (textSprites[j].RotationOrScale * 16.6f));
+        textSprites[j].Color = j == Index ? App.Theme.White : App.Theme.Main_40;
+        sprites.Add(textSprites[j]);
+      }
+    }
   }
 }

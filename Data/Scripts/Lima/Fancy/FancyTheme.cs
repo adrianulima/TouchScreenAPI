@@ -81,7 +81,7 @@ namespace Lima.Fancy
       _lastFore = _surface.ScriptForegroundColor;
     }
 
-    private bool IsColorDark(Color color)
+    private static bool IsColorDark(Color color)
     {
       var hsv = color.ColorToHSV();
       return hsv.Z < 0.125 || (hsv.Y > 0.5 && hsv.Z < 0.25);

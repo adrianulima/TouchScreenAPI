@@ -42,7 +42,7 @@ namespace Lima.Fancy.Elements
         Type = SpriteType.TEXTURE,
         Data = "SquareSimple",
         RotationOrScale = 0,
-        Color = App.Theme.Main
+        Color = App.Theme.Main_60
       };
 
       sprites.Clear();

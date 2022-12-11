@@ -165,11 +165,11 @@ namespace Lima.Fancy.Elements
 
 
       if (Alignment == TextAlignment.LEFT)
-        textSprite.Position = Position + new Vector2(0, Size.Y * 0.5f - (Size.Y / 2.4f));
+        textSprite.Position = Position + new Vector2(0, Size.Y * 0.5f - (textSprite.RotationOrScale * 16.6f));
       else if (Alignment == TextAlignment.RIGHT)
-        textSprite.Position = Position + new Vector2(Size.X - caretX * 2, Size.Y * 0.5f - (Size.Y / 2.4f));
+        textSprite.Position = Position + new Vector2(Size.X - caretX * 2, Size.Y * 0.5f - (textSprite.RotationOrScale * 16.6f));
       else
-        textSprite.Position = Position + new Vector2(Size.X / 2 - caretX, Size.Y * 0.5f - (Size.Y / 2.4f));
+        textSprite.Position = Position + new Vector2(Size.X / 2 - caretX, Size.Y * 0.5f - (textSprite.RotationOrScale * 16.6f));
 
 
       sprites.Add(bgSprite);
