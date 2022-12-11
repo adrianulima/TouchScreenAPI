@@ -79,17 +79,17 @@ namespace Lima.Fancy.Elements
 
     public FancyElementBase() { }
 
-    public bool DebugDraw = false;
-    public Color _debugDrawColor;
-    public Color DebugDrawColor
-    {
-      get
-      {
-        if (_debugDrawColor == Color.Transparent)
-          _debugDrawColor = new Color(MathUtils.GetRandomInt(30, 100), MathUtils.GetRandomInt(30, 80), MathUtils.GetRandomInt(20, 60), 200);
-        return _debugDrawColor;
-      }
-    }
+    // public bool DebugDraw = false;
+    // public Color _debugDrawColor;
+    // public Color DebugDrawColor
+    // {
+    //   get
+    //   {
+    //     if (_debugDrawColor == Color.Transparent)
+    //       _debugDrawColor = new Color(MathUtils.GetRandomInt(30, 100), MathUtils.GetRandomInt(30, 80), MathUtils.GetRandomInt(20, 60), 200);
+    //     return _debugDrawColor;
+    //   }
+    // }
 
     public virtual void InitElements() { }
 
@@ -102,18 +102,18 @@ namespace Lima.Fancy.Elements
 
     public virtual List<MySprite> GetSprites()
     {
-      if (DebugDraw)
-      {
-        sprites.Insert(0, new MySprite()
-        {
-          Type = SpriteType.TEXTURE,
-          Data = "SquareSimple",
-          RotationOrScale = 0,
-          Color = DebugDrawColor,
-          Position = Position + new Vector2(0, Size.Y / 2),
-          Size = Size
-        });
-      }
+      // if (DebugDraw)
+      // {
+      //   sprites.Insert(0, new MySprite()
+      //   {
+      //     Type = SpriteType.TEXTURE,
+      //     Data = "SquareSimple",
+      //     RotationOrScale = 0,
+      //     Color = DebugDrawColor,
+      //     Position = Position + new Vector2(0, Size.Y / 2),
+      //     Size = Size
+      //   });
+      // }
 
       return sprites;
     }
