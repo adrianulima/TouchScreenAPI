@@ -92,6 +92,8 @@ namespace Lima.Touch
       dict.Add("FancyView_NewV", new Func<int, FancyView>(FancyView_NewV));
       dict.Add("FancyView_GetDirection", new Func<object, int>(FancyView_GetDirection));
       dict.Add("FancyView_SetDirection", new Action<object, int>(FancyView_SetDirection));
+      dict.Add("FancyView_GetBgColor", new Func<object, Color>(FancyView_GetBgColor));
+      dict.Add("FancyView_SetBgColor", new Action<object, Color>(FancyView_SetBgColor));
 
       dict.Add("FancyApp_New", new Func<FancyApp>(FancyApp_New));
       dict.Add("FancyApp_GetScreen", new Func<object, TouchScreen>(FancyApp_GetScreen));
@@ -140,8 +142,6 @@ namespace Lima.Touch
       dict.Add("FancyLabel_SetFontSize", new Action<object, float>(FancyLabel_SetFontSize));
       dict.Add("FancyLabel_GetAlignment", new Func<object, TextAlignment>(FancyLabel_GetAlignment));
       dict.Add("FancyLabel_SetAlignment", new Action<object, TextAlignment>(FancyLabel_SetAlignment));
-
-      dict.Add("FancyPanel_New", new Func<object>(FancyPanel_New));
 
       dict.Add("FancyProgressBar_New", new Func<float, float, bool, object>(FancyProgressBar_New));
       dict.Add("FancyProgressBar_GetValue", new Func<object, float>(FancyProgressBar_GetValue));
@@ -252,6 +252,8 @@ namespace Lima.Touch
     private FancyView FancyView_NewV(int direction) => new FancyView((FancyView.ViewDirection)direction);
     private int FancyView_GetDirection(object obj) => (int)(obj as FancyView).Direction;
     private void FancyView_SetDirection(object obj, int direction) => (obj as FancyView).Direction = (FancyView.ViewDirection)direction;
+    private Color FancyView_GetBgColor(object obj) => (Color)(obj as FancyView).BgColor;
+    private void FancyView_SetBgColor(object obj, Color bgColor) => (obj as FancyView).BgColor = bgColor;
 
     private FancyApp FancyApp_New() => new FancyApp();
     private TouchScreen FancyApp_GetScreen(object obj) => (obj as FancyApp).Screen;
@@ -312,8 +314,6 @@ namespace Lima.Touch
     private void FancyLabel_SetFontSize(object obj, float fontSize) => (obj as FancyLabel).FontSize = fontSize;
     private TextAlignment FancyLabel_GetAlignment(object obj) => (obj as FancyLabel).Alignment;
     private void FancyLabel_SetAlignment(object obj, TextAlignment alignment) => (obj as FancyLabel).Alignment = alignment;
-
-    private FancyPanel FancyPanel_New() => new FancyPanel();
 
     private FancyProgressBar FancyProgressBar_New(float min, float max, bool bars = true) => new FancyProgressBar(min, max, bars);
     private float FancyProgressBar_GetValue(object obj) => (obj as FancyProgressBar).Value;

@@ -1,6 +1,5 @@
 using System;
 using System.Text;
-using Lima.Utils;
 using VRage.Game;
 using VRageMath;
 
@@ -48,23 +47,9 @@ namespace Lima.Fancy
 
     public float Scale = 1f;
 
-    private bool IsBgDark
-    {
-      get
-      {
-        var hsv = _surface.ScriptBackgroundColor.ColorToHSV();
-        return hsv.Z < 0.125 || (hsv.Y > 0.5 && hsv.Z < 0.25);
-      }
-    }
+    public bool IsBgDark { get { return IsColorDark(_surface.ScriptBackgroundColor); } }
 
-    private bool IsMainDark
-    {
-      get
-      {
-        var hsv = _surface.ScriptForegroundColor.ColorToHSV();
-        return hsv.Z < 0.125 || (hsv.Y > 0.5 && hsv.Z < 0.25);
-      }
-    }
+    public bool IsMainDark { get { return IsColorDark(_surface.ScriptForegroundColor); } }
 
     public FancyTheme(Sandbox.ModAPI.Ingame.IMyTextSurface surface)
     {
@@ -76,24 +61,30 @@ namespace Lima.Fancy
       if (_surface.ScriptForegroundColor == _lastFore && _surface.ScriptBackgroundColor == _lastBg)
         return;
 
-      float r = (_surface.ScriptForegroundColor.R + ((1 - _surface.ScriptForegroundColor.R) * 0.6f));
-      float g = (_surface.ScriptForegroundColor.G + ((1 - _surface.ScriptForegroundColor.G) * 0.6f));
-      float b = (_surface.ScriptForegroundColor.B + ((1 - _surface.ScriptForegroundColor.B) * 0.6f));
+      float r = _surface.ScriptForegroundColor.R + ((1 - _surface.ScriptForegroundColor.R) * 0.6f);
+      float g = _surface.ScriptForegroundColor.G + ((1 - _surface.ScriptForegroundColor.G) * 0.6f);
+      float b = _surface.ScriptForegroundColor.B + ((1 - _surface.ScriptForegroundColor.B) * 0.6f);
       _White = new Color(r, g, b);
-      _Bg = ColorUtils.Opac(_surface.ScriptBackgroundColor);
-      _Main = ColorUtils.Opac(_surface.ScriptForegroundColor);
-      _Main_10 = ColorUtils.Opac(_surface.ScriptForegroundColor * 0.1f);
-      _Main_20 = ColorUtils.Opac(_surface.ScriptForegroundColor * 0.2f);
-      _Main_30 = ColorUtils.Opac(_surface.ScriptForegroundColor * 0.3f);
-      _Main_40 = ColorUtils.Opac(_surface.ScriptForegroundColor * 0.4f);
-      _Main_50 = ColorUtils.Opac(_surface.ScriptForegroundColor * 0.5f);
-      _Main_60 = ColorUtils.Opac(_surface.ScriptForegroundColor * 0.6f);
-      _Main_70 = ColorUtils.Opac(_surface.ScriptForegroundColor * 0.7f);
-      _Main_80 = ColorUtils.Opac(_surface.ScriptForegroundColor * 0.8f);
-      _Main_90 = ColorUtils.Opac(_surface.ScriptForegroundColor * 0.9f);
+      _Bg = new Color(_surface.ScriptBackgroundColor, 1);
+      _Main = new Color(_surface.ScriptForegroundColor, 1);
+      _Main_10 = new Color(_surface.ScriptForegroundColor * 0.1f, 1);
+      _Main_20 = new Color(_surface.ScriptForegroundColor * 0.2f, 1);
+      _Main_30 = new Color(_surface.ScriptForegroundColor * 0.3f, 1);
+      _Main_40 = new Color(_surface.ScriptForegroundColor * 0.4f, 1);
+      _Main_50 = new Color(_surface.ScriptForegroundColor * 0.5f, 1);
+      _Main_60 = new Color(_surface.ScriptForegroundColor * 0.6f, 1);
+      _Main_70 = new Color(_surface.ScriptForegroundColor * 0.7f, 1);
+      _Main_80 = new Color(_surface.ScriptForegroundColor * 0.8f, 1);
+      _Main_90 = new Color(_surface.ScriptForegroundColor * 0.9f, 1);
 
       _lastBg = _surface.ScriptBackgroundColor;
       _lastFore = _surface.ScriptForegroundColor;
+    }
+
+    private bool IsColorDark(Color color)
+    {
+      var hsv = color.ColorToHSV();
+      return hsv.Z < 0.125 || (hsv.Y > 0.5 && hsv.Z < 0.25);
     }
 
   }

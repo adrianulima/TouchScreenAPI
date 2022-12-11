@@ -67,6 +67,7 @@ namespace Lima.Fancy.Elements
       {
         OnChange();
         // MyAPIGateway.Utilities.ShowNotification($"[ Button callback ]", 2000, MyFontEnum.Red);
+        Sandbox.Game.MyVisualScriptLogicProvider.SendChatMessage(App.Theme.Scale.ToString(), "SampleApp");
       }
 
       sprites.Clear();
@@ -75,11 +76,11 @@ namespace Lima.Fancy.Elements
       bgSprite.Size = Size;
 
       if (Alignment == TextAlignment.LEFT)
-        textSprite.Position = Position + new Vector2(0, Size.Y * 0.5f - (Size.Y / 2.4f));
+        textSprite.Position = Position + new Vector2(0, Size.Y * 0.5f - (textSprite.RotationOrScale * 16.6f));
       else if (Alignment == TextAlignment.RIGHT)
-        textSprite.Position = Position + new Vector2(Size.X, Size.Y * 0.5f - (Size.Y / 2.4f));
+        textSprite.Position = Position + new Vector2(Size.X, Size.Y * 0.5f - (textSprite.RotationOrScale * 16.6f));
       else
-        textSprite.Position = Position + new Vector2(Size.X / 2, Size.Y * 0.5f - (Size.Y / 2.4f));
+        textSprite.Position = Position + new Vector2(Size.X / 2, Size.Y * 0.5f - (textSprite.RotationOrScale * 16.6f));
 
       sprites.Add(bgSprite);
       sprites.Add(textSprite);

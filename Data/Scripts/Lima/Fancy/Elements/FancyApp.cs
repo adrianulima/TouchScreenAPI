@@ -10,8 +10,6 @@ namespace Lima.Fancy
 {
   public class FancyApp : FancyView
   {
-    private MySprite bgSprite;
-
     public event Action UpdateEvent;
 
     public TouchScreen Screen { get; private set; }
@@ -51,7 +49,7 @@ namespace Lima.Fancy
       bgSprite = new MySprite()
       {
         Type = SpriteType.TEXTURE,
-        Data = "Grid",//"MyObjectBuilder_Component/MetalGrid",
+        Data = "Grid",
         RotationOrScale = 0,
         Color = App.Theme.Main_10
       };

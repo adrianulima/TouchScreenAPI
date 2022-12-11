@@ -1,3 +1,5 @@
+using System;
+using VRage.Game.GUI.TextPanel;
 using VRageMath;
 
 namespace Lima.Fancy.Elements
@@ -13,16 +15,39 @@ namespace Lima.Fancy.Elements
 
     public ViewDirection Direction = ViewDirection.Column;
 
-    public FancyView(ViewDirection direction = ViewDirection.Column)
+    protected MySprite bgSprite;
+    public Color? BgColor;
+
+    public FancyView(ViewDirection direction = ViewDirection.Column, Color? bgColor = null)
     {
       Direction = direction;
+      BgColor = bgColor;
     }
 
     public override void Update()
     {
       base.Update();
 
+      if (BgColor != null)
+      {
+        bgSprite = new MySprite()
+        {
+          Type = SpriteType.TEXTURE,
+          Data = "SquareSimple",
+          RotationOrScale = 0,
+          Color = BgColor
+        };
+      }
+
       sprites.Clear();
+
+      if (BgColor != null)
+      {
+        bgSprite.Position = Position + new Vector2(0, Size.Y / 2);
+        bgSprite.Size = Size;
+
+        sprites.Add(bgSprite);
+      }
 
       var len = children.Count;
       for (int i = 0; i < len; i++)
