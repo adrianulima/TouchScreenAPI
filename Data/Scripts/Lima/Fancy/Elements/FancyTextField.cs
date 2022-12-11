@@ -139,7 +139,7 @@ namespace Lima.Fancy.Elements
         ToggleEdit(true, false);
       }
 
-      sprites.Clear();
+      Sprites.Clear();
 
       _bgSprite.Position = Position + new Vector2(0, Size.Y / 2);
       _bgSprite.Size = Size;
@@ -172,8 +172,8 @@ namespace Lima.Fancy.Elements
         _textSprite.Position = Position + new Vector2(Size.X / 2 - caretX, Size.Y * 0.5f - (_textSprite.RotationOrScale * 16.6f));
 
 
-      sprites.Add(_bgSprite);
-      sprites.Add(_textSprite);
+      Sprites.Add(_bgSprite);
+      Sprites.Add(_textSprite);
     }
 
     private void Blink()

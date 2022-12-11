@@ -17,13 +17,13 @@ namespace Lima.Fancy.Elements
     public int Selected = 0;
     public List<string> Labels;
     public Action<int, string> OnChange;
-    protected bool _loop;
+    protected bool Loop;
 
     public FancySelector(List<string> labels, Action<int, string> onChange, bool loop = true)
     {
       Labels = labels;
       OnChange = onChange;
-      _loop = loop;
+      Loop = loop;
 
       Scale = new Vector2(1, 0);
       Margin = new Vector4(8, 0, 8, 0);
@@ -121,16 +121,16 @@ namespace Lima.Fancy.Elements
 
         var count = Labels.Count;
         if (Selected < 0)
-          Selected = _loop ? count - 1 : 0;
+          Selected = Loop ? count - 1 : 0;
 
         if (Selected >= count)
-          Selected = _loop ? 0 : count - 1;
+          Selected = Loop ? 0 : count - 1;
 
         if (prev != Selected)
           OnChange(Selected, Labels[Selected]);
       }
 
-      sprites.Clear();
+      Sprites.Clear();
 
       _bgSprite.Position = Position + new Vector2(0, Size.Y / 2);
       _bgSprite.Size = Size;
@@ -144,12 +144,12 @@ namespace Lima.Fancy.Elements
       _textSprite.Position = Position + new Vector2(Size.X / 2, Size.Y * 0.5f - (_textSprite.RotationOrScale * 16.6f));
       // textSprite.Size = Size;
 
-      sprites.Add(_bgSprite);
-      sprites.Add(_arrowBgSprite);
-      sprites.Add(_arrow2BgSprite);
-      sprites.Add(_arrowSprite);
-      sprites.Add(_arrow2Sprite);
-      sprites.Add(_textSprite);
+      Sprites.Add(_bgSprite);
+      Sprites.Add(_arrowBgSprite);
+      Sprites.Add(_arrow2BgSprite);
+      Sprites.Add(_arrowSprite);
+      Sprites.Add(_arrow2Sprite);
+      Sprites.Add(_textSprite);
     }
 
   }

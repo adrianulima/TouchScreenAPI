@@ -82,12 +82,12 @@ namespace Lima.Fancy.Elements
           OnChange(Index);
       }
 
-      sprites.Clear();
+      Sprites.Clear();
 
       _bgSprite.Position = Position + new Vector2(0, Size.Y / 2);
       _bgSprite.Size = Size;
 
-      sprites.Add(_bgSprite);
+      Sprites.Add(_bgSprite);
 
       if (handler.IsMousePressed || handler.IsMouseOver)
       {
@@ -99,20 +99,20 @@ namespace Lima.Fancy.Elements
           _handlerSprite.Position = Position + new Vector2(width * p, Size.Y / 2);
           _handlerSprite.Size = new Vector2(width, Size.Y);
 
-          sprites.Add(_handlerSprite);
+          Sprites.Add(_handlerSprite);
         }
       }
 
       _selectedSprite.Position = Position + new Vector2(width * Index, Size.Y / 2);
       _selectedSprite.Size = new Vector2(width, Size.Y);
 
-      sprites.Add(_selectedSprite);
+      Sprites.Add(_selectedSprite);
 
       for (int j = 0; j < _textSprites.Length; j++)
       {
         _textSprites[j].Position = Position + new Vector2(j * width + halfWidth, Size.Y * 0.5f - (_textSprites[j].RotationOrScale * 16.6f));
         _textSprites[j].Color = j == Index ? App.Theme.White : App.Theme.Main_40;
-        sprites.Add(_textSprites[j]);
+        Sprites.Add(_textSprites[j]);
       }
     }
   }

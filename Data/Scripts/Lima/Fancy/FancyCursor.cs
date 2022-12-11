@@ -7,7 +7,7 @@ namespace Lima.Fancy
 {
   public class FancyCursor
   {
-    protected readonly List<MySprite> sprites = new List<MySprite>();
+    protected readonly List<MySprite> Sprites = new List<MySprite>();
     private TouchScreen _screen;
 
     private MySprite _cursorSprite;
@@ -34,23 +34,23 @@ namespace Lima.Fancy
 
     public void Dispose()
     {
-      sprites.Clear();
+      Sprites.Clear();
     }
 
     public List<MySprite> GetSprites()
     {
-      sprites.Clear();
+      Sprites.Clear();
 
       if (!Active)
-        return sprites;
+        return Sprites;
 
       if (TouchSession.Instance.TouchMan.CurrentScreen != _screen)
-        return sprites;
+        return Sprites;
 
       _cursorSprite.Position = new Vector2(Position.X, Position.Y + 8);
-      sprites.Add(_cursorSprite);
+      Sprites.Add(_cursorSprite);
 
-      return sprites;
+      return Sprites;
     }
 
     public bool IsInsideArea(float x, float y, float z, float w)

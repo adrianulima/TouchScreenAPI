@@ -414,8 +414,8 @@ namespace Lima.API
   }
   public class FancyElementBase : DelegatorBase
   {
-    protected FancyApp _app;
-    protected FancyElementContainerBase _parent;
+    protected FancyApp App;
+    protected FancyElementContainerBase Parent;
     internal object internalObj;
     public FancyElementBase(object internalObject) { internalObj = internalObject; }
     public Vector2 GetPosition() => Api.FancyElementBase_GetPosition.Invoke(internalObj);
@@ -428,8 +428,8 @@ namespace Lima.API
     public void SetPixels(Vector2 pixels) => Api.FancyElementBase_SetPixels.Invoke(internalObj, pixels);
     public Vector2 GetSize() => Api.FancyElementBase_GetSize.Invoke(internalObj);
     public RectangleF GetViewport() => Api.FancyElementBase_GetViewport.Invoke(internalObj);
-    public FancyApp GetApp() { if (_app == null) _app = new FancyApp(Api.FancyElementBase_GetApp.Invoke(internalObj)); return _app; }
-    public FancyElementContainerBase GetParent() { if (_parent == null) _parent = new FancyApp(Api.FancyElementBase_GetParent.Invoke(internalObj)); return _parent; }
+    public FancyApp GetApp() { if (App == null) App = new FancyApp(Api.FancyElementBase_GetApp.Invoke(internalObj)); return App; }
+    public FancyElementContainerBase GetParent() { if (Parent == null) Parent = new FancyApp(Api.FancyElementBase_GetParent.Invoke(internalObj)); return Parent; }
     public Vector2 GetOffset() => Api.FancyElementBase_GetOffset.Invoke(internalObj);
     public List<MySprite> GetSprites() => Api.FancyElementBase_GetSprites.Invoke(internalObj);
     public void InitElements() => Api.FancyElementBase_InitElements.Invoke(internalObj);
@@ -455,21 +455,21 @@ namespace Lima.API
   }
   public class FancyApp : FancyView
   {
-    protected TouchScreen _screen;
-    protected FancyCursor _cursor;
-    protected FancyTheme _theme;
+    protected TouchScreen Screen;
+    protected FancyCursor Cursor;
+    protected FancyTheme Theme;
     public FancyApp() : base(Api.FancyApp_New()) { }
     public FancyApp(object internalObject) : base(internalObject) { }
-    public TouchScreen GetScreen() { if (_screen == null) _screen = new TouchScreen(Api.FancyApp_GetScreen.Invoke(internalObj)); return _screen; }
-    public FancyCursor GetCursor() { if (_cursor == null) _cursor = new FancyCursor(Api.FancyApp_GetCursor.Invoke(internalObj)); return _cursor; }
-    public FancyTheme GetTheme() { if (_theme == null) _theme = new FancyTheme(Api.FancyApp_GetTheme.Invoke(internalObj)); return _theme; }
+    public TouchScreen GetScreen() { if (Screen == null) Screen = new TouchScreen(Api.FancyApp_GetScreen.Invoke(internalObj)); return Screen; }
+    public FancyCursor GetCursor() { if (Cursor == null) Cursor = new FancyCursor(Api.FancyApp_GetCursor.Invoke(internalObj)); return Cursor; }
+    public FancyTheme GetTheme() { if (Theme == null) Theme = new FancyTheme(Api.FancyApp_GetTheme.Invoke(internalObj)); return Theme; }
     public void InitApp(MyCubeBlock block, Sandbox.ModAPI.Ingame.IMyTextSurface surface) => Api.FancyApp_InitApp.Invoke(internalObj, block, surface);
   }
   public class FancyButtonBase : FancyElementBase
   {
-    protected ClickHandler _handler;
+    protected ClickHandler Handler;
     public FancyButtonBase(object internalObject) : base(internalObject) { }
-    public ClickHandler GetHandler() { if (_handler == null) _handler = new ClickHandler(Api.FancyButtonBase_GetHandler.Invoke(internalObj)); return _handler; }
+    public ClickHandler GetHandler() { if (Handler == null) Handler = new ClickHandler(Api.FancyButtonBase_GetHandler.Invoke(internalObj)); return Handler; }
   }
   public class FancyButton : FancyButtonBase
   {

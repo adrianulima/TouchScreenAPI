@@ -40,15 +40,15 @@ namespace Lima.Fancy.Elements
         FontId = App.Theme.Font
       };
 
-      sprites.Clear();
+      Sprites.Clear();
 
       _bgSprite.Position = Position + new Vector2(0, Size.Y / 2);
       _bgSprite.Size = Size;
 
       _textSprite.Position = Position + new Vector2(10, Size.Y * 0.5f - Size.Y / 3);
 
-      sprites.Add(_bgSprite);
-      sprites.Add(_textSprite);
+      Sprites.Add(_bgSprite);
+      Sprites.Add(_textSprite);
     }
 
   }

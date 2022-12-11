@@ -37,10 +37,10 @@ namespace Lima.Fancy.Elements
 
       foreach (FancyElementBase child in children)
       {
-        sprites.AddRange(child.GetSprites());
+        Sprites.AddRange(child.GetSprites());
       }
 
-      return sprites;
+      return Sprites;
     }
 
     public virtual FancyElementBase AddChild(FancyElementBase child)

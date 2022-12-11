@@ -28,7 +28,7 @@ namespace Lima.Fancy.Elements
       float diff = Math.Abs(value - Value);
       float diffLower = Math.Abs(value - ValueLower);
 
-      if (!_inputOpen && AllowInput && MyAPIGateway.Input.IsAnyCtrlKeyPressed())
+      if (!InputOpen && AllowInput && MyAPIGateway.Input.IsAnyCtrlKeyPressed())
       {
         PresentTextInput(diff < diffLower ? Value : ValueLower);
         return;
@@ -63,17 +63,17 @@ namespace Lima.Fancy.Elements
 
     public override void Update()
     {
-      var skip = _skipNext;
-      var input = _inputOpen;
+      var skip = SkipNext;
+      var input = InputOpen;
 
       base.Update();
 
       if (input || skip)
         return;
 
-      _handlerLowerSprite = handlerSprite;
-      _handlerInnerLowerSprite = handlerInnerSprite;
-      _bgLowerSprite = bgSprite;
+      _handlerLowerSprite = HandlerSprite;
+      _handlerInnerLowerSprite = HandlerInnerSprite;
+      _bgLowerSprite = BgSprite;
       if (handler.IsMousePressed || handler.IsMouseOver)
       {
         _bgLowerSprite.Color = App.Theme.Main_20;
@@ -97,18 +97,18 @@ namespace Lima.Fancy.Elements
       _bgLowerSprite.Size = new Vector2(prgW, Size.Y / 2);
 
       var ratioRange = (Value - ValueLower) / (Range.Y - Range.X);
-      progressSprite.Position = Position + new Vector2(prgW, Size.Y - Size.Y / 2);
-      progressSprite.Size = new Vector2(Size.X * ratioRange, Size.Y / 2);
+      ProgressSprite.Position = Position + new Vector2(prgW, Size.Y - Size.Y / 2);
+      ProgressSprite.Size = new Vector2(Size.X * ratioRange, Size.Y / 2);
 
-      sprites.Clear();
+      Sprites.Clear();
 
-      sprites.Add(bgSprite);
-      sprites.Add(_bgLowerSprite);
-      sprites.Add(progressSprite);
-      sprites.Add(_handlerLowerSprite);
-      sprites.Add(_handlerInnerLowerSprite);
-      sprites.Add(handlerSprite);
-      sprites.Add(handlerInnerSprite);
+      Sprites.Add(BgSprite);
+      Sprites.Add(_bgLowerSprite);
+      Sprites.Add(ProgressSprite);
+      Sprites.Add(_handlerLowerSprite);
+      Sprites.Add(_handlerInnerLowerSprite);
+      Sprites.Add(HandlerSprite);
+      Sprites.Add(HandlerInnerSprite);
     }
 
   }

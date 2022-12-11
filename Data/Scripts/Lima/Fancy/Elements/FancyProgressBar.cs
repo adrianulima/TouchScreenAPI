@@ -6,8 +6,8 @@ namespace Lima.Fancy.Elements
 {
   public class FancyProgressBar : FancyElementBase
   {
-    protected MySprite bgSprite;
-    protected MySprite progressSprite;
+    protected MySprite BgSprite;
+    protected MySprite ProgressSprite;
 
     public Vector2 Range;
     public float Value = 0;
@@ -29,7 +29,7 @@ namespace Lima.Fancy.Elements
     {
       base.Update();
 
-      bgSprite = new MySprite()
+      BgSprite = new MySprite()
       {
         Type = SpriteType.TEXTURE,
         Data = "SquareSimple",
@@ -37,7 +37,7 @@ namespace Lima.Fancy.Elements
         Color = App.Theme.Main_10
       };
 
-      progressSprite = new MySprite()
+      ProgressSprite = new MySprite()
       {
         Type = SpriteType.TEXTURE,
         Data = "SquareSimple",
@@ -45,30 +45,30 @@ namespace Lima.Fancy.Elements
         Color = App.Theme.Main_60
       };
 
-      sprites.Clear();
+      Sprites.Clear();
 
-      bgSprite.Position = Position + new Vector2(0, Size.Y / 2);
-      bgSprite.Size = Size;
+      BgSprite.Position = Position + new Vector2(0, Size.Y / 2);
+      BgSprite.Size = Size;
 
       var gap = 2;
       var ratio = ((Value - Range.X) / (Range.Y - Range.X));
 
-      progressSprite.Position = Position + new Vector2(gap, Size.Y / 2);
-      progressSprite.Size = new Vector2(Size.X * ratio - gap * 2, Size.Y - gap * 2);
+      ProgressSprite.Position = Position + new Vector2(gap, Size.Y / 2);
+      ProgressSprite.Size = new Vector2(Size.X * ratio - gap * 2, Size.Y - gap * 2);
 
-      sprites.Add(bgSprite);
-      sprites.Add(progressSprite);
+      Sprites.Add(BgSprite);
+      Sprites.Add(ProgressSprite);
 
       if (Bars)
       {
         var c = (int)Math.Round((Size.X - gap * 2) / (Size.Y / 2));
         var interval = (Size.X - gap * 2) / c;
-        var b = bgSprite;
+        var b = BgSprite;
         for (int i = 0; i < c - 1; i++)
         {
           b.Position = Position + new Vector2(interval + interval * i, Size.Y / 2);
           b.Size = new Vector2(gap, Size.Y);
-          sprites.Add(b);
+          Sprites.Add(b);
         }
       }
     }

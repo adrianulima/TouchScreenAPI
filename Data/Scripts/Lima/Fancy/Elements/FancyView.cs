@@ -15,7 +15,7 @@ namespace Lima.Fancy.Elements
 
     public ViewDirection Direction = ViewDirection.Column;
 
-    protected MySprite bgSprite;
+    protected MySprite BgSprite;
     public Color? BgColor;
 
     public FancyView(ViewDirection direction = ViewDirection.Column, Color? bgColor = null)
@@ -30,7 +30,7 @@ namespace Lima.Fancy.Elements
 
       if (BgColor != null)
       {
-        bgSprite = new MySprite()
+        BgSprite = new MySprite()
         {
           Type = SpriteType.TEXTURE,
           Data = "SquareSimple",
@@ -39,14 +39,14 @@ namespace Lima.Fancy.Elements
         };
       }
 
-      sprites.Clear();
+      Sprites.Clear();
 
       if (BgColor != null)
       {
-        bgSprite.Position = Position + new Vector2(0, Size.Y / 2);
-        bgSprite.Size = Size;
+        BgSprite.Position = Position + new Vector2(0, Size.Y / 2);
+        BgSprite.Size = Size;
 
-        sprites.Add(bgSprite);
+        Sprites.Add(BgSprite);
       }
 
       var len = children.Count;

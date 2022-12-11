@@ -7,11 +7,11 @@ namespace Lima.Fancy.Elements
 {
   public class FancySlider : FancyButtonBase
   {
-    protected MySprite bgSprite;
-    protected MySprite progressSprite;
-    protected MySprite handlerSprite;
-    protected MySprite handlerInnerSprite;
-    protected MySprite textSprite;
+    protected MySprite BgSprite;
+    protected MySprite ProgressSprite;
+    protected MySprite HandlerSprite;
+    protected MySprite HandlerInnerSprite;
+    protected MySprite TextSprite;
 
     private FancyTextField _innerTextField;
     public FancyTextField InnerTextField
@@ -31,8 +31,8 @@ namespace Lima.Fancy.Elements
 
     public bool IsInteger = false;
     public bool AllowInput = true;
-    protected bool _inputOpen = false;
-    protected bool _skipNext = false;
+    protected bool InputOpen = false;
+    protected bool SkipNext = false;
 
     public FancySlider(float min, float max, Action<float> onChange = null)
     {
@@ -47,7 +47,7 @@ namespace Lima.Fancy.Elements
 
     protected virtual void UpdateValue(float value)
     {
-      if (!_inputOpen && AllowInput && MyAPIGateway.Input.IsAnyCtrlKeyPressed())
+      if (!InputOpen && AllowInput && MyAPIGateway.Input.IsAnyCtrlKeyPressed())
       {
         PresentTextInput(Value);
         return;
@@ -64,11 +64,11 @@ namespace Lima.Fancy.Elements
 
     public override void Update()
     {
-      if (_inputOpen)
+      if (InputOpen)
       {
         InnerTextField.Update();
-        sprites.Clear();
-        sprites.AddRange(InnerTextField.GetSprites());
+        Sprites.Clear();
+        Sprites.AddRange(InnerTextField.GetSprites());
         return;
       }
 
@@ -76,13 +76,13 @@ namespace Lima.Fancy.Elements
 
       base.Update();
 
-      if (_skipNext)
+      if (SkipNext)
       {
-        _skipNext = false;
+        SkipNext = false;
         return;
       }
 
-      bgSprite = new MySprite()
+      BgSprite = new MySprite()
       {
         Type = SpriteType.TEXTURE,
         Data = "SquareSimple",
@@ -90,7 +90,7 @@ namespace Lima.Fancy.Elements
         Color = App.Theme.Main_30
       };
 
-      progressSprite = new MySprite()
+      ProgressSprite = new MySprite()
       {
         Type = SpriteType.TEXTURE,
         Data = "SquareSimple",
@@ -98,7 +98,7 @@ namespace Lima.Fancy.Elements
         Color = App.Theme.Main_60
       };
 
-      handlerSprite = new MySprite()
+      HandlerSprite = new MySprite()
       {
         Type = SpriteType.TEXTURE,
         Data = "Circle",
@@ -106,7 +106,7 @@ namespace Lima.Fancy.Elements
         Color = App.Theme.White
       };
 
-      handlerInnerSprite = new MySprite()
+      HandlerInnerSprite = new MySprite()
       {
         Type = SpriteType.TEXTURE,
         Data = "Circle",
@@ -116,47 +116,47 @@ namespace Lima.Fancy.Elements
 
       if (handler.IsMousePressed)
       {
-        bgSprite.Color = App.Theme.Main_20;
+        BgSprite.Color = App.Theme.Main_20;
 
         var mouseX = MathHelper.Clamp(-0.04f + 1.08f * ((App.Cursor.Position.X - handler.HitArea.X) / (handler.HitArea.Z - handler.HitArea.X)), 0, 1);
         UpdateValue(Range.X + mouseX * (Range.Y - Range.X));
       }
       else if (handler.IsMouseOver)
       {
-        bgSprite.Color = App.Theme.Main_20;
+        BgSprite.Color = App.Theme.Main_20;
       }
       else
       {
-        bgSprite.Color = App.Theme.Main_10;
+        BgSprite.Color = App.Theme.Main_10;
       }
 
       var ratio = ((Value - Range.X) / (Range.Y - Range.X));
       var prgW = Size.X * ratio;
 
       var handlerOffset = (Size.Y / 2) * ((ratio * 1.4f) + 0.3f);
-      handlerSprite.Position = Position + new Vector2(prgW - handlerOffset, Size.Y / 2);
-      handlerSprite.Size = new Vector2(Size.Y * 0.8f, Size.Y * 0.8f);
+      HandlerSprite.Position = Position + new Vector2(prgW - handlerOffset, Size.Y / 2);
+      HandlerSprite.Size = new Vector2(Size.Y * 0.8f, Size.Y * 0.8f);
 
-      handlerInnerSprite.Position = Position + new Vector2(prgW - handlerOffset + Size.Y * 0.15f, Size.Y / 2);
-      handlerInnerSprite.Size = new Vector2(Size.Y * 0.5f, Size.Y * 0.5f);
+      HandlerInnerSprite.Position = Position + new Vector2(prgW - handlerOffset + Size.Y * 0.15f, Size.Y / 2);
+      HandlerInnerSprite.Size = new Vector2(Size.Y * 0.5f, Size.Y * 0.5f);
 
-      progressSprite.Position = Position + new Vector2(0, Size.Y / 2);
-      progressSprite.Size = new Vector2(prgW, Size.Y / 2);
+      ProgressSprite.Position = Position + new Vector2(0, Size.Y / 2);
+      ProgressSprite.Size = new Vector2(prgW, Size.Y / 2);
 
-      bgSprite.Position = Position + new Vector2(prgW, Size.Y / 2);
-      bgSprite.Size = new Vector2(Size.X - prgW, Size.Y / 2);
+      BgSprite.Position = Position + new Vector2(prgW, Size.Y / 2);
+      BgSprite.Size = new Vector2(Size.X - prgW, Size.Y / 2);
 
-      sprites.Clear();
+      Sprites.Clear();
 
-      sprites.Add(bgSprite);
-      sprites.Add(progressSprite);
-      sprites.Add(handlerSprite);
-      sprites.Add(handlerInnerSprite);
+      Sprites.Add(BgSprite);
+      Sprites.Add(ProgressSprite);
+      Sprites.Add(HandlerSprite);
+      Sprites.Add(HandlerInnerSprite);
     }
 
     protected void PresentTextInput(float v)
     {
-      _inputOpen = true;
+      InputOpen = true;
 
       InnerTextField.IsNumeric = true;
       InnerTextField.IsInteger = IsInteger;
@@ -175,8 +175,8 @@ namespace Lima.Fancy.Elements
       float v = MathHelper.Clamp(float.Parse(textValue), Range.X, Range.Y);
       InnerTextField.Dispose();
       UpdateValue(v);
-      _inputOpen = false;
-      _skipNext = true;
+      InputOpen = false;
+      SkipNext = true;
     }
 
   }

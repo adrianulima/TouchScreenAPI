@@ -7,7 +7,7 @@ namespace Lima.Fancy.Elements
 {
   public abstract class FancyElementBase
   {
-    protected readonly List<MySprite> sprites = new List<MySprite>();
+    protected readonly List<MySprite> Sprites = new List<MySprite>();
 
     private Vector2 _position = Vector2.Zero;
     public Vector2 Position
@@ -41,22 +41,25 @@ namespace Lima.Fancy.Elements
       set { _pixels = value; }
     }
 
-    protected Vector2 _size = Vector2.Zero;
+    private Vector2 _size = Vector2.Zero;
     public Vector2 Size
     {
       get { return this.Parent != null ? new Vector2(-Margin.X - Margin.Z + Pixels.X * ThemeScale, Pixels.Y * ThemeScale) + Parent.Size * Scale : _size; }
+      protected set { _size = value; }
     }
 
-    protected RectangleF _viewport;
+    private RectangleF _viewport;
     public RectangleF Viewport
     {
       get { return _viewport != null ? _viewport : Parent.Viewport; }
+      protected set { _viewport = value; }
     }
 
-    protected FancyApp _app;
+    private FancyApp _app;
     public FancyApp App
     {
       get { return _app ?? Parent?.App; }
+      protected set { _app = value; }
     }
 
     protected float ThemeScale
@@ -64,7 +67,7 @@ namespace Lima.Fancy.Elements
       get { return App != null ? App.Theme.Scale : 1f; }
     }
 
-    protected FancyElementContainerBase _parent;
+    private FancyElementContainerBase _parent;
     public FancyElementContainerBase Parent
     {
       get { return _parent; }
@@ -97,7 +100,7 @@ namespace Lima.Fancy.Elements
 
     public virtual void Dispose()
     {
-      sprites.Clear();
+      Sprites.Clear();
     }
 
     public virtual List<MySprite> GetSprites()
@@ -115,7 +118,7 @@ namespace Lima.Fancy.Elements
       //   });
       // }
 
-      return sprites;
+      return Sprites;
     }
 
   }

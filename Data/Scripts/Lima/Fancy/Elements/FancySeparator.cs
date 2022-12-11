@@ -26,12 +26,12 @@ namespace Lima.Fancy.Elements
         Color = App.Theme.Main_70
       };
 
-      sprites.Clear();
+      Sprites.Clear();
 
       _bgSprite.Position = Position + new Vector2(0, Size.Y / 2);
       _bgSprite.Size = Size;
 
-      sprites.Add(_bgSprite);
+      Sprites.Add(_bgSprite);
     }
 
   }

@@ -5,7 +5,7 @@ namespace Lima.Fancy.Elements
 {
   public class FancyLabel : FancyElementBase
   {
-    protected MySprite textSprite;
+    protected MySprite TextSprite;
     public string Text;
     public float FontSize;
     public TextAlignment Alignment = TextAlignment.CENTER;
@@ -24,7 +24,7 @@ namespace Lima.Fancy.Elements
     {
       base.Update();
 
-      textSprite = new MySprite()
+      TextSprite = new MySprite()
       {
         Type = SpriteType.TEXT,
         Data = Text,
@@ -35,15 +35,15 @@ namespace Lima.Fancy.Elements
       };
 
       if (Alignment == TextAlignment.LEFT)
-        textSprite.Position = Position;
+        TextSprite.Position = Position;
       else if (Alignment == TextAlignment.RIGHT)
-        textSprite.Position = Position + new Vector2(Size.X, 0);
+        TextSprite.Position = Position + new Vector2(Size.X, 0);
       else
-        textSprite.Position = Position + new Vector2(Size.X / 2, 0);
+        TextSprite.Position = Position + new Vector2(Size.X / 2, 0);
 
-      sprites.Clear();
+      Sprites.Clear();
 
-      sprites.Add(textSprite);
+      Sprites.Add(TextSprite);
     }
 
   }
