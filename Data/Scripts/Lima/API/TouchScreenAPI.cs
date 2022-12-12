@@ -124,7 +124,6 @@ namespace Lima.API
       AssignMethod(delegates, "FancyElementBase_GetSize", ref FancyElementBase_GetSize);
       AssignMethod(delegates, "FancyElementBase_GetApp", ref FancyElementBase_GetApp);
       AssignMethod(delegates, "FancyElementBase_GetParent", ref FancyElementBase_GetParent);
-      AssignMethod(delegates, "FancyElementBase_GetOffset", ref FancyElementBase_GetOffset);
       AssignMethod(delegates, "FancyElementBase_GetSprites", ref FancyElementBase_GetSprites);
       AssignMethod(delegates, "FancyElementBase_InitElements", ref FancyElementBase_InitElements);
       AssignMethod(delegates, "FancyElementBase_Update", ref FancyElementBase_Update);
@@ -272,7 +271,6 @@ namespace Lima.API
     public Func<object, Vector2> FancyElementBase_GetSize;
     public Func<object, object> FancyElementBase_GetApp;
     public Func<object, object> FancyElementBase_GetParent;
-    public Func<object, Vector2> FancyElementBase_GetOffset;
     public Func<object, List<MySprite>> FancyElementBase_GetSprites;
     public Action<object> FancyElementBase_InitElements;
     public Action<object> FancyElementBase_Update;
@@ -445,7 +443,6 @@ namespace Lima.API
     public Vector2 GetSize() => Api.FancyElementBase_GetSize.Invoke(internalObj);
     public FancyApp GetApp() { if (App == null) App = new FancyApp(Api.FancyElementBase_GetApp.Invoke(internalObj)); return App; }
     public FancyElementContainerBase GetParent() { if (Parent == null) Parent = new FancyApp(Api.FancyElementBase_GetParent.Invoke(internalObj)); return Parent; }
-    public Vector2 GetOffset() => Api.FancyElementBase_GetOffset.Invoke(internalObj);
     public List<MySprite> GetSprites() => Api.FancyElementBase_GetSprites.Invoke(internalObj);
     public void InitElements() => Api.FancyElementBase_InitElements.Invoke(internalObj);
     public void Update() => Api.FancyElementBase_Update.Invoke(internalObj);

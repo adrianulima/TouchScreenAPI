@@ -163,7 +163,6 @@ namespace Lima.Fancy.Elements
       InnerTextField.Parent = Parent;
       InnerTextField.Scale = Scale;
       InnerTextField.Pixels = Pixels;
-      InnerTextField.Offset = Offset;
       InnerTextField.Margin = Margin;
       InnerTextField.Text = $"{v}";
       InnerTextField.ToggleEdit(true, true);

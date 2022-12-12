@@ -9,26 +9,9 @@ namespace Lima.Fancy.Elements
   {
     protected readonly List<MySprite> Sprites = new List<MySprite>();
 
-    public Vector2 Offset = Vector2.Zero;
-
-    private Vector2 _position = Vector2.Zero;
-    public Vector2 Position
-    {
-      get
-      {
-        return _position * ThemeScale;
-      }
-      set { _position = value; }
-    }
-
+    public Vector2 Position = Vector2.Zero;
     public Vector2 Pixels = Vector2.Zero;
-
-    private Vector4 _margin = Vector4.Zero;
-    public Vector4 Margin
-    {
-      get { return _margin * ThemeScale; }
-      set { _margin = value; }
-    }
+    public Vector4 Margin = Vector4.Zero;
 
     private Vector2 _scale = Vector2.One;
     public Vector2 Scale

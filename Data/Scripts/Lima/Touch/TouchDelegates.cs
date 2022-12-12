@@ -78,7 +78,6 @@ namespace Lima.Touch
         { "FancyElementBase_GetSize", new Func<object, Vector2>(FancyElementBase_GetSize) },
         { "FancyElementBase_GetApp", new Func<object, FancyApp>(FancyElementBase_GetApp) },
         { "FancyElementBase_GetParent", new Func<object, FancyElementContainerBase>(FancyElementBase_GetParent) },
-        { "FancyElementBase_GetOffset", new Func<object, Vector2>(FancyElementBase_GetOffset) },
         { "FancyElementBase_GetSprites", new Func<object, List<MySprite>>(FancyElementBase_GetSprites) },
         { "FancyElementBase_InitElements", new Action<object>(FancyElementBase_InitElements) },
         { "FancyElementBase_Update", new Action<object>(FancyElementBase_Update) },
@@ -246,7 +245,6 @@ namespace Lima.Touch
     private Vector2 FancyElementBase_GetSize(object obj) => (obj as FancyElementBase).GetSize();
     private FancyApp FancyElementBase_GetApp(object obj) => (obj as FancyElementBase).App;
     private FancyElementContainerBase FancyElementBase_GetParent(object obj) => (obj as FancyElementBase).Parent;
-    private Vector2 FancyElementBase_GetOffset(object obj) => (obj as FancyElementBase).Offset;
     private List<MySprite> FancyElementBase_GetSprites(object obj) => (obj as FancyElementBase).GetSprites();
     private void FancyElementBase_InitElements(object obj) => (obj as FancyElementBase).InitElements();
     private void FancyElementBase_Update(object obj) => (obj as FancyElementBase).Update();
