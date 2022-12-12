@@ -26,13 +26,13 @@ namespace Lima.Fancy.Elements
       Loop = loop;
 
       Scale = new Vector2(1, 0);
-      Margin = new Vector4(8, 0, 8, 0);
       Pixels = new Vector2(0, 24);
     }
 
     public override void Update()
     {
-      handler.HitArea = new Vector4(Position.X, Position.Y, Position.X + Size.X, Position.Y + Size.Y);
+      var size = GetSize();
+      handler.HitArea = new Vector4(Position.X, Position.Y, Position.X + size.X, Position.Y + size.Y);
 
       base.Update();
 
@@ -91,16 +91,16 @@ namespace Lima.Fancy.Elements
         var mouseX = App.Cursor.Position.X - handler.HitArea.X;
         if (handler.IsMousePressed)
         {
-          if (mouseX < Size.Y)
+          if (mouseX < size.Y)
             _arrowBgSprite.Color = App.Theme.Main_70;
-          else if (mouseX > Size.X - Size.Y)
+          else if (mouseX > size.X - size.Y)
             _arrow2BgSprite.Color = App.Theme.Main_70;
         }
         else
         {
-          if (mouseX < Size.Y)
+          if (mouseX < size.Y)
             _arrowBgSprite.Color = App.Theme.Main_40;
-          else if (mouseX > Size.X - Size.Y)
+          else if (mouseX > size.X - size.Y)
             _arrow2BgSprite.Color = App.Theme.Main_40;
         }
       }
@@ -114,9 +114,9 @@ namespace Lima.Fancy.Elements
       {
         var mouseX = App.Cursor.Position.X - handler.HitArea.X;
         var prev = Selected;
-        if (mouseX < Size.Y)
+        if (mouseX < size.Y)
           Selected -= 1;
-        else if (mouseX > Size.X - Size.Y)
+        else if (mouseX > size.X - size.Y)
           Selected += 1;
 
         var count = Labels.Count;
@@ -132,16 +132,16 @@ namespace Lima.Fancy.Elements
 
       Sprites.Clear();
 
-      _bgSprite.Position = Position + new Vector2(0, Size.Y / 2);
-      _bgSprite.Size = Size;
+      _bgSprite.Position = Position + new Vector2(0, size.Y / 2);
+      _bgSprite.Size = size;
 
-      _arrowSprite.Position = _arrowBgSprite.Position = Position + new Vector2(0, Size.Y / 2);
-      _arrowSprite.Size = _arrowBgSprite.Size = new Vector2(Size.Y, Size.Y);
+      _arrowSprite.Position = _arrowBgSprite.Position = Position + new Vector2(0, size.Y / 2);
+      _arrowSprite.Size = _arrowBgSprite.Size = new Vector2(size.Y, size.Y);
 
-      _arrow2Sprite.Position = _arrow2BgSprite.Position = Position + new Vector2(Size.X - Size.Y, Size.Y / 2);
-      _arrow2Sprite.Size = _arrow2BgSprite.Size = new Vector2(Size.Y, Size.Y);
+      _arrow2Sprite.Position = _arrow2BgSprite.Position = Position + new Vector2(size.X - size.Y, size.Y / 2);
+      _arrow2Sprite.Size = _arrow2BgSprite.Size = new Vector2(size.Y, size.Y);
 
-      _textSprite.Position = Position + new Vector2(Size.X / 2, Size.Y * 0.5f - (_textSprite.RotationOrScale * 16.6f));
+      _textSprite.Position = Position + new Vector2(size.X / 2, size.Y * 0.5f - (_textSprite.RotationOrScale * 16.6f));
       // textSprite.Size = Size;
 
       Sprites.Add(_bgSprite);

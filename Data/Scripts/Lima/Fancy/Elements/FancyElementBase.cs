@@ -16,37 +16,25 @@ namespace Lima.Fancy.Elements
     {
       get
       {
-        if (this.Parent != null)
-          return this.Parent.Position + new Vector2(Margin.X, Margin.Y) + _position * ThemeScale;
-        return (new Vector2(Margin.X, Margin.Y) + _position * ThemeScale);
+        return _position * ThemeScale;
       }
       set { _position = value; }
     }
+
+    public Vector2 Pixels = Vector2.Zero;
+
     private Vector4 _margin = Vector4.Zero;
     public Vector4 Margin
     {
       get { return _margin * ThemeScale; }
       set { _margin = value; }
     }
+
     private Vector2 _scale = Vector2.One;
     public Vector2 Scale
     {
       get { return _scale; }
       set { _scale = new Vector2(MathHelper.Clamp(value.X, 0, 1), MathHelper.Clamp(value.Y, 0, 1)); }
-    }
-
-    private Vector2 _pixels = Vector2.Zero;
-    public Vector2 Pixels
-    {
-      get { return _pixels; }
-      set { _pixels = value; }
-    }
-
-    private Vector2 _size = Vector2.Zero;
-    public Vector2 Size
-    {
-      get { return this.Parent != null ? new Vector2(Pixels.X - Margin.X - Margin.Z, Pixels.Y - Margin.Y - Margin.W) * ThemeScale + Parent.Size * Scale : Pixels; }
-      protected set { _size = value; }
     }
 
     private FancyApp _app;
@@ -74,6 +62,25 @@ namespace Lima.Fancy.Elements
 
     public FancyElementBase() { }
 
+    public virtual Vector2 GetSize()
+    {
+      return this.Parent != null ? Pixels * ThemeScale + Parent.GetSize() * Scale : Pixels;
+    }
+
+    public virtual Vector2 GetBoundaries()
+    {
+      return Position + GetSize() + new Vector2(Margin.X + Margin.Z, Margin.Y + Margin.W);
+    }
+
+    public virtual void InitElements() { }
+
+    public virtual void Update() { }
+
+    public virtual void Dispose()
+    {
+      Sprites.Clear();
+    }
+
     // public bool DebugDraw = true;
     // public Color _debugDrawColor;
     // public Color DebugDrawColor
@@ -85,15 +92,6 @@ namespace Lima.Fancy.Elements
     //     return _debugDrawColor;
     //   }
     // }
-
-    public virtual void InitElements() { }
-
-    public virtual void Update() { }
-
-    public virtual void Dispose()
-    {
-      Sprites.Clear();
-    }
 
     public virtual List<MySprite> GetSprites()
     {

@@ -19,13 +19,13 @@ namespace Lima.Fancy.Elements
       OnChange = onChange;
 
       Scale = new Vector2(1, 0);
-      Margin = new Vector4(8, 8, 8, 0);
       Pixels = new Vector2(0, 24);
     }
 
     public override void Update()
     {
-      handler.HitArea = new Vector4(Position.X, Position.Y, Position.X + Size.X, Position.Y + Size.Y);
+      var size = GetSize();
+      handler.HitArea = new Vector4(Position.X, Position.Y, Position.X + size.X, Position.Y + size.Y);
 
       base.Update();
 
@@ -72,15 +72,15 @@ namespace Lima.Fancy.Elements
 
       Sprites.Clear();
 
-      _bgSprite.Position = Position + new Vector2(0, Size.Y / 2);
-      _bgSprite.Size = Size;
+      _bgSprite.Position = Position + new Vector2(0, size.Y / 2);
+      _bgSprite.Size = size;
 
       if (Alignment == TextAlignment.LEFT)
-        _textSprite.Position = Position + new Vector2(0, Size.Y * 0.5f - (_textSprite.RotationOrScale * 16.6f));
+        _textSprite.Position = Position + new Vector2(0, size.Y * 0.5f - (_textSprite.RotationOrScale * 16.6f));
       else if (Alignment == TextAlignment.RIGHT)
-        _textSprite.Position = Position + new Vector2(Size.X, Size.Y * 0.5f - (_textSprite.RotationOrScale * 16.6f));
+        _textSprite.Position = Position + new Vector2(size.X, size.Y * 0.5f - (_textSprite.RotationOrScale * 16.6f));
       else
-        _textSprite.Position = Position + new Vector2(Size.X / 2, Size.Y * 0.5f - (_textSprite.RotationOrScale * 16.6f));
+        _textSprite.Position = Position + new Vector2(size.X / 2, size.Y * 0.5f - (_textSprite.RotationOrScale * 16.6f));
 
       Sprites.Add(_bgSprite);
       Sprites.Add(_textSprite);

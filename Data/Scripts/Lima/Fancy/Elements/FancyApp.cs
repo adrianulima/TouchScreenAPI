@@ -63,9 +63,10 @@ namespace Lima.Fancy
 
       Sprites.Clear();
 
-      BgSprite.Position = Position + new Vector2(0, Size.Y / 2);
-      var s = Math.Min(Size.X * 2, Size.Y * 2);
-      BgSprite.Size = new Vector2(s);
+      var size = GetSize();
+
+      BgSprite.Position = Position + new Vector2(0, size.Y / 2);
+      BgSprite.Size = new Vector2(Math.Min(size.X * 2, size.Y * 2));
 
       Sprites.Add(BgSprite);
     }

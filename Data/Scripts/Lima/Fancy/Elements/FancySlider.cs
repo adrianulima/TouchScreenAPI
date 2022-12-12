@@ -41,7 +41,6 @@ namespace Lima.Fancy.Elements
       OnChange = onChange;
 
       Scale = new Vector2(1, 0);
-      Margin = new Vector4(8, 0, 8, 0);
       Pixels = new Vector2(0, 24);
     }
 
@@ -72,7 +71,8 @@ namespace Lima.Fancy.Elements
         return;
       }
 
-      handler.HitArea = new Vector4(Position.X, Position.Y, Position.X + Size.X, Position.Y + Size.Y);
+      var size = GetSize();
+      handler.HitArea = new Vector4(Position.X, Position.Y, Position.X + size.X, Position.Y + size.Y);
 
       base.Update();
 
@@ -131,20 +131,20 @@ namespace Lima.Fancy.Elements
       }
 
       var ratio = ((Value - Range.X) / (Range.Y - Range.X));
-      var prgW = Size.X * ratio;
+      var prgW = size.X * ratio;
 
-      var handlerOffset = (Size.Y / 2) * ((ratio * 1.4f) + 0.3f);
-      HandlerSprite.Position = Position + new Vector2(prgW - handlerOffset, Size.Y / 2);
-      HandlerSprite.Size = new Vector2(Size.Y * 0.8f, Size.Y * 0.8f);
+      var handlerOffset = (size.Y / 2) * ((ratio * 1.4f) + 0.3f);
+      HandlerSprite.Position = Position + new Vector2(prgW - handlerOffset, size.Y / 2);
+      HandlerSprite.Size = new Vector2(size.Y * 0.8f, size.Y * 0.8f);
 
-      HandlerInnerSprite.Position = Position + new Vector2(prgW - handlerOffset + Size.Y * 0.15f, Size.Y / 2);
-      HandlerInnerSprite.Size = new Vector2(Size.Y * 0.5f, Size.Y * 0.5f);
+      HandlerInnerSprite.Position = Position + new Vector2(prgW - handlerOffset + size.Y * 0.15f, size.Y / 2);
+      HandlerInnerSprite.Size = new Vector2(size.Y * 0.5f, size.Y * 0.5f);
 
-      ProgressSprite.Position = Position + new Vector2(0, Size.Y / 2);
-      ProgressSprite.Size = new Vector2(prgW, Size.Y / 2);
+      ProgressSprite.Position = Position + new Vector2(0, size.Y / 2);
+      ProgressSprite.Size = new Vector2(prgW, size.Y / 2);
 
-      BgSprite.Position = Position + new Vector2(prgW, Size.Y / 2);
-      BgSprite.Size = new Vector2(Size.X - prgW, Size.Y / 2);
+      BgSprite.Position = Position + new Vector2(prgW, size.Y / 2);
+      BgSprite.Size = new Vector2(size.X - prgW, size.Y / 2);
 
       Sprites.Clear();
 

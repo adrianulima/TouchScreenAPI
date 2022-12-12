@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using VRage.Game.GUI.TextPanel;
+using VRageMath;
 
 namespace Lima.Fancy.Elements
 {
@@ -8,6 +9,11 @@ namespace Lima.Fancy.Elements
     public readonly List<FancyElementBase> children = new List<FancyElementBase>();
 
     public FancyElementContainerBase() { }
+
+    public override Vector2 GetSize()
+    {
+      return base.GetSize() - new Vector2(Margin.X + Margin.Z, Margin.Y + Margin.W);
+    }
 
     public override void InitElements()
     {

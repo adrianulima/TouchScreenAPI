@@ -10,7 +10,6 @@ namespace Lima.Fancy.Elements
     public FancySeparator()
     {
       Scale = new Vector2(1, 0);
-      Margin = new Vector4(8, 2, 8, 0);
       Pixels = new Vector2(0, 2);
     }
 
@@ -28,8 +27,9 @@ namespace Lima.Fancy.Elements
 
       Sprites.Clear();
 
-      _bgSprite.Position = Position + new Vector2(0, Size.Y / 2);
-      _bgSprite.Size = Size;
+      var size = GetSize();
+      _bgSprite.Position = Position + new Vector2(0, size.Y / 2);
+      _bgSprite.Size = size;
 
       Sprites.Add(_bgSprite);
     }

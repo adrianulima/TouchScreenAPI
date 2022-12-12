@@ -42,10 +42,12 @@ namespace Lima.Fancy.Elements
 
       Sprites.Clear();
 
-      _bgSprite.Position = Position + new Vector2(0, Size.Y / 2);
-      _bgSprite.Size = Size;
+      var size = GetSize();
 
-      _textSprite.Position = Position + new Vector2(10, Size.Y * 0.5f - Size.Y / 3);
+      _bgSprite.Position = Position + new Vector2(0, size.Y / 2);
+      _bgSprite.Size = size;
+
+      _textSprite.Position = Position + new Vector2(10, size.Y * 0.5f - size.Y / 3);
 
       Sprites.Add(_bgSprite);
       Sprites.Add(_textSprite);

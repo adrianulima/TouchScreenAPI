@@ -31,7 +31,6 @@ namespace Lima.Fancy.Elements
       _inputHandler = new TextInputHandler(AddChar, RemoveLastChar, OnInput);
 
       Scale = new Vector2(1, 0);
-      Margin = new Vector4(8, 0, 8, 0);
       Pixels = new Vector2(0, 24);
     }
 
@@ -94,7 +93,8 @@ namespace Lima.Fancy.Elements
 
     public override void Update()
     {
-      handler.HitArea = new Vector4(Position.X, Position.Y, Position.X + Size.X, Position.Y + Size.Y);
+      var size = GetSize();
+      handler.HitArea = new Vector4(Position.X, Position.Y, Position.X + size.X, Position.Y + size.Y);
 
       base.Update();
 
@@ -141,13 +141,13 @@ namespace Lima.Fancy.Elements
 
       Sprites.Clear();
 
-      _bgSprite.Position = Position + new Vector2(0, Size.Y / 2);
-      _bgSprite.Size = Size;
+      _bgSprite.Position = Position + new Vector2(0, size.Y / 2);
+      _bgSprite.Size = size;
 
       if (_maxText != Text)
       {
         var tx = App.Theme.MeasureStringInPixels(Text, _textSprite.FontId, _textSprite.RotationOrScale).X;
-        if (tx <= Size.X)
+        if (tx <= size.X)
           _maxText = Text.Substring(0, Math.Max(0, Text.Length - 3)) + "...";
         else
         {
@@ -165,11 +165,11 @@ namespace Lima.Fancy.Elements
 
 
       if (Alignment == TextAlignment.LEFT)
-        _textSprite.Position = Position + new Vector2(0, Size.Y * 0.5f - (_textSprite.RotationOrScale * 16.6f));
+        _textSprite.Position = Position + new Vector2(0, size.Y * 0.5f - (_textSprite.RotationOrScale * 16.6f));
       else if (Alignment == TextAlignment.RIGHT)
-        _textSprite.Position = Position + new Vector2(Size.X - caretX * 2, Size.Y * 0.5f - (_textSprite.RotationOrScale * 16.6f));
+        _textSprite.Position = Position + new Vector2(size.X - caretX * 2, size.Y * 0.5f - (_textSprite.RotationOrScale * 16.6f));
       else
-        _textSprite.Position = Position + new Vector2(Size.X / 2 - caretX, Size.Y * 0.5f - (_textSprite.RotationOrScale * 16.6f));
+        _textSprite.Position = Position + new Vector2(size.X / 2 - caretX, size.Y * 0.5f - (_textSprite.RotationOrScale * 16.6f));
 
 
       Sprites.Add(_bgSprite);

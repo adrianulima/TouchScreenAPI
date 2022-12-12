@@ -19,7 +19,6 @@ namespace Lima.Fancy.Elements
       OnChangeR = onChange;
 
       Scale = new Vector2(1, 0);
-      Margin = new Vector4(8, 0, 8, 0);
       Pixels = new Vector2(0, 24);
     }
 
@@ -83,22 +82,23 @@ namespace Lima.Fancy.Elements
         _bgLowerSprite.Color = App.Theme.Main_10;
       }
 
+      var size = GetSize();
       var ratio = (ValueLower - Range.X) / (Range.Y - Range.X);
-      var prgW = Size.X * ratio;
+      var prgW = size.X * ratio;
 
-      var handlerOffset = (Size.Y / 2) * ((ratio * 1.4f) + 0.3f);
-      _handlerLowerSprite.Position = Position + new Vector2(prgW - handlerOffset, Size.Y - Size.Y / 2);
-      _handlerLowerSprite.Size = new Vector2(Size.Y * 0.8f, Size.Y * 0.8f);
+      var handlerOffset = (size.Y / 2) * ((ratio * 1.4f) + 0.3f);
+      _handlerLowerSprite.Position = Position + new Vector2(prgW - handlerOffset, size.Y - size.Y / 2);
+      _handlerLowerSprite.Size = new Vector2(size.Y * 0.8f, size.Y * 0.8f);
 
-      _handlerInnerLowerSprite.Position = Position + new Vector2(prgW - handlerOffset + Size.Y * 0.15f, Size.Y - Size.Y / 2);
-      _handlerInnerLowerSprite.Size = new Vector2(Size.Y * 0.5f, Size.Y * 0.5f);
+      _handlerInnerLowerSprite.Position = Position + new Vector2(prgW - handlerOffset + size.Y * 0.15f, size.Y - size.Y / 2);
+      _handlerInnerLowerSprite.Size = new Vector2(size.Y * 0.5f, size.Y * 0.5f);
 
-      _bgLowerSprite.Position = Position + new Vector2(0, Size.Y - Size.Y / 2);
-      _bgLowerSprite.Size = new Vector2(prgW, Size.Y / 2);
+      _bgLowerSprite.Position = Position + new Vector2(0, size.Y - size.Y / 2);
+      _bgLowerSprite.Size = new Vector2(prgW, size.Y / 2);
 
       var ratioRange = (Value - ValueLower) / (Range.Y - Range.X);
-      ProgressSprite.Position = Position + new Vector2(prgW, Size.Y - Size.Y / 2);
-      ProgressSprite.Size = new Vector2(Size.X * ratioRange, Size.Y / 2);
+      ProgressSprite.Position = Position + new Vector2(prgW, size.Y - size.Y / 2);
+      ProgressSprite.Size = new Vector2(size.X * ratioRange, size.Y / 2);
 
       Sprites.Clear();
 

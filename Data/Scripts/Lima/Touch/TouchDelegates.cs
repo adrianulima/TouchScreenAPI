@@ -239,7 +239,7 @@ namespace Lima.Touch
     private void FancyElementBase_SetScale(object obj, Vector2 scale) => (obj as FancyElementBase).Scale = scale;
     private Vector2 FancyElementBase_GetPixels(object obj) => (obj as FancyElementBase).Pixels;
     private void FancyElementBase_SetPixels(object obj, Vector2 pixels) => (obj as FancyElementBase).Pixels = pixels;
-    private Vector2 FancyElementBase_GetSize(object obj) => (obj as FancyElementBase).Size;
+    private Vector2 FancyElementBase_GetSize(object obj) => (obj as FancyElementBase).GetSize();
     private FancyApp FancyElementBase_GetApp(object obj) => (obj as FancyElementBase).App;
     private FancyElementContainerBase FancyElementBase_GetParent(object obj) => (obj as FancyElementBase).Parent;
     private Vector2 FancyElementBase_GetOffset(object obj) => (obj as FancyElementBase).Offset;

@@ -28,9 +28,10 @@ namespace Lima.Fancy.Elements
 
     public override void Update()
     {
-      handler.HitArea = new Vector4(Position.X, Position.Y, Position.X + Size.X, Position.Y + Size.Y);
+      var size = GetSize();
+      handler.HitArea = new Vector4(Position.X, Position.Y, Position.X + size.X, Position.Y + size.Y);
 
-      var width = Size.X / _textSprites.Length;
+      var width = size.X / _textSprites.Length;
       var halfWidth = width / 2f;
 
       base.Update();
@@ -84,8 +85,8 @@ namespace Lima.Fancy.Elements
 
       Sprites.Clear();
 
-      _bgSprite.Position = Position + new Vector2(0, Size.Y / 2);
-      _bgSprite.Size = Size;
+      _bgSprite.Position = Position + new Vector2(0, size.Y / 2);
+      _bgSprite.Size = size;
 
       Sprites.Add(_bgSprite);
 
@@ -96,21 +97,21 @@ namespace Lima.Fancy.Elements
 
         if (p != Index)
         {
-          _handlerSprite.Position = Position + new Vector2(width * p, Size.Y / 2);
-          _handlerSprite.Size = new Vector2(width, Size.Y);
+          _handlerSprite.Position = Position + new Vector2(width * p, size.Y / 2);
+          _handlerSprite.Size = new Vector2(width, size.Y);
 
           Sprites.Add(_handlerSprite);
         }
       }
 
-      _selectedSprite.Position = Position + new Vector2(width * Index, Size.Y / 2);
-      _selectedSprite.Size = new Vector2(width, Size.Y);
+      _selectedSprite.Position = Position + new Vector2(width * Index, size.Y / 2);
+      _selectedSprite.Size = new Vector2(width, size.Y);
 
       Sprites.Add(_selectedSprite);
 
       for (int j = 0; j < _textSprites.Length; j++)
       {
-        _textSprites[j].Position = Position + new Vector2(j * width + halfWidth, Size.Y * 0.5f - (_textSprites[j].RotationOrScale * 16.6f));
+        _textSprites[j].Position = Position + new Vector2(j * width + halfWidth, size.Y * 0.5f - (_textSprites[j].RotationOrScale * 16.6f));
         _textSprites[j].Color = j == Index ? App.Theme.White : App.Theme.Main_40;
         Sprites.Add(_textSprites[j]);
       }
