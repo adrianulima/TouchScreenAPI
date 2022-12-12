@@ -76,7 +76,6 @@ namespace Lima.Touch
         { "FancyElementBase_GetPixels", new Func<object, Vector2>(FancyElementBase_GetPixels) },
         { "FancyElementBase_SetPixels", new Action<object, Vector2>(FancyElementBase_SetPixels) },
         { "FancyElementBase_GetSize", new Func<object, Vector2>(FancyElementBase_GetSize) },
-        { "FancyElementBase_GetViewport", new Func<object, RectangleF>(FancyElementBase_GetViewport) },
         { "FancyElementBase_GetApp", new Func<object, FancyApp>(FancyElementBase_GetApp) },
         { "FancyElementBase_GetParent", new Func<object, FancyElementContainerBase>(FancyElementBase_GetParent) },
         { "FancyElementBase_GetOffset", new Func<object, Vector2>(FancyElementBase_GetOffset) },
@@ -101,6 +100,7 @@ namespace Lima.Touch
 
         { "FancyApp_New", new Func<FancyApp>(FancyApp_New) },
         { "FancyApp_GetScreen", new Func<object, TouchScreen>(FancyApp_GetScreen) },
+        { "FancyApp_GetViewport", new Func<object, RectangleF>(FancyApp_GetViewport) },
         { "FancyApp_GetCursor", new Func<object, FancyCursor>(FancyApp_GetCursor) },
         { "FancyApp_GetTheme", new Func<object, FancyTheme>(FancyApp_GetTheme) },
         { "FancyApp_InitApp", new Action<object, MyCubeBlock, Sandbox.ModAPI.Ingame.IMyTextSurface>(FancyApp_InitApp) },
@@ -240,7 +240,6 @@ namespace Lima.Touch
     private Vector2 FancyElementBase_GetPixels(object obj) => (obj as FancyElementBase).Pixels;
     private void FancyElementBase_SetPixels(object obj, Vector2 pixels) => (obj as FancyElementBase).Pixels = pixels;
     private Vector2 FancyElementBase_GetSize(object obj) => (obj as FancyElementBase).Size;
-    private RectangleF FancyElementBase_GetViewport(object obj) => (obj as FancyElementBase).Viewport;
     private FancyApp FancyElementBase_GetApp(object obj) => (obj as FancyElementBase).App;
     private FancyElementContainerBase FancyElementBase_GetParent(object obj) => (obj as FancyElementBase).Parent;
     private Vector2 FancyElementBase_GetOffset(object obj) => (obj as FancyElementBase).Offset;
@@ -265,6 +264,7 @@ namespace Lima.Touch
 
     private FancyApp FancyApp_New() => new FancyApp();
     private TouchScreen FancyApp_GetScreen(object obj) => (obj as FancyApp).Screen;
+    private RectangleF FancyApp_GetViewport(object obj) => (obj as FancyApp).Viewport;
     private FancyCursor FancyApp_GetCursor(object obj) => (obj as FancyApp).Cursor;
     private FancyTheme FancyApp_GetTheme(object obj) => (obj as FancyApp).Theme;
     private void FancyApp_InitApp(object obj, MyCubeBlock block, Sandbox.ModAPI.Ingame.IMyTextSurface surface) => (obj as FancyApp).InitApp(block, surface);

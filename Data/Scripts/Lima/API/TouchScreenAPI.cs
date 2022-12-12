@@ -122,7 +122,6 @@ namespace Lima.API
       AssignMethod(delegates, "FancyElementBase_GetPixels", ref FancyElementBase_GetPixels);
       AssignMethod(delegates, "FancyElementBase_SetPixels", ref FancyElementBase_SetPixels);
       AssignMethod(delegates, "FancyElementBase_GetSize", ref FancyElementBase_GetSize);
-      AssignMethod(delegates, "FancyElementBase_GetViewport", ref FancyElementBase_GetViewport);
       AssignMethod(delegates, "FancyElementBase_GetApp", ref FancyElementBase_GetApp);
       AssignMethod(delegates, "FancyElementBase_GetParent", ref FancyElementBase_GetParent);
       AssignMethod(delegates, "FancyElementBase_GetOffset", ref FancyElementBase_GetOffset);
@@ -144,6 +143,7 @@ namespace Lima.API
       AssignMethod(delegates, "FancyView_SetBorderWidth", ref FancyView_SetBorderWidth);
       AssignMethod(delegates, "FancyApp_New", ref FancyApp_New);
       AssignMethod(delegates, "FancyApp_GetScreen", ref FancyApp_GetScreen);
+      AssignMethod(delegates, "FancyApp_GetViewport", ref FancyApp_GetViewport);
       AssignMethod(delegates, "FancyApp_GetCursor", ref FancyApp_GetCursor);
       AssignMethod(delegates, "FancyApp_GetTheme", ref FancyApp_GetTheme);
       AssignMethod(delegates, "FancyApp_InitApp", ref FancyApp_InitApp);
@@ -266,7 +266,6 @@ namespace Lima.API
     public Func<object, Vector2> FancyElementBase_GetPixels;
     public Action<object, Vector2> FancyElementBase_SetPixels;
     public Func<object, Vector2> FancyElementBase_GetSize;
-    public Func<object, RectangleF> FancyElementBase_GetViewport;
     public Func<object, object> FancyElementBase_GetApp;
     public Func<object, object> FancyElementBase_GetParent;
     public Func<object, Vector2> FancyElementBase_GetOffset;
@@ -291,6 +290,7 @@ namespace Lima.API
 
     public Func<object> FancyApp_New;
     public Func<object, object> FancyApp_GetScreen;
+    public Func<object, RectangleF> FancyApp_GetViewport;
     public Func<object, object> FancyApp_GetCursor;
     public Func<object, object> FancyApp_GetTheme;
     public Action<object, MyCubeBlock, Sandbox.ModAPI.Ingame.IMyTextSurface> FancyApp_InitApp;
@@ -435,7 +435,6 @@ namespace Lima.API
     public Vector2 GetPixels() => Api.FancyElementBase_GetPixels.Invoke(internalObj);
     public void SetPixels(Vector2 pixels) => Api.FancyElementBase_SetPixels.Invoke(internalObj, pixels);
     public Vector2 GetSize() => Api.FancyElementBase_GetSize.Invoke(internalObj);
-    public RectangleF GetViewport() => Api.FancyElementBase_GetViewport.Invoke(internalObj);
     public FancyApp GetApp() { if (App == null) App = new FancyApp(Api.FancyElementBase_GetApp.Invoke(internalObj)); return App; }
     public FancyElementContainerBase GetParent() { if (Parent == null) Parent = new FancyApp(Api.FancyElementBase_GetParent.Invoke(internalObj)); return Parent; }
     public Vector2 GetOffset() => Api.FancyElementBase_GetOffset.Invoke(internalObj);
@@ -473,6 +472,7 @@ namespace Lima.API
     public FancyApp() : base(Api.FancyApp_New()) { }
     public FancyApp(object internalObject) : base(internalObject) { }
     public TouchScreen GetScreen() { if (Screen == null) Screen = new TouchScreen(Api.FancyApp_GetScreen.Invoke(internalObj)); return Screen; }
+    public RectangleF GetViewport() => Api.FancyApp_GetViewport.Invoke(internalObj);
     public FancyCursor GetCursor() { if (Cursor == null) Cursor = new FancyCursor(Api.FancyApp_GetCursor.Invoke(internalObj)); return Cursor; }
     public FancyTheme GetTheme() { if (Theme == null) Theme = new FancyTheme(Api.FancyApp_GetTheme.Invoke(internalObj)); return Theme; }
     public void InitApp(MyCubeBlock block, Sandbox.ModAPI.Ingame.IMyTextSurface surface) => Api.FancyApp_InitApp.Invoke(internalObj, block, surface);

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+// using Lima.Utils;
 using VRage.Game.GUI.TextPanel;
 using VRageMath;
 
@@ -8,22 +9,23 @@ namespace Lima.Fancy.Elements
   {
     protected readonly List<MySprite> Sprites = new List<MySprite>();
 
+    public Vector2 Offset = Vector2.Zero;
+
     private Vector2 _position = Vector2.Zero;
     public Vector2 Position
     {
       get
       {
         if (this.Parent != null)
-          return new Vector2(Margin.X + Offset.X, Margin.Y + Offset.Y) + this.Parent.Position + _position * ThemeScale;
-        // TODO: + Margin + Offset ?
-        return _position * _size;
+          return this.Parent.Position + new Vector2(Margin.X, Margin.Y) + _position * ThemeScale;
+        return (new Vector2(Margin.X, Margin.Y) + _position * ThemeScale);
       }
       set { _position = value; }
     }
     private Vector4 _margin = Vector4.Zero;
     public Vector4 Margin
     {
-      get { return this.Parent != null ? this.Parent.Margin + _margin * ThemeScale : _margin * ThemeScale; }
+      get { return _margin * ThemeScale; }
       set { _margin = value; }
     }
     private Vector2 _scale = Vector2.One;
@@ -43,15 +45,8 @@ namespace Lima.Fancy.Elements
     private Vector2 _size = Vector2.Zero;
     public Vector2 Size
     {
-      get { return this.Parent != null ? new Vector2(-Margin.X - Margin.Z + Pixels.X * ThemeScale, Pixels.Y * ThemeScale) + Parent.Size * Scale : _size; }
+      get { return this.Parent != null ? new Vector2(Pixels.X - Margin.X - Margin.Z, Pixels.Y - Margin.Y - Margin.W) * ThemeScale + Parent.Size * Scale : Pixels; }
       protected set { _size = value; }
-    }
-
-    private RectangleF _viewport;
-    public RectangleF Viewport
-    {
-      get { return _viewport != null ? _viewport : Parent.Viewport; }
-      protected set { _viewport = value; }
     }
 
     private FancyApp _app;
@@ -77,11 +72,9 @@ namespace Lima.Fancy.Elements
       }
     }
 
-    public Vector2 Offset = Vector2.Zero;
-
     public FancyElementBase() { }
 
-    // public bool DebugDraw = false;
+    // public bool DebugDraw = true;
     // public Color _debugDrawColor;
     // public Color DebugDrawColor
     // {
@@ -106,7 +99,7 @@ namespace Lima.Fancy.Elements
     {
       // if (DebugDraw)
       // {
-      //   sprites.Insert(0, new MySprite()
+      //   Sprites.Insert(0, new MySprite()
       //   {
       //     Type = SpriteType.TEXTURE,
       //     Data = "SquareSimple",

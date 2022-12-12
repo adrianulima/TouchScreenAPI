@@ -16,6 +16,13 @@ namespace Lima.Fancy
     public FancyCursor Cursor { get; private set; }
     public FancyTheme Theme { get; private set; }
 
+    private RectangleF _viewport;
+    public RectangleF Viewport
+    {
+      get { return _viewport; }
+      protected set { _viewport = value; }
+    }
+
     public FancyApp() { App = this; }
 
     public virtual void InitApp(MyCubeBlock block, Sandbox.ModAPI.Ingame.IMyTextSurface surface)
@@ -33,8 +40,8 @@ namespace Lima.Fancy
         surface.SurfaceSize
       );
 
-      Size = new Vector2(Viewport.Width, Viewport.Height);
-      Position = new Vector2(Viewport.X / Size.X, Viewport.Y / Size.Y);
+      Position = new Vector2(Viewport.X, Viewport.Y);
+      Pixels = new Vector2(Viewport.Width, Viewport.Height);
     }
 
     public virtual void UpdateAfterSimulation()
