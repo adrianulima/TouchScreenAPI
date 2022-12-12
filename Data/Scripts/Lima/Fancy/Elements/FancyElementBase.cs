@@ -69,7 +69,7 @@ namespace Lima.Fancy.Elements
 
     public virtual Vector2 GetBoundaries()
     {
-      return Position + GetSize() + new Vector2(Margin.X + Margin.Z, Margin.Y + Margin.W);
+      return GetSize();
     }
 
     public virtual void InitElements() { }
@@ -103,8 +103,8 @@ namespace Lima.Fancy.Elements
       //     Data = "SquareSimple",
       //     RotationOrScale = 0,
       //     Color = DebugDrawColor,
-      //     Position = Position + new Vector2(0, Size.Y / 2),
-      //     Size = Size
+      //     Position = Position + new Vector2(0, GetBoundaries().Y / 2),
+      //     Size = GetBoundaries()
       //   });
       // }
 

@@ -95,8 +95,12 @@ namespace Lima.Touch
         { "FancyView_SetBgColor", new Action<object, Color>(FancyView_SetBgColor) },
         { "FancyView_GetBorderColor", new Func<object, Color>(FancyView_GetBorderColor) },
         { "FancyView_SetBorderColor", new Action<object, Color>(FancyView_SetBorderColor) },
-        { "FancyView_GetBorderWidth", new Func<object, Vector4>(FancyView_GetBorderWidth) },
-        { "FancyView_SetBorderWidth", new Action<object, Vector4>(FancyView_SetBorderWidth) },
+        { "FancyView_GetBorder", new Func<object, Vector4>(FancyView_GetBorder) },
+        { "FancyView_SetBorder", new Action<object, Vector4>(FancyView_SetBorder) },
+        { "FancyView_GetPadding", new Func<object, Vector4>(FancyView_GetPadding) },
+        { "FancyView_SetPadding", new Action<object, Vector4>(FancyView_SetPadding) },
+        { "FancyView_GetGap", new Func<object, int>(FancyView_GetGap) },
+        { "FancyView_SetGap", new Action<object, int>(FancyView_SetGap) },
 
         { "FancyApp_New", new Func<FancyApp>(FancyApp_New) },
         { "FancyApp_GetScreen", new Func<object, TouchScreen>(FancyApp_GetScreen) },
@@ -259,8 +263,12 @@ namespace Lima.Touch
     private void FancyView_SetBgColor(object obj, Color bgColor) => (obj as FancyView).BgColor = bgColor;
     private Color FancyView_GetBorderColor(object obj) => (Color)(obj as FancyView).BorderColor;
     private void FancyView_SetBorderColor(object obj, Color borderColor) => (obj as FancyView).BorderColor = borderColor;
-    private Vector4 FancyView_GetBorderWidth(object obj) => (Vector4)(obj as FancyView).BorderWidth;
-    private void FancyView_SetBorderWidth(object obj, Vector4 borderWidth) => (obj as FancyView).BorderWidth = borderWidth;
+    private Vector4 FancyView_GetBorder(object obj) => (Vector4)(obj as FancyView).Border;
+    private void FancyView_SetBorder(object obj, Vector4 border) => (obj as FancyView).Border = border;
+    private Vector4 FancyView_GetPadding(object obj) => (Vector4)(obj as FancyView).Padding;
+    private void FancyView_SetPadding(object obj, Vector4 padding) => (obj as FancyView).Padding = padding;
+    private int FancyView_GetGap(object obj) => (int)(obj as FancyView).Gap;
+    private void FancyView_SetGap(object obj, int gap) => (obj as FancyView).Gap = gap;
 
     private FancyApp FancyApp_New() => new FancyApp();
     private TouchScreen FancyApp_GetScreen(object obj) => (obj as FancyApp).Screen;

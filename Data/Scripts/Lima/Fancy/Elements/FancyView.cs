@@ -18,13 +18,11 @@ namespace Lima.Fancy.Elements
     protected MySprite BgSprite;
     protected MySprite[] BorderSprites = new MySprite[4];
 
-    public int Gap = 0;
-
-    // private Vector4 Padding = Vector4.One * 4;
-
     public Color? BgColor;
     public Color? BorderColor;
-    public Vector4 BorderWidth;
+    public Vector4 Border;
+    public Vector4 Padding;
+    public int Gap = 0;
 
     public FancyView(ViewDirection direction = ViewDirection.Column, Color? bgColor = null)
     {
@@ -34,12 +32,12 @@ namespace Lima.Fancy.Elements
 
     public override Vector2 GetSize()
     {
-      return base.GetSize() - new Vector2(BorderWidth.X + BorderWidth.Z, BorderWidth.Y + BorderWidth.W);
+      return base.GetSize() - GetExtraBounds();
     }
 
     public override Vector2 GetBoundaries()
     {
-      return base.GetBoundaries() + new Vector2(BorderWidth.X + BorderWidth.Z, BorderWidth.Y + BorderWidth.W);
+      return base.GetBoundaries() + GetExtraBounds();
     }
 
     public override void Update()
@@ -59,7 +57,7 @@ namespace Lima.Fancy.Elements
 
       for (int s = 0; s < BorderSprites.Length; s++)
       {
-        if (BorderWidth[s] > 0)
+        if (Border[s] > 0)
         {
           BorderSprites[s] = new MySprite()
           {
@@ -83,39 +81,38 @@ namespace Lima.Fancy.Elements
         Sprites.Add(BgSprite);
       }
 
-      if (BorderWidth.X > 0)
+      if (Border.X > 0)
       {
-        BorderSprites[0].Position = Position + new Vector2(0, (size.Y + BorderWidth.Y + BorderWidth.W) / 2);
-        BorderSprites[0].Size = new Vector2(BorderWidth.X, (size.Y + BorderWidth.Y + BorderWidth.W));
+        BorderSprites[0].Position = Position + new Vector2(0, (size.Y + GetExtraBounds().Y) / 2);
+        BorderSprites[0].Size = new Vector2(Border.X, size.Y + GetExtraBounds().Y);
 
         Sprites.Add(BorderSprites[0]);
       }
-      if (BorderWidth.Y > 0)
+      if (Border.Y > 0)
       {
-        BorderSprites[1].Position = Position + new Vector2(0, BorderWidth.Y / 2);
-        BorderSprites[1].Size = new Vector2(size.X + BorderWidth.X + BorderWidth.Z, BorderWidth.Y);
+        BorderSprites[1].Position = Position + new Vector2(0, Border.Y / 2);
+        BorderSprites[1].Size = new Vector2(size.X + GetExtraBounds().X, Border.Y);
 
         Sprites.Add(BorderSprites[1]);
       }
-      if (BorderWidth.Z > 0)
+      if (Border.Z > 0)
       {
-        BorderSprites[2].Position = Position + new Vector2(size.X + BorderWidth.X, (size.Y + BorderWidth.Y + BorderWidth.W) / 2);
-        BorderSprites[2].Size = new Vector2(BorderWidth.Z, (size.Y + BorderWidth.Y + BorderWidth.W));
+        BorderSprites[2].Position = Position + new Vector2(size.X + Border.X + Padding.X + Padding.Z, (size.Y + GetExtraBounds().Y) / 2);
+        BorderSprites[2].Size = new Vector2(Border.Z, (size.Y + GetExtraBounds().Y));
 
         Sprites.Add(BorderSprites[2]);
       }
-      if (BorderWidth.W > 0)
+      if (Border.W > 0)
       {
-        BorderSprites[3].Position = Position + new Vector2(0, BorderWidth.Y + size.Y + BorderWidth.W / 2);
-        BorderSprites[3].Size = new Vector2(size.X + BorderWidth.X + BorderWidth.Z, BorderWidth.W);
+        BorderSprites[3].Position = Position + new Vector2(0, size.Y + Border.Y + Padding.Y + Padding.W + Border.W / 2);
+        BorderSprites[3].Size = new Vector2(size.X + GetExtraBounds().X, Border.W);
 
         Sprites.Add(BorderSprites[3]);
       }
 
       if (Direction != ViewDirection.None)
       {
-        var before = new Vector2(BorderWidth.X, BorderWidth.Y);
-        // var after = new Vector2(BorderWidth.Z, BorderWidth.W);
+        var before = new Vector2(Border.X + Padding.X, Border.Y + Padding.Y);
         for (int i = 0; i < children.Count; i++)
         {
           var childMargin = new Vector2(children[i].Margin.X, children[i].Margin.Y);
@@ -126,11 +123,18 @@ namespace Lima.Fancy.Elements
           }
           var prevChild = children[i - 1];
           var prevChildBounds = prevChild.GetBoundaries();
-          var oX = Direction == ViewDirection.Row ? Gap - Position.X + prevChildBounds.X - prevChild.Margin.X : 0;
-          var oY = Direction == ViewDirection.Column ? Gap - Position.Y + prevChildBounds.Y - prevChild.Margin.Y : 0;
+          var oX = Direction == ViewDirection.Row ? Gap + prevChild.Position.X + prevChildBounds.X + prevChild.Margin.Z - Position.X - Border.X - Padding.X : 0;
+          var oY = Direction == ViewDirection.Column ? Gap + prevChild.Position.Y + prevChildBounds.Y + prevChild.Margin.W - Position.Y - Border.Y - Padding.Y : 0;
           children[i].Position = before + childMargin + Position + new Vector2(oX, oY);
         }
       }
+    }
+
+    private Vector2 GetExtraBounds()
+    {
+      var borderSize = new Vector2(Border.X + Border.Z, Border.Y + Border.W);
+      var paddingSize = new Vector2(Padding.X + Padding.Z, Padding.Y + Padding.W);
+      return borderSize + paddingSize;
     }
   }
 }
