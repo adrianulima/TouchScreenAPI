@@ -131,10 +131,10 @@ namespace Lima.API
       AssignMethod(delegates, "FancyElementBase_InitElements", ref FancyElementBase_InitElements);
       AssignMethod(delegates, "FancyElementBase_Update", ref FancyElementBase_Update);
       AssignMethod(delegates, "FancyElementBase_Dispose", ref FancyElementBase_Dispose);
-      AssignMethod(delegates, "FancyElementContainerBase_GetChildren", ref FancyElementContainerBase_GetChildren);
-      AssignMethod(delegates, "FancyElementContainerBase_GetFlexSize", ref FancyElementContainerBase_GetFlexSize);
-      AssignMethod(delegates, "FancyElementContainerBase_AddChild", ref FancyElementContainerBase_AddChild);
-      AssignMethod(delegates, "FancyElementContainerBase_RemoveChild", ref FancyElementContainerBase_RemoveChild);
+      AssignMethod(delegates, "FancyContainerBase_GetChildren", ref FancyContainerBase_GetChildren);
+      AssignMethod(delegates, "FancyContainerBase_GetFlexSize", ref FancyContainerBase_GetFlexSize);
+      AssignMethod(delegates, "FancyContainerBase_AddChild", ref FancyContainerBase_AddChild);
+      AssignMethod(delegates, "FancyContainerBase_RemoveChild", ref FancyContainerBase_RemoveChild);
       AssignMethod(delegates, "FancyView_NewV", ref FancyView_NewV);
       AssignMethod(delegates, "FancyView_GetDirection", ref FancyView_GetDirection);
       AssignMethod(delegates, "FancyView_SetDirection", ref FancyView_SetDirection);
@@ -283,10 +283,10 @@ namespace Lima.API
     public Action<object> FancyElementBase_Update;
     public Action<object> FancyElementBase_Dispose;
 
-    public Func<object, List<object>> FancyElementContainerBase_GetChildren;
-    public Func<object, Vector2> FancyElementContainerBase_GetFlexSize;
-    public Action<object, object> FancyElementContainerBase_AddChild;
-    public Action<object, object> FancyElementContainerBase_RemoveChild;
+    public Func<object, List<object>> FancyContainerBase_GetChildren;
+    public Func<object, Vector2> FancyContainerBase_GetFlexSize;
+    public Action<object, object> FancyContainerBase_AddChild;
+    public Action<object, object> FancyContainerBase_RemoveChild;
 
     public Func<int, object> FancyView_NewV;
     public Func<object, int> FancyView_GetDirection;
@@ -437,7 +437,7 @@ namespace Lima.API
   public class FancyElementBase : DelegatorBase
   {
     protected FancyApp App;
-    protected FancyElementContainerBase Parent;
+    protected FancyContainerBase Parent;
     internal object internalObj;
     public FancyElementBase(object internalObject) { internalObj = internalObject; }
     public bool GetEnabled() => Api.FancyElementBase_GetEnabled.Invoke(internalObj);
@@ -453,21 +453,21 @@ namespace Lima.API
     public Vector2 GetSize() => Api.FancyElementBase_GetSize.Invoke(internalObj);
     public Vector2 GetBoundaries() => Api.FancyElementBase_GetBoundaries.Invoke(internalObj);
     public FancyApp GetApp() { if (App == null) App = new FancyApp(Api.FancyElementBase_GetApp.Invoke(internalObj)); return App; }
-    public FancyElementContainerBase GetParent() { if (Parent == null) Parent = new FancyApp(Api.FancyElementBase_GetParent.Invoke(internalObj)); return Parent; }
+    public FancyContainerBase GetParent() { if (Parent == null) Parent = new FancyApp(Api.FancyElementBase_GetParent.Invoke(internalObj)); return Parent; }
     public List<MySprite> GetSprites() => Api.FancyElementBase_GetSprites.Invoke(internalObj);
     public void InitElements() => Api.FancyElementBase_InitElements.Invoke(internalObj);
     public void Update() => Api.FancyElementBase_Update.Invoke(internalObj);
     public void Dispose() => Api.FancyElementBase_Dispose.Invoke(internalObj);
   }
-  public class FancyElementContainerBase : FancyElementBase
+  public class FancyContainerBase : FancyElementBase
   {
-    public FancyElementContainerBase(object internalObject) : base(internalObject) { }
-    public List<object> GetChildren() => Api.FancyElementContainerBase_GetChildren.Invoke(internalObj);
-    public Vector2 GetFlexSize() => Api.FancyElementContainerBase_GetFlexSize.Invoke(internalObj);
-    public void AddChild(FancyElementBase child) => Api.FancyElementContainerBase_AddChild.Invoke(internalObj, child.internalObj);
-    public void RemoveChild(FancyElementBase child) => Api.FancyElementContainerBase_RemoveChild.Invoke(internalObj, child.internalObj);
+    public FancyContainerBase(object internalObject) : base(internalObject) { }
+    public List<object> GetChildren() => Api.FancyContainerBase_GetChildren.Invoke(internalObj);
+    public Vector2 GetFlexSize() => Api.FancyContainerBase_GetFlexSize.Invoke(internalObj);
+    public void AddChild(FancyElementBase child) => Api.FancyContainerBase_AddChild.Invoke(internalObj, child.internalObj);
+    public void RemoveChild(FancyElementBase child) => Api.FancyContainerBase_RemoveChild.Invoke(internalObj, child.internalObj);
   }
-  public class FancyView : FancyElementContainerBase
+  public class FancyView : FancyContainerBase
   {
     public enum ViewDirection : int { None = 0, Row = 1, Column = 2 }
     public FancyView(ViewDirection direction = ViewDirection.Column) : base(Api.FancyView_NewV((int)direction)) { }

@@ -1,10 +1,9 @@
-using System;
 using VRage.Game.GUI.TextPanel;
 using VRageMath;
 
 namespace Lima.Fancy.Elements
 {
-  public class FancyView : FancyElementContainerBase
+  public class FancyView : FancyContainerBase
   {
     public enum ViewDirection : int
     {
@@ -46,6 +45,31 @@ namespace Lima.Fancy.Elements
       return base.GetBoundaries() + GetExtraBounds();
     }
 
+    protected override bool ValidateChild(FancyElementBase child)
+    {
+      if (Direction != ViewDirection.None)
+      {
+        var size = GetSize();
+        var childSize = child.GetSize();
+        if (Direction == ViewDirection.Row)
+        {
+          if (child.Position.X + childSize.X > Position.X + size.X + 1)
+            return false;
+          if (child.Position.X + childSize.X < -1)
+            return false;
+        }
+        else if (Direction == ViewDirection.Column)
+        {
+          if (child.Position.Y + childSize.Y > Position.Y + size.Y + 1)
+            return false;
+          if (child.Position.Y + childSize.Y < -1)
+            return false;
+        }
+      }
+
+      return base.ValidateChild(child);
+    }
+
     private void UpdateChildrenPixels()
     {
       ChildrenPixels = Vector2.Zero;
@@ -62,7 +86,7 @@ namespace Lima.Fancy.Elements
       }
     }
 
-    private void UpdateChildrenPositions()
+    protected virtual void UpdateChildrenPositions()
     {
       FancyElementBase prevChild = null;
       int childrenCount = Children.Count;
@@ -164,7 +188,7 @@ namespace Lima.Fancy.Elements
       }
     }
 
-    private Vector2 GetExtraBounds()
+    protected virtual Vector2 GetExtraBounds()
     {
       var borderSize = new Vector2(Border.X + Border.Z, Border.Y + Border.W);
       var paddingSize = new Vector2(Padding.X + Padding.Z, Padding.Y + Padding.W);

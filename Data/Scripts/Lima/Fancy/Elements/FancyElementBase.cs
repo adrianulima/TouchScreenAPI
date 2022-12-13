@@ -34,8 +34,8 @@ namespace Lima.Fancy.Elements
       get { return App != null ? App.Theme.Scale : 1f; }
     }
 
-    private FancyElementContainerBase _parent;
-    public FancyElementContainerBase Parent
+    private FancyContainerBase _parent;
+    public FancyContainerBase Parent
     {
       get { return _parent; }
       set

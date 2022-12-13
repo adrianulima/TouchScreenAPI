@@ -80,16 +80,16 @@ namespace Lima.Touch
         { "FancyElementBase_GetSize", new Func<object, Vector2>(FancyElementBase_GetSize) },
         { "FancyElementBase_GetBoundaries", new Func<object, Vector2>(FancyElementBase_GetBoundaries) },
         { "FancyElementBase_GetApp", new Func<object, FancyApp>(FancyElementBase_GetApp) },
-        { "FancyElementBase_GetParent", new Func<object, FancyElementContainerBase>(FancyElementBase_GetParent) },
+        { "FancyElementBase_GetParent", new Func<object, FancyContainerBase>(FancyElementBase_GetParent) },
         { "FancyElementBase_GetSprites", new Func<object, List<MySprite>>(FancyElementBase_GetSprites) },
         { "FancyElementBase_InitElements", new Action<object>(FancyElementBase_InitElements) },
         { "FancyElementBase_Update", new Action<object>(FancyElementBase_Update) },
         { "FancyElementBase_Dispose", new Action<object>(FancyElementBase_Dispose) },
 
-        { "FancyElementContainerBase_GetChildren", new Func<object, List<object>>(FancyElementContainerBase_GetChildren) },
-        { "FancyElementContainerBase_GetFlexSize", new Func<object, Vector2>(FancyElementContainerBase_GetFlexSize) },
-        { "FancyElementContainerBase_AddChild", new Action<object, object>(FancyElementContainerBase_AddChild) },
-        { "FancyElementContainerBase_RemoveChild", new Action<object, object>(FancyElementContainerBase_RemoveChild) },
+        { "FancyContainerBase_GetChildren", new Func<object, List<object>>(FancyContainerBase_GetChildren) },
+        { "FancyContainerBase_GetFlexSize", new Func<object, Vector2>(FancyContainerBase_GetFlexSize) },
+        { "FancyContainerBase_AddChild", new Action<object, object>(FancyContainerBase_AddChild) },
+        { "FancyContainerBase_RemoveChild", new Action<object, object>(FancyContainerBase_RemoveChild) },
 
         { "FancyView_NewV", new Func<int, FancyView>(FancyView_NewV) },
         { "FancyView_GetDirection", new Func<object, int>(FancyView_GetDirection) },
@@ -251,16 +251,16 @@ namespace Lima.Touch
     private Vector2 FancyElementBase_GetSize(object obj) => (obj as FancyElementBase).GetSize();
     private Vector2 FancyElementBase_GetBoundaries(object obj) => (obj as FancyElementBase).GetBoundaries();
     private FancyApp FancyElementBase_GetApp(object obj) => (obj as FancyElementBase).App;
-    private FancyElementContainerBase FancyElementBase_GetParent(object obj) => (obj as FancyElementBase).Parent;
+    private FancyContainerBase FancyElementBase_GetParent(object obj) => (obj as FancyElementBase).Parent;
     private List<MySprite> FancyElementBase_GetSprites(object obj) => (obj as FancyElementBase).GetSprites();
     private void FancyElementBase_InitElements(object obj) => (obj as FancyElementBase).InitElements();
     private void FancyElementBase_Update(object obj) => (obj as FancyElementBase).Update();
     private void FancyElementBase_Dispose(object obj) => (obj as FancyElementBase).Dispose();
 
-    private List<object> FancyElementContainerBase_GetChildren(object obj) => (obj as FancyElementContainerBase).Children.Cast<object>().ToList();
-    private Vector2 FancyElementContainerBase_GetFlexSize(object obj) => (obj as FancyElementContainerBase).GetFlexSize();
-    private void FancyElementContainerBase_AddChild(object obj, object child) => (obj as FancyElementContainerBase).AddChild((FancyElementBase)child);
-    private void FancyElementContainerBase_RemoveChild(object obj, object child) => (obj as FancyElementContainerBase).RemoveChild((FancyElementBase)child);
+    private List<object> FancyContainerBase_GetChildren(object obj) => (obj as FancyContainerBase).Children.Cast<object>().ToList();
+    private Vector2 FancyContainerBase_GetFlexSize(object obj) => (obj as FancyContainerBase).GetFlexSize();
+    private void FancyContainerBase_AddChild(object obj, object child) => (obj as FancyContainerBase).AddChild((FancyElementBase)child);
+    private void FancyContainerBase_RemoveChild(object obj, object child) => (obj as FancyContainerBase).RemoveChild((FancyElementBase)child);
 
     private FancyView FancyView_NewV(int direction) => new FancyView((FancyView.ViewDirection)direction);
     private int FancyView_GetDirection(object obj) => (int)(obj as FancyView).Direction;

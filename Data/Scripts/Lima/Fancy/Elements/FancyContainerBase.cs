@@ -4,11 +4,11 @@ using VRageMath;
 
 namespace Lima.Fancy.Elements
 {
-  public abstract class FancyElementContainerBase : FancyElementBase
+  public abstract class FancyContainerBase : FancyElementBase
   {
     public readonly List<FancyElementBase> Children = new List<FancyElementBase>();
 
-    public FancyElementContainerBase() { }
+    public FancyContainerBase() { }
 
     public override Vector2 GetSize()
     {
@@ -51,14 +51,16 @@ namespace Lima.Fancy.Elements
 
       foreach (FancyElementBase child in Children)
       {
-        if (child.Position.Y + child.GetSize().Y > Position.Y + GetSize().Y + 1)
-          continue;
-
-        if (child.Enabled)
+        if (ValidateChild((child)))
           Sprites.AddRange(child.GetSprites());
       }
 
       return Sprites;
+    }
+
+    protected virtual bool ValidateChild(FancyElementBase child)
+    {
+      return child.Enabled;
     }
 
     public virtual FancyElementBase AddChild(FancyElementBase child)
@@ -84,6 +86,5 @@ namespace Lima.Fancy.Elements
 
       return null;
     }
-
   }
 }
