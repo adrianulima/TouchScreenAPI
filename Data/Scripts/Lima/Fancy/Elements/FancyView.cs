@@ -42,6 +42,25 @@ namespace Lima.Fancy.Elements
 
     public override void Update()
     {
+      if (Direction != ViewDirection.None)
+      {
+        var before = new Vector2(Border.X + Padding.X, Border.Y + Padding.Y);
+        for (int i = 0; i < children.Count; i++)
+        {
+          var childMargin = new Vector2(children[i].Margin.X, children[i].Margin.Y);
+          if (i == 0)
+          {
+            children[0].Position = before + childMargin + Position;
+            continue;
+          }
+          var prevChild = children[i - 1];
+          var prevChildBounds = prevChild.GetBoundaries();
+          var oX = Direction == ViewDirection.Row ? Gap + prevChild.Position.X + prevChildBounds.X + prevChild.Margin.Z - Position.X - Border.X - Padding.X : 0;
+          var oY = Direction == ViewDirection.Column ? Gap + prevChild.Position.Y + prevChildBounds.Y + prevChild.Margin.W - Position.Y - Border.Y - Padding.Y : 0;
+          children[i].Position = before + childMargin + Position + new Vector2(oX, oY);
+        }
+      }
+
       base.Update();
 
       if (BgColor != null)
@@ -108,25 +127,6 @@ namespace Lima.Fancy.Elements
         BorderSprites[3].Size = new Vector2(size.X + GetExtraBounds().X, Border.W);
 
         Sprites.Add(BorderSprites[3]);
-      }
-
-      if (Direction != ViewDirection.None)
-      {
-        var before = new Vector2(Border.X + Padding.X, Border.Y + Padding.Y);
-        for (int i = 0; i < children.Count; i++)
-        {
-          var childMargin = new Vector2(children[i].Margin.X, children[i].Margin.Y);
-          if (i == 0)
-          {
-            children[0].Position = before + childMargin + Position;
-            continue;
-          }
-          var prevChild = children[i - 1];
-          var prevChildBounds = prevChild.GetBoundaries();
-          var oX = Direction == ViewDirection.Row ? Gap + prevChild.Position.X + prevChildBounds.X + prevChild.Margin.Z - Position.X - Border.X - Padding.X : 0;
-          var oY = Direction == ViewDirection.Column ? Gap + prevChild.Position.Y + prevChildBounds.Y + prevChild.Margin.W - Position.Y - Border.Y - Padding.Y : 0;
-          children[i].Position = before + childMargin + Position + new Vector2(oX, oY);
-        }
       }
     }
 
