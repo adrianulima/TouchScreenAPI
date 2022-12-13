@@ -67,6 +67,8 @@ namespace Lima.Touch
         { "TouchScreen_CompareWithBlockAndSurface", new Func<object, IMyCubeBlock, IMyTextSurface, bool>(TouchScreen_CompareWithBlockAndSurface) },
         { "TouchScreen_Dispose", new Action<object>(TouchScreen_Dispose) },
 
+        { "FancyElementBase_GetEnabled", new Func<object, bool>(FancyElementBase_GetEnabled) },
+        { "FancyElementBase_SetEnabled", new Action<object, bool>(FancyElementBase_SetEnabled) },
         { "FancyElementBase_GetPosition", new Func<object, Vector2>(FancyElementBase_GetPosition) },
         { "FancyElementBase_SetPosition", new Action<object, Vector2>(FancyElementBase_SetPosition) },
         { "FancyElementBase_GetMargin", new Func<object, Vector4>(FancyElementBase_GetMargin) },
@@ -234,6 +236,8 @@ namespace Lima.Touch
     private bool TouchScreen_CompareWithBlockAndSurface(object obj, IMyCubeBlock block, IMyTextSurface surface) => (obj as TouchScreen).CompareWithBlockAndSurface(block, surface);
     private void TouchScreen_Dispose(object obj) => (obj as TouchScreen).Dispose();
 
+    private bool FancyElementBase_GetEnabled(object obj) => (obj as FancyElementBase).Enabled;
+    private void FancyElementBase_SetEnabled(object obj, bool enabled) => (obj as FancyElementBase).Enabled = enabled;
     private Vector2 FancyElementBase_GetPosition(object obj) => (obj as FancyElementBase).Position;
     private void FancyElementBase_SetPosition(object obj, Vector2 position) => (obj as FancyElementBase).Position = position;
     private Vector4 FancyElementBase_GetMargin(object obj) => (obj as FancyElementBase).Margin;
@@ -250,7 +254,7 @@ namespace Lima.Touch
     private void FancyElementBase_Update(object obj) => (obj as FancyElementBase).Update();
     private void FancyElementBase_Dispose(object obj) => (obj as FancyElementBase).Dispose();
 
-    private List<object> FancyElementContainerBase_GetChildren(object obj) => (obj as FancyElementContainerBase).children.Cast<object>().ToList();
+    private List<object> FancyElementContainerBase_GetChildren(object obj) => (obj as FancyElementContainerBase).Children.Cast<object>().ToList();
     private void FancyElementContainerBase_AddChild(object obj, object child) => (obj as FancyElementContainerBase).AddChild((FancyElementBase)child);
     private void FancyElementContainerBase_RemoveChild(object obj, object child) => (obj as FancyElementContainerBase).RemoveChild((FancyElementBase)child);
 

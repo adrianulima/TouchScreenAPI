@@ -6,7 +6,7 @@ namespace Lima.Fancy.Elements
 {
   public abstract class FancyElementContainerBase : FancyElementBase
   {
-    public readonly List<FancyElementBase> children = new List<FancyElementBase>();
+    public readonly List<FancyElementBase> Children = new List<FancyElementBase>();
 
     public FancyElementContainerBase() { }
 
@@ -18,22 +18,25 @@ namespace Lima.Fancy.Elements
     public override void InitElements()
     {
       base.InitElements();
-      foreach (var child in children)
+      foreach (var child in Children)
         child.InitElements();
     }
 
     public override void Update()
     {
       base.Update();
-      foreach (var child in children)
-        child.Update();
+      foreach (var child in Children)
+      {
+        if (child.Enabled)
+          child.Update();
+      }
     }
 
     public override void Dispose()
     {
       base.Dispose();
 
-      foreach (var child in children)
+      foreach (var child in Children)
         child.Dispose();
     }
 
@@ -41,9 +44,10 @@ namespace Lima.Fancy.Elements
     {
       base.GetSprites();
 
-      foreach (FancyElementBase child in children)
+      foreach (FancyElementBase child in Children)
       {
-        Sprites.AddRange(child.GetSprites());
+        if (child.Enabled)
+          Sprites.AddRange(child.GetSprites());
       }
 
       return Sprites;
@@ -51,10 +55,10 @@ namespace Lima.Fancy.Elements
 
     public virtual FancyElementBase AddChild(FancyElementBase child)
     {
-      if (child.Parent == null && !children.Contains(child))
+      if (child.Parent == null && !Children.Contains(child))
       {
         child.Parent = this;
-        children.Add(child);
+        Children.Add(child);
         return child;
       }
 
@@ -63,10 +67,10 @@ namespace Lima.Fancy.Elements
 
     public virtual FancyElementBase RemoveChild(FancyElementBase child)
     {
-      if (children.Contains(child))
+      if (Children.Contains(child))
       {
         child.Parent = null;
-        children.Remove(child);
+        Children.Remove(child);
         return child;
       }
 

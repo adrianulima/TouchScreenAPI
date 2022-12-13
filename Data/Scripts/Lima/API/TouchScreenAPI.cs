@@ -113,6 +113,8 @@ namespace Lima.API
       AssignMethod(delegates, "FancyTheme_MeasureStringInPixels", ref FancyTheme_MeasureStringInPixels);
       AssignMethod(delegates, "FancyTheme_GetScale", ref FancyTheme_GetScale);
       AssignMethod(delegates, "FancyTheme_SetScale", ref FancyTheme_SetScale);
+      AssignMethod(delegates, "FancyElementBase_GetEnabled", ref FancyElementBase_GetEnabled);
+      AssignMethod(delegates, "FancyElementBase_SetEnabled", ref FancyElementBase_SetEnabled);
       AssignMethod(delegates, "FancyElementBase_GetPosition", ref FancyElementBase_GetPosition);
       AssignMethod(delegates, "FancyElementBase_SetPosition", ref FancyElementBase_SetPosition);
       AssignMethod(delegates, "FancyElementBase_GetMargin", ref FancyElementBase_GetMargin);
@@ -260,6 +262,8 @@ namespace Lima.API
     public Func<object, float> FancyTheme_GetScale;
     public Action<object, float> FancyTheme_SetScale;
 
+    public Func<object, bool> FancyElementBase_GetEnabled;
+    public Action<object, bool> FancyElementBase_SetEnabled;
     public Func<object, Vector2> FancyElementBase_GetPosition;
     public Action<object, Vector2> FancyElementBase_SetPosition;
     public Func<object, Vector4> FancyElementBase_GetMargin;
@@ -432,6 +436,8 @@ namespace Lima.API
     protected FancyElementContainerBase Parent;
     internal object internalObj;
     public FancyElementBase(object internalObject) { internalObj = internalObject; }
+    public bool GetEnabled() => Api.FancyElementBase_GetEnabled.Invoke(internalObj);
+    public void SetEnabled(bool enabled) => Api.FancyElementBase_SetEnabled.Invoke(internalObj, enabled);
     public Vector2 GetPosition() => Api.FancyElementBase_GetPosition.Invoke(internalObj);
     public void SetPosition(Vector2 position) => Api.FancyElementBase_SetPosition.Invoke(internalObj, position);
     public Vector4 GetMargin() => Api.FancyElementBase_GetMargin.Invoke(internalObj);
