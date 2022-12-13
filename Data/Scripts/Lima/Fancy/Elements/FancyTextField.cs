@@ -110,7 +110,7 @@ namespace Lima.Fancy.Elements
       {
         Type = SpriteType.TEXT,
         Data = Text,
-        RotationOrScale = 0.6f * App.Theme.Scale,
+        RotationOrScale = 0.6f * ThemeScale,
         Color = App.Theme.White,//Theme.Main,
         Alignment = Alignment,
         FontId = App.Theme.Font
@@ -156,7 +156,7 @@ namespace Lima.Fancy.Elements
         }
       }
 
-      var caretX = 1.5f * App.Theme.Scale;
+      var caretX = 1.5f * ThemeScale;
       if (_edit && _blinkCaret && _textSprite.Data != _maxText)
       {
         _textSprite.Data = _textSprite.Data + "|";

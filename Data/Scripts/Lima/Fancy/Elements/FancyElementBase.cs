@@ -49,7 +49,7 @@ namespace Lima.Fancy.Elements
 
     public virtual Vector2 GetSize()
     {
-      return this.Parent != null ? Pixels * ThemeScale + Parent.GetSize() * Scale : Pixels;
+      return this.Parent != null ? Pixels * ThemeScale + Parent.GetFlexSize() * Scale : Pixels;
     }
 
     public virtual Vector2 GetBoundaries()

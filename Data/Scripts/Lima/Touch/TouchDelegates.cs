@@ -78,6 +78,7 @@ namespace Lima.Touch
         { "FancyElementBase_GetPixels", new Func<object, Vector2>(FancyElementBase_GetPixels) },
         { "FancyElementBase_SetPixels", new Action<object, Vector2>(FancyElementBase_SetPixels) },
         { "FancyElementBase_GetSize", new Func<object, Vector2>(FancyElementBase_GetSize) },
+        { "FancyElementBase_GetBoundaries", new Func<object, Vector2>(FancyElementBase_GetBoundaries) },
         { "FancyElementBase_GetApp", new Func<object, FancyApp>(FancyElementBase_GetApp) },
         { "FancyElementBase_GetParent", new Func<object, FancyElementContainerBase>(FancyElementBase_GetParent) },
         { "FancyElementBase_GetSprites", new Func<object, List<MySprite>>(FancyElementBase_GetSprites) },
@@ -86,6 +87,7 @@ namespace Lima.Touch
         { "FancyElementBase_Dispose", new Action<object>(FancyElementBase_Dispose) },
 
         { "FancyElementContainerBase_GetChildren", new Func<object, List<object>>(FancyElementContainerBase_GetChildren) },
+        { "FancyElementContainerBase_GetFlexSize", new Func<object, Vector2>(FancyElementContainerBase_GetFlexSize) },
         { "FancyElementContainerBase_AddChild", new Action<object, object>(FancyElementContainerBase_AddChild) },
         { "FancyElementContainerBase_RemoveChild", new Action<object, object>(FancyElementContainerBase_RemoveChild) },
 
@@ -247,6 +249,7 @@ namespace Lima.Touch
     private Vector2 FancyElementBase_GetPixels(object obj) => (obj as FancyElementBase).Pixels;
     private void FancyElementBase_SetPixels(object obj, Vector2 pixels) => (obj as FancyElementBase).Pixels = pixels;
     private Vector2 FancyElementBase_GetSize(object obj) => (obj as FancyElementBase).GetSize();
+    private Vector2 FancyElementBase_GetBoundaries(object obj) => (obj as FancyElementBase).GetBoundaries();
     private FancyApp FancyElementBase_GetApp(object obj) => (obj as FancyElementBase).App;
     private FancyElementContainerBase FancyElementBase_GetParent(object obj) => (obj as FancyElementBase).Parent;
     private List<MySprite> FancyElementBase_GetSprites(object obj) => (obj as FancyElementBase).GetSprites();
@@ -255,6 +258,7 @@ namespace Lima.Touch
     private void FancyElementBase_Dispose(object obj) => (obj as FancyElementBase).Dispose();
 
     private List<object> FancyElementContainerBase_GetChildren(object obj) => (obj as FancyElementContainerBase).Children.Cast<object>().ToList();
+    private Vector2 FancyElementContainerBase_GetFlexSize(object obj) => (obj as FancyElementContainerBase).GetFlexSize();
     private void FancyElementContainerBase_AddChild(object obj, object child) => (obj as FancyElementContainerBase).AddChild((FancyElementBase)child);
     private void FancyElementContainerBase_RemoveChild(object obj, object child) => (obj as FancyElementContainerBase).RemoveChild((FancyElementBase)child);
 

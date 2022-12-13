@@ -124,6 +124,7 @@ namespace Lima.API
       AssignMethod(delegates, "FancyElementBase_GetPixels", ref FancyElementBase_GetPixels);
       AssignMethod(delegates, "FancyElementBase_SetPixels", ref FancyElementBase_SetPixels);
       AssignMethod(delegates, "FancyElementBase_GetSize", ref FancyElementBase_GetSize);
+      AssignMethod(delegates, "FancyElementBase_GetBoundaries", ref FancyElementBase_GetBoundaries);
       AssignMethod(delegates, "FancyElementBase_GetApp", ref FancyElementBase_GetApp);
       AssignMethod(delegates, "FancyElementBase_GetParent", ref FancyElementBase_GetParent);
       AssignMethod(delegates, "FancyElementBase_GetSprites", ref FancyElementBase_GetSprites);
@@ -131,6 +132,7 @@ namespace Lima.API
       AssignMethod(delegates, "FancyElementBase_Update", ref FancyElementBase_Update);
       AssignMethod(delegates, "FancyElementBase_Dispose", ref FancyElementBase_Dispose);
       AssignMethod(delegates, "FancyElementContainerBase_GetChildren", ref FancyElementContainerBase_GetChildren);
+      AssignMethod(delegates, "FancyElementContainerBase_GetFlexSize", ref FancyElementContainerBase_GetFlexSize);
       AssignMethod(delegates, "FancyElementContainerBase_AddChild", ref FancyElementContainerBase_AddChild);
       AssignMethod(delegates, "FancyElementContainerBase_RemoveChild", ref FancyElementContainerBase_RemoveChild);
       AssignMethod(delegates, "FancyView_NewV", ref FancyView_NewV);
@@ -273,6 +275,7 @@ namespace Lima.API
     public Func<object, Vector2> FancyElementBase_GetPixels;
     public Action<object, Vector2> FancyElementBase_SetPixels;
     public Func<object, Vector2> FancyElementBase_GetSize;
+    public Func<object, Vector2> FancyElementBase_GetBoundaries;
     public Func<object, object> FancyElementBase_GetApp;
     public Func<object, object> FancyElementBase_GetParent;
     public Func<object, List<MySprite>> FancyElementBase_GetSprites;
@@ -281,6 +284,7 @@ namespace Lima.API
     public Action<object> FancyElementBase_Dispose;
 
     public Func<object, List<object>> FancyElementContainerBase_GetChildren;
+    public Func<object, Vector2> FancyElementContainerBase_GetFlexSize;
     public Action<object, object> FancyElementContainerBase_AddChild;
     public Action<object, object> FancyElementContainerBase_RemoveChild;
 
@@ -447,6 +451,7 @@ namespace Lima.API
     public Vector2 GetPixels() => Api.FancyElementBase_GetPixels.Invoke(internalObj);
     public void SetPixels(Vector2 pixels) => Api.FancyElementBase_SetPixels.Invoke(internalObj, pixels);
     public Vector2 GetSize() => Api.FancyElementBase_GetSize.Invoke(internalObj);
+    public Vector2 GetBoundaries() => Api.FancyElementBase_GetBoundaries.Invoke(internalObj);
     public FancyApp GetApp() { if (App == null) App = new FancyApp(Api.FancyElementBase_GetApp.Invoke(internalObj)); return App; }
     public FancyElementContainerBase GetParent() { if (Parent == null) Parent = new FancyApp(Api.FancyElementBase_GetParent.Invoke(internalObj)); return Parent; }
     public List<MySprite> GetSprites() => Api.FancyElementBase_GetSprites.Invoke(internalObj);
@@ -458,6 +463,7 @@ namespace Lima.API
   {
     public FancyElementContainerBase(object internalObject) : base(internalObject) { }
     public List<object> GetChildren() => Api.FancyElementContainerBase_GetChildren.Invoke(internalObj);
+    public Vector2 GetFlexSize() => Api.FancyElementContainerBase_GetFlexSize.Invoke(internalObj);
     public void AddChild(FancyElementBase child) => Api.FancyElementContainerBase_AddChild.Invoke(internalObj, child.internalObj);
     public void RemoveChild(FancyElementBase child) => Api.FancyElementContainerBase_RemoveChild.Invoke(internalObj, child.internalObj);
   }

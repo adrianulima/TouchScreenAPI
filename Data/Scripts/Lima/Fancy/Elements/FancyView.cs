@@ -17,6 +17,7 @@ namespace Lima.Fancy.Elements
 
     protected MySprite BgSprite;
     protected MySprite[] BorderSprites = new MySprite[4];
+    protected Vector2 ChildrenPixels = Vector2.Zero;
 
     public Color? BgColor;
     public Color? BorderColor;
@@ -35,9 +36,30 @@ namespace Lima.Fancy.Elements
       return base.GetSize() - GetExtraBounds();
     }
 
+    public override Vector2 GetFlexSize()
+    {
+      return base.GetFlexSize() - ChildrenPixels;
+    }
+
     public override Vector2 GetBoundaries()
     {
       return base.GetBoundaries() + GetExtraBounds();
+    }
+
+    private void UpdateChildrenPixels()
+    {
+      ChildrenPixels = Vector2.Zero;
+      int childrenCount = Children.Count;
+      if (Direction != ViewDirection.None && childrenCount > 0)
+      {
+        foreach (var child in Children)
+        {
+          if (Direction == ViewDirection.Row)
+            ChildrenPixels.X += child.Pixels.X * ThemeScale;
+          else if (Direction == ViewDirection.Column)
+            ChildrenPixels.Y += child.Pixels.Y * ThemeScale;
+        }
+      }
     }
 
     private void UpdateChildrenPositions()
@@ -70,6 +92,7 @@ namespace Lima.Fancy.Elements
 
     public override void Update()
     {
+      UpdateChildrenPixels();
       UpdateChildrenPositions();
 
       base.Update();

@@ -15,6 +15,11 @@ namespace Lima.Fancy.Elements
       return base.GetSize() - new Vector2(Margin.X + Margin.Z, Margin.Y + Margin.W);
     }
 
+    public virtual Vector2 GetFlexSize()
+    {
+      return GetSize();
+    }
+
     public override void InitElements()
     {
       base.InitElements();
@@ -46,6 +51,9 @@ namespace Lima.Fancy.Elements
 
       foreach (FancyElementBase child in Children)
       {
+        if (child.Position.Y + child.GetSize().Y > Position.Y + GetSize().Y + 1)
+          continue;
+
         if (child.Enabled)
           Sprites.AddRange(child.GetSprites());
       }
