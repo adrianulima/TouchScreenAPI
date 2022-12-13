@@ -8,20 +8,28 @@ namespace Lima.Fancy.Elements
     protected MySprite TextSprite;
     public string Text;
     public float FontSize;
-    public TextAlignment Alignment = TextAlignment.CENTER;
+    public TextAlignment Alignment;
 
-    public FancyLabel(string text, float fontSize = 0.5f)
+    public FancyLabel(string text, float fontSize = 0.5f, TextAlignment alignment = TextAlignment.CENTER)
     {
       Text = text;
       FontSize = fontSize;
+      Alignment = alignment;
 
       Scale = new Vector2(1, 0);
-      Pixels = new Vector2(0, 16);
     }
 
     public override void Update()
     {
       base.Update();
+
+      var count = 1;
+      for (int i = 0; i < Text.Length; i++)
+      {
+        if (Text[i] == '\n')
+          count++;
+      }
+      Pixels.Y = 32 * FontSize * count;
 
       TextSprite = new MySprite()
       {

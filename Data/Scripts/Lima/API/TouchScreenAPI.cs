@@ -310,7 +310,7 @@ namespace Lima.API
     public Func<object, TextAlignment> FancyButton_GetAlignment;
     public Action<object, TextAlignment> FancyButton_SetAlignment;
 
-    public Func<string, float, object> FancyLabel_New;
+    public Func<string, float, TextAlignment, object> FancyLabel_New;
     public Func<object, string> FancyLabel_GetText;
     public Action<object, string> FancyLabel_SetText;
     public Action<object, float> FancyLabel_SetFontSize;
@@ -504,7 +504,7 @@ namespace Lima.API
   }
   public class FancyLabel : FancyElementBase
   {
-    public FancyLabel(string text, float fontSize = 0.5f) : base(Api.FancyLabel_New(text, fontSize)) { }
+    public FancyLabel(string text, float fontSize = 0.5f, TextAlignment alignment = TextAlignment.CENTER) : base(Api.FancyLabel_New(text, fontSize, alignment)) { }
     public FancyLabel(object internalObject) : base(internalObject) { }
     public string GetText() => Api.FancyLabel_GetText.Invoke(internalObj);
     public void SetText(string text) => Api.FancyLabel_SetText.Invoke(internalObj, text);
