@@ -19,6 +19,9 @@ namespace Lima.Fancy
 
     public ClickHandler() { }
 
+    private bool _wasPressedInside = false;
+    private bool _wasPresseOutside = false;
+
     public void UpdateStatus(TouchScreen screen)
     {
       if (JustReleased)
@@ -29,6 +32,8 @@ namespace Lima.Fancy
 
       if (HitArea != Vector4.Zero)
       {
+        // var mousePressed = MyAPIGateway.Input.IsMousePressed(MyMouseButtonsEnum.Left)
+        var mousePressed = MyAPIGateway.Input.IsAnyMouseOrJoystickPressed();
         if (screen.IsInsideArea(
             HitArea.X,
             HitArea.Y,
@@ -36,23 +41,35 @@ namespace Lima.Fancy
             HitArea.W
           ))
         {
-          // if (MyAPIGateway.Input.IsMousePressed(MyMouseButtonsEnum.Left))
-          if (MyAPIGateway.Input.IsAnyMouseOrJoystickPressed())
+          if (mousePressed && !_wasPresseOutside)
           {
             _status = 2;
             if (!_wasPressed)
               JustPressed = true;
             _wasPressed = true;
+            _wasPressedInside = true;
           }
           else if (_wasPressed)
           {
-            _status = 1;
             JustReleased = true;
             _wasPressed = false;
+            _status = 1;
+            _wasPresseOutside = false;
           }
           else
           {
             _status = 1;
+            if (!mousePressed)
+              _wasPresseOutside = false;
+          }
+        }
+        else
+        {
+          _wasPresseOutside = !_wasPressedInside && mousePressed;
+          if (!mousePressed)
+          {
+            _wasPressedInside = false;
+            _wasPressed = false;
           }
         }
       }
