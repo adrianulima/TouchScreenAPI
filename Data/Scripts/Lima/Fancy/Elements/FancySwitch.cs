@@ -29,7 +29,7 @@ namespace Lima.Fancy.Elements
     public override void Update()
     {
       var size = GetSize();
-      handler.HitArea = new Vector4(Position.X, Position.Y, Position.X + size.X, Position.Y + size.Y);
+      Handler.HitArea = new Vector4(Position.X, Position.Y, Position.X + size.X, Position.Y + size.Y);
 
       var width = size.X / _textSprites.Length;
       var halfWidth = width / 2f;
@@ -73,9 +73,9 @@ namespace Lima.Fancy.Elements
         };
       }
 
-      if (handler.JustReleased)
+      if (Handler.JustReleased)
       {
-        var mouseX = App.Cursor.Position.X - handler.HitArea.X;
+        var mouseX = App.Cursor.Position.X - Handler.HitArea.X;
         var prev = Index;
         Index = (int)Math.Floor(mouseX / width);
 
@@ -90,9 +90,9 @@ namespace Lima.Fancy.Elements
 
       Sprites.Add(_bgSprite);
 
-      if (handler.IsMousePressed || handler.IsMouseOver)
+      if (Handler.IsMousePressed || Handler.IsMouseOver)
       {
-        var mouseX = App.Cursor.Position.X - handler.HitArea.X;
+        var mouseX = App.Cursor.Position.X - Handler.HitArea.X;
         var p = (int)Math.Floor(mouseX / width);
 
         if (p != Index)

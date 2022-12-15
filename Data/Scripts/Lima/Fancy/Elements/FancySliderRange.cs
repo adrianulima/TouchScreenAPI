@@ -73,7 +73,7 @@ namespace Lima.Fancy.Elements
       _handlerLowerSprite = HandlerSprite;
       _handlerInnerLowerSprite = HandlerInnerSprite;
       _bgLowerSprite = BgSprite;
-      if (handler.IsMousePressed || handler.IsMouseOver)
+      if (Handler.IsMousePressed || Handler.IsMouseOver)
       {
         _bgLowerSprite.Color = App.Theme.Main_20;
       }

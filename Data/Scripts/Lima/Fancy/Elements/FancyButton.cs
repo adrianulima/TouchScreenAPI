@@ -25,7 +25,7 @@ namespace Lima.Fancy.Elements
     public override void Update()
     {
       var size = GetSize();
-      handler.HitArea = new Vector4(Position.X, Position.Y, Position.X + size.X, Position.Y + size.Y);
+      Handler.HitArea = new Vector4(Position.X, Position.Y, Position.X + size.X, Position.Y + size.Y);
 
       base.Update();
 
@@ -47,12 +47,12 @@ namespace Lima.Fancy.Elements
         FontId = App.Theme.Font
       };
 
-      if (handler.IsMousePressed)
+      if (Handler.IsMousePressed)
       {
         _textSprite.Color = App.Theme.Main_30;
         _bgSprite.Color = App.Theme.Main_70;
       }
-      else if (handler.IsMouseOver)
+      else if (Handler.IsMouseOver)
       {
         _textSprite.Color = App.Theme.White;
         _bgSprite.Color = App.Theme.Main_40;
@@ -63,11 +63,9 @@ namespace Lima.Fancy.Elements
         _bgSprite.Color = App.Theme.Main_30;
       }
 
-      if (handler.JustReleased)
+      if (Handler.JustReleased)
       {
         OnChange();
-        // MyAPIGateway.Utilities.ShowNotification($"[ Button callback ]", 2000, MyFontEnum.Red);
-        Sandbox.Game.MyVisualScriptLogicProvider.SendChatMessage(App.Theme.Scale.ToString(), "SampleApp");
       }
 
       Sprites.Clear();

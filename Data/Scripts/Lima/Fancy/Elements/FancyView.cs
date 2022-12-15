@@ -50,19 +50,20 @@ namespace Lima.Fancy.Elements
       if (Direction != ViewDirection.None)
       {
         var size = GetSize();
+        var before = new Vector2(Border.X + Padding.X, Border.Y + Padding.Y);
         var childSize = child.GetSize();
         if (Direction == ViewDirection.Row)
         {
-          if (child.Position.X + childSize.X > Position.X + size.X + 1)
+          if (child.Position.X + childSize.X > Position.X + size.X + before.X + 1)
             return false;
-          if (child.Position.X + childSize.X < -1)
+          if (child.Position.X < Position.X + before.Y - 1)
             return false;
         }
         else if (Direction == ViewDirection.Column)
         {
-          if (child.Position.Y + childSize.Y > Position.Y + size.Y + 1)
+          if (child.Position.Y + childSize.Y > Position.Y + size.Y + before.Y + 1)
             return false;
-          if (child.Position.Y + childSize.Y < -1)
+          if (child.Position.Y < Position.Y + before.Y - 1)
             return false;
         }
       }
@@ -78,10 +79,12 @@ namespace Lima.Fancy.Elements
       {
         foreach (var child in Children)
         {
+          var extra = child is FancyView ? Vector2.Zero : new Vector2(child.Margin.X + child.Margin.Z, child.Margin.Y + child.Margin.W);
+
           if (Direction == ViewDirection.Row)
-            ChildrenPixels.X += child.Pixels.X * ThemeScale;
+            ChildrenPixels.X += child.Pixels.X * ThemeScale + extra.X;
           else if (Direction == ViewDirection.Column)
-            ChildrenPixels.Y += child.Pixels.Y * ThemeScale;
+            ChildrenPixels.Y += child.Pixels.Y * ThemeScale + extra.Y;
         }
       }
     }

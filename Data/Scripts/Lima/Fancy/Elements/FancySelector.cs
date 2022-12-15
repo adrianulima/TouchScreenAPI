@@ -32,7 +32,7 @@ namespace Lima.Fancy.Elements
     public override void Update()
     {
       var size = GetSize();
-      handler.HitArea = new Vector4(Position.X, Position.Y, Position.X + size.X, Position.Y + size.Y);
+      Handler.HitArea = new Vector4(Position.X, Position.Y, Position.X + size.X, Position.Y + size.Y);
 
       base.Update();
 
@@ -86,10 +86,10 @@ namespace Lima.Fancy.Elements
         FontId = App.Theme.Font
       };
 
-      if (handler.IsMouseOver)
+      if (Handler.IsMouseOver)
       {
-        var mouseX = App.Cursor.Position.X - handler.HitArea.X;
-        if (handler.IsMousePressed)
+        var mouseX = App.Cursor.Position.X - Handler.HitArea.X;
+        if (Handler.IsMousePressed)
         {
           if (mouseX < size.Y)
             _arrowBgSprite.Color = App.Theme.Main_70;
@@ -110,9 +110,9 @@ namespace Lima.Fancy.Elements
         _arrow2BgSprite.Color = App.Theme.Main_30;
       }
 
-      if (handler.JustReleased)
+      if (Handler.JustReleased)
       {
-        var mouseX = App.Cursor.Position.X - handler.HitArea.X;
+        var mouseX = App.Cursor.Position.X - Handler.HitArea.X;
         var prev = Selected;
         if (mouseX < size.Y)
           Selected -= 1;

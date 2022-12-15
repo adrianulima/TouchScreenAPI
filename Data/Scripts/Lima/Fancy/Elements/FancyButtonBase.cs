@@ -5,7 +5,7 @@ namespace Lima.Fancy.Elements
 {
   public class FancyButtonBase : FancyElementBase
   {
-    public ClickHandler handler = new ClickHandler();
+    public ClickHandler Handler = new ClickHandler();
 
     public FancyButtonBase() { }
 
@@ -13,7 +13,7 @@ namespace Lima.Fancy.Elements
     {
       base.Update();
 
-      handler.UpdateStatus(App.Screen);
+      Handler.UpdateStatus(App.Screen);
     }
 
   }

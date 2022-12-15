@@ -72,7 +72,7 @@ namespace Lima.Fancy.Elements
       }
 
       var size = GetSize();
-      handler.HitArea = new Vector4(Position.X, Position.Y, Position.X + size.X, Position.Y + size.Y);
+      Handler.HitArea = new Vector4(Position.X, Position.Y, Position.X + size.X, Position.Y + size.Y);
 
       base.Update();
 
@@ -114,14 +114,14 @@ namespace Lima.Fancy.Elements
         Color = App.Theme.Main_60
       };
 
-      if (handler.IsMousePressed)
+      if (Handler.IsMousePressed)
       {
         BgSprite.Color = App.Theme.Main_20;
 
-        var mouseX = MathHelper.Clamp(-0.04f + 1.08f * ((App.Cursor.Position.X - handler.HitArea.X) / (handler.HitArea.Z - handler.HitArea.X)), 0, 1);
+        var mouseX = MathHelper.Clamp(-0.04f + 1.08f * ((App.Cursor.Position.X - Handler.HitArea.X) / (Handler.HitArea.Z - Handler.HitArea.X)), 0, 1);
         UpdateValue(Range.X + mouseX * (Range.Y - Range.X));
       }
-      else if (handler.IsMouseOver)
+      else if (Handler.IsMouseOver)
       {
         BgSprite.Color = App.Theme.Main_20;
       }

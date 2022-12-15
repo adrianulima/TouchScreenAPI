@@ -135,7 +135,7 @@ namespace Lima.API
       AssignMethod(delegates, "FancyContainerBase_GetFlexSize", ref FancyContainerBase_GetFlexSize);
       AssignMethod(delegates, "FancyContainerBase_AddChild", ref FancyContainerBase_AddChild);
       AssignMethod(delegates, "FancyContainerBase_RemoveChild", ref FancyContainerBase_RemoveChild);
-      AssignMethod(delegates, "FancyView_NewV", ref FancyView_NewV);
+      AssignMethod(delegates, "FancyView_New", ref FancyView_New);
       AssignMethod(delegates, "FancyView_GetDirection", ref FancyView_GetDirection);
       AssignMethod(delegates, "FancyView_SetDirection", ref FancyView_SetDirection);
       AssignMethod(delegates, "FancyView_GetBgColor", ref FancyView_GetBgColor);
@@ -148,6 +148,13 @@ namespace Lima.API
       AssignMethod(delegates, "FancyView_SetPadding", ref FancyView_SetPadding);
       AssignMethod(delegates, "FancyView_GetGap", ref FancyView_GetGap);
       AssignMethod(delegates, "FancyView_SetGap", ref FancyView_SetGap);
+      AssignMethod(delegates, "FancyScrollView_New", ref FancyScrollView_New);
+      AssignMethod(delegates, "FancyScrollView_GetBarWidth", ref FancyScrollView_GetBarWidth);
+      AssignMethod(delegates, "FancyScrollView_SetBarWidth", ref FancyScrollView_SetBarWidth);
+      AssignMethod(delegates, "FancyScrollView_GetScroll", ref FancyScrollView_GetScroll);
+      AssignMethod(delegates, "FancyScrollView_SetScroll", ref FancyScrollView_SetScroll);
+      AssignMethod(delegates, "FancyScrollView_GetScrollAlwaysVisible", ref FancyScrollView_GetScrollAlwaysVisible);
+      AssignMethod(delegates, "FancyScrollView_SetScrollAlwaysVisible", ref FancyScrollView_SetScrollAlwaysVisible);
       AssignMethod(delegates, "FancyApp_New", ref FancyApp_New);
       AssignMethod(delegates, "FancyApp_GetScreen", ref FancyApp_GetScreen);
       AssignMethod(delegates, "FancyApp_GetViewport", ref FancyApp_GetViewport);
@@ -288,7 +295,7 @@ namespace Lima.API
     public Action<object, object> FancyContainerBase_AddChild;
     public Action<object, object> FancyContainerBase_RemoveChild;
 
-    public Func<int, object> FancyView_NewV;
+    public Func<int, Color?, object> FancyView_New;
     public Func<object, int> FancyView_GetDirection;
     public Action<object, int> FancyView_SetDirection;
     public Func<object, Color> FancyView_GetBgColor;
@@ -301,6 +308,14 @@ namespace Lima.API
     public Action<object, Vector4> FancyView_SetPadding;
     public Func<object, int> FancyView_GetGap;
     public Action<object, int> FancyView_SetGap;
+
+    public Func<int, Color?, object> FancyScrollView_New;
+    public Func<object, int> FancyScrollView_GetBarWidth;
+    public Action<object, int> FancyScrollView_SetBarWidth;
+    public Func<object, float> FancyScrollView_GetScroll;
+    public Action<object, float> FancyScrollView_SetScroll;
+    public Func<object, bool> FancyScrollView_GetScrollAlwaysVisible;
+    public Action<object, bool> FancyScrollView_SetScrollAlwaysVisible;
 
     public Func<object> FancyApp_New;
     public Func<object, object> FancyApp_GetScreen;
@@ -470,7 +485,7 @@ namespace Lima.API
   public class FancyView : FancyContainerBase
   {
     public enum ViewDirection : int { None = 0, Row = 1, Column = 2 }
-    public FancyView(ViewDirection direction = ViewDirection.Column) : base(Api.FancyView_NewV((int)direction)) { }
+    public FancyView(ViewDirection direction = ViewDirection.Column, Color? bgColor = null) : base(Api.FancyView_New((int)direction, bgColor)) { }
     public FancyView(object internalObject) : base(internalObject) { }
     public ViewDirection GetDirection() => (ViewDirection)Api.FancyView_GetDirection.Invoke(internalObj);
     public void SetDirection(ViewDirection direction) => Api.FancyView_SetDirection.Invoke(internalObj, (int)direction);
@@ -484,6 +499,16 @@ namespace Lima.API
     public void SetPadding(Vector4 padding) => Api.FancyView_SetPadding.Invoke(internalObj, padding);
     public int GetGap() => Api.FancyView_GetGap.Invoke(internalObj);
     public void SetGap(int gap) => Api.FancyView_SetGap.Invoke(internalObj, gap);
+  }
+  public class FancyScrollView : FancyView
+  {
+    public FancyScrollView(ViewDirection direction = ViewDirection.Column, Color? bgColor = null) : base(Api.FancyScrollView_New((int)direction, bgColor)) { }
+    public int GetBarWidth() => Api.FancyScrollView_GetBarWidth.Invoke(internalObj);
+    public void SetBarWidth(int width) => Api.FancyScrollView_SetBarWidth.Invoke(internalObj, width);
+    public float GetScroll() => Api.FancyScrollView_GetScroll.Invoke(internalObj);
+    public void SetScroll(float scroll) => Api.FancyScrollView_SetScroll.Invoke(internalObj, scroll);
+    public bool GetScrollAlwaysVisible() => Api.FancyScrollView_GetScrollAlwaysVisible.Invoke(internalObj);
+    public void SetScrollAlwaysVisible(bool visible) => Api.FancyScrollView_SetScrollAlwaysVisible.Invoke(internalObj, visible);
   }
   public class FancyApp : FancyView
   {

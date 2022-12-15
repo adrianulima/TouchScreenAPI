@@ -91,7 +91,7 @@ namespace Lima.Touch
         { "FancyContainerBase_AddChild", new Action<object, object>(FancyContainerBase_AddChild) },
         { "FancyContainerBase_RemoveChild", new Action<object, object>(FancyContainerBase_RemoveChild) },
 
-        { "FancyView_NewV", new Func<int, FancyView>(FancyView_NewV) },
+        { "FancyView_New", new Func<int, Color?, FancyView>(FancyView_New) },
         { "FancyView_GetDirection", new Func<object, int>(FancyView_GetDirection) },
         { "FancyView_SetDirection", new Action<object, int>(FancyView_SetDirection) },
         { "FancyView_GetBgColor", new Func<object, Color>(FancyView_GetBgColor) },
@@ -104,6 +104,14 @@ namespace Lima.Touch
         { "FancyView_SetPadding", new Action<object, Vector4>(FancyView_SetPadding) },
         { "FancyView_GetGap", new Func<object, int>(FancyView_GetGap) },
         { "FancyView_SetGap", new Action<object, int>(FancyView_SetGap) },
+
+        { "FancyScrollView_New", new Func<int, Color?, FancyScrollView>(FancyScrollView_New) },
+        { "FancyScrollView_GetBarWidth", new Func<object, int>(FancyScrollView_GetBarWidth) },
+        { "FancyScrollView_SetBarWidth", new Action<object, int>(FancyScrollView_SetBarWidth) },
+        { "FancyScrollView_GetScroll", new Func<object, float>(FancyScrollView_GetScroll) },
+        { "FancyScrollView_SetScroll", new Action<object, float>(FancyScrollView_SetScroll) },
+        { "FancyScrollView_GetScrollAlwaysVisible", new Func<object, bool>(FancyScrollView_GetScrollAlwaysVisible) },
+        { "FancyScrollView_SetScrollAlwaysVisible", new Action<object, bool>(FancyScrollView_SetScrollAlwaysVisible) },
 
         { "FancyApp_New", new Func<FancyApp>(FancyApp_New) },
         { "FancyApp_GetScreen", new Func<object, TouchScreen>(FancyApp_GetScreen) },
@@ -262,7 +270,7 @@ namespace Lima.Touch
     private void FancyContainerBase_AddChild(object obj, object child) => (obj as FancyContainerBase).AddChild((FancyElementBase)child);
     private void FancyContainerBase_RemoveChild(object obj, object child) => (obj as FancyContainerBase).RemoveChild((FancyElementBase)child);
 
-    private FancyView FancyView_NewV(int direction) => new FancyView((FancyView.ViewDirection)direction);
+    private FancyView FancyView_New(int direction, Color? bgColor = null) => new FancyView((FancyView.ViewDirection)direction, bgColor);
     private int FancyView_GetDirection(object obj) => (int)(obj as FancyView).Direction;
     private void FancyView_SetDirection(object obj, int direction) => (obj as FancyView).Direction = (FancyView.ViewDirection)direction;
     private Color FancyView_GetBgColor(object obj) => (Color)(obj as FancyView).BgColor;
@@ -275,6 +283,14 @@ namespace Lima.Touch
     private void FancyView_SetPadding(object obj, Vector4 padding) => (obj as FancyView).Padding = padding;
     private int FancyView_GetGap(object obj) => (int)(obj as FancyView).Gap;
     private void FancyView_SetGap(object obj, int gap) => (obj as FancyView).Gap = gap;
+
+    private FancyScrollView FancyScrollView_New(int direction, Color? bgColor = null) => new FancyScrollView((FancyView.ViewDirection)direction, bgColor);
+    private int FancyScrollView_GetBarWidth(object obj) => (int)(obj as FancyScrollView).BarWidth;
+    private void FancyScrollView_SetBarWidth(object obj, int width) => (obj as FancyScrollView).BarWidth = width;
+    private float FancyScrollView_GetScroll(object obj) => (obj as FancyScrollView).Scroll;
+    private void FancyScrollView_SetScroll(object obj, float scroll) => (obj as FancyScrollView).Scroll = scroll;
+    private bool FancyScrollView_GetScrollAlwaysVisible(object obj) => (obj as FancyScrollView).ScrollAlwaysVisible;
+    private void FancyScrollView_SetScrollAlwaysVisible(object obj, bool visible) => (obj as FancyScrollView).ScrollAlwaysVisible = visible;
 
     private FancyApp FancyApp_New() => new FancyApp();
     private TouchScreen FancyApp_GetScreen(object obj) => (obj as FancyApp).Screen;
@@ -311,7 +327,7 @@ namespace Lima.Touch
     private float FancyTheme_GetScale(object obj) => (obj as FancyTheme).Scale;
     private void FancyTheme_SetScale(object obj, float scale) => (obj as FancyTheme).Scale = scale;
 
-    private ClickHandler FancyButtonBase_GetHandler(object obj) => (obj as FancyButtonBase).handler;
+    private ClickHandler FancyButtonBase_GetHandler(object obj) => (obj as FancyButtonBase).Handler;
 
     private ClickHandler ClickHandler_New() => new ClickHandler();
     private Vector4 ClickHandler_GetHitArea(object obj) => (obj as ClickHandler).HitArea;
