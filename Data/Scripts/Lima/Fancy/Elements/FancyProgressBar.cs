@@ -51,13 +51,16 @@ namespace Lima.Fancy.Elements
       BgSprite.Position = Position + new Vector2(0, size.Y / 2);
       BgSprite.Size = size;
 
-      var gap = 2;
+      Sprites.Add(BgSprite);
+
       var ratio = ((Value - Range.X) / (Range.Y - Range.X));
 
+      if (ratio <= Range.X)
+        return;
+
+      var gap = 2;
       ProgressSprite.Position = Position + new Vector2(gap, size.Y / 2);
       ProgressSprite.Size = new Vector2(size.X * ratio - gap * 2, size.Y - gap * 2);
-
-      Sprites.Add(BgSprite);
       Sprites.Add(ProgressSprite);
 
       if (Bars)

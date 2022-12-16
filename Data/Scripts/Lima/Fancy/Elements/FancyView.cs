@@ -17,6 +17,7 @@ namespace Lima.Fancy.Elements
     protected MySprite BgSprite;
     protected MySprite[] BorderSprites = new MySprite[4];
     protected Vector2 ChildrenPixels = Vector2.Zero;
+    protected Vector2 ChildrenScales = Vector2.One;
 
     public Color? BgColor;
     public Color? BorderColor;
@@ -37,7 +38,7 @@ namespace Lima.Fancy.Elements
 
     public override Vector2 GetFlexSize()
     {
-      return base.GetFlexSize() - ChildrenPixels;
+      return (base.GetFlexSize() - ChildrenPixels) * (1 / ChildrenScales);
     }
 
     public override Vector2 GetBoundaries()
@@ -71,21 +72,39 @@ namespace Lima.Fancy.Elements
       return base.ValidateChild(child);
     }
 
-    private void UpdateChildrenPixels()
+    private void UpdateChildrenPixelsAndScales()
     {
-      ChildrenPixels = Vector2.Zero;
       int childrenCount = Children.Count;
       if (Direction != ViewDirection.None && childrenCount > 0)
       {
+        ChildrenPixels = Vector2.Zero;
+        ChildrenScales = Vector2.Zero;
+
         foreach (var child in Children)
         {
           var extra = child is FancyView ? Vector2.Zero : new Vector2(child.Margin.X + child.Margin.Z, child.Margin.Y + child.Margin.W);
 
           if (Direction == ViewDirection.Row)
+          {
             ChildrenPixels.X += child.Pixels.X * ThemeScale + extra.X;
+            ChildrenScales.X += child.Scale.X;
+          }
           else if (Direction == ViewDirection.Column)
+          {
             ChildrenPixels.Y += child.Pixels.Y * ThemeScale + extra.Y;
+            ChildrenScales.Y += child.Scale.Y;
+          }
         }
+
+        if (Direction == ViewDirection.Row)
+          ChildrenPixels.X += Gap * (childrenCount - 1);
+        else if (Direction == ViewDirection.Column)
+          ChildrenPixels.Y += Gap * (childrenCount - 1);
+
+        if (ChildrenScales.X == 0)
+          ChildrenScales.X = 1;
+        if (ChildrenScales.Y == 0)
+          ChildrenScales.Y = 1;
       }
     }
 
@@ -101,6 +120,7 @@ namespace Lima.Fancy.Elements
           if (!Children[i].Enabled) continue;
 
           var childMargin = new Vector2(Children[i].Margin.X, Children[i].Margin.Y);
+
           if (prevChild == null)
           {
             Children[i].Position = before + childMargin + Position;
@@ -119,7 +139,7 @@ namespace Lima.Fancy.Elements
 
     public override void Update()
     {
-      UpdateChildrenPixels();
+      UpdateChildrenPixelsAndScales();
       UpdateChildrenPositions();
 
       base.Update();

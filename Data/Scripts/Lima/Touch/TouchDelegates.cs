@@ -158,6 +158,8 @@ namespace Lima.Touch
         { "FancyLabel_New", new Func<string, float, TextAlignment, object>(FancyLabel_New) },
         { "FancyLabel_GetText", new Func<object, string>(FancyLabel_GetText) },
         { "FancyLabel_SetText", new Action<object, string>(FancyLabel_SetText) },
+        { "FancyLabel_GetTextColor", new Func<object, Color?>(FancyLabel_GetTextColor) },
+        { "FancyLabel_SetTextColor", new Action<object, Color>(FancyLabel_SetTextColor) },
         { "FancyLabel_SetFontSize", new Action<object, float>(FancyLabel_SetFontSize) },
         { "FancyLabel_GetAlignment", new Func<object, TextAlignment>(FancyLabel_GetAlignment) },
         { "FancyLabel_SetAlignment", new Action<object, TextAlignment>(FancyLabel_SetAlignment) },
@@ -165,6 +167,8 @@ namespace Lima.Touch
         { "FancyProgressBar_New", new Func<float, float, bool, object>(FancyProgressBar_New) },
         { "FancyProgressBar_GetValue", new Func<object, float>(FancyProgressBar_GetValue) },
         { "FancyProgressBar_SetValue", new Action<object, float>(FancyProgressBar_SetValue) },
+        { "FancyProgressBar_GetRange", new Func<object, Vector2>(FancyProgressBar_GetRange) },
+        { "FancyProgressBar_SetRange", new Action<object, Vector2>(FancyProgressBar_SetRange) },
 
         { "FancySelector_New", new Func<List<string>, Action<int, string>, bool, object>(FancySelector_New) },
         { "FancySelector_SetOnChange", new Action<object, Action<int, string>>(FancySelector_SetOnChange) },
@@ -313,14 +317,14 @@ namespace Lima.Touch
     private Color FancyTheme_GetColorMainDarker(object obj, int value)
     {
       var theme = (obj as FancyTheme);
-      if (value <= 1) return theme.Main_10;
-      else if (value <= 2) return theme.Main_20;
-      else if (value <= 3) return theme.Main_30;
-      else if (value <= 4) return theme.Main_40;
-      else if (value <= 5) return theme.Main_50;
-      else if (value <= 6) return theme.Main_60;
-      else if (value <= 7) return theme.Main_70;
-      else if (value <= 8) return theme.Main_80;
+      if (value <= 10) return theme.Main_10;
+      else if (value <= 20) return theme.Main_20;
+      else if (value <= 30) return theme.Main_30;
+      else if (value <= 40) return theme.Main_40;
+      else if (value <= 50) return theme.Main_50;
+      else if (value <= 60) return theme.Main_60;
+      else if (value <= 70) return theme.Main_70;
+      else if (value <= 80) return theme.Main_80;
       return theme.Main_90;
     }
     private Vector2 FancyTheme_MeasureStringInPixels(object obj, String text, string font, float scale) => (obj as FancyTheme).MeasureStringInPixels(text, font, scale);
@@ -349,6 +353,8 @@ namespace Lima.Touch
     private FancyLabel FancyLabel_New(string text, float fontSize = 0.5f, TextAlignment alignment = TextAlignment.CENTER) => new FancyLabel(text, fontSize, alignment);
     private string FancyLabel_GetText(object obj) => (obj as FancyLabel).Text;
     private void FancyLabel_SetText(object obj, string text) => (obj as FancyLabel).Text = text;
+    private Color? FancyLabel_GetTextColor(object obj) => (obj as FancyLabel).TextColor;
+    private void FancyLabel_SetTextColor(object obj, Color color) => (obj as FancyLabel).TextColor = color;
     private void FancyLabel_SetFontSize(object obj, float fontSize) => (obj as FancyLabel).FontSize = fontSize;
     private TextAlignment FancyLabel_GetAlignment(object obj) => (obj as FancyLabel).Alignment;
     private void FancyLabel_SetAlignment(object obj, TextAlignment alignment) => (obj as FancyLabel).Alignment = alignment;
@@ -356,6 +362,8 @@ namespace Lima.Touch
     private FancyProgressBar FancyProgressBar_New(float min, float max, bool bars = true) => new FancyProgressBar(min, max, bars);
     private float FancyProgressBar_GetValue(object obj) => (obj as FancyProgressBar).Value;
     private void FancyProgressBar_SetValue(object obj, float value) => (obj as FancyProgressBar).Value = value;
+    private Vector2 FancyProgressBar_GetRange(object obj) => (obj as FancyProgressBar).Range;
+    private void FancyProgressBar_SetRange(object obj, Vector2 range) => (obj as FancyProgressBar).Range = range;
 
     private FancySelector FancySelector_New(List<string> labels, Action<int, string> onChange, bool loop = true) => new FancySelector(labels, onChange, loop);
     private void FancySelector_SetOnChange(object obj, Action<int, string> onChange) => (obj as FancySelector).OnChange = onChange;

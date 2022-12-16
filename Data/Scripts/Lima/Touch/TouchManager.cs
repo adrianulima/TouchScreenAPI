@@ -14,6 +14,7 @@ namespace Lima.Touch
     public float MaxInteractiveDistance = 50f;
     public float DefaultInteractiveDistance = 10f;
 
+    // TODO: Implement Dispose to clear this array and possible more garbage
     public readonly List<TouchScreen> Screens = new List<TouchScreen>();
 
     public TouchScreen CurrentScreen;

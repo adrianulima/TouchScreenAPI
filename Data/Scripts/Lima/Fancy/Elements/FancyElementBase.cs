@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-// using Lima.Utils;
+using Lima.Utils;
 using VRage.Game.GUI.TextPanel;
 using VRageMath;
 
@@ -66,32 +66,32 @@ namespace Lima.Fancy.Elements
       Sprites.Clear();
     }
 
-    // public bool DebugDraw = true;
-    // public Color _debugDrawColor;
-    // public Color DebugDrawColor
-    // {
-    //   get
-    //   {
-    //     if (_debugDrawColor == Color.Transparent)
-    //       _debugDrawColor = new Color(MathUtils.GetRandomInt(30, 100), MathUtils.GetRandomInt(30, 80), MathUtils.GetRandomInt(20, 60), 200);
-    //     return _debugDrawColor;
-    //   }
-    // }
+    public bool DebugDraw = false;
+    public Color _debugDrawColor;
+    public Color DebugDrawColor
+    {
+      get
+      {
+        if (_debugDrawColor == Color.Transparent)
+          _debugDrawColor = new Color(MathUtils.GetRandomInt(30, 100), MathUtils.GetRandomInt(30, 80), MathUtils.GetRandomInt(20, 60), 200);
+        return _debugDrawColor;
+      }
+    }
 
     public virtual List<MySprite> GetSprites()
     {
-      // if (DebugDraw)
-      // {
-      //   Sprites.Insert(0, new MySprite()
-      //   {
-      //     Type = SpriteType.TEXTURE,
-      //     Data = "SquareSimple",
-      //     RotationOrScale = 0,
-      //     Color = DebugDrawColor,
-      //     Position = Position + new Vector2(0, GetBoundaries().Y / 2),
-      //     Size = GetBoundaries()
-      //   });
-      // }
+      if (DebugDraw)
+      {
+        Sprites.Insert(0, new MySprite()
+        {
+          Type = SpriteType.TEXTURE,
+          Data = "SquareSimple",
+          RotationOrScale = 0,
+          Color = DebugDrawColor,
+          Position = Position + new Vector2(0, GetBoundaries().Y / 2),
+          Size = GetBoundaries()
+        });
+      }
 
       return Sprites;
     }

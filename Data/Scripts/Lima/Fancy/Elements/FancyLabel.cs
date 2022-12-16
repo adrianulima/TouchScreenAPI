@@ -9,6 +9,7 @@ namespace Lima.Fancy.Elements
     public string Text;
     public float FontSize;
     public TextAlignment Alignment;
+    public Color? TextColor;
 
     public FancyLabel(string text, float fontSize = 0.5f, TextAlignment alignment = TextAlignment.CENTER)
     {
@@ -36,7 +37,7 @@ namespace Lima.Fancy.Elements
         Type = SpriteType.TEXT,
         Data = Text,
         RotationOrScale = FontSize * ThemeScale,
-        Color = App.Theme.White,//Theme.Main,
+        Color = TextColor ?? App.Theme.White,//Theme.Main,
         Alignment = Alignment,
         FontId = App.Theme.Font
       };

@@ -171,12 +171,16 @@ namespace Lima.API
       AssignMethod(delegates, "FancyLabel_New", ref FancyLabel_New);
       AssignMethod(delegates, "FancyLabel_GetText", ref FancyLabel_GetText);
       AssignMethod(delegates, "FancyLabel_SetText", ref FancyLabel_SetText);
+      AssignMethod(delegates, "FancyLabel_GetTextColor", ref FancyLabel_GetTextColor);
+      AssignMethod(delegates, "FancyLabel_SetTextColor", ref FancyLabel_SetTextColor);
       AssignMethod(delegates, "FancyLabel_SetFontSize", ref FancyLabel_SetFontSize);
       AssignMethod(delegates, "FancyLabel_GetAlignment", ref FancyLabel_GetAlignment);
       AssignMethod(delegates, "FancyLabel_SetAlignment", ref FancyLabel_SetAlignment);
       AssignMethod(delegates, "FancyProgressBar_New", ref FancyProgressBar_New);
       AssignMethod(delegates, "FancyProgressBar_GetValue", ref FancyProgressBar_GetValue);
       AssignMethod(delegates, "FancyProgressBar_SetValue", ref FancyProgressBar_SetValue);
+      AssignMethod(delegates, "FancyProgressBar_GetRange", ref FancyProgressBar_GetRange);
+      AssignMethod(delegates, "FancyProgressBar_SetRange", ref FancyProgressBar_SetRange);
       AssignMethod(delegates, "FancySelector_New", ref FancySelector_New);
       AssignMethod(delegates, "FancySelector_SetOnChange", ref FancySelector_SetOnChange);
       AssignMethod(delegates, "FancySeparator_New", ref FancySeparator_New);
@@ -336,6 +340,8 @@ namespace Lima.API
     public Func<string, float, TextAlignment, object> FancyLabel_New;
     public Func<object, string> FancyLabel_GetText;
     public Action<object, string> FancyLabel_SetText;
+    public Func<object, Color?> FancyLabel_GetTextColor;
+    public Action<object, Color> FancyLabel_SetTextColor;
     public Action<object, float> FancyLabel_SetFontSize;
     public Func<object, TextAlignment> FancyLabel_GetAlignment;
     public Action<object, TextAlignment> FancyLabel_SetAlignment;
@@ -343,6 +349,8 @@ namespace Lima.API
     public Func<float, float, bool, object> FancyProgressBar_New;
     public Func<object, float> FancyProgressBar_GetValue;
     public Action<object, float> FancyProgressBar_SetValue;
+    public Func<object, Vector2> FancyProgressBar_GetRange;
+    public Action<object, Vector2> FancyProgressBar_SetRange;
 
     public Func<List<string>, Action<int, string>, bool, object> FancySelector_New;
     public Action<object, Action<int, string>> FancySelector_SetOnChange;
@@ -451,8 +459,8 @@ namespace Lima.API
   }
   public class FancyElementBase : DelegatorBase
   {
-    protected FancyApp App;
-    protected FancyContainerBase Parent;
+    private FancyApp App;
+    private FancyContainerBase Parent;
     internal object internalObj;
     public FancyElementBase(object internalObject) { internalObj = internalObject; }
     public bool GetEnabled() => Api.FancyElementBase_GetEnabled.Invoke(internalObj);
@@ -545,6 +553,8 @@ namespace Lima.API
     public FancyLabel(object internalObject) : base(internalObject) { }
     public string GetText() => Api.FancyLabel_GetText.Invoke(internalObj);
     public void SetText(string text) => Api.FancyLabel_SetText.Invoke(internalObj, text);
+    public Color? GetTextColor() => Api.FancyLabel_GetTextColor.Invoke(internalObj);
+    public void SetTextColor(Color color) => Api.FancyLabel_SetTextColor.Invoke(internalObj, color);
     public void SetFontSize(float fontSize) => Api.FancyLabel_SetFontSize.Invoke(internalObj, fontSize);
     public TextAlignment GetAlignment() => Api.FancyLabel_GetAlignment.Invoke(internalObj);
     public void SetAlignment(TextAlignment alignment) => Api.FancyLabel_SetAlignment.Invoke(internalObj, alignment);
@@ -555,6 +565,8 @@ namespace Lima.API
     public FancyProgressBar(object internalObject) : base(internalObject) { }
     public float GetValue() => Api.FancyProgressBar_GetValue.Invoke(internalObj);
     public void SetValue(float value) => Api.FancyProgressBar_SetValue.Invoke(internalObj, value);
+    public Vector2 GetRange() => Api.FancyProgressBar_GetRange.Invoke(internalObj);
+    public void SetRange(Vector2 range) => Api.FancyProgressBar_SetRange.Invoke(internalObj, range);
   }
   public class FancySelector : FancyButtonBase
   {
