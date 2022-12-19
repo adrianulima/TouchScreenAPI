@@ -69,6 +69,8 @@ namespace Lima.Touch
 
         { "FancyElementBase_GetEnabled", new Func<object, bool>(FancyElementBase_GetEnabled) },
         { "FancyElementBase_SetEnabled", new Action<object, bool>(FancyElementBase_SetEnabled) },
+        { "FancyElementBase_GetAbsolute", new Func<object, bool>(FancyElementBase_GetAbsolute) },
+        { "FancyElementBase_SetAbsolute", new Action<object, bool>(FancyElementBase_SetAbsolute) },
         { "FancyElementBase_GetPosition", new Func<object, Vector2>(FancyElementBase_GetPosition) },
         { "FancyElementBase_SetPosition", new Action<object, Vector2>(FancyElementBase_SetPosition) },
         { "FancyElementBase_GetMargin", new Func<object, Vector4>(FancyElementBase_GetMargin) },
@@ -252,6 +254,8 @@ namespace Lima.Touch
 
     private bool FancyElementBase_GetEnabled(object obj) => (obj as FancyElementBase).Enabled;
     private void FancyElementBase_SetEnabled(object obj, bool enabled) => (obj as FancyElementBase).Enabled = enabled;
+    private bool FancyElementBase_GetAbsolute(object obj) => (obj as FancyElementBase).Absolute;
+    private void FancyElementBase_SetAbsolute(object obj, bool absolute) => (obj as FancyElementBase).Absolute = absolute;
     private Vector2 FancyElementBase_GetPosition(object obj) => (obj as FancyElementBase).Position;
     private void FancyElementBase_SetPosition(object obj, Vector2 position) => (obj as FancyElementBase).Position = position;
     private Vector4 FancyElementBase_GetMargin(object obj) => (obj as FancyElementBase).Margin;

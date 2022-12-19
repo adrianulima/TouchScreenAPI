@@ -82,6 +82,9 @@ namespace Lima.Fancy.Elements
 
         foreach (var child in Children)
         {
+          if (child.Absolute)
+            continue;
+
           var extra = child is FancyView ? Vector2.Zero : new Vector2(child.Margin.X + child.Margin.Z, child.Margin.Y + child.Margin.W);
 
           if (Direction == ViewDirection.Row)
@@ -111,28 +114,27 @@ namespace Lima.Fancy.Elements
     protected virtual void UpdateChildrenPositions()
     {
       FancyElementBase prevChild = null;
-      int childrenCount = Children.Count;
-      if (Direction != ViewDirection.None && childrenCount > 0)
+      if (Direction != ViewDirection.None)
       {
         var before = new Vector2(Border.X + Padding.X, Border.Y + Padding.Y);
-        for (int i = 0; i < childrenCount; i++)
+        foreach (var child in Children)
         {
-          if (!Children[i].Enabled) continue;
+          if (!child.Enabled || child.Absolute) continue;
 
-          var childMargin = new Vector2(Children[i].Margin.X, Children[i].Margin.Y);
+          var originPos = before + Position + new Vector2(child.Margin.X, child.Margin.Y);
 
           if (prevChild == null)
           {
-            Children[i].Position = before + childMargin + Position;
-            prevChild = Children[i];
+            child.Position = originPos;
+            prevChild = child;
             continue;
           }
 
           var prevChildBounds = prevChild.GetBoundaries();
           var oX = Direction == ViewDirection.Row ? Gap + prevChild.Position.X + prevChildBounds.X + prevChild.Margin.Z - Position.X - Border.X - Padding.X : 0;
           var oY = Direction == ViewDirection.Column ? Gap + prevChild.Position.Y + prevChildBounds.Y + prevChild.Margin.W - Position.Y - Border.Y - Padding.Y : 0;
-          Children[i].Position = before + childMargin + Position + new Vector2(oX, oY);
-          prevChild = Children[i];
+          child.Position = originPos + new Vector2(oX, oY);
+          prevChild = child;
         }
       }
     }

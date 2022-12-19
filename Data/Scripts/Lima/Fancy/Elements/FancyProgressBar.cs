@@ -60,7 +60,7 @@ namespace Lima.Fancy.Elements
 
       var gap = 2;
       ProgressSprite.Position = Position + new Vector2(gap, size.Y / 2);
-      ProgressSprite.Size = new Vector2(size.X * ratio - gap * 2, size.Y - gap * 2);
+      ProgressSprite.Size = new Vector2(Math.Max(size.X * ratio - gap * 2, 0), size.Y - gap * 2);
       Sprites.Add(ProgressSprite);
 
       if (Bars)

@@ -115,6 +115,8 @@ namespace Lima.API
       AssignMethod(delegates, "FancyTheme_SetScale", ref FancyTheme_SetScale);
       AssignMethod(delegates, "FancyElementBase_GetEnabled", ref FancyElementBase_GetEnabled);
       AssignMethod(delegates, "FancyElementBase_SetEnabled", ref FancyElementBase_SetEnabled);
+      AssignMethod(delegates, "FancyElementBase_GetAbsolute", ref FancyElementBase_GetAbsolute);
+      AssignMethod(delegates, "FancyElementBase_SetAbsolute", ref FancyElementBase_SetAbsolute);
       AssignMethod(delegates, "FancyElementBase_GetPosition", ref FancyElementBase_GetPosition);
       AssignMethod(delegates, "FancyElementBase_SetPosition", ref FancyElementBase_SetPosition);
       AssignMethod(delegates, "FancyElementBase_GetMargin", ref FancyElementBase_GetMargin);
@@ -277,6 +279,8 @@ namespace Lima.API
 
     public Func<object, bool> FancyElementBase_GetEnabled;
     public Action<object, bool> FancyElementBase_SetEnabled;
+    public Func<object, bool> FancyElementBase_GetAbsolute;
+    public Action<object, bool> FancyElementBase_SetAbsolute;
     public Func<object, Vector2> FancyElementBase_GetPosition;
     public Action<object, Vector2> FancyElementBase_SetPosition;
     public Func<object, Vector4> FancyElementBase_GetMargin;
@@ -459,12 +463,14 @@ namespace Lima.API
   }
   public class FancyElementBase : DelegatorBase
   {
-    private FancyApp App;
-    private FancyContainerBase Parent;
+    private FancyApp _app;
+    private FancyContainerBase _parent;
     internal object internalObj;
     public FancyElementBase(object internalObject) { internalObj = internalObject; }
     public bool GetEnabled() => Api.FancyElementBase_GetEnabled.Invoke(internalObj);
     public void SetEnabled(bool enabled) => Api.FancyElementBase_SetEnabled.Invoke(internalObj, enabled);
+    public bool GetAbsolute() => Api.FancyElementBase_GetAbsolute.Invoke(internalObj);
+    public void SetAbsolute(bool absolute) => Api.FancyElementBase_SetAbsolute.Invoke(internalObj, absolute);
     public Vector2 GetPosition() => Api.FancyElementBase_GetPosition.Invoke(internalObj);
     public void SetPosition(Vector2 position) => Api.FancyElementBase_SetPosition.Invoke(internalObj, position);
     public Vector4 GetMargin() => Api.FancyElementBase_GetMargin.Invoke(internalObj);
@@ -475,8 +481,8 @@ namespace Lima.API
     public void SetPixels(Vector2 pixels) => Api.FancyElementBase_SetPixels.Invoke(internalObj, pixels);
     public Vector2 GetSize() => Api.FancyElementBase_GetSize.Invoke(internalObj);
     public Vector2 GetBoundaries() => Api.FancyElementBase_GetBoundaries.Invoke(internalObj);
-    public FancyApp GetApp() { if (App == null) App = new FancyApp(Api.FancyElementBase_GetApp.Invoke(internalObj)); return App; }
-    public FancyContainerBase GetParent() { if (Parent == null) Parent = new FancyApp(Api.FancyElementBase_GetParent.Invoke(internalObj)); return Parent; }
+    public FancyApp GetApp() { if (_app == null) _app = new FancyApp(Api.FancyElementBase_GetApp.Invoke(internalObj)); return _app; }
+    public FancyContainerBase GetParent() { if (_parent == null) _parent = new FancyApp(Api.FancyElementBase_GetParent.Invoke(internalObj)); return _parent; }
     public List<MySprite> GetSprites() => Api.FancyElementBase_GetSprites.Invoke(internalObj);
     public void InitElements() => Api.FancyElementBase_InitElements.Invoke(internalObj);
     public void Update() => Api.FancyElementBase_Update.Invoke(internalObj);
