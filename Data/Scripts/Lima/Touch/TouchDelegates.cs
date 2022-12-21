@@ -216,7 +216,9 @@ namespace Lima.Touch
 
         { "FancyWindowBar_New", new Func<string, object>(FancyWindowBar_New) },
         { "FancyWindowBar_GetText", new Func<object, string>(FancyWindowBar_GetText) },
-        { "FancyWindowBar_SetText", new Action<object, string>(FancyWindowBar_SetText) }
+        { "FancyWindowBar_SetText", new Action<object, string>(FancyWindowBar_SetText) },
+
+        { "FancyCustomElement_New", new Func<object>(FancyCustomElement_New) }
       };
 
       return dict;
@@ -414,5 +416,8 @@ namespace Lima.Touch
     private FancyWindowBar FancyWindowBar_New(string text) => new FancyWindowBar(text);
     private string FancyWindowBar_GetText(object obj) => (obj as FancyWindowBar).Text;
     private void FancyWindowBar_SetText(object obj, string text) => (obj as FancyWindowBar).Text = text;
+
+    private FancyCustomElement FancyCustomElement_New() => new FancyCustomElement();
+
   }
 }

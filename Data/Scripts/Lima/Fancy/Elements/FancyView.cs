@@ -121,7 +121,8 @@ namespace Lima.Fancy.Elements
         {
           if (!child.Enabled || child.Absolute) continue;
 
-          var originPos = before + Position + new Vector2(child.Margin.X, child.Margin.Y);
+          var originPos = before + Position;
+          originPos += child is FancyView ? Vector2.Zero : new Vector2(child.Margin.X, child.Margin.Y);
 
           if (prevChild == null)
           {
@@ -178,7 +179,7 @@ namespace Lima.Fancy.Elements
       if (BgColor != null)
       {
         BgSprite.Position = Position + new Vector2(0, size.Y / 2);
-        BgSprite.Size = size;
+        BgSprite.Size = size + GetExtraBounds();
 
         Sprites.Add(BgSprite);
       }

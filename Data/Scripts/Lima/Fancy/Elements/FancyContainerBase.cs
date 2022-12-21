@@ -43,6 +43,8 @@ namespace Lima.Fancy.Elements
 
       foreach (var child in Children)
         child.Dispose();
+
+      Children.Clear();
     }
 
     public override List<MySprite> GetSprites()

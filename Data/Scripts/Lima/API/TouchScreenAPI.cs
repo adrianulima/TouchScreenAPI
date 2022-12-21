@@ -224,6 +224,7 @@ namespace Lima.API
       AssignMethod(delegates, "FancyWindowBar_New", ref FancyWindowBar_New);
       AssignMethod(delegates, "FancyWindowBar_GetText", ref FancyWindowBar_GetText);
       AssignMethod(delegates, "FancyWindowBar_SetText", ref FancyWindowBar_SetText);
+      AssignMethod(delegates, "FancyCustomElement_New", ref FancyCustomElement_New);
     }
     private void AssignMethod<T>(IReadOnlyDictionary<string, Delegate> delegates, string name, ref T field) where T : class
     {
@@ -397,13 +398,14 @@ namespace Lima.API
     public Action<object, bool> FancyTextField_SetAllowNegative;
     public Func<object, TextAlignment> FancyTextField_GetAlignment;
     public Action<object, TextAlignment> FancyTextField_SetAlignment;
-
     public Func<string, object> FancyWindowBar_New;
     public Func<object, string> FancyWindowBar_GetText;
     public Action<object, string> FancyWindowBar_SetText;
+
+    public Func<object> FancyCustomElement_New;
   }
 
-  public class DelegatorBase
+  public abstract class DelegatorBase
   {
     static protected TouchScreenAPI Api;
     internal static void SetApi(TouchScreenAPI api) => Api = api;
@@ -461,7 +463,7 @@ namespace Lima.API
     public float GetScale() => Api.FancyTheme_GetScale.Invoke(internalObj);
     public void SetScale(float scale) => Api.FancyTheme_SetScale.Invoke(internalObj, scale);
   }
-  public class FancyElementBase : DelegatorBase
+  public abstract class FancyElementBase : DelegatorBase
   {
     private FancyApp _app;
     private FancyContainerBase _parent;
@@ -485,16 +487,17 @@ namespace Lima.API
     public FancyContainerBase GetParent() { if (_parent == null) _parent = new FancyApp(Api.FancyElementBase_GetParent.Invoke(internalObj)); return _parent; }
     public List<MySprite> GetSprites() => Api.FancyElementBase_GetSprites.Invoke(internalObj);
     public void InitElements() => Api.FancyElementBase_InitElements.Invoke(internalObj);
-    public void Update() => Api.FancyElementBase_Update.Invoke(internalObj);
-    public void Dispose() => Api.FancyElementBase_Dispose.Invoke(internalObj);
+    public void ForceUpdate() => Api.FancyElementBase_Update.Invoke(internalObj);
+    public void ForceDispose() => Api.FancyElementBase_Dispose.Invoke(internalObj);
   }
-  public class FancyContainerBase : FancyElementBase
+  public abstract class FancyContainerBase : FancyElementBase
   {
     public FancyContainerBase(object internalObject) : base(internalObject) { }
     public List<object> GetChildren() => Api.FancyContainerBase_GetChildren.Invoke(internalObj);
     public Vector2 GetFlexSize() => Api.FancyContainerBase_GetFlexSize.Invoke(internalObj);
     public void AddChild(FancyElementBase child) => Api.FancyContainerBase_AddChild.Invoke(internalObj, child.internalObj);
     public void RemoveChild(FancyElementBase child) => Api.FancyContainerBase_RemoveChild.Invoke(internalObj, child.internalObj);
+    public void RemoveChild(object child) => Api.FancyContainerBase_RemoveChild.Invoke(internalObj, child);
   }
   public class FancyView : FancyContainerBase
   {
@@ -537,7 +540,7 @@ namespace Lima.API
     public FancyTheme GetTheme() { if (Theme == null) Theme = new FancyTheme(Api.FancyApp_GetTheme.Invoke(internalObj)); return Theme; }
     public void InitApp(MyCubeBlock block, Sandbox.ModAPI.Ingame.IMyTextSurface surface) => Api.FancyApp_InitApp.Invoke(internalObj, block, surface);
   }
-  public class FancyButtonBase : FancyElementBase
+  public abstract class FancyButtonBase : FancyElementBase
   {
     protected ClickHandler Handler;
     public FancyButtonBase(object internalObject) : base(internalObject) { }
@@ -640,5 +643,10 @@ namespace Lima.API
     public FancyWindowBar(object internalObject) : base(internalObject) { }
     public string GetText() => Api.FancyWindowBar_GetText.Invoke(internalObj);
     public void SetText(string text) => Api.FancyWindowBar_SetText.Invoke(internalObj, text);
+  }
+  public class FancyCustomElement : FancyElementBase
+  {
+    public FancyCustomElement() : base(Api.FancyCustomElement_New()) { }
+    public FancyCustomElement(object internalObject) : base(internalObject) { }
   }
 }
