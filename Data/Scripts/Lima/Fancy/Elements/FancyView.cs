@@ -121,8 +121,7 @@ namespace Lima.Fancy.Elements
         {
           if (!child.Enabled || child.Absolute) continue;
 
-          var originPos = before + Position;
-          originPos += child is FancyView ? Vector2.Zero : new Vector2(child.Margin.X, child.Margin.Y);
+          var originPos = before + Position + new Vector2(child.Margin.X, child.Margin.Y);
 
           if (prevChild == null)
           {
@@ -175,40 +174,41 @@ namespace Lima.Fancy.Elements
       Sprites.Clear();
 
       var size = GetSize();
+      var extraBounds = GetExtraBounds();
 
       if (BgColor != null)
       {
-        BgSprite.Position = Position + new Vector2(0, size.Y / 2);
-        BgSprite.Size = size + GetExtraBounds();
+        BgSprite.Position = Position + new Vector2(0, (size.Y + extraBounds.Y) / 2);
+        BgSprite.Size = size + extraBounds;
 
         Sprites.Add(BgSprite);
       }
 
       if (Border.X > 0)
       {
-        BorderSprites[0].Position = Position + new Vector2(0, (size.Y + GetExtraBounds().Y) / 2);
-        BorderSprites[0].Size = new Vector2(Border.X, size.Y + GetExtraBounds().Y);
+        BorderSprites[0].Position = Position + new Vector2(0, (size.Y + extraBounds.Y) / 2);
+        BorderSprites[0].Size = new Vector2(Border.X, size.Y + extraBounds.Y);
 
         Sprites.Add(BorderSprites[0]);
       }
       if (Border.Y > 0)
       {
         BorderSprites[1].Position = Position + new Vector2(0, Border.Y / 2);
-        BorderSprites[1].Size = new Vector2(size.X + GetExtraBounds().X, Border.Y);
+        BorderSprites[1].Size = new Vector2(size.X + extraBounds.X, Border.Y);
 
         Sprites.Add(BorderSprites[1]);
       }
       if (Border.Z > 0)
       {
-        BorderSprites[2].Position = Position + new Vector2(size.X + Border.X + Padding.X + Padding.Z, (size.Y + GetExtraBounds().Y) / 2);
-        BorderSprites[2].Size = new Vector2(Border.Z, (size.Y + GetExtraBounds().Y));
+        BorderSprites[2].Position = Position + new Vector2(size.X + Border.X + Padding.X + Padding.Z, (size.Y + extraBounds.Y) / 2);
+        BorderSprites[2].Size = new Vector2(Border.Z, (size.Y + extraBounds.Y));
 
         Sprites.Add(BorderSprites[2]);
       }
       if (Border.W > 0)
       {
         BorderSprites[3].Position = Position + new Vector2(0, size.Y + Border.Y + Padding.Y + Padding.W + Border.W / 2);
-        BorderSprites[3].Size = new Vector2(size.X + GetExtraBounds().X, Border.W);
+        BorderSprites[3].Size = new Vector2(size.X + extraBounds.X, Border.W);
 
         Sprites.Add(BorderSprites[3]);
       }

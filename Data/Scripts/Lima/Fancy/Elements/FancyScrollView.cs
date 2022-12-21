@@ -56,7 +56,7 @@ namespace Lima.Fancy.Elements
       var size = GetSize();
 
       var width = BarWidth * ThemeScale;
-      Pixels = new Vector2(width, 0);
+      // Pixels = new Vector2(width, 0);
 
       // Adds an extra podding to give inside space for the scrollbar
       var prevPad = Padding;
@@ -86,7 +86,6 @@ namespace Lima.Fancy.Elements
           RotationOrScale = 0,
           Color = App.Theme.Main_30
         };
-
 
         var bgPos = _bgSprite.Position.GetValueOrDefault();
         var bgSize = _bgSprite.Size.GetValueOrDefault();
