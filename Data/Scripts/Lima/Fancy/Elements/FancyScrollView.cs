@@ -5,7 +5,7 @@ namespace Lima.Fancy.Elements
 {
   public class FancyScrollView : FancyView
   {
-    public int BarWidth = 12;
+    public int BarWidth = 8;
     public bool ScrollAlwaysVisible = false;
 
     private float _scroll = 0;
@@ -89,7 +89,7 @@ namespace Lima.Fancy.Elements
 
         var bgPos = _bgSprite.Position.GetValueOrDefault();
         var bgSize = _bgSprite.Size.GetValueOrDefault();
-        _handler.HitArea = new Vector4(bgPos.X, bgPos.Y - bgSize.Y / 2, bgPos.X + bgSize.X, bgPos.Y / 2 + bgSize.Y);
+        _handler.HitArea = new Vector4(bgPos.X, bgPos.Y - bgSize.Y / 2, bgPos.X + bgSize.X, bgPos.Y + bgSize.Y / 2);
 
         var barSize = new Vector2(bgSize.X, MathHelper.Clamp(bgSize.Y + _flexSize.Y * ThemeScale, bgSize.Y * 0.5f, bgSize.Y * 0.9f));
         _bar.Size = barSize;
