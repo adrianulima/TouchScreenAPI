@@ -23,7 +23,7 @@ namespace Lima.Fancy.Elements
       _textSprites = new MySprite[TabNames.Length];
 
       Scale = new Vector2(1, 0);
-      Pixels = new Vector2(0, 24);
+      Pixels = new Vector2(0, 20);
     }
 
     public override void Update()
@@ -41,7 +41,7 @@ namespace Lima.Fancy.Elements
         Type = SpriteType.TEXTURE,
         Data = "SquareSimple",
         RotationOrScale = 0,
-        Color = App.Theme.Main_10
+        Color = App.Theme.Main_20
       };
 
       _handlerSprite = new MySprite()
@@ -49,7 +49,7 @@ namespace Lima.Fancy.Elements
         Type = SpriteType.TEXTURE,
         Data = "SquareSimple",
         RotationOrScale = 0,
-        Color = App.Theme.Main_20
+        Color = App.Theme.Main_40
       };
 
       _selectedSprite = new MySprite()
@@ -112,9 +112,16 @@ namespace Lima.Fancy.Elements
       for (int j = 0; j < _textSprites.Length; j++)
       {
         _textSprites[j].Position = Position + new Vector2(j * width + halfWidth, size.Y * 0.5f - (_textSprites[j].RotationOrScale * 16.6f));
-        _textSprites[j].Color = j == Index ? App.Theme.White : App.Theme.Main_40;
+        _textSprites[j].Color = j == Index ? App.Theme.White : App.Theme.Main_70;
         Sprites.Add(_textSprites[j]);
       }
+    }
+
+    public override void Dispose()
+    {
+      base.Dispose();
+
+      _textSprites = null;
     }
   }
 }

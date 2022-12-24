@@ -25,7 +25,8 @@ namespace Lima.Fancy.Elements
       }
     }
 
-    public Vector2 Range;
+    public float MinValue;
+    public float MaxValue;
     public float Value = 0;
     public Action<float> OnChange;
 
@@ -36,8 +37,9 @@ namespace Lima.Fancy.Elements
 
     public FancySlider(float min, float max, Action<float> onChange = null)
     {
-      Range = new Vector2(min, max);
-      Value = MathHelper.Clamp(Value, min, max);
+      MinValue = min;
+      MaxValue = max;
+      Value = max;
       OnChange = onChange;
 
       Scale = new Vector2(1, 0);
@@ -119,7 +121,7 @@ namespace Lima.Fancy.Elements
         BgSprite.Color = App.Theme.Main_20;
 
         var mouseX = MathHelper.Clamp(-0.04f + 1.08f * ((App.Cursor.Position.X - Handler.HitArea.X) / (Handler.HitArea.Z - Handler.HitArea.X)), 0, 1);
-        UpdateValue(Range.X + mouseX * (Range.Y - Range.X));
+        UpdateValue(MinValue + mouseX * (MaxValue - MinValue));
       }
       else if (Handler.IsMouseOver)
       {
@@ -130,7 +132,7 @@ namespace Lima.Fancy.Elements
         BgSprite.Color = App.Theme.Main_10;
       }
 
-      var ratio = ((Value - Range.X) / (Range.Y - Range.X));
+      var ratio = ((Value - MinValue) / (MaxValue - MinValue));
       var prgW = size.X * ratio;
 
       var handlerOffset = (size.Y / 2) * ((ratio * 1.4f) + 0.3f);
@@ -171,7 +173,7 @@ namespace Lima.Fancy.Elements
 
     protected void OnTextSubmit(string textValue)
     {
-      float v = MathHelper.Clamp(float.Parse(textValue), Range.X, Range.Y);
+      float v = MathHelper.Clamp(float.Parse(textValue), MinValue, MaxValue);
       InnerTextField.Dispose();
       UpdateValue(v);
       InputOpen = false;

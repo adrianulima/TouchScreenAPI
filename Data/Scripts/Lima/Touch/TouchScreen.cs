@@ -11,7 +11,7 @@ namespace Lima.Touch
   {
     public bool Active { get; set; }
 
-    public event Action UpdateEvent;
+    public event Action UpdateAfterSimulationEvent;
 
     public string SubtypeId { get { return Block.BlockDefinition.SubtypeId; } }
 
@@ -157,12 +157,12 @@ namespace Lima.Touch
 
     public void UpdateAfterSimulation()
     {
-      UpdateEvent?.Invoke();
+      UpdateAfterSimulationEvent?.Invoke();
     }
 
     public void Dispose()
     {
-      UpdateEvent = null;
+      UpdateAfterSimulationEvent = null;
     }
 
     public bool IsInsideArea(float x, float y, float z, float w)

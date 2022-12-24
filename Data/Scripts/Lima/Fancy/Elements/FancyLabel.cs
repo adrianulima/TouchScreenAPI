@@ -24,13 +24,13 @@ namespace Lima.Fancy.Elements
     {
       base.Update();
 
-      var count = 1;
+      var lines = 1;
       for (int i = 0; i < Text.Length; i++)
       {
         if (Text[i] == '\n')
-          count++;
+          lines++;
       }
-      Pixels.Y = 32 * FontSize * count;
+      Pixels.Y = 32 * FontSize * lines;
 
       TextSprite = new MySprite()
       {

@@ -10,23 +10,47 @@ namespace Lima.Fancy.Elements
     protected MySprite ProgressSprite;
     protected MySprite TextSprite;
 
-    public Vector2 Range;
-    public float Value = 0;
+    private float _value = 0;
+    public float Value
+    {
+      get { return _value; }
+      set { this._value = MathHelper.Clamp(value, MinValue, MaxValue); }
+    }
+
+    public float MinValue;
+    public float MaxValue;
     public int Precision = 1;
     public bool Bars;
     public string Label;
     public float LabelScale = 0.6f;
     public TextAlignment LabelAlignment = TextAlignment.CENTER;
 
-    public FancyProgressBar(float min, float max, bool bars = true, string label = "")
+    private bool _isVertical = false;
+    public bool IsVertical
     {
-      Range = new Vector2(min, max);
-      Value = MathHelper.Clamp(Value, min, max);
+      get { return _isVertical; }
+      set
+      {
+        if (_isVertical != value)
+        {
+          Scale = new Vector2(Scale.Y, Scale.X);
+          Pixels = new Vector2(Pixels.Y, Pixels.X);
+          _isVertical = value;
+        }
+      }
+    }
+
+    public FancyProgressBar(float min, float max, bool bars = true, bool vertical = false)
+    {
+      MinValue = min;
+      MaxValue = max;
+      Value = max;
       Bars = bars;
-      Label = label;
 
       Scale = new Vector2(1, 0);
       Pixels = new Vector2(0, 24);
+
+      IsVertical = vertical;
     }
 
     public override void Update()
@@ -71,37 +95,68 @@ namespace Lima.Fancy.Elements
 
       Sprites.Add(BgSprite);
 
-      var ratio = ((Value - Range.X) / (Range.Y - Range.X));
+      var ratio = (Value - MinValue) / (MaxValue - MinValue);
       var gap = 2 * ThemeScale;
-      if (ratio > Range.X)
+      if (ratio > MinValue)
       {
-        ProgressSprite.Position = Position + new Vector2(gap, size.Y / 2);
-        ProgressSprite.Size = new Vector2(Math.Max(size.X * ratio - gap * 2, 0), size.Y - gap * 2);
+        if (IsVertical)
+        {
+          var sizeProgY = Math.Max(size.Y * ratio - gap * 2, 0);
+          ProgressSprite.Size = new Vector2(size.X - gap * 2, sizeProgY);
+          ProgressSprite.Position = Position + new Vector2(gap, size.Y - sizeProgY / 2 - gap);
+        }
+        else
+        {
+          ProgressSprite.Size = new Vector2(Math.Max(size.X * ratio - gap * 2, 0), size.Y - gap * 2);
+          ProgressSprite.Position = Position + new Vector2(gap, size.Y / 2);
+        }
         Sprites.Add(ProgressSprite);
 
         if (Bars)
         {
-          var c = (int)Math.Round((size.X - gap * 2) / (size.Y / 2));
-          var interval = (size.X - gap * 2) / c;
-          var b = BgSprite;
-          for (int i = 0; i < c - 1; i++)
+          if (IsVertical)
           {
-            b.Position = Position + new Vector2(interval + interval * i, size.Y / 2);
-            b.Size = new Vector2(gap, size.Y);
-            Sprites.Add(b);
+            var innerSize = (size.Y - gap * 2);
+            var count = (int)Math.Round(innerSize / (size.X / 2));
+            var interval = innerSize / count;
+            var b = BgSprite;
+            for (int i = 0; i < count - 1; i++)
+            {
+              b.Position = Position + new Vector2(gap, gap + interval + interval * i);
+              b.Size = new Vector2(size.X, gap);
+              Sprites.Add(b);
+            }
+          }
+          else
+          {
+            var innerSize = (size.X - gap * 2);
+            var count = (int)Math.Round(innerSize / (size.Y / 2));
+            var interval = innerSize / count;
+            var b = BgSprite;
+            for (int i = 0; i < count - 1; i++)
+            {
+              b.Position = Position + new Vector2(gap + interval + interval * i, size.Y / 2);
+              b.Size = new Vector2(gap, size.Y);
+              Sprites.Add(b);
+            }
           }
         }
       }
 
       if (Label != "")
       {
-        var py = size.Y * 0.5f - (TextSprite.RotationOrScale * 16.6f);
+        var py = -(TextSprite.RotationOrScale * 16.6f);
+        if (IsVertical)
+          py += py + size.Y - gap;
+        else
+          py += size.Y * 0.5f;
+
         if (LabelAlignment == TextAlignment.LEFT)
           TextSprite.Position = Position;
         else if (LabelAlignment == TextAlignment.RIGHT)
-          TextSprite.Position = Position + new Vector2(GetSize().X - gap * 2, py);
+          TextSprite.Position = Position + new Vector2(size.X - gap * 2, py);
         else
-          TextSprite.Position = Position + new Vector2(GetSize().X / 2 + gap * 2, py);
+          TextSprite.Position = Position + new Vector2(size.X / 2, py);
         Sprites.Add(TextSprite);
       }
     }

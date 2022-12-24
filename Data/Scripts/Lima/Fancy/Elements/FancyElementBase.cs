@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Lima.Utils;
 using VRage.Game.GUI.TextPanel;
@@ -7,6 +8,8 @@ namespace Lima.Fancy.Elements
 {
   public abstract class FancyElementBase
   {
+    public event Action UpdateEvent;
+
     protected readonly List<MySprite> Sprites = new List<MySprite>();
 
     public bool Enabled = true;
@@ -15,13 +18,7 @@ namespace Lima.Fancy.Elements
     public Vector2 Position = Vector2.Zero;
     public Vector2 Pixels = Vector2.Zero;
     public Vector4 Margin = Vector4.Zero;
-
-    private Vector2 _scale = Vector2.One;
-    public Vector2 Scale
-    {
-      get { return _scale; }
-      set { _scale = new Vector2(MathHelper.Clamp(value.X, 0, 1), MathHelper.Clamp(value.Y, 0, 1)); }
-    }
+    public Vector2 Scale = Vector2.One;
 
     private FancyApp _app;
     public FancyApp App
@@ -60,11 +57,15 @@ namespace Lima.Fancy.Elements
 
     public virtual void InitElements() { }
 
-    public virtual void Update() { }
+    public virtual void Update()
+    {
+      UpdateEvent?.Invoke();
+    }
 
     public virtual void Dispose()
     {
       Sprites.Clear();
+      UpdateEvent = null;
     }
 
     public bool DebugDraw = false;

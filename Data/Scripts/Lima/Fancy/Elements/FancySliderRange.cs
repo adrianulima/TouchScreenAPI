@@ -83,7 +83,7 @@ namespace Lima.Fancy.Elements
       }
 
       var size = GetSize();
-      var ratio = (ValueLower - Range.X) / (Range.Y - Range.X);
+      var ratio = (ValueLower - MinValue) / (MaxValue - MinValue);
       var prgW = size.X * ratio;
 
       var handlerOffset = (size.Y / 2) * ((ratio * 1.4f) + 0.3f);
@@ -96,7 +96,7 @@ namespace Lima.Fancy.Elements
       _bgLowerSprite.Position = Position + new Vector2(0, size.Y - size.Y / 2);
       _bgLowerSprite.Size = new Vector2(prgW, size.Y / 2);
 
-      var ratioRange = (Value - ValueLower) / (Range.Y - Range.X);
+      var ratioRange = (Value - ValueLower) / (MaxValue - MinValue);
       ProgressSprite.Position = Position + new Vector2(prgW, size.Y - size.Y / 2);
       ProgressSprite.Size = new Vector2(size.X * ratioRange, size.Y / 2);
 

@@ -48,7 +48,7 @@ namespace Lima.Fancy.Elements
 
     protected override bool ValidateChild(FancyElementBase child)
     {
-      if (Direction != ViewDirection.None)
+      if (Direction != ViewDirection.None && !child.Absolute)
       {
         var size = GetSize();
         var before = new Vector2(Border.X + Padding.X, Border.Y + Padding.Y);

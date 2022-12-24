@@ -131,8 +131,10 @@ namespace Lima.API
       AssignMethod(delegates, "FancyElementBase_GetParent", ref FancyElementBase_GetParent);
       AssignMethod(delegates, "FancyElementBase_GetSprites", ref FancyElementBase_GetSprites);
       AssignMethod(delegates, "FancyElementBase_InitElements", ref FancyElementBase_InitElements);
-      AssignMethod(delegates, "FancyElementBase_Update", ref FancyElementBase_Update);
-      AssignMethod(delegates, "FancyElementBase_Dispose", ref FancyElementBase_Dispose);
+      AssignMethod(delegates, "FancyElementBase_ForceUpdate", ref FancyElementBase_ForceUpdate);
+      AssignMethod(delegates, "FancyElementBase_ForceDispose", ref FancyElementBase_ForceDispose);
+      AssignMethod(delegates, "FancyElementBase_RegisterUpdate", ref FancyElementBase_RegisterUpdate);
+      AssignMethod(delegates, "FancyElementBase_UnregisterUpdate", ref FancyElementBase_UnregisterUpdate);
       AssignMethod(delegates, "FancyContainerBase_GetChildren", ref FancyContainerBase_GetChildren);
       AssignMethod(delegates, "FancyContainerBase_GetFlexSize", ref FancyContainerBase_GetFlexSize);
       AssignMethod(delegates, "FancyContainerBase_AddChild", ref FancyContainerBase_AddChild);
@@ -181,8 +183,10 @@ namespace Lima.API
       AssignMethod(delegates, "FancyProgressBar_New", ref FancyProgressBar_New);
       AssignMethod(delegates, "FancyProgressBar_GetValue", ref FancyProgressBar_GetValue);
       AssignMethod(delegates, "FancyProgressBar_SetValue", ref FancyProgressBar_SetValue);
-      AssignMethod(delegates, "FancyProgressBar_GetRange", ref FancyProgressBar_GetRange);
-      AssignMethod(delegates, "FancyProgressBar_SetRange", ref FancyProgressBar_SetRange);
+      AssignMethod(delegates, "FancyProgressBar_GetMaxValue", ref FancyProgressBar_GetMaxValue);
+      AssignMethod(delegates, "FancyProgressBar_SetMaxValue", ref FancyProgressBar_SetMaxValue);
+      AssignMethod(delegates, "FancyProgressBar_GetMinValue", ref FancyProgressBar_GetMinValue);
+      AssignMethod(delegates, "FancyProgressBar_SetMinValue", ref FancyProgressBar_SetMinValue);
       AssignMethod(delegates, "FancyProgressBar_GetLabel", ref FancyProgressBar_GetLabel);
       AssignMethod(delegates, "FancyProgressBar_SetLabel", ref FancyProgressBar_SetLabel);
       AssignMethod(delegates, "FancyProgressBar_GetLabelScale", ref FancyProgressBar_GetLabelScale);
@@ -193,8 +197,8 @@ namespace Lima.API
       AssignMethod(delegates, "FancySelector_SetOnChange", ref FancySelector_SetOnChange);
       AssignMethod(delegates, "FancySeparator_New", ref FancySeparator_New);
       AssignMethod(delegates, "FancySlider_New", ref FancySlider_New);
-      AssignMethod(delegates, "FancySlider_GetRange", ref FancySlider_GetRange);
-      AssignMethod(delegates, "FancySlider_SetRange", ref FancySlider_SetRange);
+      AssignMethod(delegates, "FancySlider_GetMaxValue", ref FancySlider_GetMaxValue);
+      AssignMethod(delegates, "FancySlider_SetMaxValue", ref FancySlider_SetMaxValue);
       AssignMethod(delegates, "FancySlider_GetValue", ref FancySlider_GetValue);
       AssignMethod(delegates, "FancySlider_SetValue", ref FancySlider_SetValue);
       AssignMethod(delegates, "FancySlider_SetOnChange", ref FancySlider_SetOnChange);
@@ -206,7 +210,6 @@ namespace Lima.API
       AssignMethod(delegates, "FancySliderRange_GetValueLower", ref FancySliderRange_GetValueLower);
       AssignMethod(delegates, "FancySliderRange_SetValueLower", ref FancySliderRange_SetValueLower);
       AssignMethod(delegates, "FancySliderRange_SetOnChangeR", ref FancySliderRange_SetOnChangeR);
-
       AssignMethod(delegates, "FancySwitch_New", ref FancySwitch_New);
       AssignMethod(delegates, "FancySwitch_GetIndex", ref FancySwitch_GetIndex);
       AssignMethod(delegates, "FancySwitch_SetIndex", ref FancySwitch_SetIndex);
@@ -214,7 +217,6 @@ namespace Lima.API
       AssignMethod(delegates, "FancySwitch_GetTabName", ref FancySwitch_GetTabName);
       AssignMethod(delegates, "FancySwitch_SetTabName", ref FancySwitch_SetTabName);
       AssignMethod(delegates, "FancySwitch_SetOnChange", ref FancySwitch_SetOnChange);
-
       AssignMethod(delegates, "FancyTextField_New", ref FancyTextField_New);
       AssignMethod(delegates, "FancyTextField_GetText", ref FancyTextField_GetText);
       AssignMethod(delegates, "FancyTextField_SetText", ref FancyTextField_SetText);
@@ -230,7 +232,14 @@ namespace Lima.API
       AssignMethod(delegates, "FancyWindowBar_New", ref FancyWindowBar_New);
       AssignMethod(delegates, "FancyWindowBar_GetText", ref FancyWindowBar_GetText);
       AssignMethod(delegates, "FancyWindowBar_SetText", ref FancyWindowBar_SetText);
-      AssignMethod(delegates, "FancyCustomElement_New", ref FancyCustomElement_New);
+      AssignMethod(delegates, "FancyChart_New", ref FancyChart_New);
+      AssignMethod(delegates, "FancyChart_GetDataSets", ref FancyChart_GetDataSets);
+      AssignMethod(delegates, "FancyChart_GetDataColors", ref FancyChart_GetDataColors);
+      AssignMethod(delegates, "FancyChart_GetGridHorizontalLines", ref FancyChart_GetGridHorizontalLines);
+      AssignMethod(delegates, "FancyChart_SetGridHorizontalLines", ref FancyChart_SetGridHorizontalLines);
+      AssignMethod(delegates, "FancyChart_GetGridVerticalLines", ref FancyChart_GetGridVerticalLines);
+      AssignMethod(delegates, "FancyChart_SetGridVerticalLines", ref FancyChart_SetGridVerticalLines);
+      AssignMethod(delegates, "FancyEmptyElement_New", ref FancyEmptyElement_New);
     }
     private void AssignMethod<T>(IReadOnlyDictionary<string, Delegate> delegates, string name, ref T field) where T : class
     {
@@ -302,8 +311,10 @@ namespace Lima.API
     public Func<object, object> FancyElementBase_GetParent;
     public Func<object, List<MySprite>> FancyElementBase_GetSprites;
     public Action<object> FancyElementBase_InitElements;
-    public Action<object> FancyElementBase_Update;
-    public Action<object> FancyElementBase_Dispose;
+    public Action<object> FancyElementBase_ForceUpdate;
+    public Action<object> FancyElementBase_ForceDispose;
+    public Action<object, Action> FancyElementBase_RegisterUpdate;
+    public Action<object, Action> FancyElementBase_UnregisterUpdate;
 
     public Func<object, List<object>> FancyContainerBase_GetChildren;
     public Func<object, Vector2> FancyContainerBase_GetFlexSize;
@@ -357,11 +368,13 @@ namespace Lima.API
     public Func<object, TextAlignment> FancyLabel_GetAlignment;
     public Action<object, TextAlignment> FancyLabel_SetAlignment;
 
-    public Func<float, float, bool, string, object> FancyProgressBar_New;
+    public Func<float, float, bool, bool, object> FancyProgressBar_New;
     public Func<object, float> FancyProgressBar_GetValue;
     public Action<object, float> FancyProgressBar_SetValue;
-    public Func<object, Vector2> FancyProgressBar_GetRange;
-    public Action<object, Vector2> FancyProgressBar_SetRange;
+    public Func<object, float> FancyProgressBar_GetMaxValue;
+    public Action<object, float> FancyProgressBar_SetMaxValue;
+    public Func<object, float> FancyProgressBar_GetMinValue;
+    public Action<object, float> FancyProgressBar_SetMinValue;
     public Func<object, string> FancyProgressBar_GetLabel;
     public Action<object, string> FancyProgressBar_SetLabel;
     public Func<object, float> FancyProgressBar_GetLabelScale;
@@ -375,8 +388,10 @@ namespace Lima.API
     public Func<object> FancySeparator_New;
 
     public Func<float, float, Action<float>, object> FancySlider_New;
-    public Func<object, Vector2> FancySlider_GetRange;
-    public Action<object, Vector2> FancySlider_SetRange;
+    public Func<object, float> FancySlider_GetMaxValue;
+    public Action<object, float> FancySlider_SetMaxValue;
+    public Func<object, float> FancySlider_GetMinValue;
+    public Action<object, float> FancySlider_SetMinValue;
     public Func<object, float> FancySlider_GetValue;
     public Action<object, float> FancySlider_SetValue;
     public Action<object, Action<float>> FancySlider_SetOnChange;
@@ -414,7 +429,15 @@ namespace Lima.API
     public Func<object, string> FancyWindowBar_GetText;
     public Action<object, string> FancyWindowBar_SetText;
 
-    public Func<object> FancyCustomElement_New;
+    public Func<int, object> FancyChart_New;
+    public Func<object, List<float[]>> FancyChart_GetDataSets;
+    public Func<object, List<Color>> FancyChart_GetDataColors;
+    public Func<object, int> FancyChart_GetGridHorizontalLines;
+    public Action<object, int> FancyChart_SetGridHorizontalLines;
+    public Func<object, int> FancyChart_GetGridVerticalLines;
+    public Action<object, int> FancyChart_SetGridVerticalLines;
+
+    public Func<object> FancyEmptyElement_New;
   }
 
   public abstract class DelegatorBase
@@ -499,8 +522,10 @@ namespace Lima.API
     public FancyContainerBase GetParent() { if (_parent == null) _parent = new FancyApp(Api.FancyElementBase_GetParent.Invoke(internalObj)); return _parent; }
     public List<MySprite> GetSprites() => Api.FancyElementBase_GetSprites.Invoke(internalObj);
     public void InitElements() => Api.FancyElementBase_InitElements.Invoke(internalObj);
-    public void ForceUpdate() => Api.FancyElementBase_Update.Invoke(internalObj);
-    public void ForceDispose() => Api.FancyElementBase_Dispose.Invoke(internalObj);
+    public void ForceUpdate() => Api.FancyElementBase_ForceUpdate.Invoke(internalObj);
+    public void ForceDispose() => Api.FancyElementBase_ForceDispose.Invoke(internalObj);
+    public void RegisterUpdate(Action update) => Api.FancyElementBase_RegisterUpdate.Invoke(internalObj, update);
+    public void UnregisterUpdate(Action update) => Api.FancyElementBase_UnregisterUpdate.Invoke(internalObj, update);
   }
   public abstract class FancyContainerBase : FancyElementBase
   {
@@ -582,12 +607,14 @@ namespace Lima.API
   }
   public class FancyProgressBar : FancyElementBase
   {
-    public FancyProgressBar(float min, float max, bool bars = true, string label = "") : base(Api.FancyProgressBar_New(min, max, bars, label)) { }
+    public FancyProgressBar(float min, float max, bool bars = true, bool vertical = false) : base(Api.FancyProgressBar_New(min, max, bars, vertical)) { }
     public FancyProgressBar(object internalObject) : base(internalObject) { }
     public float GetValue() => Api.FancyProgressBar_GetValue.Invoke(internalObj);
     public void SetValue(float value) => Api.FancyProgressBar_SetValue.Invoke(internalObj, value);
-    public Vector2 GetRange() => Api.FancyProgressBar_GetRange.Invoke(internalObj);
-    public void SetRange(Vector2 range) => Api.FancyProgressBar_SetRange.Invoke(internalObj, range);
+    public float GetMaxValue() => Api.FancyProgressBar_GetMaxValue.Invoke(internalObj);
+    public void SetMaxValue(float max) => Api.FancyProgressBar_SetMaxValue.Invoke(internalObj, max);
+    public float GetMinValue() => Api.FancyProgressBar_GetMinValue.Invoke(internalObj);
+    public void SetMinValue(float min) => Api.FancyProgressBar_SetMinValue.Invoke(internalObj, min);
     public string GetLabel() => Api.FancyProgressBar_GetLabel.Invoke(internalObj);
     public void SetLabel(string label) => Api.FancyProgressBar_SetLabel.Invoke(internalObj, label);
     public float GetLabelScale() => Api.FancyProgressBar_GetLabelScale.Invoke(internalObj);
@@ -610,8 +637,10 @@ namespace Lima.API
   {
     public FancySlider(float min, float max, Action<float> onChange) : base(Api.FancySlider_New(min, max, onChange)) { }
     public FancySlider(object internalObject) : base(internalObject) { }
-    public Vector2 GetRange() => Api.FancySlider_GetRange.Invoke(internalObj);
-    public void SetRange(Vector2 range) => Api.FancySlider_SetRange.Invoke(internalObj, range);
+    public float GetMaxValue() => Api.FancySlider_GetMaxValue.Invoke(internalObj);
+    public void SetMaxValue(float max) => Api.FancySlider_SetMaxValue.Invoke(internalObj, max);
+    public float GetMinValue() => Api.FancySlider_GetMinValue.Invoke(internalObj);
+    public void SetMinValue(float min) => Api.FancySlider_SetMinValue.Invoke(internalObj, min);
     public float GetValue() => Api.FancySlider_GetValue.Invoke(internalObj);
     public void SetValue(float value) => Api.FancySlider_SetValue.Invoke(internalObj, value);
     public void SetOnChange(Action<float> onChange) => Api.FancySlider_SetOnChange.Invoke(internalObj, onChange);
@@ -662,9 +691,20 @@ namespace Lima.API
     public string GetText() => Api.FancyWindowBar_GetText.Invoke(internalObj);
     public void SetText(string text) => Api.FancyWindowBar_SetText.Invoke(internalObj, text);
   }
-  public class FancyCustomElement : FancyElementBase
+  public class FancyChart : FancyElementBase
   {
-    public FancyCustomElement() : base(Api.FancyCustomElement_New()) { }
-    public FancyCustomElement(object internalObject) : base(internalObject) { }
+    public FancyChart(int intervals) : base(Api.FancyChart_New(intervals)) { }
+    public FancyChart(object internalObject) : base(internalObject) { }
+    public List<float[]> GetDataSets() => Api.FancyChart_GetDataSets.Invoke(internalObj);
+    public List<Color> GetDataColors() => Api.FancyChart_GetDataColors.Invoke(internalObj);
+    public int GetGridHorizontalLines() => Api.FancyChart_GetGridHorizontalLines.Invoke(internalObj);
+    public void SetGridHorizontalLines(int lines) => Api.FancyChart_SetGridHorizontalLines.Invoke(internalObj, lines);
+    public int GetGridVerticalLines() => Api.FancyChart_GetGridVerticalLines.Invoke(internalObj);
+    public void SetGridVerticalLines(int lines) => Api.FancyChart_SetGridVerticalLines.Invoke(internalObj, lines);
+  }
+  public class FancyEmptyElement : FancyElementBase
+  {
+    public FancyEmptyElement() : base(Api.FancyEmptyElement_New()) { }
+    public FancyEmptyElement(object internalObject) : base(internalObject) { }
   }
 }

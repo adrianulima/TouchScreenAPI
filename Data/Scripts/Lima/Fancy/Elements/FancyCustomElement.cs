@@ -1,8 +1,8 @@
 namespace Lima.Fancy.Elements
 {
-  public class FancyCustomElement : FancyElementBase
+  public class FancyEmptyElement : FancyElementBase
   {
-    public FancyCustomElement()
+    public FancyEmptyElement()
     {
     }
   }

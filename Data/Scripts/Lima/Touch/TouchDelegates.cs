@@ -85,8 +85,10 @@ namespace Lima.Touch
         { "FancyElementBase_GetParent", new Func<object, FancyContainerBase>(FancyElementBase_GetParent) },
         { "FancyElementBase_GetSprites", new Func<object, List<MySprite>>(FancyElementBase_GetSprites) },
         { "FancyElementBase_InitElements", new Action<object>(FancyElementBase_InitElements) },
-        { "FancyElementBase_Update", new Action<object>(FancyElementBase_Update) },
-        { "FancyElementBase_Dispose", new Action<object>(FancyElementBase_Dispose) },
+        { "FancyElementBase_ForceUpdate", new Action<object>(FancyElementBase_ForceUpdate) },
+        { "FancyElementBase_ForceDispose", new Action<object>(FancyElementBase_ForceDispose) },
+        { "FancyElementBase_RegisterUpdate", new Action<object, Action>(FancyElementBase_RegisterUpdate) },
+        { "FancyElementBase_UnregisterUpdate", new Action<object, Action>(FancyElementBase_UnregisterUpdate) },
 
         { "FancyContainerBase_GetChildren", new Func<object, List<object>>(FancyContainerBase_GetChildren) },
         { "FancyContainerBase_GetFlexSize", new Func<object, Vector2>(FancyContainerBase_GetFlexSize) },
@@ -166,11 +168,13 @@ namespace Lima.Touch
         { "FancyLabel_GetAlignment", new Func<object, TextAlignment>(FancyLabel_GetAlignment) },
         { "FancyLabel_SetAlignment", new Action<object, TextAlignment>(FancyLabel_SetAlignment) },
 
-        { "FancyProgressBar_New", new Func<float, float, bool, string, object>(FancyProgressBar_New) },
+        { "FancyProgressBar_New", new Func<float, float, bool, bool, object>(FancyProgressBar_New) },
         { "FancyProgressBar_GetValue", new Func<object, float>(FancyProgressBar_GetValue) },
         { "FancyProgressBar_SetValue", new Action<object, float>(FancyProgressBar_SetValue) },
-        { "FancyProgressBar_GetRange", new Func<object, Vector2>(FancyProgressBar_GetRange) },
-        { "FancyProgressBar_SetRange", new Action<object, Vector2>(FancyProgressBar_SetRange) },
+        { "FancyProgressBar_GetMaxValue", new Func<object, float>(FancyProgressBar_GetMaxValue) },
+        { "FancyProgressBar_SetMaxValue", new Action<object, float>(FancyProgressBar_SetMaxValue) },
+        { "FancyProgressBar_GetMinValue", new Func<object, float>(FancyProgressBar_GetMinValue) },
+        { "FancyProgressBar_SetMinValue", new Action<object, float>(FancyProgressBar_SetMinValue) },
         { "FancyProgressBar_GetLabel", new Func<object, string>(FancyProgressBar_GetLabel) },
         { "FancyProgressBar_SetLabel", new Action<object, string>(FancyProgressBar_SetLabel) },
         { "FancyProgressBar_GetLabelScale", new Func<object, float>(FancyProgressBar_GetLabelScale) },
@@ -184,8 +188,10 @@ namespace Lima.Touch
         { "FancySeparator_New", new Func<object>(FancySeparator_New) },
 
         { "FancySlider_New", new Func<float, float, Action<float>, object>(FancySlider_New) },
-        { "FancySlider_GetRange", new Func<object, Vector2>(FancySlider_GetRange) },
-        { "FancySlider_SetRange", new Action<object, Vector2>(FancySlider_SetRange) },
+        { "FancySlider_GetMaxValue", new Func<object, float>(FancySlider_GetMaxValue) },
+        { "FancySlider_SetMaxValue", new Action<object, float>(FancySlider_SetMaxValue) },
+        { "FancySlider_GetMinValue", new Func<object, float>(FancySlider_GetMinValue) },
+        { "FancySlider_SetMinValue", new Action<object, float>(FancySlider_SetMinValue) },
         { "FancySlider_GetValue", new Func<object, float>(FancySlider_GetValue) },
         { "FancySlider_SetValue", new Action<object, float>(FancySlider_SetValue) },
         { "FancySlider_SetOnChange", new Action<object, Action<float>>(FancySlider_SetOnChange) },
@@ -224,7 +230,15 @@ namespace Lima.Touch
         { "FancyWindowBar_GetText", new Func<object, string>(FancyWindowBar_GetText) },
         { "FancyWindowBar_SetText", new Action<object, string>(FancyWindowBar_SetText) },
 
-        { "FancyCustomElement_New", new Func<object>(FancyCustomElement_New) }
+        { "FancyChart_New", new Func<int, object>(FancyChart_New) },
+        { "FancyChart_GetDataSets", new Func<object, List<float[]>>(FancyChart_GetDataSets) },
+        { "FancyChart_GetDataColors", new Func<object, List<Color>>(FancyChart_GetDataColors) },
+        { "FancyChart_GetGridHorizontalLines", new Func<object, int>(FancyChart_GetGridHorizontalLines) },
+        { "FancyChart_SetGridHorizontalLines", new Action<object, int>(FancyChart_SetGridHorizontalLines) },
+        { "FancyChart_GetGridVerticalLines", new Func<object, int>(FancyChart_GetGridVerticalLines) },
+        { "FancyChart_SetGridVerticalLines", new Action<object, int>(FancyChart_SetGridVerticalLines) },
+
+        { "FancyEmptyElement_New", new Func<object>(FancyEmptyElement_New) }
       };
 
       return dict;
@@ -278,8 +292,10 @@ namespace Lima.Touch
     private FancyContainerBase FancyElementBase_GetParent(object obj) => (obj as FancyElementBase).Parent;
     private List<MySprite> FancyElementBase_GetSprites(object obj) => (obj as FancyElementBase).GetSprites();
     private void FancyElementBase_InitElements(object obj) => (obj as FancyElementBase).InitElements();
-    private void FancyElementBase_Update(object obj) => (obj as FancyElementBase).Update();
-    private void FancyElementBase_Dispose(object obj) => (obj as FancyElementBase).Dispose();
+    private void FancyElementBase_ForceUpdate(object obj) => (obj as FancyElementBase).Update();
+    private void FancyElementBase_ForceDispose(object obj) => (obj as FancyElementBase).Dispose();
+    private void FancyElementBase_RegisterUpdate(object obj, Action update) => (obj as FancyElementBase).UpdateEvent += update;
+    private void FancyElementBase_UnregisterUpdate(object obj, Action update) => (obj as FancyElementBase).UpdateEvent -= update;
 
     private List<object> FancyContainerBase_GetChildren(object obj) => (obj as FancyContainerBase).Children.Cast<object>().ToList();
     private Vector2 FancyContainerBase_GetFlexSize(object obj) => (obj as FancyContainerBase).GetFlexSize();
@@ -371,11 +387,13 @@ namespace Lima.Touch
     private TextAlignment FancyLabel_GetAlignment(object obj) => (obj as FancyLabel).Alignment;
     private void FancyLabel_SetAlignment(object obj, TextAlignment alignment) => (obj as FancyLabel).Alignment = alignment;
 
-    private FancyProgressBar FancyProgressBar_New(float min, float max, bool bars = true, string label = "") => new FancyProgressBar(min, max, bars, label);
+    private FancyProgressBar FancyProgressBar_New(float min, float max, bool bars = true, bool vertical = false) => new FancyProgressBar(min, max, bars, vertical);
     private float FancyProgressBar_GetValue(object obj) => (obj as FancyProgressBar).Value;
     private void FancyProgressBar_SetValue(object obj, float value) => (obj as FancyProgressBar).Value = value;
-    private Vector2 FancyProgressBar_GetRange(object obj) => (obj as FancyProgressBar).Range;
-    private void FancyProgressBar_SetRange(object obj, Vector2 range) => (obj as FancyProgressBar).Range = range;
+    private float FancyProgressBar_GetMaxValue(object obj) => (obj as FancyProgressBar).MaxValue;
+    private void FancyProgressBar_SetMaxValue(object obj, float max) => (obj as FancyProgressBar).MaxValue = max;
+    private float FancyProgressBar_GetMinValue(object obj) => (obj as FancyProgressBar).MinValue;
+    private void FancyProgressBar_SetMinValue(object obj, float min) => (obj as FancyProgressBar).MinValue = min;
     private string FancyProgressBar_GetLabel(object obj) => (obj as FancyProgressBar).Label;
     private void FancyProgressBar_SetLabel(object obj, string label) => (obj as FancyProgressBar).Label = label;
     private float FancyProgressBar_GetLabelScale(object obj) => (obj as FancyProgressBar).LabelScale;
@@ -389,8 +407,10 @@ namespace Lima.Touch
     private FancySeparator FancySeparator_New() => new FancySeparator();
 
     private FancySlider FancySlider_New(float min, float max, Action<float> onChange) => new FancySlider(min, max, onChange);
-    private Vector2 FancySlider_GetRange(object obj) => (obj as FancySlider).Range;
-    private void FancySlider_SetRange(object obj, Vector2 range) => (obj as FancySlider).Range = range;
+    private float FancySlider_GetMaxValue(object obj) => (obj as FancySlider).MaxValue;
+    private void FancySlider_SetMaxValue(object obj, float max) => (obj as FancySlider).MaxValue = max;
+    private float FancySlider_GetMinValue(object obj) => (obj as FancySlider).MinValue;
+    private void FancySlider_SetMinValue(object obj, float min) => (obj as FancySlider).MinValue = min;
     private float FancySlider_GetValue(object obj) => (obj as FancySlider).Value;
     private void FancySlider_SetValue(object obj, float value) => (obj as FancySlider).Value = value;
     private void FancySlider_SetOnChange(object obj, Action<float> onChange) => (obj as FancySlider).OnChange = onChange;
@@ -429,7 +449,14 @@ namespace Lima.Touch
     private string FancyWindowBar_GetText(object obj) => (obj as FancyWindowBar).Text;
     private void FancyWindowBar_SetText(object obj, string text) => (obj as FancyWindowBar).Text = text;
 
-    private FancyCustomElement FancyCustomElement_New() => new FancyCustomElement();
+    private FancyChart FancyChart_New(int intervals) => new FancyChart(intervals);
+    private List<float[]> FancyChart_GetDataSets(object obj) => (obj as FancyChart).DataSets;
+    private List<Color> FancyChart_GetDataColors(object obj) => (obj as FancyChart).DataColors;
+    private int FancyChart_GetGridHorizontalLines(object obj) => (obj as FancyChart).GridHorizontalLines;
+    private void FancyChart_SetGridHorizontalLines(object obj, int lines) => (obj as FancyChart).GridHorizontalLines = lines;
+    private int FancyChart_GetGridVerticalLines(object obj) => (obj as FancyChart).GridVerticalLines;
+    private void FancyChart_SetGridVerticalLines(object obj, int lines) => (obj as FancyChart).GridVerticalLines = lines;
 
+    private FancyEmptyElement FancyEmptyElement_New() => new FancyEmptyElement();
   }
 }

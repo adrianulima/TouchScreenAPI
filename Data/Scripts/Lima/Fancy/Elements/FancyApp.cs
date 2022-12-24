@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Lima.Fancy.Elements;
 using Lima.Touch;
 using Sandbox.Game.Entities;
+// using Sandbox.ModAPI;
 using VRage.Game.GUI.TextPanel;
 using VRageMath;
 
@@ -10,7 +11,7 @@ namespace Lima.Fancy
 {
   public class FancyApp : FancyView
   {
-    public event Action UpdateEvent;
+    public event Action UpdateAfterSimulationEvent;
 
     public TouchScreen Screen { get; private set; }
     public FancyCursor Cursor { get; private set; }
@@ -30,7 +31,7 @@ namespace Lima.Fancy
       Screen = new TouchScreen(block, surface as Sandbox.ModAPI.IMyTextSurface);
       TouchSession.Instance.TouchMan.RemoveScreen(block, surface as Sandbox.ModAPI.IMyTextSurface);
       TouchSession.Instance.TouchMan.Screens.Add(Screen);
-      Screen.UpdateEvent += UpdateAfterSimulation;
+      Screen.UpdateAfterSimulationEvent += UpdateAfterSimulation;
 
       Cursor = new FancyCursor(Screen);
       Theme = new FancyTheme(surface);
@@ -46,12 +47,21 @@ namespace Lima.Fancy
 
     public virtual void UpdateAfterSimulation()
     {
-      UpdateEvent?.Invoke();
+      UpdateAfterSimulationEvent?.Invoke();
     }
 
+    // int prevScroll = 0;
     public override void Update()
     {
       base.Update();
+
+      // var newScroll = MyAPIGateway.Input.MouseScrollWheelValue();
+      // if (newScroll - prevScroll != 0)
+      // {
+      //   this.Theme.Scale += Math.Sign(newScroll - prevScroll) * 0.05f;
+      //   this.Theme.Scale = Math.Max(this.Theme.Scale, 0.5f);
+      //   prevScroll = newScroll;
+      // }
 
       BgSprite = new MySprite()
       {
@@ -83,11 +93,11 @@ namespace Lima.Fancy
 
     public override void Dispose()
     {
-      Screen.UpdateEvent -= UpdateAfterSimulation;
+      Screen.UpdateAfterSimulationEvent -= UpdateAfterSimulation;
       Screen.Dispose();
       Cursor.Dispose();
       TouchSession.Instance.TouchMan.Screens.Remove(Screen);
-      UpdateEvent = null;
+      UpdateAfterSimulationEvent = null;
 
       base.Dispose();
     }

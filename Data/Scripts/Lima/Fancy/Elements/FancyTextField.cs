@@ -37,13 +37,13 @@ namespace Lima.Fancy.Elements
     public override void InitElements()
     {
       base.InitElements();
-      App.UpdateEvent += UpdateFast;
+      App.UpdateAfterSimulationEvent += UpdateAfterSimulation;
     }
 
     public override void Dispose()
     {
       base.Dispose();
-      App.UpdateEvent -= UpdateFast;
+      App.UpdateAfterSimulationEvent -= UpdateAfterSimulation;
     }
 
     private void AddChar(char ch)
@@ -85,7 +85,7 @@ namespace Lima.Fancy.Elements
       InputUtils.SetPlayerKeyboardBlacklistState(_edit);
     }
 
-    public void UpdateFast()
+    public void UpdateAfterSimulation()
     {
       if (_edit)
         _inputHandler.Update();
