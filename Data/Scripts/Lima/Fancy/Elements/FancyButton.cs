@@ -34,7 +34,7 @@ namespace Lima.Fancy.Elements
         Type = SpriteType.TEXTURE,
         Data = "SquareSimple",
         RotationOrScale = 0,
-        Color = App.Theme.Main_30
+        Color = App.Theme.Main_40
       };
 
       _textSprite = new MySprite()
@@ -49,18 +49,18 @@ namespace Lima.Fancy.Elements
 
       if (Handler.IsMousePressed)
       {
-        _textSprite.Color = App.Theme.Main_30;
-        _bgSprite.Color = App.Theme.Main_70;
+        _textSprite.Color = App.Theme.Main_40;
+        _bgSprite.Color = App.Theme.Main_80;
       }
       else if (Handler.IsMouseOver)
       {
         _textSprite.Color = App.Theme.White;
-        _bgSprite.Color = App.Theme.Main_40;
+        _bgSprite.Color = App.Theme.Main_50;
       }
       else
       {
         _textSprite.Color = App.Theme.White;
-        _bgSprite.Color = App.Theme.Main_30;
+        _bgSprite.Color = App.Theme.Main_40;
       }
 
       if (Handler.JustReleased)

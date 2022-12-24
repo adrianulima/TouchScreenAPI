@@ -57,7 +57,7 @@ namespace Lima.Fancy.Elements
         Type = SpriteType.TEXTURE,
         Data = "SquareSimple",
         RotationOrScale = 0,
-        Color = App.Theme.Main_60
+        Color = App.Theme.Main_70
       };
 
       for (int i = 0; i < _textSprites.Length; i++)
@@ -112,7 +112,7 @@ namespace Lima.Fancy.Elements
       for (int j = 0; j < _textSprites.Length; j++)
       {
         _textSprites[j].Position = Position + new Vector2(j * width + halfWidth, size.Y * 0.5f - (_textSprites[j].RotationOrScale * 16.6f));
-        _textSprites[j].Color = j == Index ? App.Theme.White : App.Theme.Main_70;
+        _textSprites[j].Color = j == Index ? App.Theme.White : App.Theme.Main_80;
         Sprites.Add(_textSprites[j]);
       }
     }

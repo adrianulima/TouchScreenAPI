@@ -27,7 +27,7 @@ namespace Lima.Fancy.Elements
         Type = SpriteType.TEXTURE,
         Data = "SquareSimple",
         RotationOrScale = 0,
-        Color = App.Theme.Main_10
+        Color = App.Theme.Main_20
       };
 
       _textSprite = new MySprite()

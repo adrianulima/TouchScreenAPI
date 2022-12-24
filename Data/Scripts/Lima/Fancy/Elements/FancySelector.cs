@@ -41,7 +41,7 @@ namespace Lima.Fancy.Elements
         Type = SpriteType.TEXTURE,
         Data = "SquareSimple",
         RotationOrScale = 0,
-        Color = App.Theme.Main_10
+        Color = App.Theme.Main_20
       };
 
       _arrowBgSprite = new MySprite()
@@ -49,7 +49,7 @@ namespace Lima.Fancy.Elements
         Type = SpriteType.TEXTURE,
         Data = "SquareSimple",
         RotationOrScale = 0,
-        Color = App.Theme.Main_30
+        Color = App.Theme.Main_40
       };
 
       _arrow2BgSprite = new MySprite()
@@ -57,7 +57,7 @@ namespace Lima.Fancy.Elements
         Type = SpriteType.TEXTURE,
         Data = "SquareSimple",
         RotationOrScale = 0,
-        Color = App.Theme.Main_30
+        Color = App.Theme.Main_40
       };
 
       _arrowSprite = new MySprite()
@@ -92,22 +92,22 @@ namespace Lima.Fancy.Elements
         if (Handler.IsMousePressed)
         {
           if (mouseX < size.Y)
-            _arrowBgSprite.Color = App.Theme.Main_70;
+            _arrowBgSprite.Color = App.Theme.Main_80;
           else if (mouseX > size.X - size.Y)
-            _arrow2BgSprite.Color = App.Theme.Main_70;
+            _arrow2BgSprite.Color = App.Theme.Main_80;
         }
         else
         {
           if (mouseX < size.Y)
-            _arrowBgSprite.Color = App.Theme.Main_40;
+            _arrowBgSprite.Color = App.Theme.Main_50;
           else if (mouseX > size.X - size.Y)
-            _arrow2BgSprite.Color = App.Theme.Main_40;
+            _arrow2BgSprite.Color = App.Theme.Main_50;
         }
       }
       else
       {
-        _arrowBgSprite.Color = App.Theme.Main_30;
-        _arrow2BgSprite.Color = App.Theme.Main_30;
+        _arrowBgSprite.Color = App.Theme.Main_40;
+        _arrow2BgSprite.Color = App.Theme.Main_40;
       }
 
       if (Handler.JustReleased)

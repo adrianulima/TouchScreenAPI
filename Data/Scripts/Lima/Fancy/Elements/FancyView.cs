@@ -169,7 +169,7 @@ namespace Lima.Fancy.Elements
             Type = SpriteType.TEXTURE,
             Data = "SquareSimple",
             RotationOrScale = 0,
-            Color = BorderColor ?? App.Theme.Main_60
+            Color = BorderColor ?? App.Theme.Main_70
           };
         }
       }

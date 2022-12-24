@@ -89,7 +89,7 @@ namespace Lima.Fancy.Elements
         Type = SpriteType.TEXTURE,
         Data = "SquareSimple",
         RotationOrScale = 0,
-        Color = App.Theme.Main_30
+        Color = App.Theme.Main_40
       };
 
       ProgressSprite = new MySprite()
@@ -97,7 +97,7 @@ namespace Lima.Fancy.Elements
         Type = SpriteType.TEXTURE,
         Data = "SquareSimple",
         RotationOrScale = 0,
-        Color = App.Theme.Main_60
+        Color = App.Theme.Main_70
       };
 
       HandlerSprite = new MySprite()
@@ -113,23 +113,23 @@ namespace Lima.Fancy.Elements
         Type = SpriteType.TEXTURE,
         Data = "Circle",
         RotationOrScale = 0,
-        Color = App.Theme.Main_60
+        Color = App.Theme.Main_70
       };
 
       if (Handler.IsMousePressed)
       {
-        BgSprite.Color = App.Theme.Main_20;
+        BgSprite.Color = App.Theme.Main_30;
 
         var mouseX = MathHelper.Clamp(-0.04f + 1.08f * ((App.Cursor.Position.X - Handler.HitArea.X) / (Handler.HitArea.Z - Handler.HitArea.X)), 0, 1);
         UpdateValue(MinValue + mouseX * (MaxValue - MinValue));
       }
       else if (Handler.IsMouseOver)
       {
-        BgSprite.Color = App.Theme.Main_20;
+        BgSprite.Color = App.Theme.Main_30;
       }
       else
       {
-        BgSprite.Color = App.Theme.Main_10;
+        BgSprite.Color = App.Theme.Main_20;
       }
 
       var ratio = ((Value - MinValue) / (MaxValue - MinValue));

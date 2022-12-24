@@ -68,7 +68,7 @@ namespace Lima.Fancy
         Type = SpriteType.TEXTURE,
         Data = "Grid",
         RotationOrScale = 0,
-        Color = App.Theme.Main_10
+        Color = App.Theme.Main_20
       };
 
       Sprites.Clear();

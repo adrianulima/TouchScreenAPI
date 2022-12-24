@@ -75,11 +75,11 @@ namespace Lima.Fancy.Elements
       _bgLowerSprite = BgSprite;
       if (Handler.IsMousePressed || Handler.IsMouseOver)
       {
-        _bgLowerSprite.Color = App.Theme.Main_20;
+        _bgLowerSprite.Color = App.Theme.Main_30;
       }
       else
       {
-        _bgLowerSprite.Color = App.Theme.Main_10;
+        _bgLowerSprite.Color = App.Theme.Main_20;
       }
 
       var size = GetSize();
