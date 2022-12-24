@@ -48,6 +48,9 @@ namespace Lima.Fancy.Elements
 
     protected override bool ValidateChild(FancyElementBase child)
     {
+      if (child.Absolute)
+        return base.ValidateChild(child);
+
       if (Direction != ViewDirection.None && !child.Absolute)
       {
         var size = GetSize();

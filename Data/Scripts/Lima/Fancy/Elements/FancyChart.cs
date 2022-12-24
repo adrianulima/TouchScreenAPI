@@ -17,6 +17,9 @@ namespace Lima.Fancy.Elements
     private float _max;
     private float _min;
 
+    public float MaxValue { get { return _max; } }
+    public float MinValue { get { return _min; } }
+
     public int GridHorizontalLines = 2;
     public int GridVerticalLines = 2;
 
@@ -116,7 +119,7 @@ namespace Lima.Fancy.Elements
 
     private void DrawHorizontalGridLines()
     {
-      var stepY = _cacheSize.Y / (GridHorizontalLines + 1);
+      var stepY = _cacheSize.Y / (GridHorizontalLines - 1);
       for (int i = 0; i < GridHorizontalLines; i++)
       {
         Sprites.Add(new MySprite()
@@ -125,7 +128,7 @@ namespace Lima.Fancy.Elements
           Data = "SquareSimple",
           RotationOrScale = 0,
           Color = App.Theme.Main_20,
-          Position = Position + new Vector2(0, stepY * (i + 1)),
+          Position = Position + new Vector2(0, stepY * i),
           Size = new Vector2(_cacheSize.X, 1)
         });
       }

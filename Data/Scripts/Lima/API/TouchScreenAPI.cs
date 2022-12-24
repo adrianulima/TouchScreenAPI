@@ -239,6 +239,8 @@ namespace Lima.API
       AssignMethod(delegates, "FancyChart_SetGridHorizontalLines", ref FancyChart_SetGridHorizontalLines);
       AssignMethod(delegates, "FancyChart_GetGridVerticalLines", ref FancyChart_GetGridVerticalLines);
       AssignMethod(delegates, "FancyChart_SetGridVerticalLines", ref FancyChart_SetGridVerticalLines);
+      AssignMethod(delegates, "FancyChart_GetMaxValue", ref FancyChart_GetMaxValue);
+      AssignMethod(delegates, "FancyChart_GetMinValue", ref FancyChart_GetMinValue);
       AssignMethod(delegates, "FancyEmptyElement_New", ref FancyEmptyElement_New);
     }
     private void AssignMethod<T>(IReadOnlyDictionary<string, Delegate> delegates, string name, ref T field) where T : class
@@ -436,6 +438,8 @@ namespace Lima.API
     public Action<object, int> FancyChart_SetGridHorizontalLines;
     public Func<object, int> FancyChart_GetGridVerticalLines;
     public Action<object, int> FancyChart_SetGridVerticalLines;
+    public Func<object, float> FancyChart_GetMaxValue;
+    public Func<object, float> FancyChart_GetMinValue;
 
     public Func<object> FancyEmptyElement_New;
   }
@@ -701,6 +705,8 @@ namespace Lima.API
     public void SetGridHorizontalLines(int lines) => Api.FancyChart_SetGridHorizontalLines.Invoke(internalObj, lines);
     public int GetGridVerticalLines() => Api.FancyChart_GetGridVerticalLines.Invoke(internalObj);
     public void SetGridVerticalLines(int lines) => Api.FancyChart_SetGridVerticalLines.Invoke(internalObj, lines);
+    public float GetMaxValue() => Api.FancyChart_GetMaxValue.Invoke(internalObj);
+    public float GetMinValue() => Api.FancyChart_GetMinValue.Invoke(internalObj);
   }
   public class FancyEmptyElement : FancyElementBase
   {

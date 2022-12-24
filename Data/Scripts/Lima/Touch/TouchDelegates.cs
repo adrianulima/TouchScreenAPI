@@ -237,6 +237,8 @@ namespace Lima.Touch
         { "FancyChart_SetGridHorizontalLines", new Action<object, int>(FancyChart_SetGridHorizontalLines) },
         { "FancyChart_GetGridVerticalLines", new Func<object, int>(FancyChart_GetGridVerticalLines) },
         { "FancyChart_SetGridVerticalLines", new Action<object, int>(FancyChart_SetGridVerticalLines) },
+        { "FancyChart_GetMaxValue", new Func<object, float>(FancyChart_GetMaxValue) },
+        { "FancyChart_GetMinValue", new Func<object, float>(FancyChart_GetMinValue) },
 
         { "FancyEmptyElement_New", new Func<object>(FancyEmptyElement_New) }
       };
@@ -456,6 +458,8 @@ namespace Lima.Touch
     private void FancyChart_SetGridHorizontalLines(object obj, int lines) => (obj as FancyChart).GridHorizontalLines = lines;
     private int FancyChart_GetGridVerticalLines(object obj) => (obj as FancyChart).GridVerticalLines;
     private void FancyChart_SetGridVerticalLines(object obj, int lines) => (obj as FancyChart).GridVerticalLines = lines;
+    private float FancyChart_GetMaxValue(object obj) => (obj as FancyChart).MaxValue;
+    private float FancyChart_GetMinValue(object obj) => (obj as FancyChart).MinValue;
 
     private FancyEmptyElement FancyEmptyElement_New() => new FancyEmptyElement();
   }
