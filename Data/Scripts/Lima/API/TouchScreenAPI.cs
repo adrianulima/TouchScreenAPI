@@ -172,6 +172,10 @@ namespace Lima.API
       AssignMethod(delegates, "FancyButton_SetOnChange", ref FancyButton_SetOnChange);
       AssignMethod(delegates, "FancyButton_GetAlignment", ref FancyButton_GetAlignment);
       AssignMethod(delegates, "FancyButton_SetAlignment", ref FancyButton_SetAlignment);
+      AssignMethod(delegates, "FancyCheckbox_New", ref FancyCheckbox_New);
+      AssignMethod(delegates, "FancyCheckbox_GetValue", ref FancyCheckbox_GetValue);
+      AssignMethod(delegates, "FancyCheckbox_SetValue", ref FancyCheckbox_SetValue);
+      AssignMethod(delegates, "FancyCheckbox_SetOnChange", ref FancyCheckbox_SetOnChange);
       AssignMethod(delegates, "FancyLabel_New", ref FancyLabel_New);
       AssignMethod(delegates, "FancyLabel_GetText", ref FancyLabel_GetText);
       AssignMethod(delegates, "FancyLabel_SetText", ref FancyLabel_SetText);
@@ -360,6 +364,11 @@ namespace Lima.API
     public Action<object, Action> FancyButton_SetOnChange;
     public Func<object, TextAlignment> FancyButton_GetAlignment;
     public Action<object, TextAlignment> FancyButton_SetAlignment;
+
+    public Func<Action<bool>, bool, object> FancyCheckbox_New;
+    public Func<object, bool> FancyCheckbox_GetValue;
+    public Action<object, bool> FancyCheckbox_SetValue;
+    public Action<object, Action<bool>> FancyCheckbox_SetOnChange;
 
     public Func<string, float, TextAlignment, object> FancyLabel_New;
     public Func<object, string> FancyLabel_GetText;
@@ -596,6 +605,14 @@ namespace Lima.API
     public void SetOnChange(Action onChange) => Api.FancyButton_SetOnChange.Invoke(internalObj, onChange);
     public TextAlignment GetAlignment() => Api.FancyButton_GetAlignment.Invoke(internalObj);
     public void SetAlignment(TextAlignment alignment) => Api.FancyButton_SetAlignment.Invoke(internalObj, alignment);
+  }
+  public class FancyCheckbox : FancyButtonBase
+  {
+    public FancyCheckbox(Action<bool> onChange, bool value = false) : base(Api.FancyCheckbox_New(onChange, value)) { }
+    public FancyCheckbox(object internalObject) : base(internalObject) { }
+    public bool GetValue() => Api.FancyCheckbox_GetValue.Invoke(internalObj);
+    public void SetValue(bool value) => Api.FancyCheckbox_SetValue.Invoke(internalObj, value);
+    public void SetOnChange(Action<bool> onChange) => Api.FancyCheckbox_SetOnChange.Invoke(internalObj, onChange);
   }
   public class FancyLabel : FancyElementBase
   {

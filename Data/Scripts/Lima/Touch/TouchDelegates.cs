@@ -159,6 +159,11 @@ namespace Lima.Touch
         { "FancyButton_GetAlignment", new Func<object, TextAlignment>(FancyButton_GetAlignment) },
         { "FancyButton_SetAlignment", new Action<object, TextAlignment>(FancyButton_SetAlignment) },
 
+        { "FancyCheckbox_New", new Func<Action<bool>, bool, object>(FancyCheckbox_New) },
+        { "FancyCheckbox_GetValue", new Func<object, bool>(FancyCheckbox_GetValue) },
+        { "FancyCheckbox_SetValue", new Action<object, bool>(FancyCheckbox_SetValue) },
+        { "FancyCheckbox_SetOnChange", new Action<object, Action<bool>>(FancyCheckbox_SetOnChange) },
+
         { "FancyLabel_New", new Func<string, float, TextAlignment, object>(FancyLabel_New) },
         { "FancyLabel_GetText", new Func<object, string>(FancyLabel_GetText) },
         { "FancyLabel_SetText", new Action<object, string>(FancyLabel_SetText) },
@@ -379,6 +384,11 @@ namespace Lima.Touch
     private void FancyButton_SetOnChange(object obj, Action onChange) => (obj as FancyButton).OnChange = onChange;
     private TextAlignment FancyButton_GetAlignment(object obj) => (obj as FancyButton).Alignment;
     private void FancyButton_SetAlignment(object obj, TextAlignment alignment) => (obj as FancyButton).Alignment = alignment;
+
+    private FancyCheckbox FancyCheckbox_New(Action<bool> onChange, bool value = false) => new FancyCheckbox(onChange, value);
+    private bool FancyCheckbox_GetValue(object obj) => (obj as FancyCheckbox).Value;
+    private void FancyCheckbox_SetValue(object obj, bool value) => (obj as FancyCheckbox).Value = value;
+    private void FancyCheckbox_SetOnChange(object obj, Action<bool> onChange) => (obj as FancyCheckbox).OnChange = onChange;
 
     private FancyLabel FancyLabel_New(string text, float fontSize = 0.5f, TextAlignment alignment = TextAlignment.CENTER) => new FancyLabel(text, fontSize, alignment);
     private string FancyLabel_GetText(object obj) => (obj as FancyLabel).Text;
