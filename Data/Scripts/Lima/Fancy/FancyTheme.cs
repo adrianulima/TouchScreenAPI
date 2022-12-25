@@ -11,30 +11,32 @@ namespace Lima.Fancy
     private Color _lastBg;
     private Color _lastFore;
 
-    private Color _White;
-    public Color White { get { UpdateColors(); return _White; } }
-    private Color _Bg;
-    public Color Bg { get { UpdateColors(); return _Bg; } }
-    private Color _Main;
-    public Color Main { get { UpdateColors(); return _Main; } }
-    private Color _Main_10;
-    public Color Main_10 { get { UpdateColors(); return _Main_10; } }
-    private Color _Main_20;
-    public Color Main_20 { get { UpdateColors(); return _Main_20; } }
-    private Color _Main_30;
-    public Color Main_30 { get { UpdateColors(); return _Main_30; } }
-    private Color _Main_40;
-    public Color Main_40 { get { UpdateColors(); return _Main_40; } }
-    private Color _Main_50;
-    public Color Main_50 { get { UpdateColors(); return _Main_50; } }
-    private Color _Main_60;
-    public Color Main_60 { get { UpdateColors(); return _Main_60; } }
-    private Color _Main_70;
-    public Color Main_70 { get { UpdateColors(); return _Main_70; } }
-    private Color _Main_80;
-    public Color Main_80 { get { UpdateColors(); return _Main_80; } }
-    private Color _Main_90;
-    public Color Main_90 { get { UpdateColors(); return _Main_90; } }
+    private Color _whiteColor;
+    public Color WhiteColor { get { UpdateColors(); return _whiteColor; } }
+    private Color _bgColor;
+    public Color BgColor { get { UpdateColors(); return _bgColor; } }
+    private Color _mainColor;
+    public Color MainColor { get { UpdateColors(); return _mainColor; } }
+    private Color _main_1;
+    public Color MainColor_1 { get { UpdateColors(); return _main_1; } }
+    private Color _main_2;
+    public Color MainColor_2 { get { UpdateColors(); return _main_2; } }
+    private Color _main_3;
+    public Color MainColor_3 { get { UpdateColors(); return _main_3; } }
+    private Color _main_4;
+    public Color MainColor_4 { get { UpdateColors(); return _main_4; } }
+    private Color _main_5;
+    public Color MainColor_5 { get { UpdateColors(); return _main_5; } }
+    private Color _main_6;
+    public Color MainColor_6 { get { UpdateColors(); return _main_6; } }
+    private Color _main_7;
+    public Color MainColor_7 { get { UpdateColors(); return _main_7; } }
+    private Color _main_8;
+    public Color MainColor_8 { get { UpdateColors(); return _main_8; } }
+    private Color _main_9;
+    public Color MainColor_9 { get { UpdateColors(); return _main_9; } }
+
+    public float Scale = 1f;
 
     public string Font = MyFontEnum.White;
     private readonly StringBuilder _strBuilder = new StringBuilder();
@@ -44,8 +46,6 @@ namespace Lima.Fancy
       _strBuilder.Append(text);
       return _surface.MeasureStringInPixels(_strBuilder, font, scale);
     }
-
-    public float Scale = 1f;
 
     public bool IsBgDark { get { return IsColorDark(_surface.ScriptBackgroundColor); } }
 
@@ -66,27 +66,27 @@ namespace Lima.Fancy
         float r = _surface.ScriptForegroundColor.R + ((1 - _surface.ScriptForegroundColor.R) * 0.6f);
         float g = _surface.ScriptForegroundColor.G + ((1 - _surface.ScriptForegroundColor.G) * 0.6f);
         float b = _surface.ScriptForegroundColor.B + ((1 - _surface.ScriptForegroundColor.B) * 0.6f);
-        _White = new Color(r, g, b);
+        _whiteColor = new Color(r, g, b);
       }
       else
       {
-        _White = new Color(_surface.ScriptForegroundColor * 0.025f, 1);
+        _whiteColor = new Color(_surface.ScriptForegroundColor * 0.025f, 1);
       }
 
       var bgLuma = 1 - (GetColorLuma(_surface.ScriptBackgroundColor) / 255) * 0.5f;
       var bgSum = _surface.ScriptBackgroundColor * 0.5f;
 
-      _Bg = new Color(_surface.ScriptBackgroundColor, 1);
-      _Main = new Color(_surface.ScriptForegroundColor, 1);
-      _Main_90 = new Color((_surface.ScriptForegroundColor * (0.8f * bgLuma) + bgSum), 1);
-      _Main_80 = new Color((_surface.ScriptForegroundColor * (0.7f * bgLuma) + bgSum), 1);
-      _Main_70 = new Color((_surface.ScriptForegroundColor * (0.6f * bgLuma) + bgSum), 1);
-      _Main_60 = new Color((_surface.ScriptForegroundColor * (0.5f * bgLuma) + bgSum), 1);
-      _Main_50 = new Color((_surface.ScriptForegroundColor * (0.4f * bgLuma) + bgSum), 1);
-      _Main_40 = new Color((_surface.ScriptForegroundColor * (0.3f * bgLuma) + bgSum), 1);
-      _Main_30 = new Color((_surface.ScriptForegroundColor * (0.2f * bgLuma) + bgSum), 1);
-      _Main_20 = new Color((_surface.ScriptForegroundColor * (0.1f * bgLuma) + bgSum), 1);
-      _Main_10 = new Color((_surface.ScriptForegroundColor * (0.025f * bgLuma) + bgSum), 1);
+      _bgColor = new Color(_surface.ScriptBackgroundColor, 1);
+      _mainColor = new Color(_surface.ScriptForegroundColor, 1);
+      _main_9 = new Color((_surface.ScriptForegroundColor * (0.8f * bgLuma) + bgSum), 1);
+      _main_8 = new Color((_surface.ScriptForegroundColor * (0.7f * bgLuma) + bgSum), 1);
+      _main_7 = new Color((_surface.ScriptForegroundColor * (0.6f * bgLuma) + bgSum), 1);
+      _main_6 = new Color((_surface.ScriptForegroundColor * (0.5f * bgLuma) + bgSum), 1);
+      _main_5 = new Color((_surface.ScriptForegroundColor * (0.4f * bgLuma) + bgSum), 1);
+      _main_4 = new Color((_surface.ScriptForegroundColor * (0.3f * bgLuma) + bgSum), 1);
+      _main_3 = new Color((_surface.ScriptForegroundColor * (0.2f * bgLuma) + bgSum), 1);
+      _main_2 = new Color((_surface.ScriptForegroundColor * (0.1f * bgLuma) + bgSum), 1);
+      _main_1 = new Color((_surface.ScriptForegroundColor * (0.025f * bgLuma) + bgSum), 1);
 
       _lastBg = _surface.ScriptBackgroundColor;
       _lastFore = _surface.ScriptForegroundColor;

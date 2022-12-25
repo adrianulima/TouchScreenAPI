@@ -69,7 +69,7 @@ namespace Lima.Fancy.Elements
         Type = SpriteType.TEXTURE,
         Data = "SquareSimple",
         RotationOrScale = 0,
-        Color = App.Theme.Main_20
+        Color = App.Theme.MainColor_2
       };
 
       _bgSprite.Position = Position + new Vector2(size.X + Border.X + Padding.X + Padding.Z - width, Border.Y + Padding.Y + size.Y / 2);
@@ -84,7 +84,7 @@ namespace Lima.Fancy.Elements
           Type = SpriteType.TEXTURE,
           Data = "SquareSimple",
           RotationOrScale = 0,
-          Color = App.Theme.Main_40
+          Color = App.Theme.MainColor_4
         };
 
         var bgPos = _bgSprite.Position.GetValueOrDefault();
@@ -96,18 +96,18 @@ namespace Lima.Fancy.Elements
 
         if (_handler.IsMouseOver)
         {
-          _bar.Color = App.Theme.Main_50;
+          _bar.Color = App.Theme.MainColor_5;
           var mouseY = App.Cursor.Position.Y - _handler.HitArea.Y;
           if (_handler.IsMousePressed)
           {
-            _bar.Color = App.Theme.Main_60;
+            _bar.Color = App.Theme.MainColor_6;
             var adjust = 0.2f;
             Scroll = -adjust + (1 + 2 * adjust) * (App.Cursor.Position.Y - _handler.HitArea.Y) / ((_handler.HitArea.W * (1 - adjust)) - _handler.HitArea.Y);
           }
         }
         else
         {
-          _bar.Color = App.Theme.Main_40;
+          _bar.Color = App.Theme.MainColor_4;
         }
 
         var diffSize = bgSize.Y - barSize.Y;

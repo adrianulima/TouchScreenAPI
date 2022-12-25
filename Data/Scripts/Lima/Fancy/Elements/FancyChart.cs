@@ -127,7 +127,7 @@ namespace Lima.Fancy.Elements
           Type = SpriteType.TEXTURE,
           Data = "SquareSimple",
           RotationOrScale = 0,
-          Color = App.Theme.Main_20,
+          Color = App.Theme.MainColor_2,
           Position = Position + new Vector2(0, stepY * i),
           Size = new Vector2(_cacheSize.X, 1)
         });
@@ -144,7 +144,7 @@ namespace Lima.Fancy.Elements
           Type = SpriteType.TEXTURE,
           Data = "SquareSimple",
           RotationOrScale = 0,
-          Color = App.Theme.Main_20,
+          Color = App.Theme.MainColor_2,
           Position = Position + new Vector2(stepX * (i + 1), _cacheSize.Y / 2),
           Size = new Vector2(1, _cacheSize.Y)
         });
@@ -157,13 +157,13 @@ namespace Lima.Fancy.Elements
       {
         if (index == 0)
         {
-          DataColors.Add(App.Theme.Main);
+          DataColors.Add(App.Theme.MainColor);
           continue;
         }
 
-        var mainR = App.Theme.Main.R;
-        var mainG = App.Theme.Main.G;
-        var mainB = App.Theme.Main.B;
+        var mainR = App.Theme.MainColor.R;
+        var mainG = App.Theme.MainColor.G;
+        var mainB = App.Theme.MainColor.B;
         var r = MathHelper.Clamp(MathUtils.GetRandomInt(mainR - 50, mainR + 50), 0, 255);
         var g = MathHelper.Clamp(MathUtils.GetRandomInt(mainG - 50, mainG + 50), 0, 255);
         var b = MathHelper.Clamp(MathUtils.GetRandomInt(mainB - 50, mainB + 50), 0, 255);

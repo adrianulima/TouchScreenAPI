@@ -15,9 +15,9 @@ namespace Lima.Fancy.Elements
     private MySprite _textSprite;
 
     public int Selected = 0;
-    public List<string> Labels;
+    public readonly List<string> Labels;
     public Action<int, string> OnChange;
-    protected bool Loop;
+    public bool Loop;
 
     public FancySelector(List<string> labels, Action<int, string> onChange, bool loop = true)
     {
@@ -41,7 +41,7 @@ namespace Lima.Fancy.Elements
         Type = SpriteType.TEXTURE,
         Data = "SquareSimple",
         RotationOrScale = 0,
-        Color = App.Theme.Main_20
+        Color = App.Theme.MainColor_2
       };
 
       _arrowBgSprite = new MySprite()
@@ -49,7 +49,7 @@ namespace Lima.Fancy.Elements
         Type = SpriteType.TEXTURE,
         Data = "SquareSimple",
         RotationOrScale = 0,
-        Color = App.Theme.Main_40
+        Color = App.Theme.MainColor_4
       };
 
       _arrow2BgSprite = new MySprite()
@@ -57,7 +57,7 @@ namespace Lima.Fancy.Elements
         Type = SpriteType.TEXTURE,
         Data = "SquareSimple",
         RotationOrScale = 0,
-        Color = App.Theme.Main_40
+        Color = App.Theme.MainColor_4
       };
 
       _arrowSprite = new MySprite()
@@ -65,7 +65,7 @@ namespace Lima.Fancy.Elements
         Type = SpriteType.TEXTURE,
         Data = "AH_BoreSight",
         RotationOrScale = MathHelper.Pi,
-        Color = App.Theme.White
+        Color = App.Theme.WhiteColor
       };
 
       _arrow2Sprite = new MySprite()
@@ -73,7 +73,7 @@ namespace Lima.Fancy.Elements
         Type = SpriteType.TEXTURE,
         Data = "AH_BoreSight",
         RotationOrScale = 0,
-        Color = App.Theme.White
+        Color = App.Theme.WhiteColor
       };
 
       _textSprite = new MySprite()
@@ -81,7 +81,7 @@ namespace Lima.Fancy.Elements
         Type = SpriteType.TEXT,
         Data = Labels[Selected],
         RotationOrScale = 0.6f * ThemeScale,
-        Color = App.Theme.White,//Theme.Main,
+        Color = App.Theme.WhiteColor,//Theme.Main,
         Alignment = TextAlignment.CENTER,
         FontId = App.Theme.Font
       };
@@ -92,22 +92,22 @@ namespace Lima.Fancy.Elements
         if (Handler.IsMousePressed)
         {
           if (mouseX < size.Y)
-            _arrowBgSprite.Color = App.Theme.Main_80;
+            _arrowBgSprite.Color = App.Theme.MainColor_8;
           else if (mouseX > size.X - size.Y)
-            _arrow2BgSprite.Color = App.Theme.Main_80;
+            _arrow2BgSprite.Color = App.Theme.MainColor_8;
         }
         else
         {
           if (mouseX < size.Y)
-            _arrowBgSprite.Color = App.Theme.Main_50;
+            _arrowBgSprite.Color = App.Theme.MainColor_5;
           else if (mouseX > size.X - size.Y)
-            _arrow2BgSprite.Color = App.Theme.Main_50;
+            _arrow2BgSprite.Color = App.Theme.MainColor_5;
         }
       }
       else
       {
-        _arrowBgSprite.Color = App.Theme.Main_40;
-        _arrow2BgSprite.Color = App.Theme.Main_40;
+        _arrowBgSprite.Color = App.Theme.MainColor_4;
+        _arrow2BgSprite.Color = App.Theme.MainColor_4;
       }
 
       if (Handler.JustReleased)

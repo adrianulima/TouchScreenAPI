@@ -62,7 +62,7 @@ namespace Lima.Fancy.Elements
         Type = SpriteType.TEXTURE,
         Data = "SquareSimple",
         RotationOrScale = 0,
-        Color = App.Theme.Main_20
+        Color = App.Theme.MainColor_2
       };
 
       ProgressSprite = new MySprite()
@@ -70,7 +70,7 @@ namespace Lima.Fancy.Elements
         Type = SpriteType.TEXTURE,
         Data = "SquareSimple",
         RotationOrScale = 0,
-        Color = App.Theme.Main_70
+        Color = App.Theme.MainColor_7
       };
 
       if (Label != "")
@@ -80,7 +80,7 @@ namespace Lima.Fancy.Elements
           Type = SpriteType.TEXT,
           Data = Label,
           RotationOrScale = LabelScale * ThemeScale,
-          Color = App.Theme.White,//Theme.Main,
+          Color = App.Theme.WhiteColor,//Theme.Main,
           Alignment = LabelAlignment,
           FontId = App.Theme.Font
         };

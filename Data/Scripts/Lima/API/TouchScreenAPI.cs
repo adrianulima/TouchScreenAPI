@@ -87,9 +87,9 @@ namespace Lima.API
       AssignMethod(delegates, "TouchScreen_GetCursorPosition", ref TouchScreen_GetCursorPosition);
       AssignMethod(delegates, "TouchScreen_GetInteractiveDistance", ref TouchScreen_GetInteractiveDistance);
       AssignMethod(delegates, "TouchScreen_SetInteractiveDistance", ref TouchScreen_SetInteractiveDistance);
-      AssignMethod(delegates, "TouchScreen_GetScreenRotate", ref TouchScreen_GetScreenRotate);
+      AssignMethod(delegates, "TouchScreen_GetRotation", ref TouchScreen_GetRotation);
       AssignMethod(delegates, "TouchScreen_CompareWithBlockAndSurface", ref TouchScreen_CompareWithBlockAndSurface);
-      AssignMethod(delegates, "TouchScreen_Dispose", ref TouchScreen_Dispose);
+      AssignMethod(delegates, "TouchScreen_ForceDispose", ref TouchScreen_ForceDispose);
       AssignMethod(delegates, "ClickHandler_New", ref ClickHandler_New);
       AssignMethod(delegates, "ClickHandler_GetHitArea", ref ClickHandler_GetHitArea);
       AssignMethod(delegates, "ClickHandler_SetHitArea", ref ClickHandler_SetHitArea);
@@ -105,11 +105,11 @@ namespace Lima.API
       AssignMethod(delegates, "FancyCursor_GetPosition", ref FancyCursor_GetPosition);
       AssignMethod(delegates, "FancyCursor_IsInsideArea", ref FancyCursor_IsInsideArea);
       AssignMethod(delegates, "FancyCursor_GetSprites", ref FancyCursor_GetSprites);
-      AssignMethod(delegates, "FancyCursor_Dispose", ref FancyCursor_Dispose);
-      AssignMethod(delegates, "FancyTheme_GetColorBg", ref FancyTheme_GetColorBg);
-      AssignMethod(delegates, "FancyTheme_GetColorWhite", ref FancyTheme_GetColorWhite);
-      AssignMethod(delegates, "FancyTheme_GetColorMain", ref FancyTheme_GetColorMain);
-      AssignMethod(delegates, "FancyTheme_GetColorMainDarker", ref FancyTheme_GetColorMainDarker);
+      AssignMethod(delegates, "FancyCursor_ForceDispose", ref FancyCursor_ForceDispose);
+      AssignMethod(delegates, "FancyTheme_GetBgColor", ref FancyTheme_GetBgColor);
+      AssignMethod(delegates, "FancyTheme_GetWhiteColor", ref FancyTheme_GetWhiteColor);
+      AssignMethod(delegates, "FancyTheme_GetMainColor", ref FancyTheme_GetMainColor);
+      AssignMethod(delegates, "FancyTheme_GetMainColorDarker", ref FancyTheme_GetMainColorDarker);
       AssignMethod(delegates, "FancyTheme_MeasureStringInPixels", ref FancyTheme_MeasureStringInPixels);
       AssignMethod(delegates, "FancyTheme_GetScale", ref FancyTheme_GetScale);
       AssignMethod(delegates, "FancyTheme_SetScale", ref FancyTheme_SetScale);
@@ -183,6 +183,7 @@ namespace Lima.API
       AssignMethod(delegates, "FancyLabel_SetText", ref FancyLabel_SetText);
       AssignMethod(delegates, "FancyLabel_GetTextColor", ref FancyLabel_GetTextColor);
       AssignMethod(delegates, "FancyLabel_SetTextColor", ref FancyLabel_SetTextColor);
+      AssignMethod(delegates, "FancyLabel_GetFontSize", ref FancyLabel_GetFontSize);
       AssignMethod(delegates, "FancyLabel_SetFontSize", ref FancyLabel_SetFontSize);
       AssignMethod(delegates, "FancyLabel_GetAlignment", ref FancyLabel_GetAlignment);
       AssignMethod(delegates, "FancyLabel_SetAlignment", ref FancyLabel_SetAlignment);
@@ -200,6 +201,10 @@ namespace Lima.API
       AssignMethod(delegates, "FancyProgressBar_GetLabelAlignment", ref FancyProgressBar_GetLabelAlignment);
       AssignMethod(delegates, "FancyProgressBar_SetLabelAlignment", ref FancyProgressBar_SetLabelAlignment);
       AssignMethod(delegates, "FancySelector_New", ref FancySelector_New);
+      AssignMethod(delegates, "FancySelector_GetLoop", ref FancySelector_GetLoop);
+      AssignMethod(delegates, "FancySelector_SetLoop", ref FancySelector_SetLoop);
+      AssignMethod(delegates, "FancySelector_GetSelected", ref FancySelector_GetSelected);
+      AssignMethod(delegates, "FancySelector_SetSelected", ref FancySelector_SetSelected);
       AssignMethod(delegates, "FancySelector_SetOnChange", ref FancySelector_SetOnChange);
       AssignMethod(delegates, "FancySeparator_New", ref FancySeparator_New);
       AssignMethod(delegates, "FancySlider_New", ref FancySlider_New);
@@ -219,9 +224,7 @@ namespace Lima.API
       AssignMethod(delegates, "FancySwitch_New", ref FancySwitch_New);
       AssignMethod(delegates, "FancySwitch_GetIndex", ref FancySwitch_GetIndex);
       AssignMethod(delegates, "FancySwitch_SetIndex", ref FancySwitch_SetIndex);
-      AssignMethod(delegates, "FancySwitch_GetTabNames", ref FancySwitch_GetTabNames);
-      AssignMethod(delegates, "FancySwitch_GetTabName", ref FancySwitch_GetTabName);
-      AssignMethod(delegates, "FancySwitch_SetTabName", ref FancySwitch_SetTabName);
+      AssignMethod(delegates, "FancySwitch_GetLabels", ref FancySwitch_GetLabels);
       AssignMethod(delegates, "FancySwitch_SetOnChange", ref FancySwitch_SetOnChange);
       AssignMethod(delegates, "FancyTextField_New", ref FancyTextField_New);
       AssignMethod(delegates, "FancyTextField_GetText", ref FancyTextField_GetText);
@@ -271,9 +274,9 @@ namespace Lima.API
     public Func<object, Vector2> TouchScreen_GetCursorPosition;
     public Func<object, float> TouchScreen_GetInteractiveDistance;
     public Action<object, float> TouchScreen_SetInteractiveDistance;
-    public Func<object, int> TouchScreen_GetScreenRotate;
+    public Func<object, int> TouchScreen_GetRotation;
     public Func<object, IMyCubeBlock, IMyTextSurface, bool> TouchScreen_CompareWithBlockAndSurface;
-    public Action<object> TouchScreen_Dispose;
+    public Action<object> TouchScreen_ForceDispose;
 
     public Func<object> ClickHandler_New;
     public Func<object, Vector4> ClickHandler_GetHitArea;
@@ -291,12 +294,12 @@ namespace Lima.API
     public Func<object, Vector2> FancyCursor_GetPosition;
     public Func<object, float, float, float, float, bool> FancyCursor_IsInsideArea;
     public Func<object, List<MySprite>> FancyCursor_GetSprites;
-    public Action<object> FancyCursor_Dispose;
+    public Action<object> FancyCursor_ForceDispose;
 
-    public Func<object, Color> FancyTheme_GetColorBg;
-    public Func<object, Color> FancyTheme_GetColorWhite;
-    public Func<object, Color> FancyTheme_GetColorMain;
-    public Func<object, int, Color> FancyTheme_GetColorMainDarker;
+    public Func<object, Color> FancyTheme_GetBgColor;
+    public Func<object, Color> FancyTheme_GetWhiteColor;
+    public Func<object, Color> FancyTheme_GetMainColor;
+    public Func<object, int, Color> FancyTheme_GetMainColorDarker;
     public Func<object, String, string, float, Vector2> FancyTheme_MeasureStringInPixels;
     public Func<object, float> FancyTheme_GetScale;
     public Action<object, float> FancyTheme_SetScale;
@@ -379,6 +382,7 @@ namespace Lima.API
     public Action<object, string> FancyLabel_SetText;
     public Func<object, Color?> FancyLabel_GetTextColor;
     public Action<object, Color> FancyLabel_SetTextColor;
+    public Func<object, float> FancyLabel_GetFontSize;
     public Action<object, float> FancyLabel_SetFontSize;
     public Func<object, TextAlignment> FancyLabel_GetAlignment;
     public Action<object, TextAlignment> FancyLabel_SetAlignment;
@@ -398,6 +402,10 @@ namespace Lima.API
     public Action<object, TextAlignment> FancyProgressBar_SetLabelAlignment;
 
     public Func<List<string>, Action<int, string>, bool, object> FancySelector_New;
+    public Func<object, bool> FancySelector_GetLoop;
+    public Action<object, bool> FancySelector_SetLoop;
+    public Func<object, int> FancySelector_GetSelected;
+    public Action<object, int> FancySelector_SetSelected;
     public Action<object, Action<int, string>> FancySelector_SetOnChange;
 
     public Func<object> FancySeparator_New;
@@ -423,9 +431,7 @@ namespace Lima.API
     public Func<string[], int, Action<int>, object> FancySwitch_New;
     public Func<object, int> FancySwitch_GetIndex;
     public Action<object, int> FancySwitch_SetIndex;
-    public Func<object, string[]> FancySwitch_GetTabNames;
-    public Func<object, int, string> FancySwitch_GetTabName;
-    public Action<object, int, string> FancySwitch_SetTabName;
+    public Func<object, string[]> FancySwitch_GetLabels;
     public Action<object, Action<int>> FancySwitch_SetOnChange;
 
     public Func<string, Action<string>, object> FancyTextField_New;
@@ -464,196 +470,167 @@ namespace Lima.API
   }
   public class TouchScreen : DelegatorBase
   {
-    internal object internalObj;
-    public TouchScreen(object internalObject) { internalObj = internalObject; }
-    public IMyCubeBlock GetBlock() => Api.TouchScreen_GetBlock.Invoke(internalObj);
-    public IMyTextSurface GetSurface() => Api.TouchScreen_GetSurface.Invoke(internalObj);
-    public int GetIndex() => Api.TouchScreen_GetIndex.Invoke(internalObj);
-    public bool IsOnScreen() => Api.TouchScreen_IsOnScreen.Invoke(internalObj);
-    public Vector2 GetCursorPosition() => Api.TouchScreen_GetCursorPosition.Invoke(internalObj);
-    public float GetInteractiveDistance() => Api.TouchScreen_GetInteractiveDistance.Invoke(internalObj);
-    public void SetInteractiveDistance(float distance) => Api.TouchScreen_SetInteractiveDistance.Invoke(internalObj, distance);
-    public int GetScreenRotate() => Api.TouchScreen_GetScreenRotate.Invoke(internalObj);
-    public bool CompareWithBlockAndSurface(IMyCubeBlock block, IMyTextSurface surface) => Api.TouchScreen_CompareWithBlockAndSurface.Invoke(internalObj, block, surface);
-    public void Dispose() => Api.TouchScreen_Dispose.Invoke(internalObj);
+    internal readonly object InternalObj;
+    public TouchScreen(object internalObject) { InternalObj = internalObject; }
+    public IMyCubeBlock Block { get { return Api.TouchScreen_GetBlock.Invoke(InternalObj); } }
+    public IMyTextSurface Surface { get { return Api.TouchScreen_GetSurface.Invoke(InternalObj); } }
+    public int Index { get { return Api.TouchScreen_GetIndex.Invoke(InternalObj); } }
+    public bool IsOnScreen { get { return Api.TouchScreen_IsOnScreen.Invoke(InternalObj); } }
+    public Vector2 CursorPosition { get { return Api.TouchScreen_GetCursorPosition.Invoke(InternalObj); } }
+    public float InteractiveDistance { get { return Api.TouchScreen_GetInteractiveDistance.Invoke(InternalObj); } }
+    public void SetInteractiveDistance(float distance) => Api.TouchScreen_SetInteractiveDistance.Invoke(InternalObj, distance);
+    public int Rotation { get { return Api.TouchScreen_GetRotation.Invoke(InternalObj); } }
+    public bool CompareWithBlockAndSurface(IMyCubeBlock block, IMyTextSurface surface) => Api.TouchScreen_CompareWithBlockAndSurface.Invoke(InternalObj, block, surface);
+    public void ForceDispose() => Api.TouchScreen_ForceDispose.Invoke(InternalObj);
   }
   public class ClickHandler : DelegatorBase
   {
-    internal object internalObj;
-    public ClickHandler() { internalObj = Api.ClickHandler_New(); }
-    public ClickHandler(object internalObject) { internalObj = internalObject; }
-    public Vector4 GetHitArea() => Api.ClickHandler_GetHitArea.Invoke(internalObj);
-    public void SetHitArea(Vector4 hitArea) => Api.ClickHandler_SetHitArea.Invoke(internalObj, hitArea);
-    public bool IsMouseReleased() => Api.ClickHandler_IsMouseReleased.Invoke(internalObj);
-    public bool IsMouseOver() => Api.ClickHandler_IsMouseOver.Invoke(internalObj);
-    public bool IsMousePressed() => Api.ClickHandler_IsMousePressed.Invoke(internalObj);
-    public bool JustReleased() => Api.ClickHandler_JustReleased.Invoke(internalObj);
-    public bool JustPressed() => Api.ClickHandler_JustPressed.Invoke(internalObj);
-    public void UpdateStatus(TouchScreen screen) => Api.ClickHandler_UpdateStatus.Invoke(internalObj, screen.internalObj);
+    internal readonly object InternalObj;
+    public ClickHandler() { InternalObj = Api.ClickHandler_New(); }
+    public ClickHandler(object internalObject) { InternalObj = internalObject; }
+    public Vector4 HitArea { get { return Api.ClickHandler_GetHitArea.Invoke(InternalObj); } set { Api.ClickHandler_SetHitArea.Invoke(InternalObj, value); } }
+    public bool IsMouseReleased { get { return Api.ClickHandler_IsMouseReleased.Invoke(InternalObj); } }
+    public bool IsMouseOver { get { return Api.ClickHandler_IsMouseOver.Invoke(InternalObj); } }
+    public bool IsMousePressed { get { return Api.ClickHandler_IsMousePressed.Invoke(InternalObj); } }
+    public bool JustReleased { get { return Api.ClickHandler_JustReleased.Invoke(InternalObj); } }
+    public bool JustPressed { get { return Api.ClickHandler_JustPressed.Invoke(InternalObj); } }
+    public void UpdateStatus(TouchScreen screen) => Api.ClickHandler_UpdateStatus.Invoke(InternalObj, screen.InternalObj);
   }
   public class FancyCursor : DelegatorBase
   {
-    internal object internalObj;
-    public FancyCursor(TouchScreen screen) { internalObj = Api.FancyCursor_New(screen.internalObj); }
-    public FancyCursor(object internalObject) { internalObj = internalObject; }
-    public bool GetActive() => Api.FancyCursor_GetActive.Invoke(internalObj);
-    public void SetActive(bool active) => Api.FancyCursor_SetActive.Invoke(internalObj, active);
-    public Vector2 GetPosition() => Api.FancyCursor_GetPosition.Invoke(internalObj);
-    public bool IsInsideArea(float x, float y, float z, float w) => Api.FancyCursor_IsInsideArea.Invoke(internalObj, x, y, z, w);
-    public List<MySprite> GetSprites() => Api.FancyCursor_GetSprites.Invoke(internalObj);
-    public void Dispose() => Api.FancyCursor_Dispose.Invoke(internalObj);
+    internal readonly object InternalObj;
+    public FancyCursor(TouchScreen screen) { InternalObj = Api.FancyCursor_New(screen.InternalObj); }
+    public FancyCursor(object internalObject) { InternalObj = internalObject; }
+    public bool Active { get { return Api.FancyCursor_GetActive.Invoke(InternalObj); } set { Api.FancyCursor_SetActive.Invoke(InternalObj, value); } }
+    public Vector2 Position { get { return Api.FancyCursor_GetPosition.Invoke(InternalObj); } }
+    public bool IsInsideArea(float x, float y, float z, float w) => Api.FancyCursor_IsInsideArea.Invoke(InternalObj, x, y, z, w);
+    public List<MySprite> Sprites { get { return Api.FancyCursor_GetSprites.Invoke(InternalObj); } }
+    public void ForceDispose() => Api.FancyCursor_ForceDispose.Invoke(InternalObj);
   }
   public class FancyTheme : DelegatorBase
   {
-    internal object internalObj;
-    public FancyTheme(object internalObject) { internalObj = internalObject; }
-    public Color GetColorBg() => Api.FancyTheme_GetColorBg.Invoke(internalObj);
-    public Color GetColorWhite() => Api.FancyTheme_GetColorWhite.Invoke(internalObj);
-    public Color GetColorMain() => Api.FancyTheme_GetColorMain.Invoke(internalObj);
-    public Color GetColorMainDarker(int value) => Api.FancyTheme_GetColorMainDarker.Invoke(internalObj, value);
-    public Vector2 MeasureStringInPixels(String text, string font, float scale) => Api.FancyTheme_MeasureStringInPixels.Invoke(internalObj, text, font, scale);
-    public float GetScale() => Api.FancyTheme_GetScale.Invoke(internalObj);
-    public void SetScale(float scale) => Api.FancyTheme_SetScale.Invoke(internalObj, scale);
+    internal readonly object InternalObj;
+    public FancyTheme(object internalObject) { InternalObj = internalObject; }
+    public Color BgColor { get { return Api.FancyTheme_GetBgColor.Invoke(InternalObj); } }
+    public Color WhiteColor { get { return Api.FancyTheme_GetWhiteColor.Invoke(InternalObj); } }
+    public Color MainColor { get { return Api.FancyTheme_GetMainColor.Invoke(InternalObj); } }
+    public Color GetMainColorDarker(int value) => Api.FancyTheme_GetMainColorDarker.Invoke(InternalObj, value);
+    public float Scale { get { return Api.FancyTheme_GetScale.Invoke(InternalObj); } set { Api.FancyTheme_SetScale.Invoke(InternalObj, value); } }
+    public Vector2 MeasureStringInPixels(String text, string font, float scale) => Api.FancyTheme_MeasureStringInPixels.Invoke(InternalObj, text, font, scale);
   }
   public abstract class FancyElementBase : DelegatorBase
   {
     private FancyApp _app;
     private FancyContainerBase _parent;
-    internal object internalObj;
-    public FancyElementBase(object internalObject) { internalObj = internalObject; }
-    public bool GetEnabled() => Api.FancyElementBase_GetEnabled.Invoke(internalObj);
-    public void SetEnabled(bool enabled) => Api.FancyElementBase_SetEnabled.Invoke(internalObj, enabled);
-    public bool GetAbsolute() => Api.FancyElementBase_GetAbsolute.Invoke(internalObj);
-    public void SetAbsolute(bool absolute) => Api.FancyElementBase_SetAbsolute.Invoke(internalObj, absolute);
-    public Vector2 GetPosition() => Api.FancyElementBase_GetPosition.Invoke(internalObj);
-    public void SetPosition(Vector2 position) => Api.FancyElementBase_SetPosition.Invoke(internalObj, position);
-    public Vector4 GetMargin() => Api.FancyElementBase_GetMargin.Invoke(internalObj);
-    public void SetMargin(Vector4 margin) => Api.FancyElementBase_SetMargin.Invoke(internalObj, margin);
-    public Vector2 GetScale() => Api.FancyElementBase_GetScale.Invoke(internalObj);
-    public void SetScale(Vector2 scale) => Api.FancyElementBase_SetScale.Invoke(internalObj, scale);
-    public Vector2 GetPixels() => Api.FancyElementBase_GetPixels.Invoke(internalObj);
-    public void SetPixels(Vector2 pixels) => Api.FancyElementBase_SetPixels.Invoke(internalObj, pixels);
-    public Vector2 GetSize() => Api.FancyElementBase_GetSize.Invoke(internalObj);
-    public Vector2 GetBoundaries() => Api.FancyElementBase_GetBoundaries.Invoke(internalObj);
-    public FancyApp GetApp() { if (_app == null) _app = new FancyApp(Api.FancyElementBase_GetApp.Invoke(internalObj)); return _app; }
-    public FancyContainerBase GetParent() { if (_parent == null) _parent = new FancyApp(Api.FancyElementBase_GetParent.Invoke(internalObj)); return _parent; }
-    public List<MySprite> GetSprites() => Api.FancyElementBase_GetSprites.Invoke(internalObj);
-    public void InitElements() => Api.FancyElementBase_InitElements.Invoke(internalObj);
-    public void ForceUpdate() => Api.FancyElementBase_ForceUpdate.Invoke(internalObj);
-    public void ForceDispose() => Api.FancyElementBase_ForceDispose.Invoke(internalObj);
-    public void RegisterUpdate(Action update) => Api.FancyElementBase_RegisterUpdate.Invoke(internalObj, update);
-    public void UnregisterUpdate(Action update) => Api.FancyElementBase_UnregisterUpdate.Invoke(internalObj, update);
+    internal readonly object InternalObj;
+    public FancyElementBase(object internalObject) { InternalObj = internalObject; }
+    public bool Enabled { get { return Api.FancyElementBase_GetEnabled.Invoke(InternalObj); } set { Api.FancyElementBase_SetEnabled.Invoke(InternalObj, value); } }
+    public bool Absolute { get { return Api.FancyElementBase_GetAbsolute.Invoke(InternalObj); } set { Api.FancyElementBase_SetAbsolute.Invoke(InternalObj, value); } }
+    public Vector2 Position { get { return Api.FancyElementBase_GetPosition.Invoke(InternalObj); } set { Api.FancyElementBase_SetPosition.Invoke(InternalObj, value); } }
+    public Vector4 Margin { get { return Api.FancyElementBase_GetMargin.Invoke(InternalObj); } set { Api.FancyElementBase_SetMargin.Invoke(InternalObj, value); } }
+    public Vector2 Scale { get { return Api.FancyElementBase_GetScale.Invoke(InternalObj); } set { Api.FancyElementBase_SetScale.Invoke(InternalObj, value); } }
+    public Vector2 Pixels { get { return Api.FancyElementBase_GetPixels.Invoke(InternalObj); } set { Api.FancyElementBase_SetPixels.Invoke(InternalObj, value); } }
+    public FancyApp App { get { if (_app == null) _app = new FancyApp(Api.FancyElementBase_GetApp.Invoke(InternalObj)); return _app; } }
+    public FancyContainerBase Parent { get { if (_parent == null) _parent = new FancyApp(Api.FancyElementBase_GetParent.Invoke(InternalObj)); return _parent; } }
+    public List<MySprite> Sprites { get { return Api.FancyElementBase_GetSprites.Invoke(InternalObj); } }
+    public Vector2 GetSize() => Api.FancyElementBase_GetSize.Invoke(InternalObj);
+    public Vector2 GetBoundaries() => Api.FancyElementBase_GetBoundaries.Invoke(InternalObj);
+    public void InitElements() => Api.FancyElementBase_InitElements.Invoke(InternalObj);
+    public void ForceUpdate() => Api.FancyElementBase_ForceUpdate.Invoke(InternalObj);
+    public void ForceDispose() => Api.FancyElementBase_ForceDispose.Invoke(InternalObj);
+    public void RegisterUpdate(Action update) => Api.FancyElementBase_RegisterUpdate.Invoke(InternalObj, update);
+    public void UnregisterUpdate(Action update) => Api.FancyElementBase_UnregisterUpdate.Invoke(InternalObj, update);
   }
   public abstract class FancyContainerBase : FancyElementBase
   {
     public FancyContainerBase(object internalObject) : base(internalObject) { }
-    public List<object> GetChildren() => Api.FancyContainerBase_GetChildren.Invoke(internalObj);
-    public Vector2 GetFlexSize() => Api.FancyContainerBase_GetFlexSize.Invoke(internalObj);
-    public void AddChild(FancyElementBase child) => Api.FancyContainerBase_AddChild.Invoke(internalObj, child.internalObj);
-    public void RemoveChild(FancyElementBase child) => Api.FancyContainerBase_RemoveChild.Invoke(internalObj, child.internalObj);
-    public void RemoveChild(object child) => Api.FancyContainerBase_RemoveChild.Invoke(internalObj, child);
+    public List<object> Children { get { return Api.FancyContainerBase_GetChildren.Invoke(InternalObj); } }
+    public Vector2 GetFlexSize() => Api.FancyContainerBase_GetFlexSize.Invoke(InternalObj);
+    public void AddChild(FancyElementBase child) => Api.FancyContainerBase_AddChild.Invoke(InternalObj, child.InternalObj);
+    public void RemoveChild(FancyElementBase child) => Api.FancyContainerBase_RemoveChild.Invoke(InternalObj, child.InternalObj);
+    public void RemoveChild(object child) => Api.FancyContainerBase_RemoveChild.Invoke(InternalObj, child);
   }
   public class FancyView : FancyContainerBase
   {
     public enum ViewDirection : int { None = 0, Row = 1, Column = 2 }
     public FancyView(ViewDirection direction = ViewDirection.Column, Color? bgColor = null) : base(Api.FancyView_New((int)direction, bgColor)) { }
     public FancyView(object internalObject) : base(internalObject) { }
-    public ViewDirection GetDirection() => (ViewDirection)Api.FancyView_GetDirection.Invoke(internalObj);
-    public void SetDirection(ViewDirection direction) => Api.FancyView_SetDirection.Invoke(internalObj, (int)direction);
-    public Color GetBgColor() => Api.FancyView_GetBgColor.Invoke(internalObj);
-    public void SetBgColor(Color bgColor) => Api.FancyView_SetBgColor.Invoke(internalObj, bgColor);
-    public Color GetBorderColor() => Api.FancyView_GetBorderColor.Invoke(internalObj);
-    public void SetBorderColor(Color borderColor) => Api.FancyView_SetBorderColor.Invoke(internalObj, borderColor);
-    public Vector4 GetBorder() => Api.FancyView_GetBorder.Invoke(internalObj);
-    public void SetBorder(Vector4 border) => Api.FancyView_SetBorder.Invoke(internalObj, border);
-    public Vector4 GetPadding() => Api.FancyView_GetPadding.Invoke(internalObj);
-    public void SetPadding(Vector4 padding) => Api.FancyView_SetPadding.Invoke(internalObj, padding);
-    public int GetGap() => Api.FancyView_GetGap.Invoke(internalObj);
-    public void SetGap(int gap) => Api.FancyView_SetGap.Invoke(internalObj, gap);
+    public ViewDirection GetDirection { get { return (ViewDirection)Api.FancyView_GetDirection.Invoke(InternalObj); } set { Api.FancyView_SetDirection.Invoke(InternalObj, (int)value); } }
+    public Color BgColor { get { return Api.FancyView_GetBgColor.Invoke(InternalObj); } set { Api.FancyView_SetBgColor.Invoke(InternalObj, value); } }
+    public Color BorderColor { get { return Api.FancyView_GetBorderColor.Invoke(InternalObj); } set { Api.FancyView_SetBorderColor.Invoke(InternalObj, value); } }
+    public Vector4 Border { get { return Api.FancyView_GetBorder.Invoke(InternalObj); } set { Api.FancyView_SetBorder.Invoke(InternalObj, value); } }
+    public Vector4 Padding { get { return Api.FancyView_GetPadding.Invoke(InternalObj); } set { Api.FancyView_SetPadding.Invoke(InternalObj, value); } }
+    public int Gap { get { return Api.FancyView_GetGap.Invoke(InternalObj); } set { Api.FancyView_SetGap.Invoke(InternalObj, value); } }
   }
   public class FancyScrollView : FancyView
   {
     public FancyScrollView(ViewDirection direction = ViewDirection.Column, Color? bgColor = null) : base(Api.FancyScrollView_New((int)direction, bgColor)) { }
-    public int GetBarWidth() => Api.FancyScrollView_GetBarWidth.Invoke(internalObj);
-    public void SetBarWidth(int width) => Api.FancyScrollView_SetBarWidth.Invoke(internalObj, width);
-    public float GetScroll() => Api.FancyScrollView_GetScroll.Invoke(internalObj);
-    public void SetScroll(float scroll) => Api.FancyScrollView_SetScroll.Invoke(internalObj, scroll);
-    public bool GetScrollAlwaysVisible() => Api.FancyScrollView_GetScrollAlwaysVisible.Invoke(internalObj);
-    public void SetScrollAlwaysVisible(bool visible) => Api.FancyScrollView_SetScrollAlwaysVisible.Invoke(internalObj, visible);
+    public int BarWidth { get { return Api.FancyScrollView_GetBarWidth.Invoke(InternalObj); } set { Api.FancyScrollView_SetBarWidth.Invoke(InternalObj, value); } }
+    public float Scroll { get { return Api.FancyScrollView_GetScroll.Invoke(InternalObj); } set { Api.FancyScrollView_SetScroll.Invoke(InternalObj, value); } }
+    public bool ScrollAlwaysVisible { get { return Api.FancyScrollView_GetScrollAlwaysVisible.Invoke(InternalObj); } set { Api.FancyScrollView_SetScrollAlwaysVisible.Invoke(InternalObj, value); } }
   }
   public class FancyApp : FancyView
   {
-    protected TouchScreen Screen;
-    protected FancyCursor Cursor;
-    protected FancyTheme Theme;
+    private TouchScreen _screen;
+    private FancyCursor _cursor;
+    private FancyTheme _theme;
     public FancyApp() : base(Api.FancyApp_New()) { }
     public FancyApp(object internalObject) : base(internalObject) { }
-    public TouchScreen GetScreen() { if (Screen == null) Screen = new TouchScreen(Api.FancyApp_GetScreen.Invoke(internalObj)); return Screen; }
-    public RectangleF GetViewport() => Api.FancyApp_GetViewport.Invoke(internalObj);
-    public FancyCursor GetCursor() { if (Cursor == null) Cursor = new FancyCursor(Api.FancyApp_GetCursor.Invoke(internalObj)); return Cursor; }
-    public FancyTheme GetTheme() { if (Theme == null) Theme = new FancyTheme(Api.FancyApp_GetTheme.Invoke(internalObj)); return Theme; }
-    public bool GetDefaultBg() => Api.FancyApp_GetDefaultBg.Invoke(internalObj);
-    public void SetDefaultBg(bool defaultBg) => Api.FancyApp_SetDefaultBg.Invoke(internalObj, defaultBg);
-    public void InitApp(MyCubeBlock block, Sandbox.ModAPI.Ingame.IMyTextSurface surface) => Api.FancyApp_InitApp.Invoke(internalObj, block, surface);
+    public TouchScreen Screen { get { if (_screen == null) _screen = new TouchScreen(Api.FancyApp_GetScreen.Invoke(InternalObj)); return _screen; } }
+    public RectangleF Viewport { get { return Api.FancyApp_GetViewport.Invoke(InternalObj); } }
+    public FancyCursor Cursor { get { if (_cursor == null) _cursor = new FancyCursor(Api.FancyApp_GetCursor.Invoke(InternalObj)); return _cursor; } }
+    public FancyTheme Theme { get { if (_theme == null) _theme = new FancyTheme(Api.FancyApp_GetTheme.Invoke(InternalObj)); return _theme; } }
+    public bool DefaultBg { get { return Api.FancyApp_GetDefaultBg.Invoke(InternalObj); } set { Api.FancyApp_SetDefaultBg.Invoke(InternalObj, value); } }
+    public virtual void InitApp(MyCubeBlock block, Sandbox.ModAPI.Ingame.IMyTextSurface surface) => Api.FancyApp_InitApp.Invoke(InternalObj, block, surface);
   }
   public abstract class FancyButtonBase : FancyElementBase
   {
-    protected ClickHandler Handler;
+    private ClickHandler _handler;
     public FancyButtonBase(object internalObject) : base(internalObject) { }
-    public ClickHandler GetHandler() { if (Handler == null) Handler = new ClickHandler(Api.FancyButtonBase_GetHandler.Invoke(internalObj)); return Handler; }
+    public ClickHandler Handler { get { if (_handler == null) _handler = new ClickHandler(Api.FancyButtonBase_GetHandler.Invoke(InternalObj)); return _handler; } }
   }
   public class FancyButton : FancyButtonBase
   {
     public FancyButton(string text, Action onChange) : base(Api.FancyButton_New(text, onChange)) { }
     public FancyButton(object internalObject) : base(internalObject) { }
-    public string GetText() => Api.FancyButton_GetText.Invoke(internalObj);
-    public void SetText(string text) => Api.FancyButton_SetText.Invoke(internalObj, text);
-    public void SetOnChange(Action onChange) => Api.FancyButton_SetOnChange.Invoke(internalObj, onChange);
-    public TextAlignment GetAlignment() => Api.FancyButton_GetAlignment.Invoke(internalObj);
-    public void SetAlignment(TextAlignment alignment) => Api.FancyButton_SetAlignment.Invoke(internalObj, alignment);
+    public string Text { get { return Api.FancyButton_GetText.Invoke(InternalObj); } set { Api.FancyButton_SetText.Invoke(InternalObj, value); } }
+    public TextAlignment Alignment { get { return Api.FancyButton_GetAlignment.Invoke(InternalObj); } set { Api.FancyButton_SetAlignment.Invoke(InternalObj, value); } }
+    public Action OnChange { set { Api.FancyButton_SetOnChange.Invoke(InternalObj, value); } }
   }
   public class FancyCheckbox : FancyButtonBase
   {
     public FancyCheckbox(Action<bool> onChange, bool value = false) : base(Api.FancyCheckbox_New(onChange, value)) { }
     public FancyCheckbox(object internalObject) : base(internalObject) { }
-    public bool GetValue() => Api.FancyCheckbox_GetValue.Invoke(internalObj);
-    public void SetValue(bool value) => Api.FancyCheckbox_SetValue.Invoke(internalObj, value);
-    public void SetOnChange(Action<bool> onChange) => Api.FancyCheckbox_SetOnChange.Invoke(internalObj, onChange);
+    public bool Value { get { return Api.FancyCheckbox_GetValue.Invoke(InternalObj); } set { Api.FancyCheckbox_SetValue.Invoke(InternalObj, value); } }
+    public Action<bool> OnChange { set { Api.FancyCheckbox_SetOnChange.Invoke(InternalObj, value); } }
   }
   public class FancyLabel : FancyElementBase
   {
     public FancyLabel(string text, float fontSize = 0.5f, TextAlignment alignment = TextAlignment.CENTER) : base(Api.FancyLabel_New(text, fontSize, alignment)) { }
     public FancyLabel(object internalObject) : base(internalObject) { }
-    public string GetText() => Api.FancyLabel_GetText.Invoke(internalObj);
-    public void SetText(string text) => Api.FancyLabel_SetText.Invoke(internalObj, text);
-    public Color? GetTextColor() => Api.FancyLabel_GetTextColor.Invoke(internalObj);
-    public void SetTextColor(Color color) => Api.FancyLabel_SetTextColor.Invoke(internalObj, color);
-    public void SetFontSize(float fontSize) => Api.FancyLabel_SetFontSize.Invoke(internalObj, fontSize);
-    public TextAlignment GetAlignment() => Api.FancyLabel_GetAlignment.Invoke(internalObj);
-    public void SetAlignment(TextAlignment alignment) => Api.FancyLabel_SetAlignment.Invoke(internalObj, alignment);
+    public string Text { get { return Api.FancyLabel_GetText.Invoke(InternalObj); } set { Api.FancyLabel_SetText.Invoke(InternalObj, value); } }
+    public Color? TextColor { get { return Api.FancyLabel_GetTextColor.Invoke(InternalObj); } set { Api.FancyLabel_SetTextColor.Invoke(InternalObj, (Color)value); } }
+    public float FontSize { get { return Api.FancyLabel_GetFontSize.Invoke(InternalObj); } set { Api.FancyLabel_SetFontSize.Invoke(InternalObj, value); } }
+    public TextAlignment Alignment { get { return Api.FancyLabel_GetAlignment.Invoke(InternalObj); } set { Api.FancyLabel_SetAlignment.Invoke(InternalObj, value); } }
   }
   public class FancyProgressBar : FancyElementBase
   {
     public FancyProgressBar(float min, float max, bool bars = true, bool vertical = false) : base(Api.FancyProgressBar_New(min, max, bars, vertical)) { }
     public FancyProgressBar(object internalObject) : base(internalObject) { }
-    public float GetValue() => Api.FancyProgressBar_GetValue.Invoke(internalObj);
-    public void SetValue(float value) => Api.FancyProgressBar_SetValue.Invoke(internalObj, value);
-    public float GetMaxValue() => Api.FancyProgressBar_GetMaxValue.Invoke(internalObj);
-    public void SetMaxValue(float max) => Api.FancyProgressBar_SetMaxValue.Invoke(internalObj, max);
-    public float GetMinValue() => Api.FancyProgressBar_GetMinValue.Invoke(internalObj);
-    public void SetMinValue(float min) => Api.FancyProgressBar_SetMinValue.Invoke(internalObj, min);
-    public string GetLabel() => Api.FancyProgressBar_GetLabel.Invoke(internalObj);
-    public void SetLabel(string label) => Api.FancyProgressBar_SetLabel.Invoke(internalObj, label);
-    public float GetLabelScale() => Api.FancyProgressBar_GetLabelScale.Invoke(internalObj);
-    public void SetLabelScale(float scale) => Api.FancyProgressBar_SetLabelScale.Invoke(internalObj, scale);
-    public TextAlignment GetLabelAlignment() => Api.FancyProgressBar_GetLabelAlignment.Invoke(internalObj);
-    public void SetLabelAlignment(TextAlignment alignment) => Api.FancyProgressBar_SetLabelAlignment.Invoke(internalObj, alignment);
+    public float Value { get { return Api.FancyProgressBar_GetValue.Invoke(InternalObj); } set { Api.FancyProgressBar_SetValue.Invoke(InternalObj, value); } }
+    public float MaxValue { get { return Api.FancyProgressBar_GetMaxValue.Invoke(InternalObj); } set { Api.FancyProgressBar_SetMaxValue.Invoke(InternalObj, value); } }
+    public float MinValue { get { return Api.FancyProgressBar_GetMinValue.Invoke(InternalObj); } set { Api.FancyProgressBar_SetMinValue.Invoke(InternalObj, value); } }
+    public string Label { get { return Api.FancyProgressBar_GetLabel.Invoke(InternalObj); } set { Api.FancyProgressBar_SetLabel.Invoke(InternalObj, value); } }
+    public float LabelScale { get { return Api.FancyProgressBar_GetLabelScale.Invoke(InternalObj); } set { Api.FancyProgressBar_SetLabelScale.Invoke(InternalObj, value); } }
+    public TextAlignment LabelAlignment { get { return Api.FancyProgressBar_GetLabelAlignment.Invoke(InternalObj); } set { Api.FancyProgressBar_SetLabelAlignment.Invoke(InternalObj, value); } }
   }
   public class FancySelector : FancyButtonBase
   {
     public FancySelector(List<string> labels, Action<int, string> onChange, bool loop = true) : base(Api.FancySelector_New(labels, onChange, loop)) { }
     public FancySelector(object internalObject) : base(internalObject) { }
-    public void SetOnChange(Action<int, string> onChange) => Api.FancySelector_SetOnChange.Invoke(internalObj, onChange);
+    public bool Loop { get { return Api.FancySelector_GetLoop.Invoke(InternalObj); } set { Api.FancySelector_SetLoop.Invoke(InternalObj, value); } }
+    public int Selected { get { return Api.FancySelector_GetSelected.Invoke(InternalObj); } set { Api.FancySelector_SetSelected.Invoke(InternalObj, value); } }
+    public Action<int, string> OnChange { set { Api.FancySelector_SetOnChange.Invoke(InternalObj, value); } }
   }
   public class FancySeparator : FancyElementBase
   {
@@ -664,72 +641,55 @@ namespace Lima.API
   {
     public FancySlider(float min, float max, Action<float> onChange) : base(Api.FancySlider_New(min, max, onChange)) { }
     public FancySlider(object internalObject) : base(internalObject) { }
-    public float GetMaxValue() => Api.FancySlider_GetMaxValue.Invoke(internalObj);
-    public void SetMaxValue(float max) => Api.FancySlider_SetMaxValue.Invoke(internalObj, max);
-    public float GetMinValue() => Api.FancySlider_GetMinValue.Invoke(internalObj);
-    public void SetMinValue(float min) => Api.FancySlider_SetMinValue.Invoke(internalObj, min);
-    public float GetValue() => Api.FancySlider_GetValue.Invoke(internalObj);
-    public void SetValue(float value) => Api.FancySlider_SetValue.Invoke(internalObj, value);
-    public void SetOnChange(Action<float> onChange) => Api.FancySlider_SetOnChange.Invoke(internalObj, onChange);
-    public bool GetIsInteger() => Api.FancySlider_GetIsInteger.Invoke(internalObj);
-    public void SetIsInteger(bool isInterger) => Api.FancySlider_SetIsInteger.Invoke(internalObj, isInterger);
-    public bool GetAllowInput() => Api.FancySlider_GetAllowInput.Invoke(internalObj);
-    public void SetAllowInput(bool allowInput) => Api.FancySlider_SetAllowInput.Invoke(internalObj, allowInput);
+    public float MaxValue { get { return Api.FancySlider_GetMaxValue.Invoke(InternalObj); } set { Api.FancySlider_SetMaxValue.Invoke(InternalObj, value); } }
+    public float MinValue { get { return Api.FancySlider_GetMinValue.Invoke(InternalObj); } set { Api.FancySlider_SetMinValue.Invoke(InternalObj, value); } }
+    public float Value { get { return Api.FancySlider_GetValue.Invoke(InternalObj); } set { Api.FancySlider_SetValue.Invoke(InternalObj, value); } }
+    public bool IsInteger { get { return Api.FancySlider_GetIsInteger.Invoke(InternalObj); } set { Api.FancySlider_SetIsInteger.Invoke(InternalObj, value); } }
+    public bool AllowInput { get { return Api.FancySlider_GetAllowInput.Invoke(InternalObj); } set { Api.FancySlider_SetAllowInput.Invoke(InternalObj, value); } }
+    public Action<float> OnChange { set { Api.FancySlider_SetOnChange.Invoke(InternalObj, value); } }
   }
   public class FancySliderRange : FancySlider
   {
     public FancySliderRange(float min, float max, Action<float, float> onChange) : base(Api.FancySliderRange_NewR(min, max, onChange)) { }
     public FancySliderRange(object internalObject) : base(internalObject) { }
-    public float GetValueLower() => Api.FancySliderRange_GetValueLower.Invoke(internalObj);
-    public void SetValueLower(float value) => Api.FancySliderRange_SetValueLower.Invoke(internalObj, value);
-    public void SetOnChangeRange(Action<float, float> onChange) => Api.FancySliderRange_SetOnChangeR.Invoke(internalObj, onChange);
+    public float ValueLower { get { return Api.FancySliderRange_GetValueLower.Invoke(InternalObj); } set { Api.FancySliderRange_SetValueLower.Invoke(InternalObj, value); } }
+    public Action<float, float> OnChangeRange { set { Api.FancySliderRange_SetOnChangeR.Invoke(InternalObj, value); } }
   }
   public class FancySwitch : FancyButtonBase
   {
-    public FancySwitch(string[] tabNames, int index = 0, Action<int> onChange = null) : base(Api.FancySwitch_New(tabNames, index, onChange)) { }
+    public FancySwitch(string[] labels, int index = 0, Action<int> onChange = null) : base(Api.FancySwitch_New(labels, index, onChange)) { }
     public FancySwitch(object internalObject) : base(internalObject) { }
-    public int GetIndex() => Api.FancySwitch_GetIndex.Invoke(internalObj);
-    public void SetIndex(int index) => Api.FancySwitch_SetIndex.Invoke(internalObj, index);
-    public string[] GetTabNames() => Api.FancySwitch_GetTabNames.Invoke(internalObj);
-    public string GetTabName(int index) => Api.FancySwitch_GetTabName.Invoke(internalObj, index);
-    public void SetTabName(int index, string text) => Api.FancySwitch_SetTabName.Invoke(internalObj, index, text);
-    public void SetOnChange(Action<int> onChange) => Api.FancySwitch_SetOnChange.Invoke(internalObj, onChange);
+    public int Index { get { return Api.FancySwitch_GetIndex.Invoke(InternalObj); } set { Api.FancySwitch_SetIndex.Invoke(InternalObj, value); } }
+    public string[] Labels { get { return Api.FancySwitch_GetLabels.Invoke(InternalObj); } }
+    public Action<int> OnChange { set { Api.FancySwitch_SetOnChange.Invoke(InternalObj, value); } }
   }
   public class FancyTextField : FancyButtonBase
   {
     public FancyTextField(string text, Action<string> onChange) : base(Api.FancyTextField_New(text, onChange)) { }
     public FancyTextField(object internalObject) : base(internalObject) { }
-    public string GetText() => Api.FancyTextField_GetText.Invoke(internalObj);
-    public void SetText(string text) => Api.FancyTextField_SetText.Invoke(internalObj, text);
-    public void SetOnChange(Action<string> onChange) => Api.FancyTextField_SetOnChange.Invoke(internalObj, onChange);
-    public bool GetIsNumeric() => Api.FancyTextField_GetIsNumeric.Invoke(internalObj);
-    public void SetIsNumeric(bool isNumeric) => Api.FancyTextField_SetIsNumeric.Invoke(internalObj, isNumeric);
-    public bool GetIsInteger() => Api.FancyTextField_GetIsInteger.Invoke(internalObj);
-    public void SetIsInteger(bool isInterger) => Api.FancyTextField_SetIsInteger.Invoke(internalObj, isInterger);
-    public bool GetAllowNegative() => Api.FancyTextField_GetAllowNegative.Invoke(internalObj);
-    public void SetAllowNegative(bool allowNegative) => Api.FancyTextField_SetAllowNegative.Invoke(internalObj, allowNegative);
-    public TextAlignment GetAlignment() => Api.FancyTextField_GetAlignment.Invoke(internalObj);
-    public void SetAlignment(TextAlignment alignment) => Api.FancyTextField_SetAlignment.Invoke(internalObj, alignment);
+    public string Text { get { return Api.FancyTextField_GetText.Invoke(InternalObj); } set { Api.FancyTextField_SetText.Invoke(InternalObj, value); } }
+    public bool IsNumeric { get { return Api.FancyTextField_GetIsNumeric.Invoke(InternalObj); } set { Api.FancyTextField_SetIsNumeric.Invoke(InternalObj, value); } }
+    public bool IsInteger { get { return Api.FancyTextField_GetIsInteger.Invoke(InternalObj); } set { Api.FancyTextField_SetIsInteger.Invoke(InternalObj, value); } }
+    public bool AllowNegative { get { return Api.FancyTextField_GetAllowNegative.Invoke(InternalObj); } set { Api.FancyTextField_SetAllowNegative.Invoke(InternalObj, value); } }
+    public TextAlignment Alignment { get { return Api.FancyTextField_GetAlignment.Invoke(InternalObj); } set { Api.FancyTextField_SetAlignment.Invoke(InternalObj, value); } }
+    public Action<string> OnChange { set { Api.FancyTextField_SetOnChange.Invoke(InternalObj, value); } }
   }
   public class FancyWindowBar : FancyElementBase
   {
     public FancyWindowBar(string text) : base(Api.FancyWindowBar_New(text)) { }
     public FancyWindowBar(object internalObject) : base(internalObject) { }
-    public string GetText() => Api.FancyWindowBar_GetText.Invoke(internalObj);
-    public void SetText(string text) => Api.FancyWindowBar_SetText.Invoke(internalObj, text);
+    public string Text { get { return Api.FancyWindowBar_GetText.Invoke(InternalObj); } set { Api.FancyWindowBar_SetText.Invoke(InternalObj, value); } }
   }
   public class FancyChart : FancyElementBase
   {
     public FancyChart(int intervals) : base(Api.FancyChart_New(intervals)) { }
     public FancyChart(object internalObject) : base(internalObject) { }
-    public List<float[]> GetDataSets() => Api.FancyChart_GetDataSets.Invoke(internalObj);
-    public List<Color> GetDataColors() => Api.FancyChart_GetDataColors.Invoke(internalObj);
-    public int GetGridHorizontalLines() => Api.FancyChart_GetGridHorizontalLines.Invoke(internalObj);
-    public void SetGridHorizontalLines(int lines) => Api.FancyChart_SetGridHorizontalLines.Invoke(internalObj, lines);
-    public int GetGridVerticalLines() => Api.FancyChart_GetGridVerticalLines.Invoke(internalObj);
-    public void SetGridVerticalLines(int lines) => Api.FancyChart_SetGridVerticalLines.Invoke(internalObj, lines);
-    public float GetMaxValue() => Api.FancyChart_GetMaxValue.Invoke(internalObj);
-    public float GetMinValue() => Api.FancyChart_GetMinValue.Invoke(internalObj);
+    public List<float[]> DataSets { get { return Api.FancyChart_GetDataSets.Invoke(InternalObj); } }
+    public List<Color> DataColors { get { return Api.FancyChart_GetDataColors.Invoke(InternalObj); } }
+    public int GridHorizontalLines { get { return Api.FancyChart_GetGridHorizontalLines.Invoke(InternalObj); } set { Api.FancyChart_SetGridHorizontalLines.Invoke(InternalObj, value); } }
+    public int GridVerticalLines { get { return Api.FancyChart_GetGridVerticalLines.Invoke(InternalObj); } set { Api.FancyChart_SetGridVerticalLines.Invoke(InternalObj, value); } }
+    public float MaxValue { get { return Api.FancyChart_GetMaxValue.Invoke(InternalObj); } }
+    public float MinValue { get { return Api.FancyChart_GetMinValue.Invoke(InternalObj); } }
   }
   public class FancyEmptyElement : FancyElementBase
   {

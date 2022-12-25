@@ -63,9 +63,9 @@ namespace Lima.Touch
         { "TouchScreen_GetCursorPosition", new Func<object, Vector2>(TouchScreen_GetCursorPosition) },
         { "TouchScreen_GetInteractiveDistance", new Func<object, float>(TouchScreen_GetInteractiveDistance) },
         { "TouchScreen_SetInteractiveDistance", new Action<object, float>(TouchScreen_SetInteractiveDistance) },
-        { "TouchScreen_GetScreenRotate", new Func<object, int>(TouchScreen_GetScreenRotate) },
+        { "TouchScreen_GetRotation", new Func<object, int>(TouchScreen_GetRotation) },
         { "TouchScreen_CompareWithBlockAndSurface", new Func<object, IMyCubeBlock, IMyTextSurface, bool>(TouchScreen_CompareWithBlockAndSurface) },
-        { "TouchScreen_Dispose", new Action<object>(TouchScreen_Dispose) },
+        { "TouchScreen_ForceDispose", new Action<object>(TouchScreen_ForceDispose) },
 
         { "FancyElementBase_GetEnabled", new Func<object, bool>(FancyElementBase_GetEnabled) },
         { "FancyElementBase_SetEnabled", new Action<object, bool>(FancyElementBase_SetEnabled) },
@@ -132,12 +132,12 @@ namespace Lima.Touch
         { "FancyCursor_GetPosition", new Func<object, Vector2>(FancyCursor_GetPosition) },
         { "FancyCursor_IsInsideArea", new Func<object, float, float, float, float, bool>(FancyCursor_IsInsideArea) },
         { "FancyCursor_GetSprites", new Func<object, List<MySprite>>(FancyCursor_GetSprites) },
-        { "FancyCursor_Dispose", new Action<object>(FancyCursor_Dispose) },
+        { "FancyCursor_ForceDispose", new Action<object>(FancyCursor_ForceDispose) },
 
-        { "FancyTheme_GetColorBg", new Func<object, Color>(FancyTheme_GetColorBg) },
-        { "FancyTheme_GetColorWhite", new Func<object, Color>(FancyTheme_GetColorWhite) },
-        { "FancyTheme_GetColorMain", new Func<object, Color>(FancyTheme_GetColorMain) },
-        { "FancyTheme_GetColorMainDarker", new Func<object, int, Color>(FancyTheme_GetColorMainDarker) },
+        { "FancyTheme_GetBgColor", new Func<object, Color>(FancyTheme_GetBgColor) },
+        { "FancyTheme_GetWhiteColor", new Func<object, Color>(FancyTheme_GetWhiteColor) },
+        { "FancyTheme_GetMainColor", new Func<object, Color>(FancyTheme_GetMainColor) },
+        { "FancyTheme_GetMainColorDarker", new Func<object, int, Color>(FancyTheme_GetMainColorDarker) },
         { "FancyTheme_MeasureStringInPixels", new Func<object, String, string, float, Vector2>(FancyTheme_MeasureStringInPixels) },
         { "FancyTheme_GetScale", new Func<object, float>(FancyTheme_GetScale) },
         { "FancyTheme_SetScale", new Action<object, float>(FancyTheme_SetScale) },
@@ -171,6 +171,7 @@ namespace Lima.Touch
         { "FancyLabel_SetText", new Action<object, string>(FancyLabel_SetText) },
         { "FancyLabel_GetTextColor", new Func<object, Color?>(FancyLabel_GetTextColor) },
         { "FancyLabel_SetTextColor", new Action<object, Color>(FancyLabel_SetTextColor) },
+        { "FancyLabel_GetFontSize", new Func<object, float>(FancyLabel_GetFontSize) },
         { "FancyLabel_SetFontSize", new Action<object, float>(FancyLabel_SetFontSize) },
         { "FancyLabel_GetAlignment", new Func<object, TextAlignment>(FancyLabel_GetAlignment) },
         { "FancyLabel_SetAlignment", new Action<object, TextAlignment>(FancyLabel_SetAlignment) },
@@ -190,6 +191,10 @@ namespace Lima.Touch
         { "FancyProgressBar_SetLabelAlignment", new Action<object, TextAlignment>(FancyProgressBar_SetLabelAlignment) },
 
         { "FancySelector_New", new Func<List<string>, Action<int, string>, bool, object>(FancySelector_New) },
+        { "FancySelector_GetLoop", new Func<object, bool>(FancySelector_GetLoop) },
+        { "FancySelector_SetLoop", new Action<object, bool>(FancySelector_SetLoop) },
+        { "FancySelector_GetSelected", new Func<object, int>(FancySelector_GetSelected) },
+        { "FancySelector_SetSelected", new Action<object, int>(FancySelector_SetSelected) },
         { "FancySelector_SetOnChange", new Action<object, Action<int, string>>(FancySelector_SetOnChange) },
 
         { "FancySeparator_New", new Func<object>(FancySeparator_New) },
@@ -215,9 +220,7 @@ namespace Lima.Touch
         { "FancySwitch_New", new Func<string[], int, Action<int>, object>(FancySwitch_New) },
         { "FancySwitch_GetIndex", new Func<object, int>(FancySwitch_GetIndex) },
         { "FancySwitch_SetIndex", new Action<object, int>(FancySwitch_SetIndex) },
-        { "FancySwitch_GetTabNames", new Func<object, string[]>(FancySwitch_GetTabNames) },
-        { "FancySwitch_GetTabName", new Func<object, int, string>(FancySwitch_GetTabName) },
-        { "FancySwitch_SetTabName", new Action<object, int, string>(FancySwitch_SetTabName) },
+        { "FancySwitch_GetLabels", new Func<object, string[]>(FancySwitch_GetLabels) },
         { "FancySwitch_SetOnChange", new Action<object, Action<int>>(FancySwitch_SetOnChange) },
 
         { "FancyTextField_New", new Func<string, Action<string>, object>(FancyTextField_New) },
@@ -276,12 +279,12 @@ namespace Lima.Touch
     private IMyTextSurface TouchScreen_GetSurface(object obj) => (obj as TouchScreen).Surface;
     private int TouchScreen_GetIndex(object obj) => (obj as TouchScreen).Index;
     private bool TouchScreen_IsOnScreen(object obj) => (obj as TouchScreen).IsOnScreen;
-    private Vector2 TouchScreen_GetCursorPosition(object obj) => (obj as TouchScreen).CursorPos;
+    private Vector2 TouchScreen_GetCursorPosition(object obj) => (obj as TouchScreen).CursorPosition;
     private float TouchScreen_GetInteractiveDistance(object obj) => (obj as TouchScreen).InteractiveDistance;
     private void TouchScreen_SetInteractiveDistance(object obj, float distance) => (obj as TouchScreen).InteractiveDistance = distance;
-    private int TouchScreen_GetScreenRotate(object obj) => (obj as TouchScreen).ScreenRotate;
+    private int TouchScreen_GetRotation(object obj) => (obj as TouchScreen).Rotation;
     private bool TouchScreen_CompareWithBlockAndSurface(object obj, IMyCubeBlock block, IMyTextSurface surface) => (obj as TouchScreen).CompareWithBlockAndSurface(block, surface);
-    private void TouchScreen_Dispose(object obj) => (obj as TouchScreen).Dispose();
+    private void TouchScreen_ForceDispose(object obj) => (obj as TouchScreen).Dispose();
 
     private bool FancyElementBase_GetEnabled(object obj) => (obj as FancyElementBase).Enabled;
     private void FancyElementBase_SetEnabled(object obj, bool enabled) => (obj as FancyElementBase).Enabled = enabled;
@@ -348,23 +351,23 @@ namespace Lima.Touch
     private Vector2 FancyCursor_GetPosition(object obj) => (obj as FancyCursor).Position;
     private bool FancyCursor_IsInsideArea(object obj, float x, float y, float z, float w) => (obj as FancyCursor).IsInsideArea(x, y, z, w);
     private List<MySprite> FancyCursor_GetSprites(object obj) => (obj as FancyCursor).GetSprites();
-    private void FancyCursor_Dispose(object obj) => (obj as FancyCursor).Dispose();
+    private void FancyCursor_ForceDispose(object obj) => (obj as FancyCursor).Dispose();
 
-    private Color FancyTheme_GetColorBg(object obj) => (obj as FancyTheme).Bg;
-    private Color FancyTheme_GetColorWhite(object obj) => (obj as FancyTheme).White;
-    private Color FancyTheme_GetColorMain(object obj) => (obj as FancyTheme).Main;
-    private Color FancyTheme_GetColorMainDarker(object obj, int value)
+    private Color FancyTheme_GetBgColor(object obj) => (obj as FancyTheme).BgColor;
+    private Color FancyTheme_GetWhiteColor(object obj) => (obj as FancyTheme).WhiteColor;
+    private Color FancyTheme_GetMainColor(object obj) => (obj as FancyTheme).MainColor;
+    private Color FancyTheme_GetMainColorDarker(object obj, int value)
     {
       var theme = (obj as FancyTheme);
-      if (value <= 10) return theme.Main_10;
-      else if (value <= 20) return theme.Main_20;
-      else if (value <= 30) return theme.Main_30;
-      else if (value <= 40) return theme.Main_40;
-      else if (value <= 50) return theme.Main_50;
-      else if (value <= 60) return theme.Main_60;
-      else if (value <= 70) return theme.Main_70;
-      else if (value <= 80) return theme.Main_80;
-      return theme.Main_90;
+      if (value <= 1) return theme.MainColor_1;
+      else if (value <= 2) return theme.MainColor_2;
+      else if (value <= 3) return theme.MainColor_3;
+      else if (value <= 4) return theme.MainColor_4;
+      else if (value <= 5) return theme.MainColor_5;
+      else if (value <= 6) return theme.MainColor_6;
+      else if (value <= 7) return theme.MainColor_7;
+      else if (value <= 8) return theme.MainColor_8;
+      return theme.MainColor_9;
     }
     private Vector2 FancyTheme_MeasureStringInPixels(object obj, String text, string font, float scale) => (obj as FancyTheme).MeasureStringInPixels(text, font, scale);
     private float FancyTheme_GetScale(object obj) => (obj as FancyTheme).Scale;
@@ -399,6 +402,7 @@ namespace Lima.Touch
     private void FancyLabel_SetText(object obj, string text) => (obj as FancyLabel).Text = text;
     private Color? FancyLabel_GetTextColor(object obj) => (obj as FancyLabel).TextColor;
     private void FancyLabel_SetTextColor(object obj, Color color) => (obj as FancyLabel).TextColor = color;
+    private float FancyLabel_GetFontSize(object obj) => (obj as FancyLabel).FontSize;
     private void FancyLabel_SetFontSize(object obj, float fontSize) => (obj as FancyLabel).FontSize = fontSize;
     private TextAlignment FancyLabel_GetAlignment(object obj) => (obj as FancyLabel).Alignment;
     private void FancyLabel_SetAlignment(object obj, TextAlignment alignment) => (obj as FancyLabel).Alignment = alignment;
@@ -418,6 +422,10 @@ namespace Lima.Touch
     private void FancyProgressBar_SetLabelAlignment(object obj, TextAlignment alignment) => (obj as FancyProgressBar).LabelAlignment = alignment;
 
     private FancySelector FancySelector_New(List<string> labels, Action<int, string> onChange, bool loop = true) => new FancySelector(labels, onChange, loop);
+    private bool FancySelector_GetLoop(object obj) => (obj as FancySelector).Loop;
+    private void FancySelector_SetLoop(object obj, bool loop) => (obj as FancySelector).Loop = loop;
+    private int FancySelector_GetSelected(object obj) => (obj as FancySelector).Selected;
+    private void FancySelector_SetSelected(object obj, int selected) => (obj as FancySelector).Selected = selected;
     private void FancySelector_SetOnChange(object obj, Action<int, string> onChange) => (obj as FancySelector).OnChange = onChange;
 
     private FancySeparator FancySeparator_New() => new FancySeparator();
@@ -440,12 +448,10 @@ namespace Lima.Touch
     private void FancySliderRange_SetValueLower(object obj, float value) => (obj as FancySliderRange).ValueLower = value;
     private void FancySliderRange_SetOnChangeR(object obj, Action<float, float> onChange) => (obj as FancySliderRange).OnChangeR = onChange;
 
-    private FancySwitch FancySwitch_New(string[] tabNames, int index = 0, Action<int> onChange = null) => new FancySwitch(tabNames, index, onChange);
+    private FancySwitch FancySwitch_New(string[] labels, int index = 0, Action<int> onChange = null) => new FancySwitch(labels, index, onChange);
     private int FancySwitch_GetIndex(object obj) => (obj as FancySwitch).Index;
     private void FancySwitch_SetIndex(object obj, int index) => (obj as FancySwitch).Index = index;
-    private string[] FancySwitch_GetTabNames(object obj) => (obj as FancySwitch).TabNames;
-    private string FancySwitch_GetTabName(object obj, int index) => (obj as FancySwitch).TabNames[index];
-    private void FancySwitch_SetTabName(object obj, int index, string text) => (obj as FancySwitch).TabNames[index] = text;
+    private string[] FancySwitch_GetLabels(object obj) => (obj as FancySwitch).Labels;
     private void FancySwitch_SetOnChange(object obj, Action<int> onChange) => (obj as FancySwitch).OnChange = onChange;
 
     private FancyTextField FancyTextField_New(string text, Action<string> onChange) => new FancyTextField(text, onChange);

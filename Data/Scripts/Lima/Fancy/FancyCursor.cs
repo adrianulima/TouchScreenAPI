@@ -12,7 +12,7 @@ namespace Lima.Fancy
 
     private MySprite _cursorSprite;
 
-    public Vector2 Position { get { return _screen.CursorPos; } }
+    public Vector2 Position { get { return _screen.CursorPosition; } }
     public bool IsOnScreen { get { return _screen.IsOnScreen; } }
 
     public bool Active = true;

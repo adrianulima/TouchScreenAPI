@@ -36,7 +36,7 @@ namespace Lima.Fancy.Elements
         Type = SpriteType.TEXTURE,
         Data = "SquareSimple",
         RotationOrScale = 0,
-        Color = App.Theme.Main_40
+        Color = App.Theme.MainColor_4
       };
 
       _bgHandler = new MySprite()
@@ -44,23 +44,23 @@ namespace Lima.Fancy.Elements
         Type = SpriteType.TEXTURE,
         Data = "SquareSimple",
         RotationOrScale = 0,
-        Color = App.Theme.Main_20
+        Color = App.Theme.MainColor_2
       };
 
       if (Handler.IsMousePressed)
       {
-        _bgSprite.Color = App.Theme.Main_80;
-        _bgHandler.Color = App.Theme.Main_60;
+        _bgSprite.Color = App.Theme.MainColor_8;
+        _bgHandler.Color = App.Theme.MainColor_6;
       }
       else if (Handler.IsMouseOver)
       {
-        _bgSprite.Color = App.Theme.Main_50;
-        _bgHandler.Color = App.Theme.Main_30;
+        _bgSprite.Color = App.Theme.MainColor_5;
+        _bgHandler.Color = App.Theme.MainColor_3;
       }
       else
       {
-        _bgSprite.Color = App.Theme.Main_40;
-        _bgHandler.Color = App.Theme.Main_20;
+        _bgSprite.Color = App.Theme.MainColor_4;
+        _bgHandler.Color = App.Theme.MainColor_2;
       }
 
       if (Handler.JustReleased)
@@ -89,7 +89,7 @@ namespace Lima.Fancy.Elements
           Type = SpriteType.TEXTURE,
           Data = "Triangle",//"SquareSimple",
           RotationOrScale = -MathHelper.PiOver4,
-          Color = App.Theme.White
+          Color = App.Theme.WhiteColor
         };
         _check1.Position = Position + new Vector2(size.X / 2 - size.Y / 4, size.Y / 2 + size.Y / 12 - gap);
         _check1.Size = new Vector2(gap * 1.5f, size.Y / 2f);

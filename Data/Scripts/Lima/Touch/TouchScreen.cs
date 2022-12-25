@@ -21,7 +21,7 @@ namespace Lima.Touch
     public SurfaceCoords Coords { get; private set; }
     public RectangleF Viewport { get; private set; }
     public bool IsOnScreen { get; private set; }
-    public Vector2 CursorPos { get; private set; }
+    public Vector2 CursorPosition { get; private set; }
     public Vector3 Intersection { get; private set; }
     public float _interactiveDistance = TouchSession.Instance.TouchMan.DefaultInteractiveDistance;
     public float InteractiveDistance
@@ -30,25 +30,25 @@ namespace Lima.Touch
       set { _interactiveDistance = MathHelper.Clamp(value, 0, TouchSession.Instance.TouchMan.MaxInteractiveDistance); }
     }
 
-    private int _rotate = -1;
-    public int ScreenRotate
+    private int _rotation = -1;
+    public int Rotation
     {
       get
       {
-        if (_rotate < 0)
+        if (_rotation < 0)
         {
-          _rotate = 0;
+          _rotation = 0;
           if (Block is IMyTextPanel)
           {
             var builder = (Block.GetObjectBuilderCubeBlock() as Sandbox.Common.ObjectBuilders.MyObjectBuilder_TextPanel);
             if (builder != null)
             {
-              _rotate = (int)builder.SelectedRotationIndex;
-              return _rotate;
+              _rotation = (int)builder.SelectedRotationIndex;
+              return _rotation;
             }
           }
         }
-        return _rotate;
+        return _rotation;
       }
     }
 
@@ -80,7 +80,7 @@ namespace Lima.Touch
 
     public void ForceRotationUpdate()
     {
-      _rotate = -1;
+      _rotation = -1;
     }
 
     // private MyStringId Material = MyStringId.GetOrCompute("Square");
@@ -133,13 +133,13 @@ namespace Lima.Touch
 
       if (screenCoord.X >= 0 && screenCoord.X <= width && screenCoord.Y >= 0 && screenCoord.Y <= height)
       {
-        var rotatedCoord = SurfaceUtils.RotateScreenCoord(new Vector2(((screenCoord.X / width)), ((screenCoord.Y / height))), ScreenRotate);
+        var rotatedCoord = SurfaceUtils.RotateScreenCoord(new Vector2(((screenCoord.X / width)), ((screenCoord.Y / height))), Rotation);
         var pX = rotatedCoord.X * Viewport.Width + Viewport.X;
         var pY = rotatedCoord.Y * Viewport.Height + Viewport.Y;
 
         IsOnScreen = true;
-        CursorPos = new Vector2(pX, pY);
-        return CursorPos;
+        CursorPosition = new Vector2(pX, pY);
+        return CursorPosition;
       }
 
       return Vector2.Zero;
@@ -170,7 +170,7 @@ namespace Lima.Touch
       if (!IsOnScreen || !Active)
         return false;
 
-      return CursorPos.X >= x && CursorPos.Y >= y && CursorPos.X <= z && CursorPos.Y <= w;
+      return CursorPosition.X >= x && CursorPosition.Y >= y && CursorPosition.X <= z && CursorPosition.Y <= w;
     }
   }
 }

@@ -12,16 +12,16 @@ namespace Lima.Fancy.Elements
     private MySprite[] _textSprites;
 
     public int Index;
-    public readonly string[] TabNames;
+    public readonly string[] Labels;
     public Action<int> OnChange;
 
-    public FancySwitch(string[] tabNames, int index = 0, Action<int> onChange = null)
+    public FancySwitch(string[] labels, int index = 0, Action<int> onChange = null)
     {
-      TabNames = tabNames;
+      Labels = labels;
       Index = index;
       OnChange = onChange;
 
-      _textSprites = new MySprite[TabNames.Length];
+      _textSprites = new MySprite[Labels.Length];
 
       Scale = new Vector2(1, 0);
       Pixels = new Vector2(0, 20);
@@ -42,7 +42,7 @@ namespace Lima.Fancy.Elements
         Type = SpriteType.TEXTURE,
         Data = "SquareSimple",
         RotationOrScale = 0,
-        Color = App.Theme.Main_20
+        Color = App.Theme.MainColor_2
       };
 
       _handlerSprite = new MySprite()
@@ -50,7 +50,7 @@ namespace Lima.Fancy.Elements
         Type = SpriteType.TEXTURE,
         Data = "SquareSimple",
         RotationOrScale = 0,
-        Color = App.Theme.Main_40
+        Color = App.Theme.MainColor_4
       };
 
       _selectedSprite = new MySprite()
@@ -58,7 +58,7 @@ namespace Lima.Fancy.Elements
         Type = SpriteType.TEXTURE,
         Data = "SquareSimple",
         RotationOrScale = 0,
-        Color = App.Theme.Main_70
+        Color = App.Theme.MainColor_7
       };
 
       for (int i = 0; i < _textSprites.Length; i++)
@@ -66,9 +66,9 @@ namespace Lima.Fancy.Elements
         _textSprites[i] = new MySprite()
         {
           Type = SpriteType.TEXT,
-          Data = TabNames[i],
+          Data = Labels[i],
           RotationOrScale = 0.5f * ThemeScale,
-          Color = App.Theme.White,//Theme.Main,
+          Color = App.Theme.WhiteColor,//Theme.Main,
           Alignment = TextAlignment.CENTER,
           FontId = App.Theme.Font
         };
@@ -113,7 +113,7 @@ namespace Lima.Fancy.Elements
       for (int j = 0; j < _textSprites.Length; j++)
       {
         _textSprites[j].Position = Position + new Vector2(j * width + halfWidth, size.Y * 0.5f - (_textSprites[j].RotationOrScale * 16.6f));
-        _textSprites[j].Color = j == Index ? App.Theme.White : App.Theme.Main_80;
+        _textSprites[j].Color = j == Index ? App.Theme.WhiteColor : App.Theme.MainColor_8;
         Sprites.Add(_textSprites[j]);
       }
     }

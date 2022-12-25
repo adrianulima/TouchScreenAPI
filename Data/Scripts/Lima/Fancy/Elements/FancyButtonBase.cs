@@ -1,6 +1,3 @@
-using Sandbox.ModAPI;
-using VRageMath;
-
 namespace Lima.Fancy.Elements
 {
   public class FancyButtonBase : FancyElementBase

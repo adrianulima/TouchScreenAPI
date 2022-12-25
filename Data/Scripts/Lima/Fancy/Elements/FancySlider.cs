@@ -89,7 +89,7 @@ namespace Lima.Fancy.Elements
         Type = SpriteType.TEXTURE,
         Data = "SquareSimple",
         RotationOrScale = 0,
-        Color = App.Theme.Main_40
+        Color = App.Theme.MainColor_4
       };
 
       ProgressSprite = new MySprite()
@@ -97,7 +97,7 @@ namespace Lima.Fancy.Elements
         Type = SpriteType.TEXTURE,
         Data = "SquareSimple",
         RotationOrScale = 0,
-        Color = App.Theme.Main_70
+        Color = App.Theme.MainColor_7
       };
 
       HandlerSprite = new MySprite()
@@ -105,7 +105,7 @@ namespace Lima.Fancy.Elements
         Type = SpriteType.TEXTURE,
         Data = "Circle",
         RotationOrScale = 0,
-        Color = App.Theme.White
+        Color = App.Theme.WhiteColor
       };
 
       HandlerInnerSprite = new MySprite()
@@ -113,23 +113,23 @@ namespace Lima.Fancy.Elements
         Type = SpriteType.TEXTURE,
         Data = "Circle",
         RotationOrScale = 0,
-        Color = App.Theme.Main_70
+        Color = App.Theme.MainColor_7
       };
 
       if (Handler.IsMousePressed)
       {
-        BgSprite.Color = App.Theme.Main_30;
+        BgSprite.Color = App.Theme.MainColor_3;
 
         var mouseX = MathHelper.Clamp(-0.04f + 1.08f * ((App.Cursor.Position.X - Handler.HitArea.X) / (Handler.HitArea.Z - Handler.HitArea.X)), 0, 1);
         UpdateValue(MinValue + mouseX * (MaxValue - MinValue));
       }
       else if (Handler.IsMouseOver)
       {
-        BgSprite.Color = App.Theme.Main_30;
+        BgSprite.Color = App.Theme.MainColor_3;
       }
       else
       {
-        BgSprite.Color = App.Theme.Main_20;
+        BgSprite.Color = App.Theme.MainColor_2;
       }
 
       var ratio = ((Value - MinValue) / (MaxValue - MinValue));
