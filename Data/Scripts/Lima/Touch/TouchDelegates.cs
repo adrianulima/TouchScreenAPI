@@ -122,6 +122,8 @@ namespace Lima.Touch
         { "FancyApp_GetViewport", new Func<object, RectangleF>(FancyApp_GetViewport) },
         { "FancyApp_GetCursor", new Func<object, FancyCursor>(FancyApp_GetCursor) },
         { "FancyApp_GetTheme", new Func<object, FancyTheme>(FancyApp_GetTheme) },
+        { "FancyApp_GetDefaultBg", new Func<object, bool>(FancyApp_GetDefaultBg) },
+        { "FancyApp_SetDefaultBg", new Action<object, bool>(FancyApp_SetDefaultBg) },
         { "FancyApp_InitApp", new Action<object, MyCubeBlock, Sandbox.ModAPI.Ingame.IMyTextSurface>(FancyApp_InitApp) },
 
         { "FancyCursor_New", new Func<object, FancyCursor>(FancyCursor_New) },
@@ -336,6 +338,8 @@ namespace Lima.Touch
     private RectangleF FancyApp_GetViewport(object obj) => (obj as FancyApp).Viewport;
     private FancyCursor FancyApp_GetCursor(object obj) => (obj as FancyApp).Cursor;
     private FancyTheme FancyApp_GetTheme(object obj) => (obj as FancyApp).Theme;
+    private bool FancyApp_GetDefaultBg(object obj) => (obj as FancyApp).DefaultBg;
+    private void FancyApp_SetDefaultBg(object obj, bool defaultBg) => (obj as FancyApp).DefaultBg = defaultBg;
     private void FancyApp_InitApp(object obj, MyCubeBlock block, Sandbox.ModAPI.Ingame.IMyTextSurface surface) => (obj as FancyApp).InitApp(block, surface);
 
     private FancyCursor FancyCursor_New(object screen) => new FancyCursor(screen as TouchScreen);

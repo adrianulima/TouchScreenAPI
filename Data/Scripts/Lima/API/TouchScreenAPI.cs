@@ -164,6 +164,8 @@ namespace Lima.API
       AssignMethod(delegates, "FancyApp_GetViewport", ref FancyApp_GetViewport);
       AssignMethod(delegates, "FancyApp_GetCursor", ref FancyApp_GetCursor);
       AssignMethod(delegates, "FancyApp_GetTheme", ref FancyApp_GetTheme);
+      AssignMethod(delegates, "FancyApp_GetDefaultBg", ref FancyApp_GetDefaultBg);
+      AssignMethod(delegates, "FancyApp_SetDefaultBg", ref FancyApp_SetDefaultBg);
       AssignMethod(delegates, "FancyApp_InitApp", ref FancyApp_InitApp);
       AssignMethod(delegates, "FancyButtonBase_GetHandler", ref FancyButtonBase_GetHandler);
       AssignMethod(delegates, "FancyButton_New", ref FancyButton_New);
@@ -354,6 +356,8 @@ namespace Lima.API
     public Func<object, RectangleF> FancyApp_GetViewport;
     public Func<object, object> FancyApp_GetCursor;
     public Func<object, object> FancyApp_GetTheme;
+    public Func<object, bool> FancyApp_GetDefaultBg;
+    public Action<object, bool> FancyApp_SetDefaultBg;
     public Action<object, MyCubeBlock, Sandbox.ModAPI.Ingame.IMyTextSurface> FancyApp_InitApp;
 
     public Func<object, object> FancyButtonBase_GetHandler;
@@ -588,6 +592,8 @@ namespace Lima.API
     public RectangleF GetViewport() => Api.FancyApp_GetViewport.Invoke(internalObj);
     public FancyCursor GetCursor() { if (Cursor == null) Cursor = new FancyCursor(Api.FancyApp_GetCursor.Invoke(internalObj)); return Cursor; }
     public FancyTheme GetTheme() { if (Theme == null) Theme = new FancyTheme(Api.FancyApp_GetTheme.Invoke(internalObj)); return Theme; }
+    public bool GetDefaultBg() => Api.FancyApp_GetDefaultBg.Invoke(internalObj);
+    public void SetDefaultBg(bool defaultBg) => Api.FancyApp_SetDefaultBg.Invoke(internalObj, defaultBg);
     public void InitApp(MyCubeBlock block, Sandbox.ModAPI.Ingame.IMyTextSurface surface) => Api.FancyApp_InitApp.Invoke(internalObj, block, surface);
   }
   public abstract class FancyButtonBase : FancyElementBase

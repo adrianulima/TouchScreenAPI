@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Lima.Fancy.Elements;
 using Lima.Touch;
 using Sandbox.Game.Entities;
-// using Sandbox.ModAPI;
 using VRage.Game.GUI.TextPanel;
 using VRageMath;
 
@@ -23,6 +22,8 @@ namespace Lima.Fancy
       get { return _viewport; }
       protected set { _viewport = value; }
     }
+
+    public bool DefaultBg = false;
 
     public FancyApp() { App = this; }
 
@@ -50,35 +51,29 @@ namespace Lima.Fancy
       UpdateAfterSimulationEvent?.Invoke();
     }
 
-    // int prevScroll = 0;
     public override void Update()
     {
       base.Update();
 
-      // var newScroll = MyAPIGateway.Input.MouseScrollWheelValue();
-      // if (newScroll - prevScroll != 0)
-      // {
-      //   this.Theme.Scale += Math.Sign(newScroll - prevScroll) * 0.05f;
-      //   this.Theme.Scale = Math.Max(this.Theme.Scale, 0.5f);
-      //   prevScroll = newScroll;
-      // }
-
-      BgSprite = new MySprite()
+      if (DefaultBg)
       {
-        Type = SpriteType.TEXTURE,
-        Data = "Grid",
-        RotationOrScale = 0,
-        Color = App.Theme.Main_20
-      };
+        BgSprite = new MySprite()
+        {
+          Type = SpriteType.TEXTURE,
+          Data = "Grid",
+          RotationOrScale = 0,
+          Color = App.Theme.Main_20
+        };
 
-      Sprites.Clear();
+        Sprites.Clear();
 
-      var size = GetSize();
+        var size = GetSize();
 
-      BgSprite.Position = Position + new Vector2(0, size.Y / 2);
-      BgSprite.Size = new Vector2(Math.Min(size.X * 2, size.Y * 2));
+        BgSprite.Position = Position + new Vector2(0, size.Y / 2);
+        BgSprite.Size = new Vector2(Math.Min(size.X * 2, size.Y * 2));
 
-      Sprites.Add(BgSprite);
+        Sprites.Add(BgSprite);
+      }
     }
 
     public override List<MySprite> GetSprites()
