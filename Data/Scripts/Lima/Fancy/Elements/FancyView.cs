@@ -85,8 +85,7 @@ namespace Lima.Fancy.Elements
 
         foreach (var child in Children)
         {
-          if (child.Absolute)
-            continue;
+          if (!child.Enabled || child.Absolute) continue;
 
           var extra = child is FancyView ? Vector2.Zero : new Vector2(child.Margin.X + child.Margin.Z, child.Margin.Y + child.Margin.W);
 
