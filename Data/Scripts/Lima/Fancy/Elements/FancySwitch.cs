@@ -19,6 +19,7 @@ namespace Lima.Fancy.Elements
     {
       TabNames = tabNames;
       Index = index;
+      OnChange = onChange;
 
       _textSprites = new MySprite[TabNames.Length];
 

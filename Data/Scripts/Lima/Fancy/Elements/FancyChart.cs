@@ -71,7 +71,7 @@ namespace Lima.Fancy.Elements
     {
       for (int i = 0; i < DataSets.Count; i++)
       {
-        if (DataSets[i] == null)
+        if (DataSets[i] == null || DataSets[i].Length == 0)
           continue;
         var intervalOffset = _intervals - DataSets[i].Length;
         var init = Math.Max(0, -intervalOffset);

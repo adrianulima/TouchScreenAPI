@@ -41,7 +41,7 @@ namespace Lima.Fancy.Elements
       {
         Type = SpriteType.TEXT,
         Data = Text,
-        RotationOrScale = 0.6f * App.Theme.Scale,
+        RotationOrScale = 0.6f * ThemeScale,
         Color = App.Theme.White,
         Alignment = Alignment,
         FontId = App.Theme.Font
