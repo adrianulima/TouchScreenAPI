@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Lima.Fancy.Elements;
 using Lima.Touch;
+using Lima.Utils;
 using Sandbox.Game.Entities;
 using VRage.Game.GUI.TextPanel;
 using VRageMath;
@@ -93,6 +94,7 @@ namespace Lima.Fancy
       Cursor.Dispose();
       TouchSession.Instance.TouchMan.Screens.Remove(Screen);
       UpdateAfterSimulationEvent = null;
+      InputUtils.SetPlayerKeyboardBlacklistState(false);
 
       base.Dispose();
     }
