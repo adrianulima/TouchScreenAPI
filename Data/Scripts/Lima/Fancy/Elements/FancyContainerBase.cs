@@ -12,7 +12,7 @@ namespace Lima.Fancy.Elements
 
     public override Vector2 GetSize()
     {
-      return base.GetSize() - new Vector2(Margin.X + Margin.Z, Margin.Y + Margin.W);
+      return base.GetSize();
     }
 
     public virtual Vector2 GetFlexSize()

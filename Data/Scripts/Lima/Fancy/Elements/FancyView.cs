@@ -87,7 +87,7 @@ namespace Lima.Fancy.Elements
         {
           if (!child.Enabled || child.Absolute) continue;
 
-          var extra = child is FancyView ? Vector2.Zero : new Vector2(child.Margin.X + child.Margin.Z, child.Margin.Y + child.Margin.W);
+          var extra = new Vector2(child.Margin.X + child.Margin.Z, child.Margin.Y + child.Margin.W);
 
           if (Direction == ViewDirection.Row)
           {
