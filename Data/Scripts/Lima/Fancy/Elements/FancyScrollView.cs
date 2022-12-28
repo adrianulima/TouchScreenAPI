@@ -60,7 +60,7 @@ namespace Lima.Fancy.Elements
 
       // Adds an extra podding to give inside space for the scrollbar
       var prevPad = Padding;
-      Padding.Z += width;
+      Padding.Z += BarWidth;
       base.Update();
       Padding = prevPad;
 
@@ -72,8 +72,8 @@ namespace Lima.Fancy.Elements
         Color = App.Theme.MainColor_2
       };
 
-      _bgSprite.Position = Position + new Vector2(size.X + Border.X + Padding.X + Padding.Z - width, Border.Y + Padding.Y + size.Y / 2);
-      _bgSprite.Size = new Vector2(width, size.Y + Padding.Y + Padding.W);
+      _bgSprite.Position = Position + new Vector2(size.X + (Border.X + Padding.X + Padding.Z) * ThemeScale - width, (Border.Y + Padding.Y) * ThemeScale + size.Y / 2);
+      _bgSprite.Size = new Vector2(width, size.Y + (Padding.Y + Padding.W) * ThemeScale);
 
       Sprites.Add(_bgSprite);
 
