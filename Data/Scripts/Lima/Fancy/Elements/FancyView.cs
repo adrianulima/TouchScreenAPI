@@ -38,7 +38,7 @@ namespace Lima.Fancy.Elements
 
     public override Vector2 GetFlexSize()
     {
-      return (base.GetFlexSize() - ChildrenPixels) * (1 / ChildrenScales);
+      return (base.GetFlexSize() - ChildrenPixels * ThemeScale) * (1 / ChildrenScales);
     }
 
     public override Vector2 GetBoundaries()
@@ -87,16 +87,16 @@ namespace Lima.Fancy.Elements
         {
           if (!child.Enabled || child.Absolute) continue;
 
-          var extra = new Vector2(child.Margin.X + child.Margin.Z, child.Margin.Y + child.Margin.W) * ThemeScale;
+          ChildrenPixels += new Vector2(child.Margin.X + child.Margin.Z, child.Margin.Y + child.Margin.W);
 
           if (Direction == ViewDirection.Row)
           {
-            ChildrenPixels.X += child.Pixels.X * ThemeScale + extra.X;
+            ChildrenPixels.X += child.Pixels.X;
             ChildrenScales.X += child.Scale.X;
           }
           else if (Direction == ViewDirection.Column)
           {
-            ChildrenPixels.Y += child.Pixels.Y * ThemeScale + extra.Y;
+            ChildrenPixels.Y += child.Pixels.Y;
             ChildrenScales.Y += child.Scale.Y;
           }
         }
@@ -133,8 +133,8 @@ namespace Lima.Fancy.Elements
           }
 
           var prevChildBounds = prevChild.GetBoundaries();
-          var oX = Direction == ViewDirection.Row ? Gap + prevChild.Position.X + prevChildBounds.X - Position.X + (prevChild.Margin.Z - Border.X - Padding.X) * ThemeScale : 0;
-          var oY = Direction == ViewDirection.Column ? Gap + prevChild.Position.Y + prevChildBounds.Y - Position.Y + (prevChild.Margin.W - Border.Y - Padding.Y) * ThemeScale : 0;
+          var oX = Direction == ViewDirection.Row ? prevChild.Position.X + prevChildBounds.X - Position.X + (Gap + prevChild.Margin.Z - Border.X - Padding.X) * ThemeScale : 0;
+          var oY = Direction == ViewDirection.Column ? prevChild.Position.Y + prevChildBounds.Y - Position.Y + (Gap + prevChild.Margin.W - Border.Y - Padding.Y) * ThemeScale : 0;
           child.Position = originPos + new Vector2(oX, oY);
           prevChild = child;
         }
