@@ -168,7 +168,7 @@ namespace Lima.Fancy.Elements
       InnerTextField.Margin = Margin;
       InnerTextField.Text = $"{v}";
       InnerTextField.ToggleEdit(true, true);
-      InnerTextField.InitElements();
+      InnerTextField.OnAddedToApp();
     }
 
     protected void OnTextSubmit(string textValue)

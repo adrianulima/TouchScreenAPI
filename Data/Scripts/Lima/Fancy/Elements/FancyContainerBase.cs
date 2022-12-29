@@ -20,11 +20,11 @@ namespace Lima.Fancy.Elements
       return GetSize();
     }
 
-    public override void InitElements()
+    public override void OnAddedToApp()
     {
-      base.InitElements();
+      base.OnAddedToApp();
       foreach (var child in Children)
-        child.InitElements();
+        child.OnAddedToApp();
     }
 
     public override void Update()
@@ -51,7 +51,7 @@ namespace Lima.Fancy.Elements
     {
       base.GetSprites();
 
-      foreach (FancyElementBase child in Children)
+      foreach (var child in Children)
       {
         if (ValidateChild((child)))
           Sprites.AddRange(child.GetSprites());
@@ -69,8 +69,8 @@ namespace Lima.Fancy.Elements
     {
       if (child.Parent == null && !Children.Contains(child))
       {
-        child.Parent = this;
         Children.Add(child);
+        child.Parent = this;
         return child;
       }
 

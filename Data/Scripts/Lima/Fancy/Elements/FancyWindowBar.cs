@@ -3,54 +3,24 @@ using VRageMath;
 
 namespace Lima.Fancy.Elements
 {
-  public class FancyWindowBar : FancyElementBase
+  public class FancyWindowBar : FancyView
   {
-    private MySprite _bgSprite;
-    private MySprite _textSprite;
-
-    public string Text;
+    public FancyLabel Label;
 
     public FancyWindowBar(string text)
     {
-      Text = text;
-
       Scale = new Vector2(1, 0);
       Pixels = new Vector2(0, 24);
+
+      Label = new FancyLabel(text, 0.5f, TextAlignment.LEFT);
+      Label.Margin = new Vector4(4, 0, 4, 0);
+      AddChild(Label);
     }
 
     public override void Update()
     {
       base.Update();
-
-      _bgSprite = new MySprite()
-      {
-        Type = SpriteType.TEXTURE,
-        Data = "SquareSimple",
-        RotationOrScale = 0,
-        Color = App.Theme.MainColor_2
-      };
-
-      _textSprite = new MySprite()
-      {
-        Type = SpriteType.TEXT,
-        Data = Text,
-        RotationOrScale = 0.5f * ThemeScale,
-        Color = App.Theme.WhiteColor,//Theme.Main,
-        Alignment = TextAlignment.LEFT,
-        FontId = App.Theme.Font
-      };
-
-      Sprites.Clear();
-
-      var size = GetSize();
-
-      _bgSprite.Position = Position + new Vector2(0, size.Y / 2);
-      _bgSprite.Size = size;
-
-      _textSprite.Position = Position + new Vector2(10, size.Y * 0.5f - size.Y / 3);
-
-      Sprites.Add(_bgSprite);
-      Sprites.Add(_textSprite);
+      BgColor = App.Theme.MainColor_2;
     }
 
   }

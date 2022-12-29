@@ -19,7 +19,7 @@ namespace Lima.Touch
 
     public TouchScreen CurrentScreen;
 
-    public void Update()
+    public void UpdateAfterSimulation()
     {
       try
       {

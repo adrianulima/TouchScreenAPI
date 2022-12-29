@@ -84,7 +84,6 @@ namespace Lima.Touch
         { "FancyElementBase_GetApp", new Func<object, FancyApp>(FancyElementBase_GetApp) },
         { "FancyElementBase_GetParent", new Func<object, FancyContainerBase>(FancyElementBase_GetParent) },
         { "FancyElementBase_GetSprites", new Func<object, List<MySprite>>(FancyElementBase_GetSprites) },
-        { "FancyElementBase_InitElements", new Action<object>(FancyElementBase_InitElements) },
         { "FancyElementBase_ForceUpdate", new Action<object>(FancyElementBase_ForceUpdate) },
         { "FancyElementBase_ForceDispose", new Action<object>(FancyElementBase_ForceDispose) },
         { "FancyElementBase_RegisterUpdate", new Action<object, Action>(FancyElementBase_RegisterUpdate) },
@@ -237,8 +236,7 @@ namespace Lima.Touch
         { "FancyTextField_SetAlignment", new Action<object, TextAlignment>(FancyTextField_SetAlignment) },
 
         { "FancyWindowBar_New", new Func<string, object>(FancyWindowBar_New) },
-        { "FancyWindowBar_GetText", new Func<object, string>(FancyWindowBar_GetText) },
-        { "FancyWindowBar_SetText", new Action<object, string>(FancyWindowBar_SetText) },
+        { "FancyWindowBar_GetLabel", new Func<object, object>(FancyWindowBar_GetLabel) },
 
         { "FancyChart_New", new Func<int, object>(FancyChart_New) },
         { "FancyChart_GetDataSets", new Func<object, List<float[]>>(FancyChart_GetDataSets) },
@@ -303,7 +301,6 @@ namespace Lima.Touch
     private FancyApp FancyElementBase_GetApp(object obj) => (obj as FancyElementBase).App;
     private FancyContainerBase FancyElementBase_GetParent(object obj) => (obj as FancyElementBase).Parent;
     private List<MySprite> FancyElementBase_GetSprites(object obj) => (obj as FancyElementBase).GetSprites();
-    private void FancyElementBase_InitElements(object obj) => (obj as FancyElementBase).InitElements();
     private void FancyElementBase_ForceUpdate(object obj) => (obj as FancyElementBase).Update();
     private void FancyElementBase_ForceDispose(object obj) => (obj as FancyElementBase).Dispose();
     private void FancyElementBase_RegisterUpdate(object obj, Action update) => (obj as FancyElementBase).UpdateEvent += update;
@@ -468,8 +465,7 @@ namespace Lima.Touch
     private void FancyTextField_SetAlignment(object obj, TextAlignment alignment) => (obj as FancyTextField).Alignment = alignment;
 
     private FancyWindowBar FancyWindowBar_New(string text) => new FancyWindowBar(text);
-    private string FancyWindowBar_GetText(object obj) => (obj as FancyWindowBar).Text;
-    private void FancyWindowBar_SetText(object obj, string text) => (obj as FancyWindowBar).Text = text;
+    private FancyLabel FancyWindowBar_GetLabel(object obj) => (obj as FancyWindowBar).Label;
 
     private FancyChart FancyChart_New(int intervals) => new FancyChart(intervals);
     private List<float[]> FancyChart_GetDataSets(object obj) => (obj as FancyChart).DataSets;

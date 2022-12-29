@@ -39,7 +39,10 @@ namespace Lima.Fancy.Elements
       set
       {
         if (_parent == null || value == null)
+        {
           _parent = value;
+          if (_parent?.App != null) OnAddedToApp();
+        }
       }
     }
 
@@ -54,8 +57,6 @@ namespace Lima.Fancy.Elements
     {
       return GetSize();
     }
-
-    public virtual void InitElements() { }
 
     public virtual void Update()
     {
@@ -98,5 +99,6 @@ namespace Lima.Fancy.Elements
       return Sprites;
     }
 
+    public virtual void OnAddedToApp() { }
   }
 }

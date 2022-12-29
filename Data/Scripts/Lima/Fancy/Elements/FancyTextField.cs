@@ -34,9 +34,10 @@ namespace Lima.Fancy.Elements
       Pixels = new Vector2(0, 24);
     }
 
-    public override void InitElements()
+    public override void OnAddedToApp()
     {
-      base.InitElements();
+      base.OnAddedToApp();
+      App.UpdateAfterSimulationEvent -= UpdateAfterSimulation;
       App.UpdateAfterSimulationEvent += UpdateAfterSimulation;
     }
 
