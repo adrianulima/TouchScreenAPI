@@ -115,12 +115,11 @@ namespace Lima.Touch
         { "FancyView_SetGap", new Action<object, int>(FancyView_SetGap) },
 
         { "FancyScrollView_New", new Func<int, Color?, FancyScrollView>(FancyScrollView_New) },
-        { "FancyScrollView_GetBarWidth", new Func<object, int>(FancyScrollView_GetBarWidth) },
-        { "FancyScrollView_SetBarWidth", new Action<object, int>(FancyScrollView_SetBarWidth) },
         { "FancyScrollView_GetScroll", new Func<object, float>(FancyScrollView_GetScroll) },
         { "FancyScrollView_SetScroll", new Action<object, float>(FancyScrollView_SetScroll) },
         { "FancyScrollView_GetScrollAlwaysVisible", new Func<object, bool>(FancyScrollView_GetScrollAlwaysVisible) },
         { "FancyScrollView_SetScrollAlwaysVisible", new Action<object, bool>(FancyScrollView_SetScrollAlwaysVisible) },
+        { "FancyScrollView_GetScrollBar", new Func<object, object>(FancyScrollView_GetScrollBar) },
 
         { "FancyApp_New", new Func<FancyApp>(FancyApp_New) },
         { "FancyApp_GetScreen", new Func<object, TouchScreen>(FancyApp_GetScreen) },
@@ -341,12 +340,11 @@ namespace Lima.Touch
     private void FancyView_SetGap(object obj, int gap) => (obj as FancyView).Gap = gap;
 
     private FancyScrollView FancyScrollView_New(int direction, Color? bgColor = null) => new FancyScrollView((FancyView.ViewDirection)direction, bgColor);
-    private int FancyScrollView_GetBarWidth(object obj) => (int)(obj as FancyScrollView).BarWidth;
-    private void FancyScrollView_SetBarWidth(object obj, int width) => (obj as FancyScrollView).BarWidth = width;
     private float FancyScrollView_GetScroll(object obj) => (obj as FancyScrollView).Scroll;
     private void FancyScrollView_SetScroll(object obj, float scroll) => (obj as FancyScrollView).Scroll = scroll;
     private bool FancyScrollView_GetScrollAlwaysVisible(object obj) => (obj as FancyScrollView).ScrollAlwaysVisible;
     private void FancyScrollView_SetScrollAlwaysVisible(object obj, bool visible) => (obj as FancyScrollView).ScrollAlwaysVisible = visible;
+    private FancyBarContainer FancyScrollView_GetScrollBar(object obj) => (obj as FancyScrollView).ScrollBar;
 
     private FancyApp FancyApp_New() => new FancyApp();
     private TouchScreen FancyApp_GetScreen(object obj) => (obj as FancyApp).Screen;

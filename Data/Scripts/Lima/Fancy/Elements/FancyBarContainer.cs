@@ -43,31 +43,19 @@ namespace Lima.Fancy.Elements
 
       var size = GetSize();
       if (Ratio > 0)
-      {
-        if (IsVertical)
-        {
-          Bar.Pixels = new Vector2(0, Ratio * size.Y);
-          Bar.Scale = new Vector2(1, 0);
-        }
-        else
-        {
-          Bar.Pixels = new Vector2(Ratio * size.X, 0);
-          Bar.Scale = new Vector2(0, 1);
-        }
-      }
+        Bar.Pixels = IsVertical ? new Vector2(0, Ratio * (size.Y / ThemeScale)) : new Vector2(Ratio * (size.X / ThemeScale), 0);
       else
-      {
         Bar.Pixels = Vector2.Zero;
-        Bar.Scale = new Vector2(IsVertical ? 1 : 0, !IsVertical ? 1 : 0);
-      }
+
+      Bar.Scale = IsVertical ? Vector2.UnitX : Vector2.UnitY;
 
       var anchor = Vector2.Zero;
       if (IsVertical)
-        anchor.Y = (1f - Ratio) * size.Y * Offset;
+        anchor.Y = (1f - Ratio) * (size.Y) * Offset;
       else
-        anchor.X = (1f - Ratio) * size.X * Offset;
+        anchor.X = (1f - Ratio) * (size.X) * Offset;
 
-      Bar.Position = Position + new Vector2(Padding.X, Padding.Y) + anchor;
+      Bar.Position = Position + new Vector2(Padding.X, Padding.Y) * ThemeScale + anchor;
 
       Bar.BgColor = App.Theme.MainColor_7;
       BgColor = App.Theme.MainColor_2;

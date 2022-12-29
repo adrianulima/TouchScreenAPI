@@ -5,8 +5,9 @@ namespace Lima.Fancy.Elements
 {
   public class FancyScrollView : FancyView
   {
-    public int BarWidth = 12;
     public bool ScrollAlwaysVisible = false;
+
+    public FancyBarContainer ScrollBar;
 
     private float _scroll = 0;
     public float Scroll
@@ -16,14 +17,15 @@ namespace Lima.Fancy.Elements
     }
 
     private ClickHandler _handler = new ClickHandler();
-
-    private MySprite _bgSprite;
-    private MySprite _bar;
-
     private Vector2 _flexSize;
 
     public FancyScrollView(ViewDirection direction = ViewDirection.Column, Color? bgColor = null) : base(direction, bgColor)
     {
+      ScrollBar = new FancyBarContainer(true);
+      ScrollBar.Pixels = new Vector2(12, 0);
+      ScrollBar.Scale = Vector2.Zero;
+      ScrollBar.Absolute = true;
+      AddChild(ScrollBar);
     }
 
     protected override void UpdateChildrenPositions()
@@ -43,11 +45,12 @@ namespace Lima.Fancy.Elements
 
     public override void Update()
     {
-      var needsScroll = _flexSize.Y < 0;
       _flexSize = GetFlexSize();
+      var needsScroll = _flexSize.Y < 0;
       if (Direction != ViewDirection.Column || (!ScrollAlwaysVisible && !needsScroll))
       {
         base.Update();
+        ScrollBar.Enabled = false;
         return;
       }
 
@@ -55,65 +58,42 @@ namespace Lima.Fancy.Elements
 
       var size = GetSize();
 
-      var width = BarWidth * ThemeScale;
-
-      // Adds an extra podding to give inside space for the scrollbar
-      var prevPad = Padding;
-      Padding.Z += BarWidth;
-      base.Update();
-      Padding = prevPad;
-
-      _bgSprite = new MySprite()
-      {
-        Type = SpriteType.TEXTURE,
-        Data = "SquareSimple",
-        RotationOrScale = 0,
-        Color = App.Theme.MainColor_2
-      };
-
-      _bgSprite.Position = Position + new Vector2(size.X + (Border.X + Padding.X + Padding.Z) * ThemeScale - width, (Border.Y + Padding.Y) * ThemeScale + size.Y / 2);
-      _bgSprite.Size = new Vector2(width, size.Y + (Padding.Y + Padding.W) * ThemeScale);
-
-      Sprites.Add(_bgSprite);
+      ScrollBar.Enabled = true;
+      ScrollBar.Position = Position + new Vector2(size.X + (Border.X + Padding.X + Padding.Z - ScrollBar.Pixels.X) * ThemeScale, Border.Y * ThemeScale);
+      ScrollBar.Pixels.Y = (size.Y / ThemeScale) + Padding.Y + Padding.W;
+      ScrollBar.Scale = Vector2.Zero;
 
       if (needsScroll)
       {
-        _bar = new MySprite()
-        {
-          Type = SpriteType.TEXTURE,
-          Data = "SquareSimple",
-          RotationOrScale = 0,
-          Color = App.Theme.MainColor_4
-        };
+        var bgPos = ScrollBar.Position;
+        _handler.HitArea = new Vector4(bgPos.X, bgPos.Y, bgPos.X + ScrollBar.Pixels.X * ThemeScale, bgPos.Y + ScrollBar.Pixels.Y * ThemeScale);
 
-        var bgPos = _bgSprite.Position.GetValueOrDefault();
-        var bgSize = _bgSprite.Size.GetValueOrDefault();
-        _handler.HitArea = new Vector4(bgPos.X, bgPos.Y - bgSize.Y / 2, bgPos.X + bgSize.X, bgPos.Y + bgSize.Y / 2);
-
-        var barSize = new Vector2(bgSize.X, MathHelper.Clamp(bgSize.Y + _flexSize.Y * ThemeScale, bgSize.Y * 0.5f, bgSize.Y * 0.9f));
-        _bar.Size = barSize;
+        var barSize = 1 - (-_flexSize.Y / (ScrollBar.Pixels.Y * ThemeScale));
+        ScrollBar.Ratio = MathHelper.Clamp(barSize, 0.1f, 0.9f);
 
         if (_handler.IsMouseOver)
         {
-          _bar.Color = App.Theme.MainColor_5;
-          var mouseY = App.Cursor.Position.Y - _handler.HitArea.Y;
+          ScrollBar.Bar.BgColor = App.Theme.MainColor_5;
           if (_handler.IsMousePressed)
           {
-            _bar.Color = App.Theme.MainColor_6;
-            var adjust = 0.2f;
-            Scroll = -adjust + (1 + 2 * adjust) * (App.Cursor.Position.Y - _handler.HitArea.Y) / ((_handler.HitArea.W * (1 - adjust)) - _handler.HitArea.Y);
+            ScrollBar.Bar.BgColor = App.Theme.MainColor_6;
+            var cursorRatio = (App.Cursor.Position.Y - _handler.HitArea.Y) / (_handler.HitArea.W - _handler.HitArea.Y);
+            Scroll = cursorRatio * (1 + 2 * ScrollBar.Ratio) - (ScrollBar.Ratio * 0.5f);
           }
         }
         else
-        {
-          _bar.Color = App.Theme.MainColor_4;
-        }
-
-        var diffSize = bgSize.Y - barSize.Y;
-        _bar.Position = bgPos + Vector2.UnitY * ((Scroll * diffSize) - (diffSize / 2));
-
-        Sprites.Add(_bar);
+          ScrollBar.Bar.BgColor = App.Theme.MainColor_4;
       }
+      else
+        ScrollBar.Ratio = 0;
+
+      ScrollBar.Offset = Scroll;
+
+      // Adds an extra podding to give inside space for the scrollbar
+      var prevPad = Padding;
+      Padding.Z += ScrollBar.Pixels.X;
+      base.Update();
+      Padding = prevPad;
     }
   }
 }

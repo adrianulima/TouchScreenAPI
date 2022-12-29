@@ -158,12 +158,11 @@ namespace Lima.API
       AssignMethod(delegates, "FancyView_GetGap", ref FancyView_GetGap);
       AssignMethod(delegates, "FancyView_SetGap", ref FancyView_SetGap);
       AssignMethod(delegates, "FancyScrollView_New", ref FancyScrollView_New);
-      AssignMethod(delegates, "FancyScrollView_GetBarWidth", ref FancyScrollView_GetBarWidth);
-      AssignMethod(delegates, "FancyScrollView_SetBarWidth", ref FancyScrollView_SetBarWidth);
       AssignMethod(delegates, "FancyScrollView_GetScroll", ref FancyScrollView_GetScroll);
       AssignMethod(delegates, "FancyScrollView_SetScroll", ref FancyScrollView_SetScroll);
       AssignMethod(delegates, "FancyScrollView_GetScrollAlwaysVisible", ref FancyScrollView_GetScrollAlwaysVisible);
       AssignMethod(delegates, "FancyScrollView_SetScrollAlwaysVisible", ref FancyScrollView_SetScrollAlwaysVisible);
+      AssignMethod(delegates, "FancyScrollView_GetScrollBar", ref FancyScrollView_GetScrollBar);
       AssignMethod(delegates, "FancyApp_New", ref FancyApp_New);
       AssignMethod(delegates, "FancyApp_GetScreen", ref FancyApp_GetScreen);
       AssignMethod(delegates, "FancyApp_GetViewport", ref FancyApp_GetViewport);
@@ -358,12 +357,11 @@ namespace Lima.API
     public Action<object, int> FancyView_SetGap;
 
     public Func<int, Color?, object> FancyScrollView_New;
-    public Func<object, int> FancyScrollView_GetBarWidth;
-    public Action<object, int> FancyScrollView_SetBarWidth;
     public Func<object, float> FancyScrollView_GetScroll;
     public Action<object, float> FancyScrollView_SetScroll;
     public Func<object, bool> FancyScrollView_GetScrollAlwaysVisible;
     public Action<object, bool> FancyScrollView_SetScrollAlwaysVisible;
+    public Func<object, object> FancyScrollView_GetScrollBar;
 
     public Func<object> FancyApp_New;
     public Func<object, object> FancyApp_GetScreen;
@@ -580,10 +578,11 @@ namespace Lima.API
   }
   public class FancyScrollView : FancyView
   {
+    private FancyBarContainer _scrollBar;
     public FancyScrollView(ViewDirection direction = ViewDirection.Column, Color? bgColor = null) : base(Api.FancyScrollView_New((int)direction, bgColor)) { }
-    public int BarWidth { get { return Api.FancyScrollView_GetBarWidth.Invoke(InternalObj); } set { Api.FancyScrollView_SetBarWidth.Invoke(InternalObj, value); } }
     public float Scroll { get { return Api.FancyScrollView_GetScroll.Invoke(InternalObj); } set { Api.FancyScrollView_SetScroll.Invoke(InternalObj, value); } }
     public bool ScrollAlwaysVisible { get { return Api.FancyScrollView_GetScrollAlwaysVisible.Invoke(InternalObj); } set { Api.FancyScrollView_SetScrollAlwaysVisible.Invoke(InternalObj, value); } }
+    public FancyBarContainer ScrollBar { get { return _scrollBar ?? (_scrollBar = new FancyBarContainer(Api.FancyScrollView_GetScrollBar.Invoke(InternalObj))); } }
   }
   public class FancyApp : FancyView
   {
