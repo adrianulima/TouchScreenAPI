@@ -189,6 +189,14 @@ namespace Lima.API
       AssignMethod(delegates, "FancyLabel_SetFontSize", ref FancyLabel_SetFontSize);
       AssignMethod(delegates, "FancyLabel_GetAlignment", ref FancyLabel_GetAlignment);
       AssignMethod(delegates, "FancyLabel_SetAlignment", ref FancyLabel_SetAlignment);
+      AssignMethod(delegates, "FancyBarContainer_New", ref FancyBarContainer_New);
+      AssignMethod(delegates, "FancyBarContainer_GetIsVertical", ref FancyBarContainer_GetIsVertical);
+      AssignMethod(delegates, "FancyBarContainer_SetIsVertical", ref FancyBarContainer_SetIsVertical);
+      AssignMethod(delegates, "FancyBarContainer_GetRatio", ref FancyBarContainer_GetRatio);
+      AssignMethod(delegates, "FancyBarContainer_SetRatio", ref FancyBarContainer_SetRatio);
+      AssignMethod(delegates, "FancyBarContainer_GetOffset", ref FancyBarContainer_GetOffset);
+      AssignMethod(delegates, "FancyBarContainer_SetOffset", ref FancyBarContainer_SetOffset);
+      AssignMethod(delegates, "FancyBarContainer_GetBar", ref FancyBarContainer_GetBar);
       AssignMethod(delegates, "FancyProgressBar_New", ref FancyProgressBar_New);
       AssignMethod(delegates, "FancyProgressBar_GetValue", ref FancyProgressBar_GetValue);
       AssignMethod(delegates, "FancyProgressBar_SetValue", ref FancyProgressBar_SetValue);
@@ -386,6 +394,15 @@ namespace Lima.API
     public Action<object, float> FancyLabel_SetFontSize;
     public Func<object, TextAlignment> FancyLabel_GetAlignment;
     public Action<object, TextAlignment> FancyLabel_SetAlignment;
+
+    public Func<bool, object> FancyBarContainer_New;
+    public Func<object, bool> FancyBarContainer_GetIsVertical;
+    public Action<object, bool> FancyBarContainer_SetIsVertical;
+    public Func<object, float> FancyBarContainer_GetRatio;
+    public Action<object, float> FancyBarContainer_SetRatio;
+    public Func<object, float> FancyBarContainer_GetOffset;
+    public Action<object, float> FancyBarContainer_SetOffset;
+    public Func<object, object> FancyBarContainer_GetBar;
 
     public Func<float, float, bool, float, object> FancyProgressBar_New;
     public Func<object, float> FancyProgressBar_GetValue;
@@ -612,7 +629,17 @@ namespace Lima.API
     public float FontSize { get { return Api.FancyLabel_GetFontSize.Invoke(InternalObj); } set { Api.FancyLabel_SetFontSize.Invoke(InternalObj, value); } }
     public TextAlignment Alignment { get { return Api.FancyLabel_GetAlignment.Invoke(InternalObj); } set { Api.FancyLabel_SetAlignment.Invoke(InternalObj, value); } }
   }
-  public class FancyProgressBar : FancyView
+  public class FancyBarContainer : FancyView
+  {
+    private FancyView _bar;
+    public FancyBarContainer(bool vertical = false) : base(Api.FancyBarContainer_New(vertical)) { }
+    public FancyBarContainer(object internalObject) : base(internalObject) { }
+    public bool IsVertical { get { return Api.FancyBarContainer_GetIsVertical.Invoke(InternalObj); } set { Api.FancyBarContainer_SetIsVertical.Invoke(InternalObj, value); } }
+    public float Ratio { get { return Api.FancyBarContainer_GetRatio.Invoke(InternalObj); } set { Api.FancyBarContainer_SetRatio.Invoke(InternalObj, value); } }
+    public float Offset { get { return Api.FancyBarContainer_GetOffset.Invoke(InternalObj); } set { Api.FancyBarContainer_SetOffset.Invoke(InternalObj, value); } }
+    public FancyView Bar { get { return _bar ?? (_bar = new FancyView(Api.FancyBarContainer_GetBar.Invoke(InternalObj))); } }
+  }
+  public class FancyProgressBar : FancyBarContainer
   {
     private FancyLabel _label;
     public FancyProgressBar(float min, float max, bool vertical = false, float barsGap = 0) : base(Api.FancyProgressBar_New(min, max, vertical, barsGap)) { }

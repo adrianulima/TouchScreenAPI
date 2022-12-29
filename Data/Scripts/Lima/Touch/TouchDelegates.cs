@@ -178,6 +178,15 @@ namespace Lima.Touch
         { "FancyLabel_GetAlignment", new Func<object, TextAlignment>(FancyLabel_GetAlignment) },
         { "FancyLabel_SetAlignment", new Action<object, TextAlignment>(FancyLabel_SetAlignment) },
 
+        { "FancyBarContainer_New", new Func<bool, object>(FancyBarContainer_New) },
+        { "FancyBarContainer_GetIsVertical", new Func<object, bool>(FancyBarContainer_GetIsVertical) },
+        { "FancyBarContainer_SetIsVertical", new Action<object, bool>(FancyBarContainer_SetIsVertical) },
+        { "FancyBarContainer_GetRatio", new Func<object, float>(FancyBarContainer_GetRatio) },
+        { "FancyBarContainer_SetRatio", new Action<object, float>(FancyBarContainer_SetRatio) },
+        { "FancyBarContainer_GetOffset", new Func<object, float>(FancyBarContainer_GetOffset) },
+        { "FancyBarContainer_SetOffset", new Action<object, float>(FancyBarContainer_SetOffset) },
+        { "FancyBarContainer_GetBar", new Func<object, object>(FancyBarContainer_GetBar) },
+
         { "FancyProgressBar_New", new Func<float, float, bool, float, object>(FancyProgressBar_New) },
         { "FancyProgressBar_GetValue", new Func<object, float>(FancyProgressBar_GetValue) },
         { "FancyProgressBar_SetValue", new Action<object, float>(FancyProgressBar_SetValue) },
@@ -406,6 +415,15 @@ namespace Lima.Touch
     private void FancyLabel_SetFontSize(object obj, float fontSize) => (obj as FancyLabel).FontSize = fontSize;
     private TextAlignment FancyLabel_GetAlignment(object obj) => (obj as FancyLabel).Alignment;
     private void FancyLabel_SetAlignment(object obj, TextAlignment alignment) => (obj as FancyLabel).Alignment = alignment;
+
+    private FancyBarContainer FancyBarContainer_New(bool vertical = false) => new FancyBarContainer(vertical);
+    private bool FancyBarContainer_GetIsVertical(object obj) => (obj as FancyBarContainer).IsVertical;
+    private void FancyBarContainer_SetIsVertical(object obj, bool vertical) => (obj as FancyBarContainer).IsVertical = vertical;
+    private float FancyBarContainer_GetRatio(object obj) => (obj as FancyBarContainer).Ratio;
+    private void FancyBarContainer_SetRatio(object obj, float ratio) => (obj as FancyBarContainer).Ratio = ratio;
+    private float FancyBarContainer_GetOffset(object obj) => (obj as FancyBarContainer).Offset;
+    private void FancyBarContainer_SetOffset(object obj, float offset) => (obj as FancyBarContainer).Offset = offset;
+    private FancyView FancyBarContainer_GetBar(object obj) => (obj as FancyBarContainer).Bar;
 
     private FancyProgressBar FancyProgressBar_New(float min, float max, bool vertical = false, float barsGap = 0) => new FancyProgressBar(min, max, vertical, barsGap);
     private float FancyProgressBar_GetValue(object obj) => (obj as FancyProgressBar).Value;
