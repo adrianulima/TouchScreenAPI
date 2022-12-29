@@ -96,17 +96,17 @@ namespace Lima.Fancy.Elements
         {
           if (!child.Enabled || child.Absolute) continue;
 
-          ChildrenPixels += new Vector2(child.Margin.X + child.Margin.Z, child.Margin.Y + child.Margin.W);
-
           if (Direction == ViewDirection.Row)
           {
             ChildrenPixels.X += child.Pixels.X;
             ChildrenScales.X += child.Scale.X;
+            ChildrenPixels += new Vector2(child.Margin.X + child.Margin.Z, 0);
           }
           else if (Direction == ViewDirection.Column)
           {
             ChildrenPixels.Y += child.Pixels.Y;
             ChildrenScales.Y += child.Scale.Y;
+            ChildrenPixels += new Vector2(0, child.Margin.Y + child.Margin.W);
           }
         }
 
