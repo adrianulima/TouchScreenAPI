@@ -71,6 +71,8 @@ namespace Lima.Touch
         { "FancyElementBase_SetEnabled", new Action<object, bool>(FancyElementBase_SetEnabled) },
         { "FancyElementBase_GetAbsolute", new Func<object, bool>(FancyElementBase_GetAbsolute) },
         { "FancyElementBase_SetAbsolute", new Action<object, bool>(FancyElementBase_SetAbsolute) },
+        { "FancyElementBase_GetSelfAlignment", new Func<object, byte>(FancyElementBase_GetSelfAlignment) },
+        { "FancyElementBase_SetSelfAlignment", new Action<object, byte>(FancyElementBase_SetSelfAlignment) },
         { "FancyElementBase_GetPosition", new Func<object, Vector2>(FancyElementBase_GetPosition) },
         { "FancyElementBase_SetPosition", new Action<object, Vector2>(FancyElementBase_SetPosition) },
         { "FancyElementBase_GetMargin", new Func<object, Vector4>(FancyElementBase_GetMargin) },
@@ -97,6 +99,10 @@ namespace Lima.Touch
         { "FancyView_New", new Func<int, Color?, FancyView>(FancyView_New) },
         { "FancyView_GetDirection", new Func<object, int>(FancyView_GetDirection) },
         { "FancyView_SetDirection", new Action<object, int>(FancyView_SetDirection) },
+        { "FancyView_GetAlignment", new Func<object, byte>(FancyView_GetAlignment) },
+        { "FancyView_SetAlignment", new Action<object, byte>(FancyView_SetAlignment) },
+        { "FancyView_GetAnchor", new Func<object, byte>(FancyView_GetAnchor) },
+        { "FancyView_SetAnchor", new Action<object, byte>(FancyView_SetAnchor) },
         { "FancyView_GetBgColor", new Func<object, Color>(FancyView_GetBgColor) },
         { "FancyView_SetBgColor", new Action<object, Color>(FancyView_SetBgColor) },
         { "FancyView_GetBorderColor", new Func<object, Color>(FancyView_GetBorderColor) },
@@ -154,11 +160,8 @@ namespace Lima.Touch
         { "ClickHandler_UpdateStatus", new Action<object, object>(ClickHandler_UpdateStatus) },
 
         { "FancyButton_New", new Func<string, Action, object>(FancyButton_New) },
-        { "FancyButton_GetText", new Func<object, string>(FancyButton_GetText) },
-        { "FancyButton_SetText", new Action<object, string>(FancyButton_SetText) },
+        { "FancyButton_GetLabel", new Func<object, object>(FancyButton_GetLabel) },
         { "FancyButton_SetOnChange", new Action<object, Action>(FancyButton_SetOnChange) },
-        { "FancyButton_GetAlignment", new Func<object, TextAlignment>(FancyButton_GetAlignment) },
-        { "FancyButton_SetAlignment", new Action<object, TextAlignment>(FancyButton_SetAlignment) },
 
         { "FancyCheckbox_New", new Func<Action<bool>, bool, object>(FancyCheckbox_New) },
         { "FancyCheckbox_GetValue", new Func<object, bool>(FancyCheckbox_GetValue) },
@@ -288,6 +291,8 @@ namespace Lima.Touch
     private void FancyElementBase_SetEnabled(object obj, bool enabled) => (obj as FancyElementBase).Enabled = enabled;
     private bool FancyElementBase_GetAbsolute(object obj) => (obj as FancyElementBase).Absolute;
     private void FancyElementBase_SetAbsolute(object obj, bool absolute) => (obj as FancyElementBase).Absolute = absolute;
+    private byte FancyElementBase_GetSelfAlignment(object obj) => (byte)(obj as FancyElementBase).SelfAlignment;
+    private void FancyElementBase_SetSelfAlignment(object obj, byte alignment) => (obj as FancyElementBase).SelfAlignment = (FancyView.ViewAlignment)alignment;
     private Vector2 FancyElementBase_GetPosition(object obj) => (obj as FancyElementBase).Position;
     private void FancyElementBase_SetPosition(object obj, Vector2 position) => (obj as FancyElementBase).Position = position;
     private Vector4 FancyElementBase_GetMargin(object obj) => (obj as FancyElementBase).Margin;
@@ -314,6 +319,10 @@ namespace Lima.Touch
     private FancyView FancyView_New(int direction, Color? bgColor = null) => new FancyView((FancyView.ViewDirection)direction, bgColor);
     private int FancyView_GetDirection(object obj) => (int)(obj as FancyView).Direction;
     private void FancyView_SetDirection(object obj, int direction) => (obj as FancyView).Direction = (FancyView.ViewDirection)direction;
+    private byte FancyView_GetAlignment(object obj) => (byte)(obj as FancyView).Alignment;
+    private void FancyView_SetAlignment(object obj, byte alignment) => (obj as FancyView).Alignment = (FancyView.ViewAlignment)alignment;
+    private byte FancyView_GetAnchor(object obj) => (byte)(obj as FancyView).Anchor;
+    private void FancyView_SetAnchor(object obj, byte anchor) => (obj as FancyView).Anchor = (FancyView.ViewAlignment)anchor;
     private Color FancyView_GetBgColor(object obj) => (Color)(obj as FancyView).BgColor;
     private void FancyView_SetBgColor(object obj, Color bgColor) => (obj as FancyView).BgColor = bgColor;
     private Color FancyView_GetBorderColor(object obj) => (Color)(obj as FancyView).BorderColor;
@@ -383,11 +392,8 @@ namespace Lima.Touch
     private void ClickHandler_UpdateStatus(object obj, object screen) => (obj as ClickHandler).UpdateStatus(screen as TouchScreen);
 
     private FancyButton FancyButton_New(string text, Action onChange) => new FancyButton(text, onChange);
-    private string FancyButton_GetText(object obj) => (obj as FancyButton).Text;
-    private void FancyButton_SetText(object obj, string text) => (obj as FancyButton).Text = text;
+    private FancyLabel FancyButton_GetLabel(object obj) => (obj as FancyWindowBar).Label;
     private void FancyButton_SetOnChange(object obj, Action onChange) => (obj as FancyButton).OnChange = onChange;
-    private TextAlignment FancyButton_GetAlignment(object obj) => (obj as FancyButton).Alignment;
-    private void FancyButton_SetAlignment(object obj, TextAlignment alignment) => (obj as FancyButton).Alignment = alignment;
 
     private FancyCheckbox FancyCheckbox_New(Action<bool> onChange, bool value = false) => new FancyCheckbox(onChange, value);
     private bool FancyCheckbox_GetValue(object obj) => (obj as FancyCheckbox).Value;

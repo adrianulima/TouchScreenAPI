@@ -5,14 +5,22 @@ namespace Lima.Fancy.Elements
 {
   public class FancyView : FancyContainerBase
   {
-    public enum ViewDirection : int
+    public enum ViewDirection : byte
     {
       None = 0,
       Row = 1,
       Column = 2
     }
+    public enum ViewAlignment : byte
+    {
+      Start = 0,
+      Center = 1,
+      End = 2
+    }
 
     public ViewDirection Direction = ViewDirection.Column;
+    public ViewAlignment Alignment = ViewAlignment.Start;
+    public ViewAlignment Anchor = ViewAlignment.Start;
 
     protected MySprite BgSprite;
     protected MySprite[] BorderSprites = new MySprite[4];
@@ -38,7 +46,8 @@ namespace Lima.Fancy.Elements
 
     public override Vector2 GetFlexSize()
     {
-      return (base.GetFlexSize() - ChildrenPixels * ThemeScale) * (1 / ChildrenScales);
+      var scales = new Vector2(ChildrenScales.X < 1 ? 1 : ChildrenScales.X, ChildrenScales.Y < 1 ? 1 : ChildrenScales.Y);
+      return (base.GetFlexSize() - ChildrenPixels * ThemeScale) * (1 / scales);
     }
 
     public override Vector2 GetBoundaries()
@@ -105,11 +114,6 @@ namespace Lima.Fancy.Elements
           ChildrenPixels.X += Gap * (childrenCount - 1);
         else if (Direction == ViewDirection.Column)
           ChildrenPixels.Y += Gap * (childrenCount - 1);
-
-        if (ChildrenScales.X == 0)
-          ChildrenScales.X = 1;
-        if (ChildrenScales.Y == 0)
-          ChildrenScales.Y = 1;
       }
     }
 
@@ -118,24 +122,43 @@ namespace Lima.Fancy.Elements
       FancyElementBase prevChild = null;
       if (Direction != ViewDirection.None)
       {
+        var isRow = Direction == ViewDirection.Row;
         var before = new Vector2(Border.X + Padding.X, Border.Y + Padding.Y) * ThemeScale;
+
+        var anchorStart = Vector2.Zero;
+        var remainingFlex = GetFlexSize() * new Vector2(1 - ChildrenScales.X, 1 - ChildrenScales.Y);
+        if ((isRow && remainingFlex.X > 0) || (!isRow && remainingFlex.Y > 0))
+        {
+          if (Anchor == ViewAlignment.Center)
+            anchorStart = isRow ? new Vector2(remainingFlex.X * 0.5f, 0) : new Vector2(0, remainingFlex.Y * 0.5f);
+          else if (Anchor == ViewAlignment.End)
+            anchorStart = isRow ? new Vector2(remainingFlex.X, 0) : new Vector2(0, remainingFlex.Y);
+        }
+
+        var size = GetSize();
         foreach (var child in Children)
         {
           if (!child.Enabled || child.Absolute) continue;
 
           var originPos = before + Position + new Vector2(child.Margin.X, child.Margin.Y) * ThemeScale;
 
+          var align = Vector2.Zero;
+          if (child.SelfAlignment == ViewAlignment.Center || (Alignment == ViewAlignment.Center && child.SelfAlignment == null))
+            align = (size * 0.5f - child.GetBoundaries() * 0.5f) * (isRow ? Vector2.UnitY : Vector2.UnitX);
+          else if (child.SelfAlignment == ViewAlignment.End || (Alignment == ViewAlignment.End && child.SelfAlignment == null))
+            align = (size - child.GetBoundaries()) * (isRow ? Vector2.UnitY : Vector2.UnitX);
+
           if (prevChild == null)
           {
-            child.Position = originPos;
+            child.Position = originPos + anchorStart + align;
             prevChild = child;
             continue;
           }
 
           var prevChildBounds = prevChild.GetBoundaries();
-          var oX = Direction == ViewDirection.Row ? prevChild.Position.X + prevChildBounds.X - Position.X + (Gap + prevChild.Margin.Z - Border.X - Padding.X) * ThemeScale : 0;
-          var oY = Direction == ViewDirection.Column ? prevChild.Position.Y + prevChildBounds.Y - Position.Y + (Gap + prevChild.Margin.W - Border.Y - Padding.Y) * ThemeScale : 0;
-          child.Position = originPos + new Vector2(oX, oY);
+          var oX = isRow ? prevChild.Position.X + prevChildBounds.X - Position.X + (Gap + prevChild.Margin.Z - Border.X - Padding.X) * ThemeScale : 0;
+          var oY = !isRow ? prevChild.Position.Y + prevChildBounds.Y - Position.Y + (Gap + prevChild.Margin.W - Border.Y - Padding.Y) * ThemeScale : 0;
+          child.Position = originPos + new Vector2(oX, oY) + align;
           prevChild = child;
         }
       }

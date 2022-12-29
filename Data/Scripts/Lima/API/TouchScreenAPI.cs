@@ -117,6 +117,8 @@ namespace Lima.API
       AssignMethod(delegates, "FancyElementBase_SetEnabled", ref FancyElementBase_SetEnabled);
       AssignMethod(delegates, "FancyElementBase_GetAbsolute", ref FancyElementBase_GetAbsolute);
       AssignMethod(delegates, "FancyElementBase_SetAbsolute", ref FancyElementBase_SetAbsolute);
+      AssignMethod(delegates, "FancyElementBase_GetSelfAlignment", ref FancyElementBase_GetSelfAlignment);
+      AssignMethod(delegates, "FancyElementBase_SetSelfAlignment", ref FancyElementBase_SetSelfAlignment);
       AssignMethod(delegates, "FancyElementBase_GetPosition", ref FancyElementBase_GetPosition);
       AssignMethod(delegates, "FancyElementBase_SetPosition", ref FancyElementBase_SetPosition);
       AssignMethod(delegates, "FancyElementBase_GetMargin", ref FancyElementBase_GetMargin);
@@ -141,6 +143,10 @@ namespace Lima.API
       AssignMethod(delegates, "FancyView_New", ref FancyView_New);
       AssignMethod(delegates, "FancyView_GetDirection", ref FancyView_GetDirection);
       AssignMethod(delegates, "FancyView_SetDirection", ref FancyView_SetDirection);
+      AssignMethod(delegates, "FancyView_GetAlignment", ref FancyView_GetAlignment);
+      AssignMethod(delegates, "FancyView_SetAlignment", ref FancyView_SetAlignment);
+      AssignMethod(delegates, "FancyView_GetAnchor", ref FancyView_GetAnchor);
+      AssignMethod(delegates, "FancyView_SetAnchor", ref FancyView_SetAnchor);
       AssignMethod(delegates, "FancyView_GetBgColor", ref FancyView_GetBgColor);
       AssignMethod(delegates, "FancyView_SetBgColor", ref FancyView_SetBgColor);
       AssignMethod(delegates, "FancyView_GetBorderColor", ref FancyView_GetBorderColor);
@@ -168,11 +174,8 @@ namespace Lima.API
       AssignMethod(delegates, "FancyApp_InitApp", ref FancyApp_InitApp);
       AssignMethod(delegates, "FancyButtonBase_GetHandler", ref FancyButtonBase_GetHandler);
       AssignMethod(delegates, "FancyButton_New", ref FancyButton_New);
-      AssignMethod(delegates, "FancyButton_GetText", ref FancyButton_GetText);
-      AssignMethod(delegates, "FancyButton_SetText", ref FancyButton_SetText);
+      AssignMethod(delegates, "FancyButton_GetLabel", ref FancyButton_GetLabel);
       AssignMethod(delegates, "FancyButton_SetOnChange", ref FancyButton_SetOnChange);
-      AssignMethod(delegates, "FancyButton_GetAlignment", ref FancyButton_GetAlignment);
-      AssignMethod(delegates, "FancyButton_SetAlignment", ref FancyButton_SetAlignment);
       AssignMethod(delegates, "FancyCheckbox_New", ref FancyCheckbox_New);
       AssignMethod(delegates, "FancyCheckbox_GetValue", ref FancyCheckbox_GetValue);
       AssignMethod(delegates, "FancyCheckbox_SetValue", ref FancyCheckbox_SetValue);
@@ -306,6 +309,8 @@ namespace Lima.API
     public Action<object, bool> FancyElementBase_SetEnabled;
     public Func<object, bool> FancyElementBase_GetAbsolute;
     public Action<object, bool> FancyElementBase_SetAbsolute;
+    public Func<object, byte> FancyElementBase_GetSelfAlignment;
+    public Action<object, byte> FancyElementBase_SetSelfAlignment;
     public Func<object, Vector2> FancyElementBase_GetPosition;
     public Action<object, Vector2> FancyElementBase_SetPosition;
     public Func<object, Vector4> FancyElementBase_GetMargin;
@@ -332,6 +337,10 @@ namespace Lima.API
     public Func<int, Color?, object> FancyView_New;
     public Func<object, int> FancyView_GetDirection;
     public Action<object, int> FancyView_SetDirection;
+    public Func<object, byte> FancyView_GetAlignment;
+    public Action<object, byte> FancyView_SetAlignment;
+    public Func<object, byte> FancyView_GetAnchor;
+    public Action<object, byte> FancyView_SetAnchor;
     public Func<object, Color> FancyView_GetBgColor;
     public Action<object, Color> FancyView_SetBgColor;
     public Func<object, Color> FancyView_GetBorderColor;
@@ -363,11 +372,8 @@ namespace Lima.API
     public Func<object, object> FancyButtonBase_GetHandler;
 
     public Func<string, Action, object> FancyButton_New;
-    public Func<object, string> FancyButton_GetText;
-    public Action<object, string> FancyButton_SetText;
+    public Func<object, object> FancyButton_GetLabel;
     public Action<object, Action> FancyButton_SetOnChange;
-    public Func<object, TextAlignment> FancyButton_GetAlignment;
-    public Action<object, TextAlignment> FancyButton_SetAlignment;
 
     public Func<Action<bool>, bool, object> FancyCheckbox_New;
     public Func<object, bool> FancyCheckbox_GetValue;
@@ -522,6 +528,7 @@ namespace Lima.API
     public FancyElementBase(object internalObject) { InternalObj = internalObject; }
     public bool Enabled { get { return Api.FancyElementBase_GetEnabled.Invoke(InternalObj); } set { Api.FancyElementBase_SetEnabled.Invoke(InternalObj, value); } }
     public bool Absolute { get { return Api.FancyElementBase_GetAbsolute.Invoke(InternalObj); } set { Api.FancyElementBase_SetAbsolute.Invoke(InternalObj, value); } }
+    public FancyApp.ViewAlignment SelfAlignment { get { return (FancyApp.ViewAlignment)Api.FancyElementBase_GetSelfAlignment.Invoke(InternalObj); } set { Api.FancyElementBase_SetSelfAlignment.Invoke(InternalObj, (byte)value); } }
     public Vector2 Position { get { return Api.FancyElementBase_GetPosition.Invoke(InternalObj); } set { Api.FancyElementBase_SetPosition.Invoke(InternalObj, value); } }
     public Vector4 Margin { get { return Api.FancyElementBase_GetMargin.Invoke(InternalObj); } set { Api.FancyElementBase_SetMargin.Invoke(InternalObj, value); } }
     public Vector2 Scale { get { return Api.FancyElementBase_GetScale.Invoke(InternalObj); } set { Api.FancyElementBase_SetScale.Invoke(InternalObj, value); } }
@@ -547,10 +554,13 @@ namespace Lima.API
   }
   public class FancyView : FancyContainerBase
   {
-    public enum ViewDirection : int { None = 0, Row = 1, Column = 2 }
+    public enum ViewDirection : byte { None = 0, Row = 1, Column = 2 }
+    public enum ViewAlignment : byte { Start = 0, Center = 1, End = 2 }
     public FancyView(ViewDirection direction = ViewDirection.Column, Color? bgColor = null) : base(Api.FancyView_New((int)direction, bgColor)) { }
     public FancyView(object internalObject) : base(internalObject) { }
-    public ViewDirection GetDirection { get { return (ViewDirection)Api.FancyView_GetDirection.Invoke(InternalObj); } set { Api.FancyView_SetDirection.Invoke(InternalObj, (int)value); } }
+    public ViewDirection Direction { get { return (ViewDirection)Api.FancyView_GetDirection.Invoke(InternalObj); } set { Api.FancyView_SetDirection.Invoke(InternalObj, (byte)value); } }
+    public ViewAlignment Alignment { get { return (ViewAlignment)Api.FancyView_GetAlignment.Invoke(InternalObj); } set { Api.FancyView_SetAlignment.Invoke(InternalObj, (byte)value); } }
+    public ViewAlignment Anchor { get { return (ViewAlignment)Api.FancyView_GetAnchor.Invoke(InternalObj); } set { Api.FancyView_SetAnchor.Invoke(InternalObj, (byte)value); } }
     public Color BgColor { get { return Api.FancyView_GetBgColor.Invoke(InternalObj); } set { Api.FancyView_SetBgColor.Invoke(InternalObj, value); } }
     public Color BorderColor { get { return Api.FancyView_GetBorderColor.Invoke(InternalObj); } set { Api.FancyView_SetBorderColor.Invoke(InternalObj, value); } }
     public Vector4 Border { get { return Api.FancyView_GetBorder.Invoke(InternalObj); } set { Api.FancyView_SetBorder.Invoke(InternalObj, value); } }
@@ -584,12 +594,12 @@ namespace Lima.API
     public FancyButtonBase(object internalObject) : base(internalObject) { }
     public ClickHandler Handler { get { return _handler ?? (_handler = new ClickHandler(Api.FancyButtonBase_GetHandler.Invoke(InternalObj))); } }
   }
-  public class FancyButton : FancyButtonBase
+  public class FancyButton : FancyView
   {
+    private FancyLabel _label;
     public FancyButton(string text, Action onChange) : base(Api.FancyButton_New(text, onChange)) { }
     public FancyButton(object internalObject) : base(internalObject) { }
-    public string Text { get { return Api.FancyButton_GetText.Invoke(InternalObj); } set { Api.FancyButton_SetText.Invoke(InternalObj, value); } }
-    public TextAlignment Alignment { get { return Api.FancyButton_GetAlignment.Invoke(InternalObj); } set { Api.FancyButton_SetAlignment.Invoke(InternalObj, value); } }
+    public FancyLabel Label { get { return _label ?? (_label = new FancyLabel(Api.FancyButton_GetLabel.Invoke(InternalObj))); } }
     public Action OnChange { set { Api.FancyButton_SetOnChange.Invoke(InternalObj, value); } }
   }
   public class FancyCheckbox : FancyButtonBase
