@@ -5,11 +5,23 @@ namespace Lima.Fancy.Elements
 {
   public class FancyLabel : FancyElementBase
   {
-    protected MySprite TextSprite;
     public string Text;
-    public float FontSize;
+    private float _fontSize;
     public TextAlignment Alignment;
     public Color? TextColor;
+
+    public float FontSize
+    {
+      get { return _fontSize; }
+      set
+      {
+        if (_fontSize != value)
+        {
+          _fontSize = value;
+          UpdateHeight();
+        }
+      }
+    }
 
     public FancyLabel(string text, float fontSize = 0.5f, TextAlignment alignment = TextAlignment.CENTER)
     {
@@ -18,12 +30,11 @@ namespace Lima.Fancy.Elements
       Alignment = alignment;
 
       Scale = new Vector2(1, 0);
+      UpdateHeight();
     }
 
-    public override void Update()
+    private void UpdateHeight()
     {
-      base.Update();
-
       var lines = 1;
       for (int i = 0; i < Text.Length; i++)
       {
@@ -31,27 +42,34 @@ namespace Lima.Fancy.Elements
           lines++;
       }
       Pixels.Y = 32 * FontSize * lines;
+    }
 
-      TextSprite = new MySprite()
+    public override void Update()
+    {
+      UpdateHeight();
+
+      var textSprite = new MySprite()
       {
         Type = SpriteType.TEXT,
         Data = Text,
         RotationOrScale = FontSize * ThemeScale,
-        Color = TextColor ?? App.Theme.WhiteColor,//Theme.Main,
+        Color = TextColor ?? App.Theme.WhiteColor,
         Alignment = Alignment,
         FontId = App.Theme.Font
       };
 
       if (Alignment == TextAlignment.LEFT)
-        TextSprite.Position = Position;
+        textSprite.Position = Position;
       else if (Alignment == TextAlignment.RIGHT)
-        TextSprite.Position = Position + new Vector2(GetSize().X, 0);
+        textSprite.Position = Position + new Vector2(GetSize().X, 0);
       else
-        TextSprite.Position = Position + new Vector2(GetSize().X / 2, 0);
+        textSprite.Position = Position + new Vector2(GetSize().X / 2, 0);
 
       Sprites.Clear();
 
-      Sprites.Add(TextSprite);
+      base.Update();
+
+      Sprites.Add(textSprite);
     }
 
   }

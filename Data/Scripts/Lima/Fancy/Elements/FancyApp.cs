@@ -26,7 +26,7 @@ namespace Lima.Fancy
 
     public bool DefaultBg = false;
 
-    public FancyApp() { App = this; }
+    public FancyApp() { }
 
     public virtual void InitApp(MyCubeBlock block, Sandbox.ModAPI.Ingame.IMyTextSurface surface)
     {
@@ -45,6 +45,8 @@ namespace Lima.Fancy
 
       Position = new Vector2(Viewport.X, Viewport.Y);
       Pixels = new Vector2(Viewport.Width, Viewport.Height);
+
+      App = this;
     }
 
     public virtual void UpdateAfterSimulation()
@@ -79,7 +81,6 @@ namespace Lima.Fancy
 
     public override List<MySprite> GetSprites()
     {
-      Update();
       base.GetSprites();
 
       Sprites.AddRange(Cursor.GetSprites());

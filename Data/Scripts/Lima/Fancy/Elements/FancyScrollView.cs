@@ -5,7 +5,7 @@ namespace Lima.Fancy.Elements
 {
   public class FancyScrollView : FancyView
   {
-    public int BarWidth = 8;
+    public int BarWidth = 12;
     public bool ScrollAlwaysVisible = false;
 
     private float _scroll = 0;

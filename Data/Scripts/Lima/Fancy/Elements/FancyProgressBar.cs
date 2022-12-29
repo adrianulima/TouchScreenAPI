@@ -4,11 +4,9 @@ using VRageMath;
 
 namespace Lima.Fancy.Elements
 {
-  public class FancyProgressBar : FancyElementBase
+  public class FancyProgressBar : FancyView
   {
-    protected MySprite BgSprite;
-    protected MySprite ProgressSprite;
-    protected MySprite TextSprite;
+    protected MySprite textSprite;
 
     private float _value = 0;
     public float Value
@@ -19,11 +17,10 @@ namespace Lima.Fancy.Elements
 
     public float MinValue;
     public float MaxValue;
-    public int Precision = 1;
-    public bool Bars;
-    public string Label;
-    public float LabelScale = 0.6f;
-    public TextAlignment LabelAlignment = TextAlignment.CENTER;
+    public float BarsGap = 2;
+    public FancyLabel Label;
+
+    public FancyView ProgressBar;
 
     private bool _isVertical = false;
     public bool IsVertical
@@ -40,124 +37,107 @@ namespace Lima.Fancy.Elements
       }
     }
 
-    public FancyProgressBar(float min, float max, bool bars = true, bool vertical = false)
+    public FancyProgressBar(float min, float max, bool vertical = false, float barsGap = 0)
     {
       MinValue = min;
       MaxValue = max;
       Value = max;
-      Bars = bars;
+      BarsGap = barsGap;
 
       Scale = new Vector2(1, 0);
       Pixels = new Vector2(0, 24);
 
+      Direction = vertical ? ViewDirection.Column : ViewDirection.Row;
+      Anchor = vertical ? ViewAlignment.End : ViewAlignment.Start;
+      Alignment = ViewAlignment.Center;
+      Padding = new Vector4(2);
+
       IsVertical = vertical;
+
+      ProgressBar = new FancyView(Direction);
+      ProgressBar.Absolute = true;
+      AddChild(ProgressBar);
+
+      Label = new FancyLabel("", 0.6f, TextAlignment.CENTER);
+      Label.Margin = new Vector4(2, 0, 2, 0);
+      AddChild(Label);
     }
 
     public override void Update()
     {
-      base.Update();
-
-      BgSprite = new MySprite()
-      {
-        Type = SpriteType.TEXTURE,
-        Data = "SquareSimple",
-        RotationOrScale = 0,
-        Color = App.Theme.MainColor_2
-      };
-
-      ProgressSprite = new MySprite()
-      {
-        Type = SpriteType.TEXTURE,
-        Data = "SquareSimple",
-        RotationOrScale = 0,
-        Color = App.Theme.MainColor_7
-      };
-
-      if (Label != "")
-      {
-        TextSprite = new MySprite()
-        {
-          Type = SpriteType.TEXT,
-          Data = Label,
-          RotationOrScale = LabelScale * ThemeScale,
-          Color = App.Theme.WhiteColor,//Theme.Main,
-          Alignment = LabelAlignment,
-          FontId = App.Theme.Font
-        };
-      }
-
       Sprites.Clear();
 
       var size = GetSize();
-
-      BgSprite.Position = Position + new Vector2(0, size.Y / 2);
-      BgSprite.Size = size;
-
-      Sprites.Add(BgSprite);
-
       var ratio = (Value - MinValue) / (MaxValue - MinValue);
-      var gap = 2 * ThemeScale;
       if (ratio > MinValue)
       {
         if (IsVertical)
         {
-          var sizeProgY = Math.Max(size.Y * ratio - gap * 2, 0);
-          ProgressSprite.Size = new Vector2(size.X - gap * 2, sizeProgY);
-          ProgressSprite.Position = Position + new Vector2(gap, size.Y - sizeProgY / 2 - gap);
+          ProgressBar.Pixels = new Vector2(0, ratio * size.Y);
+          ProgressBar.Scale = new Vector2(1, 0);
         }
         else
         {
-          ProgressSprite.Size = new Vector2(Math.Max(size.X * ratio - gap * 2, 0), size.Y - gap * 2);
-          ProgressSprite.Position = Position + new Vector2(gap, size.Y / 2);
+          ProgressBar.Pixels = new Vector2(ratio * size.X, 0);
+          ProgressBar.Scale = new Vector2(0, 1);
         }
-        Sprites.Add(ProgressSprite);
+      }
+      else
+      {
+        ProgressBar.Pixels = Vector2.Zero;
+        ProgressBar.Scale = new Vector2(IsVertical ? 1 : 0, !IsVertical ? 1 : 0);
+      }
 
-        if (Bars)
+      var anchor = Vector2.Zero;
+      if (Anchor == ViewAlignment.End)
+      {
+        if (IsVertical)
+          anchor.Y = (1f - ratio) * size.Y;
+        else
+          anchor.X = (1f - ratio) * size.X;
+      }
+      ProgressBar.Position = Position + new Vector2(Padding.X, Padding.Y) + anchor;
+
+      Label.TextColor = App.Theme.WhiteColor;
+      ProgressBar.BgColor = App.Theme.MainColor_7;
+      BgColor = App.Theme.MainColor_2;
+
+      base.Update();
+
+      if (ratio > MinValue)
+      {
+        if (BarsGap > 0)
         {
+          var b = new MySprite()
+          {
+            Type = SpriteType.TEXTURE,
+            Data = "SquareSimple",
+            RotationOrScale = 0,
+            Color = BgColor
+          };
           if (IsVertical)
           {
-            var innerSize = (size.Y - gap * 2);
-            var count = (int)Math.Round(innerSize / (size.X / 2));
-            var interval = innerSize / count;
-            var b = BgSprite;
+            var count = (int)Math.Round(size.Y / (size.X / 2));
+            var interval = size.Y / count;
             for (int i = 0; i < count - 1; i++)
             {
-              b.Position = Position + new Vector2(gap, gap + interval + interval * i);
-              b.Size = new Vector2(size.X, gap);
-              Sprites.Add(b);
+              b.Position = Position + new Vector2(0, interval + interval * i) + new Vector2(Padding.X, Padding.Y);
+              b.Size = new Vector2(size.X, BarsGap * ThemeScale);
+              ProgressBar.GetSprites().Add(b);
             }
           }
           else
           {
-            var innerSize = (size.X - gap * 2);
-            var count = (int)Math.Round(innerSize / (size.Y / 2));
-            var interval = innerSize / count;
-            var b = BgSprite;
+            var count = (int)Math.Round(size.X / (size.Y / 2));
+            var interval = size.X / count;
             for (int i = 0; i < count - 1; i++)
             {
-              b.Position = Position + new Vector2(gap + interval + interval * i, size.Y / 2);
-              b.Size = new Vector2(gap, size.Y);
-              Sprites.Add(b);
+              b.Position = Position + new Vector2(interval + interval * i, size.Y / 2) + new Vector2(Padding.X, Padding.Y);
+              b.Size = new Vector2(BarsGap * ThemeScale, size.Y);
+              ProgressBar.GetSprites().Add(b);
             }
           }
         }
-      }
-
-      if (Label != "")
-      {
-        var py = -(TextSprite.RotationOrScale * 16.6f);
-        if (IsVertical)
-          py += py + size.Y - gap;
-        else
-          py += size.Y * 0.5f;
-
-        if (LabelAlignment == TextAlignment.LEFT)
-          TextSprite.Position = Position;
-        else if (LabelAlignment == TextAlignment.RIGHT)
-          TextSprite.Position = Position + new Vector2(size.X - gap * 2, py);
-        else
-          TextSprite.Position = Position + new Vector2(size.X / 2, py);
-        Sprites.Add(TextSprite);
       }
     }
 

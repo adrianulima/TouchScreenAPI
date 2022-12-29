@@ -178,19 +178,16 @@ namespace Lima.Touch
         { "FancyLabel_GetAlignment", new Func<object, TextAlignment>(FancyLabel_GetAlignment) },
         { "FancyLabel_SetAlignment", new Action<object, TextAlignment>(FancyLabel_SetAlignment) },
 
-        { "FancyProgressBar_New", new Func<float, float, bool, bool, object>(FancyProgressBar_New) },
+        { "FancyProgressBar_New", new Func<float, float, bool, float, object>(FancyProgressBar_New) },
         { "FancyProgressBar_GetValue", new Func<object, float>(FancyProgressBar_GetValue) },
         { "FancyProgressBar_SetValue", new Action<object, float>(FancyProgressBar_SetValue) },
         { "FancyProgressBar_GetMaxValue", new Func<object, float>(FancyProgressBar_GetMaxValue) },
         { "FancyProgressBar_SetMaxValue", new Action<object, float>(FancyProgressBar_SetMaxValue) },
         { "FancyProgressBar_GetMinValue", new Func<object, float>(FancyProgressBar_GetMinValue) },
         { "FancyProgressBar_SetMinValue", new Action<object, float>(FancyProgressBar_SetMinValue) },
-        { "FancyProgressBar_GetLabel", new Func<object, string>(FancyProgressBar_GetLabel) },
-        { "FancyProgressBar_SetLabel", new Action<object, string>(FancyProgressBar_SetLabel) },
-        { "FancyProgressBar_GetLabelScale", new Func<object, float>(FancyProgressBar_GetLabelScale) },
-        { "FancyProgressBar_SetLabelScale", new Action<object, float>(FancyProgressBar_SetLabelScale) },
-        { "FancyProgressBar_GetLabelAlignment", new Func<object, TextAlignment>(FancyProgressBar_GetLabelAlignment) },
-        { "FancyProgressBar_SetLabelAlignment", new Action<object, TextAlignment>(FancyProgressBar_SetLabelAlignment) },
+        { "FancyProgressBar_GetBarsGap", new Func<object, float>(FancyProgressBar_GetBarsGap) },
+        { "FancyProgressBar_SetBarsGap", new Action<object, float>(FancyProgressBar_SetBarsGap) },
+        { "FancyProgressBar_GetLabel", new Func<object, object>(FancyProgressBar_GetLabel) },
 
         { "FancySelector_New", new Func<List<string>, Action<int, string>, bool, object>(FancySelector_New) },
         { "FancySelector_GetLoop", new Func<object, bool>(FancySelector_GetLoop) },
@@ -410,19 +407,16 @@ namespace Lima.Touch
     private TextAlignment FancyLabel_GetAlignment(object obj) => (obj as FancyLabel).Alignment;
     private void FancyLabel_SetAlignment(object obj, TextAlignment alignment) => (obj as FancyLabel).Alignment = alignment;
 
-    private FancyProgressBar FancyProgressBar_New(float min, float max, bool bars = true, bool vertical = false) => new FancyProgressBar(min, max, bars, vertical);
+    private FancyProgressBar FancyProgressBar_New(float min, float max, bool vertical = false, float barsGap = 0) => new FancyProgressBar(min, max, vertical, barsGap);
     private float FancyProgressBar_GetValue(object obj) => (obj as FancyProgressBar).Value;
     private void FancyProgressBar_SetValue(object obj, float value) => (obj as FancyProgressBar).Value = value;
     private float FancyProgressBar_GetMaxValue(object obj) => (obj as FancyProgressBar).MaxValue;
     private void FancyProgressBar_SetMaxValue(object obj, float max) => (obj as FancyProgressBar).MaxValue = max;
     private float FancyProgressBar_GetMinValue(object obj) => (obj as FancyProgressBar).MinValue;
     private void FancyProgressBar_SetMinValue(object obj, float min) => (obj as FancyProgressBar).MinValue = min;
-    private string FancyProgressBar_GetLabel(object obj) => (obj as FancyProgressBar).Label;
-    private void FancyProgressBar_SetLabel(object obj, string label) => (obj as FancyProgressBar).Label = label;
-    private float FancyProgressBar_GetLabelScale(object obj) => (obj as FancyProgressBar).LabelScale;
-    private void FancyProgressBar_SetLabelScale(object obj, float scale) => (obj as FancyProgressBar).LabelScale = scale;
-    private TextAlignment FancyProgressBar_GetLabelAlignment(object obj) => (obj as FancyProgressBar).LabelAlignment;
-    private void FancyProgressBar_SetLabelAlignment(object obj, TextAlignment alignment) => (obj as FancyProgressBar).LabelAlignment = alignment;
+    private float FancyProgressBar_GetBarsGap(object obj) => (obj as FancyProgressBar).BarsGap;
+    private void FancyProgressBar_SetBarsGap(object obj, float gap) => (obj as FancyProgressBar).BarsGap = gap;
+    private FancyLabel FancyProgressBar_GetLabel(object obj) => (obj as FancyProgressBar).Label;
 
     private FancySelector FancySelector_New(List<string> labels, Action<int, string> onChange, bool loop = true) => new FancySelector(labels, onChange, loop);
     private bool FancySelector_GetLoop(object obj) => (obj as FancySelector).Loop;

@@ -169,6 +169,8 @@ namespace Lima.Fancy.Elements
       UpdateChildrenPixelsAndScales();
       UpdateChildrenPositions();
 
+      Sprites.Clear();
+
       base.Update();
 
       if (BgColor != null)
@@ -195,8 +197,6 @@ namespace Lima.Fancy.Elements
           };
         }
       }
-
-      Sprites.Clear();
 
       var size = GetSize();
       var extraBounds = GetExtraBounds();

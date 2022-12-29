@@ -4,13 +4,9 @@ using VRageMath;
 
 namespace Lima.Fancy.Elements
 {
-  public class FancyCheckbox : FancyButtonBase
+  public class FancyCheckbox : FancyElementBase
   {
-    private MySprite _bgSprite;
-    private MySprite _bgHandler;
-
-    private MySprite _check1;
-    private MySprite _check2;
+    public ClickHandler Handler = new ClickHandler();
 
     public bool Value;
     public Action<bool> OnChange;
@@ -27,11 +23,13 @@ namespace Lima.Fancy.Elements
     public override void Update()
     {
       var size = GetSize();
+
       Handler.HitArea = new Vector4(Position.X, Position.Y, Position.X + size.X, Position.Y + size.Y);
+      Handler.UpdateStatus(App.Screen);
 
       base.Update();
 
-      _bgSprite = new MySprite()
+      var bgSprite = new MySprite()
       {
         Type = SpriteType.TEXTURE,
         Data = "SquareSimple",
@@ -39,7 +37,7 @@ namespace Lima.Fancy.Elements
         Color = App.Theme.MainColor_4
       };
 
-      _bgHandler = new MySprite()
+      var bgHandler = new MySprite()
       {
         Type = SpriteType.TEXTURE,
         Data = "SquareSimple",
@@ -49,18 +47,18 @@ namespace Lima.Fancy.Elements
 
       if (Handler.IsMousePressed)
       {
-        _bgSprite.Color = App.Theme.MainColor_8;
-        _bgHandler.Color = App.Theme.MainColor_6;
+        bgSprite.Color = App.Theme.MainColor_8;
+        bgHandler.Color = App.Theme.MainColor_6;
       }
       else if (Handler.IsMouseOver)
       {
-        _bgSprite.Color = App.Theme.MainColor_5;
-        _bgHandler.Color = App.Theme.MainColor_3;
+        bgSprite.Color = App.Theme.MainColor_5;
+        bgHandler.Color = App.Theme.MainColor_3;
       }
       else
       {
-        _bgSprite.Color = App.Theme.MainColor_4;
-        _bgHandler.Color = App.Theme.MainColor_2;
+        bgSprite.Color = App.Theme.MainColor_4;
+        bgHandler.Color = App.Theme.MainColor_2;
       }
 
       if (Handler.JustReleased)
@@ -73,34 +71,34 @@ namespace Lima.Fancy.Elements
 
       var gap = 2 * ThemeScale;
 
-      _bgSprite.Position = Position + new Vector2(0, size.Y / 2);
-      _bgSprite.Size = size;
+      bgSprite.Position = Position + new Vector2(0, size.Y / 2);
+      bgSprite.Size = size;
 
-      _bgHandler.Position = Position + new Vector2(gap, size.Y / 2);
-      _bgHandler.Size = _bgSprite.Size - Vector2.One * gap * 2;
+      bgHandler.Position = Position + new Vector2(gap, size.Y / 2);
+      bgHandler.Size = bgSprite.Size - Vector2.One * gap * 2;
 
-      Sprites.Add(_bgSprite);
-      Sprites.Add(_bgHandler);
+      Sprites.Add(bgSprite);
+      Sprites.Add(bgHandler);
 
       if (Value)
       {
-        _check1 = new MySprite()
+        var check1 = new MySprite()
         {
           Type = SpriteType.TEXTURE,
-          Data = "Triangle",//"SquareSimple",
+          Data = "Triangle",
           RotationOrScale = -MathHelper.PiOver4,
           Color = App.Theme.WhiteColor
         };
-        _check1.Position = Position + new Vector2(size.X / 2 - size.Y / 4, size.Y / 2 + size.Y / 12 - gap);
-        _check1.Size = new Vector2(gap * 1.5f, size.Y / 2f);
+        check1.Position = Position + new Vector2(size.X / 2 - size.Y / 4, size.Y / 2 + size.Y / 12 - gap);
+        check1.Size = new Vector2(gap * 1.5f, size.Y / 2f);
 
-        _check2 = _check1;
-        _check2.RotationOrScale = MathHelper.PiOver4;
-        _check2.Position = Position + new Vector2(size.X / 2 + size.X / 5, size.Y / 2 + size.X / 14 - gap);
-        _check2.Size = new Vector2(gap * 1.8f, size.Y / 1.25f);
+        var check2 = check1;
+        check2.RotationOrScale = MathHelper.PiOver4;
+        check2.Position = Position + new Vector2(size.X / 2 + size.X / 5, size.Y / 2 + size.X / 14 - gap);
+        check2.Size = new Vector2(gap * 1.8f, size.Y / 1.25f);
 
-        Sprites.Add(_check1);
-        Sprites.Add(_check2);
+        Sprites.Add(check1);
+        Sprites.Add(check2);
       }
     }
   }

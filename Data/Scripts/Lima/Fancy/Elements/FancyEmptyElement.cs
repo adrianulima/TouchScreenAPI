@@ -1,6 +1,6 @@
 namespace Lima.Fancy.Elements
 {
-  public class FancyEmptyElement : FancyElementBase
+  public class FancyEmptyElement : FancyView
   {
     public FancyEmptyElement()
     {

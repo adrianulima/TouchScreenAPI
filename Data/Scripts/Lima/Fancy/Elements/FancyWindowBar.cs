@@ -22,8 +22,8 @@ namespace Lima.Fancy.Elements
 
     public override void Update()
     {
-      base.Update();
       BgColor = App.Theme.MainColor_2;
+      base.Update();
     }
 
   }

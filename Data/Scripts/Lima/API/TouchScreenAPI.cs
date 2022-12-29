@@ -196,12 +196,9 @@ namespace Lima.API
       AssignMethod(delegates, "FancyProgressBar_SetMaxValue", ref FancyProgressBar_SetMaxValue);
       AssignMethod(delegates, "FancyProgressBar_GetMinValue", ref FancyProgressBar_GetMinValue);
       AssignMethod(delegates, "FancyProgressBar_SetMinValue", ref FancyProgressBar_SetMinValue);
+      AssignMethod(delegates, "FancyProgressBar_GetBarsGap", ref FancyProgressBar_GetBarsGap);
+      AssignMethod(delegates, "FancyProgressBar_SetBarsGap", ref FancyProgressBar_SetBarsGap);
       AssignMethod(delegates, "FancyProgressBar_GetLabel", ref FancyProgressBar_GetLabel);
-      AssignMethod(delegates, "FancyProgressBar_SetLabel", ref FancyProgressBar_SetLabel);
-      AssignMethod(delegates, "FancyProgressBar_GetLabelScale", ref FancyProgressBar_GetLabelScale);
-      AssignMethod(delegates, "FancyProgressBar_SetLabelScale", ref FancyProgressBar_SetLabelScale);
-      AssignMethod(delegates, "FancyProgressBar_GetLabelAlignment", ref FancyProgressBar_GetLabelAlignment);
-      AssignMethod(delegates, "FancyProgressBar_SetLabelAlignment", ref FancyProgressBar_SetLabelAlignment);
       AssignMethod(delegates, "FancySelector_New", ref FancySelector_New);
       AssignMethod(delegates, "FancySelector_GetLoop", ref FancySelector_GetLoop);
       AssignMethod(delegates, "FancySelector_SetLoop", ref FancySelector_SetLoop);
@@ -390,19 +387,16 @@ namespace Lima.API
     public Func<object, TextAlignment> FancyLabel_GetAlignment;
     public Action<object, TextAlignment> FancyLabel_SetAlignment;
 
-    public Func<float, float, bool, bool, object> FancyProgressBar_New;
+    public Func<float, float, bool, float, object> FancyProgressBar_New;
     public Func<object, float> FancyProgressBar_GetValue;
     public Action<object, float> FancyProgressBar_SetValue;
     public Func<object, float> FancyProgressBar_GetMaxValue;
     public Action<object, float> FancyProgressBar_SetMaxValue;
     public Func<object, float> FancyProgressBar_GetMinValue;
     public Action<object, float> FancyProgressBar_SetMinValue;
-    public Func<object, string> FancyProgressBar_GetLabel;
-    public Action<object, string> FancyProgressBar_SetLabel;
-    public Func<object, float> FancyProgressBar_GetLabelScale;
-    public Action<object, float> FancyProgressBar_SetLabelScale;
-    public Func<object, TextAlignment> FancyProgressBar_GetLabelAlignment;
-    public Action<object, TextAlignment> FancyProgressBar_SetLabelAlignment;
+    public Func<object, float> FancyProgressBar_GetBarsGap;
+    public Action<object, float> FancyProgressBar_SetBarsGap;
+    public Func<object, object> FancyProgressBar_GetLabel;
 
     public Func<List<string>, Action<int, string>, bool, object> FancySelector_New;
     public Func<object, bool> FancySelector_GetLoop;
@@ -506,7 +500,7 @@ namespace Lima.API
     public bool Active { get { return Api.FancyCursor_GetActive.Invoke(InternalObj); } set { Api.FancyCursor_SetActive.Invoke(InternalObj, value); } }
     public Vector2 Position { get { return Api.FancyCursor_GetPosition.Invoke(InternalObj); } }
     public bool IsInsideArea(float x, float y, float z, float w) => Api.FancyCursor_IsInsideArea.Invoke(InternalObj, x, y, z, w);
-    public List<MySprite> Sprites { get { return Api.FancyCursor_GetSprites.Invoke(InternalObj); } }
+    public List<MySprite> GetSprites() => Api.FancyCursor_GetSprites.Invoke(InternalObj);
     public void ForceDispose() => Api.FancyCursor_ForceDispose.Invoke(InternalObj);
   }
   public class FancyTheme : DelegatorBase
@@ -535,7 +529,7 @@ namespace Lima.API
     public Vector2 Pixels { get { return Api.FancyElementBase_GetPixels.Invoke(InternalObj); } set { Api.FancyElementBase_SetPixels.Invoke(InternalObj, value); } }
     public FancyApp App { get { return _app ?? (_app = new FancyApp(Api.FancyElementBase_GetApp.Invoke(InternalObj))); } }
     public FancyContainerBase Parent { get { return _parent ?? (_parent = new FancyApp(Api.FancyElementBase_GetParent.Invoke(InternalObj))); } }
-    public List<MySprite> Sprites { get { return Api.FancyElementBase_GetSprites.Invoke(InternalObj); } }
+    public List<MySprite> GetSprites() => Api.FancyElementBase_GetSprites.Invoke(InternalObj);
     public Vector2 GetSize() => Api.FancyElementBase_GetSize.Invoke(InternalObj);
     public Vector2 GetBoundaries() => Api.FancyElementBase_GetBoundaries.Invoke(InternalObj);
     public void ForceUpdate() => Api.FancyElementBase_ForceUpdate.Invoke(InternalObj);
@@ -618,16 +612,16 @@ namespace Lima.API
     public float FontSize { get { return Api.FancyLabel_GetFontSize.Invoke(InternalObj); } set { Api.FancyLabel_SetFontSize.Invoke(InternalObj, value); } }
     public TextAlignment Alignment { get { return Api.FancyLabel_GetAlignment.Invoke(InternalObj); } set { Api.FancyLabel_SetAlignment.Invoke(InternalObj, value); } }
   }
-  public class FancyProgressBar : FancyElementBase
+  public class FancyProgressBar : FancyView
   {
-    public FancyProgressBar(float min, float max, bool bars = true, bool vertical = false) : base(Api.FancyProgressBar_New(min, max, bars, vertical)) { }
+    private FancyLabel _label;
+    public FancyProgressBar(float min, float max, bool vertical = false, float barsGap = 0) : base(Api.FancyProgressBar_New(min, max, vertical, barsGap)) { }
     public FancyProgressBar(object internalObject) : base(internalObject) { }
     public float Value { get { return Api.FancyProgressBar_GetValue.Invoke(InternalObj); } set { Api.FancyProgressBar_SetValue.Invoke(InternalObj, value); } }
     public float MaxValue { get { return Api.FancyProgressBar_GetMaxValue.Invoke(InternalObj); } set { Api.FancyProgressBar_SetMaxValue.Invoke(InternalObj, value); } }
     public float MinValue { get { return Api.FancyProgressBar_GetMinValue.Invoke(InternalObj); } set { Api.FancyProgressBar_SetMinValue.Invoke(InternalObj, value); } }
-    public string Label { get { return Api.FancyProgressBar_GetLabel.Invoke(InternalObj); } set { Api.FancyProgressBar_SetLabel.Invoke(InternalObj, value); } }
-    public float LabelScale { get { return Api.FancyProgressBar_GetLabelScale.Invoke(InternalObj); } set { Api.FancyProgressBar_SetLabelScale.Invoke(InternalObj, value); } }
-    public TextAlignment LabelAlignment { get { return Api.FancyProgressBar_GetLabelAlignment.Invoke(InternalObj); } set { Api.FancyProgressBar_SetLabelAlignment.Invoke(InternalObj, value); } }
+    public float BarsGap { get { return Api.FancyProgressBar_GetBarsGap.Invoke(InternalObj); } set { Api.FancyProgressBar_SetBarsGap.Invoke(InternalObj, value); } }
+    public FancyLabel Label { get { return _label ?? (_label = new FancyLabel(Api.FancyProgressBar_GetLabel.Invoke(InternalObj))); } }
   }
   public class FancySelector : FancyButtonBase
   {
@@ -697,7 +691,7 @@ namespace Lima.API
     public float MaxValue { get { return Api.FancyChart_GetMaxValue.Invoke(InternalObj); } }
     public float MinValue { get { return Api.FancyChart_GetMinValue.Invoke(InternalObj); } }
   }
-  public class FancyEmptyElement : FancyElementBase
+  public class FancyEmptyElement : FancyView
   {
     public FancyEmptyElement() : base(Api.FancyEmptyElement_New()) { }
     public FancyEmptyElement(object internalObject) : base(internalObject) { }
