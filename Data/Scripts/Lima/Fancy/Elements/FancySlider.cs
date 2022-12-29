@@ -11,7 +11,6 @@ namespace Lima.Fancy.Elements
     protected MySprite ProgressSprite;
     protected MySprite HandlerSprite;
     protected MySprite HandlerInnerSprite;
-    protected MySprite TextSprite;
 
     private FancyTextField _innerTextField;
     public FancyTextField InnerTextField
@@ -124,22 +123,18 @@ namespace Lima.Fancy.Elements
         UpdateValue(MinValue + mouseX * (MaxValue - MinValue));
       }
       else if (Handler.IsMouseOver)
-      {
         BgSprite.Color = App.Theme.MainColor_3;
-      }
       else
-      {
         BgSprite.Color = App.Theme.MainColor_2;
-      }
 
       var ratio = ((Value - MinValue) / (MaxValue - MinValue));
       var prgW = size.X * ratio;
 
-      var handlerOffset = (size.Y / 2) * ((ratio * 1.4f) + 0.3f);
-      HandlerSprite.Position = Position + new Vector2(prgW - handlerOffset, size.Y / 2);
+      var handlerOffset = -(size.Y * 0.4f) - (size.Y * 0.4f) * (ratio * 1.8f - 0.9f);
+      HandlerSprite.Position = Position + new Vector2(prgW + handlerOffset, size.Y / 2);
       HandlerSprite.Size = new Vector2(size.Y * 0.8f, size.Y * 0.8f);
 
-      HandlerInnerSprite.Position = Position + new Vector2(prgW - handlerOffset + size.Y * 0.15f, size.Y / 2);
+      HandlerInnerSprite.Position = Position + new Vector2(prgW + handlerOffset + size.Y * 0.15f, size.Y / 2);
       HandlerInnerSprite.Size = new Vector2(size.Y * 0.5f, size.Y * 0.5f);
 
       ProgressSprite.Position = Position + new Vector2(0, size.Y / 2);
@@ -164,6 +159,7 @@ namespace Lima.Fancy.Elements
       InnerTextField.IsInteger = IsInteger;
       InnerTextField.Parent = Parent;
       InnerTextField.Scale = Scale;
+      InnerTextField.Position = Position;
       InnerTextField.Pixels = Pixels;
       InnerTextField.Margin = Margin;
       InnerTextField.Text = $"{v}";
