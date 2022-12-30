@@ -1,3 +1,4 @@
+using System;
 using VRage.Game.GUI.TextPanel;
 using VRageMath;
 
@@ -9,6 +10,8 @@ namespace Lima.Fancy.Elements
     private float _fontSize;
     public TextAlignment Alignment;
     public Color? TextColor;
+
+    public bool Overflow = false;
 
     public float FontSize
     {
@@ -58,12 +61,24 @@ namespace Lima.Fancy.Elements
         FontId = App.Theme.Font
       };
 
+      var size = GetSize();
+
+      if (!Overflow && Text.Length > 0)
+      {
+        var text = Text;
+        while (text.Length > 0 && size.X < App.Theme.MeasureStringInPixels(text, textSprite.FontId, textSprite.RotationOrScale).X)
+          text = text.Substring(0, text.Length - 1).TrimEnd();
+
+        if (text != Text)
+          textSprite.Data = $"{text.Substring(0, Math.Max(0, text.Length - 2)).TrimEnd()}...";
+      }
+
       if (Alignment == TextAlignment.LEFT)
         textSprite.Position = Position;
       else if (Alignment == TextAlignment.RIGHT)
-        textSprite.Position = Position + new Vector2(GetSize().X, 0);
+        textSprite.Position = Position + new Vector2(size.X, 0);
       else
-        textSprite.Position = Position + new Vector2(GetSize().X / 2, 0);
+        textSprite.Position = Position + new Vector2(size.X / 2, 0);
 
       Sprites.Clear();
 

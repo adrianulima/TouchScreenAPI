@@ -97,6 +97,8 @@ namespace Lima.Touch
         { "FancyContainerBase_RemoveChild", new Action<object, object>(FancyContainerBase_RemoveChild) },
 
         { "FancyView_New", new Func<int, Color?, FancyView>(FancyView_New) },
+        { "FancyView_GetOverflow", new Func<object, bool>(FancyView_GetOverflow) },
+        { "FancyView_SetOverflow", new Action<object, bool>(FancyView_SetOverflow) },
         { "FancyView_GetDirection", new Func<object, int>(FancyView_GetDirection) },
         { "FancyView_SetDirection", new Action<object, int>(FancyView_SetDirection) },
         { "FancyView_GetAlignment", new Func<object, byte>(FancyView_GetAlignment) },
@@ -142,9 +144,11 @@ namespace Lima.Touch
         { "FancyTheme_GetWhiteColor", new Func<object, Color>(FancyTheme_GetWhiteColor) },
         { "FancyTheme_GetMainColor", new Func<object, Color>(FancyTheme_GetMainColor) },
         { "FancyTheme_GetMainColorDarker", new Func<object, int, Color>(FancyTheme_GetMainColorDarker) },
-        { "FancyTheme_MeasureStringInPixels", new Func<object, String, string, float, Vector2>(FancyTheme_MeasureStringInPixels) },
+        { "FancyTheme_MeasureStringInPixels", new Func<object, string, string, float, Vector2>(FancyTheme_MeasureStringInPixels) },
         { "FancyTheme_GetScale", new Func<object, float>(FancyTheme_GetScale) },
         { "FancyTheme_SetScale", new Action<object, float>(FancyTheme_SetScale) },
+        { "FancyTheme_GetFont", new Func<object, string>(FancyTheme_GetFont) },
+        { "FancyTheme_SetFont", new Action<object, string>(FancyTheme_SetFont) },
 
         { "FancyButtonBase_GetHandler", new Func<object, ClickHandler>(FancyButtonBase_GetHandler) },
 
@@ -166,8 +170,11 @@ namespace Lima.Touch
         { "FancyCheckbox_GetValue", new Func<object, bool>(FancyCheckbox_GetValue) },
         { "FancyCheckbox_SetValue", new Action<object, bool>(FancyCheckbox_SetValue) },
         { "FancyCheckbox_SetOnChange", new Action<object, Action<bool>>(FancyCheckbox_SetOnChange) },
+        { "FancyCheckbox_GetCheckMark", new Func<object, object>(FancyCheckbox_GetCheckMark) },
 
         { "FancyLabel_New", new Func<string, float, TextAlignment, object>(FancyLabel_New) },
+        { "FancyLabel_GetOverflow", new Func<object, bool>(FancyLabel_GetOverflow) },
+        { "FancyLabel_SetOverflow", new Action<object, bool>(FancyLabel_SetOverflow) },
         { "FancyLabel_GetText", new Func<object, string>(FancyLabel_GetText) },
         { "FancyLabel_SetText", new Action<object, string>(FancyLabel_SetText) },
         { "FancyLabel_GetTextColor", new Func<object, Color?>(FancyLabel_GetTextColor) },
@@ -322,6 +329,8 @@ namespace Lima.Touch
     private void FancyContainerBase_RemoveChild(object obj, object child) => (obj as FancyContainerBase).RemoveChild((FancyElementBase)child);
 
     private FancyView FancyView_New(int direction, Color? bgColor = null) => new FancyView((FancyView.ViewDirection)direction, bgColor);
+    private bool FancyView_GetOverflow(object obj) => (obj as FancyView).Overflow;
+    private void FancyView_SetOverflow(object obj, bool overflow) => (obj as FancyView).Overflow = overflow;
     private int FancyView_GetDirection(object obj) => (int)(obj as FancyView).Direction;
     private void FancyView_SetDirection(object obj, int direction) => (obj as FancyView).Direction = (FancyView.ViewDirection)direction;
     private byte FancyView_GetAlignment(object obj) => (byte)(obj as FancyView).Alignment;
@@ -379,9 +388,11 @@ namespace Lima.Touch
       else if (value <= 8) return theme.MainColor_8;
       return theme.MainColor_9;
     }
-    private Vector2 FancyTheme_MeasureStringInPixels(object obj, String text, string font, float scale) => (obj as FancyTheme).MeasureStringInPixels(text, font, scale);
+    private Vector2 FancyTheme_MeasureStringInPixels(object obj, string text, string font, float scale) => (obj as FancyTheme).MeasureStringInPixels(text, font, scale);
     private float FancyTheme_GetScale(object obj) => (obj as FancyTheme).Scale;
     private void FancyTheme_SetScale(object obj, float scale) => (obj as FancyTheme).Scale = scale;
+    private string FancyTheme_GetFont(object obj) => (obj as FancyTheme).Font;
+    private void FancyTheme_SetFont(object obj, string font) => (obj as FancyTheme).Font = font;
 
     private ClickHandler FancyButtonBase_GetHandler(object obj) => (obj as FancyButtonBase).Handler;
 
@@ -403,8 +414,11 @@ namespace Lima.Touch
     private bool FancyCheckbox_GetValue(object obj) => (obj as FancyCheckbox).Value;
     private void FancyCheckbox_SetValue(object obj, bool value) => (obj as FancyCheckbox).Value = value;
     private void FancyCheckbox_SetOnChange(object obj, Action<bool> onChange) => (obj as FancyCheckbox).OnChange = onChange;
+    private FancyEmptyElement FancyCheckbox_GetCheckMark(object obj) => (obj as FancyCheckbox).CheckMark;
 
     private FancyLabel FancyLabel_New(string text, float fontSize = 0.5f, TextAlignment alignment = TextAlignment.CENTER) => new FancyLabel(text, fontSize, alignment);
+    private bool FancyLabel_GetOverflow(object obj) => (obj as FancyLabel).Overflow;
+    private void FancyLabel_SetOverflow(object obj, bool overflow) => (obj as FancyLabel).Overflow = overflow;
     private string FancyLabel_GetText(object obj) => (obj as FancyLabel).Text;
     private void FancyLabel_SetText(object obj, string text) => (obj as FancyLabel).Text = text;
     private Color? FancyLabel_GetTextColor(object obj) => (obj as FancyLabel).TextColor;

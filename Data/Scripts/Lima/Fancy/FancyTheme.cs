@@ -1,4 +1,3 @@
-using System;
 using System.Text;
 using VRage.Game;
 using VRageMath;
@@ -40,7 +39,7 @@ namespace Lima.Fancy
 
     public string Font = MyFontEnum.White;
     private readonly StringBuilder _strBuilder = new StringBuilder();
-    public Vector2 MeasureStringInPixels(String text, string font, float scale)
+    public Vector2 MeasureStringInPixels(string text, string font, float scale)
     {
       _strBuilder.Clear();
       _strBuilder.Append(text);

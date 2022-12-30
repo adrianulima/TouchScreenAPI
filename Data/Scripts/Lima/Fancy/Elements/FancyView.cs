@@ -22,6 +22,8 @@ namespace Lima.Fancy.Elements
     public ViewAlignment Alignment = ViewAlignment.Start;
     public ViewAlignment Anchor = ViewAlignment.Start;
 
+    public bool Overflow = true;
+
     protected MySprite BgSprite;
     protected MySprite[] BorderSprites = new MySprite[4];
     protected Vector2 ChildrenPixels = Vector2.Zero;
@@ -57,7 +59,7 @@ namespace Lima.Fancy.Elements
 
     protected override bool ValidateChild(FancyElementBase child)
     {
-      if (child.Absolute)
+      if (Overflow || child.Absolute)
         return base.ValidateChild(child);
 
       if (Direction != ViewDirection.None && !child.Absolute)

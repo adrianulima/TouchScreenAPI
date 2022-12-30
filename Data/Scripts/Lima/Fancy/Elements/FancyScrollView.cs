@@ -21,6 +21,8 @@ namespace Lima.Fancy.Elements
 
     public FancyScrollView(ViewDirection direction = ViewDirection.Column, Color? bgColor = null) : base(direction, bgColor)
     {
+      Overflow = false;
+
       ScrollBar = new FancyBarContainer(true);
       ScrollBar.Pixels = new Vector2(12, 0);
       ScrollBar.Scale = Vector2.Zero;

@@ -113,6 +113,8 @@ namespace Lima.API
       AssignMethod(delegates, "FancyTheme_MeasureStringInPixels", ref FancyTheme_MeasureStringInPixels);
       AssignMethod(delegates, "FancyTheme_GetScale", ref FancyTheme_GetScale);
       AssignMethod(delegates, "FancyTheme_SetScale", ref FancyTheme_SetScale);
+      AssignMethod(delegates, "FancyTheme_GetFont", ref FancyTheme_GetFont);
+      AssignMethod(delegates, "FancyTheme_SetFont", ref FancyTheme_SetFont);
       AssignMethod(delegates, "FancyElementBase_GetEnabled", ref FancyElementBase_GetEnabled);
       AssignMethod(delegates, "FancyElementBase_SetEnabled", ref FancyElementBase_SetEnabled);
       AssignMethod(delegates, "FancyElementBase_GetAbsolute", ref FancyElementBase_GetAbsolute);
@@ -141,6 +143,8 @@ namespace Lima.API
       AssignMethod(delegates, "FancyContainerBase_AddChild", ref FancyContainerBase_AddChild);
       AssignMethod(delegates, "FancyContainerBase_RemoveChild", ref FancyContainerBase_RemoveChild);
       AssignMethod(delegates, "FancyView_New", ref FancyView_New);
+      AssignMethod(delegates, "FancyView_GetOverflow", ref FancyView_GetOverflow);
+      AssignMethod(delegates, "FancyView_SetOverflow", ref FancyView_SetOverflow);
       AssignMethod(delegates, "FancyView_GetDirection", ref FancyView_GetDirection);
       AssignMethod(delegates, "FancyView_SetDirection", ref FancyView_SetDirection);
       AssignMethod(delegates, "FancyView_GetAlignment", ref FancyView_GetAlignment);
@@ -179,7 +183,10 @@ namespace Lima.API
       AssignMethod(delegates, "FancyCheckbox_GetValue", ref FancyCheckbox_GetValue);
       AssignMethod(delegates, "FancyCheckbox_SetValue", ref FancyCheckbox_SetValue);
       AssignMethod(delegates, "FancyCheckbox_SetOnChange", ref FancyCheckbox_SetOnChange);
+      AssignMethod(delegates, "FancyCheckbox_GetCheckMark", ref FancyCheckbox_GetCheckMark);
       AssignMethod(delegates, "FancyLabel_New", ref FancyLabel_New);
+      AssignMethod(delegates, "FancyLabel_GetOverflow", ref FancyLabel_GetOverflow);
+      AssignMethod(delegates, "FancyLabel_SetOverflow", ref FancyLabel_SetOverflow);
       AssignMethod(delegates, "FancyLabel_GetText", ref FancyLabel_GetText);
       AssignMethod(delegates, "FancyLabel_SetText", ref FancyLabel_SetText);
       AssignMethod(delegates, "FancyLabel_GetTextColor", ref FancyLabel_GetTextColor);
@@ -305,9 +312,11 @@ namespace Lima.API
     public Func<object, Color> FancyTheme_GetWhiteColor;
     public Func<object, Color> FancyTheme_GetMainColor;
     public Func<object, int, Color> FancyTheme_GetMainColorDarker;
-    public Func<object, String, string, float, Vector2> FancyTheme_MeasureStringInPixels;
+    public Func<object, string, string, float, Vector2> FancyTheme_MeasureStringInPixels;
     public Func<object, float> FancyTheme_GetScale;
     public Action<object, float> FancyTheme_SetScale;
+    public Func<object, string> FancyTheme_GetFont;
+    public Action<object, string> FancyTheme_SetFont;
 
     public Func<object, bool> FancyElementBase_GetEnabled;
     public Action<object, bool> FancyElementBase_SetEnabled;
@@ -339,6 +348,8 @@ namespace Lima.API
     public Action<object, object> FancyContainerBase_RemoveChild;
 
     public Func<int, Color?, object> FancyView_New;
+    public Func<object, bool> FancyView_GetOverflow;
+    public Action<object, bool> FancyView_SetOverflow;
     public Func<object, int> FancyView_GetDirection;
     public Action<object, int> FancyView_SetDirection;
     public Func<object, byte> FancyView_GetAlignment;
@@ -382,8 +393,11 @@ namespace Lima.API
     public Func<object, bool> FancyCheckbox_GetValue;
     public Action<object, bool> FancyCheckbox_SetValue;
     public Action<object, Action<bool>> FancyCheckbox_SetOnChange;
+    public Func<object, object> FancyCheckbox_GetCheckMark;
 
     public Func<string, float, TextAlignment, object> FancyLabel_New;
+    public Func<object, bool> FancyLabel_GetOverflow;
+    public Action<object, bool> FancyLabel_SetOverflow;
     public Func<object, string> FancyLabel_GetText;
     public Action<object, string> FancyLabel_SetText;
     public Func<object, Color?> FancyLabel_GetTextColor;
@@ -527,7 +541,8 @@ namespace Lima.API
     public Color MainColor { get { return Api.FancyTheme_GetMainColor.Invoke(InternalObj); } }
     public Color GetMainColorDarker(int value) => Api.FancyTheme_GetMainColorDarker.Invoke(InternalObj, value);
     public float Scale { get { return Api.FancyTheme_GetScale.Invoke(InternalObj); } set { Api.FancyTheme_SetScale.Invoke(InternalObj, value); } }
-    public Vector2 MeasureStringInPixels(String text, string font, float scale) => Api.FancyTheme_MeasureStringInPixels.Invoke(InternalObj, text, font, scale);
+    public string Font { get { return Api.FancyTheme_GetFont.Invoke(InternalObj); } set { Api.FancyTheme_SetFont.Invoke(InternalObj, value); } }
+    public Vector2 MeasureStringInPixels(string text, string font, float scale) => Api.FancyTheme_MeasureStringInPixels.Invoke(InternalObj, text, font, scale);
   }
   public abstract class FancyElementBase : DelegatorBase
   {
@@ -567,6 +582,7 @@ namespace Lima.API
     public enum ViewAlignment : byte { Start = 0, Center = 1, End = 2 }
     public FancyView(ViewDirection direction = ViewDirection.Column, Color? bgColor = null) : base(Api.FancyView_New((int)direction, bgColor)) { }
     public FancyView(object internalObject) : base(internalObject) { }
+    public bool Overflow { get { return Api.FancyView_GetOverflow.Invoke(InternalObj); } set { Api.FancyView_SetOverflow.Invoke(InternalObj, value); } }
     public ViewDirection Direction { get { return (ViewDirection)Api.FancyView_GetDirection.Invoke(InternalObj); } set { Api.FancyView_SetDirection.Invoke(InternalObj, (byte)value); } }
     public ViewAlignment Alignment { get { return (ViewAlignment)Api.FancyView_GetAlignment.Invoke(InternalObj); } set { Api.FancyView_SetAlignment.Invoke(InternalObj, (byte)value); } }
     public ViewAlignment Anchor { get { return (ViewAlignment)Api.FancyView_GetAnchor.Invoke(InternalObj); } set { Api.FancyView_SetAnchor.Invoke(InternalObj, (byte)value); } }
@@ -614,15 +630,18 @@ namespace Lima.API
   }
   public class FancyCheckbox : FancyButtonBase
   {
+    private FancyEmptyElement _checkMark;
     public FancyCheckbox(Action<bool> onChange, bool value = false) : base(Api.FancyCheckbox_New(onChange, value)) { }
     public FancyCheckbox(object internalObject) : base(internalObject) { }
     public bool Value { get { return Api.FancyCheckbox_GetValue.Invoke(InternalObj); } set { Api.FancyCheckbox_SetValue.Invoke(InternalObj, value); } }
     public Action<bool> OnChange { set { Api.FancyCheckbox_SetOnChange.Invoke(InternalObj, value); } }
+    public FancyEmptyElement CheckMark { get { return _checkMark ?? (_checkMark = new FancyEmptyElement(Api.FancyCheckbox_GetCheckMark.Invoke(InternalObj))); } }
   }
   public class FancyLabel : FancyElementBase
   {
     public FancyLabel(string text, float fontSize = 0.5f, TextAlignment alignment = TextAlignment.CENTER) : base(Api.FancyLabel_New(text, fontSize, alignment)) { }
     public FancyLabel(object internalObject) : base(internalObject) { }
+    public bool Overflow { get { return Api.FancyLabel_GetOverflow.Invoke(InternalObj); } set { Api.FancyLabel_SetOverflow.Invoke(InternalObj, value); } }
     public string Text { get { return Api.FancyLabel_GetText.Invoke(InternalObj); } set { Api.FancyLabel_SetText.Invoke(InternalObj, value); } }
     public Color? TextColor { get { return Api.FancyLabel_GetTextColor.Invoke(InternalObj); } set { Api.FancyLabel_SetTextColor.Invoke(InternalObj, (Color)value); } }
     public float FontSize { get { return Api.FancyLabel_GetFontSize.Invoke(InternalObj); } set { Api.FancyLabel_SetFontSize.Invoke(InternalObj, value); } }

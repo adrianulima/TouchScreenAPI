@@ -151,10 +151,7 @@ namespace Lima.Fancy.Elements
         if (tx <= size.X)
           _maxText = Text.Substring(0, Math.Max(0, Text.Length - 3)) + "...";
         else
-        {
           _textSprite.Data = _maxText;
-          // _bgSprite.Color = _blink ? App.Theme.Main_30 : Color.Red;
-        }
       }
 
       var caretX = 1.5f * ThemeScale;
