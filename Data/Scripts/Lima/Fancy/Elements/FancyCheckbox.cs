@@ -4,12 +4,14 @@ using VRageMath;
 
 namespace Lima.Fancy.Elements
 {
-  public class FancyCheckbox : FancyElementBase
+  public class FancyCheckbox : FancyView
   {
     public ClickHandler Handler = new ClickHandler();
 
     public bool Value;
     public Action<bool> OnChange;
+
+    public FancyEmptyElement CheckMark;
 
     public FancyCheckbox(Action<bool> onChange, bool value = false)
     {
@@ -17,7 +19,15 @@ namespace Lima.Fancy.Elements
       Value = value;
 
       Scale = new Vector2(0, 0);
-      Pixels = new Vector2(24, 24);
+      Pixels = new Vector2(20, 20);
+      Border = new Vector4(2);
+
+      Anchor = ViewAlignment.Center;
+      Alignment = ViewAlignment.Center;
+
+      CheckMark = new FancyEmptyElement();
+      // CheckMark.Scale = new Vector2(0.75f);
+      AddChild(CheckMark);
     }
 
     public override void Update()
@@ -27,38 +37,20 @@ namespace Lima.Fancy.Elements
       Handler.HitArea = new Vector4(Position.X, Position.Y, Position.X + size.X, Position.Y + size.Y);
       Handler.UpdateStatus(App.Screen);
 
-      base.Update();
-
-      var bgSprite = new MySprite()
-      {
-        Type = SpriteType.TEXTURE,
-        Data = "SquareSimple",
-        RotationOrScale = 0,
-        Color = App.Theme.MainColor_4
-      };
-
-      var bgHandler = new MySprite()
-      {
-        Type = SpriteType.TEXTURE,
-        Data = "SquareSimple",
-        RotationOrScale = 0,
-        Color = App.Theme.MainColor_2
-      };
-
       if (Handler.IsMousePressed)
       {
-        bgSprite.Color = App.Theme.MainColor_8;
-        bgHandler.Color = App.Theme.MainColor_6;
+        BorderColor = App.Theme.MainColor_8;
+        BgColor = App.Theme.MainColor_6;
       }
       else if (Handler.IsMouseOver)
       {
-        bgSprite.Color = App.Theme.MainColor_5;
-        bgHandler.Color = App.Theme.MainColor_3;
+        BorderColor = App.Theme.MainColor_5;
+        BgColor = App.Theme.MainColor_3;
       }
       else
       {
-        bgSprite.Color = App.Theme.MainColor_4;
-        bgHandler.Color = App.Theme.MainColor_2;
+        BorderColor = App.Theme.MainColor_4;
+        BgColor = App.Theme.MainColor_2;
       }
 
       if (Handler.JustReleased)
@@ -67,19 +59,11 @@ namespace Lima.Fancy.Elements
         OnChange(Value);
       }
 
-      Sprites.Clear();
+      base.Update();
 
-      var gap = 2 * ThemeScale;
+      CheckMark.GetSprites().Clear();
 
-      bgSprite.Position = Position + new Vector2(0, size.Y / 2);
-      bgSprite.Size = size;
-
-      bgHandler.Position = Position + new Vector2(gap, size.Y / 2);
-      bgHandler.Size = bgSprite.Size - Vector2.One * gap * 2;
-
-      Sprites.Add(bgSprite);
-      Sprites.Add(bgHandler);
-
+      var checkSize = CheckMark.GetSize();
       if (Value)
       {
         var check1 = new MySprite()
@@ -89,16 +73,17 @@ namespace Lima.Fancy.Elements
           RotationOrScale = -MathHelper.PiOver4,
           Color = App.Theme.WhiteColor
         };
-        check1.Position = Position + new Vector2(size.X / 2 - size.Y / 4, size.Y / 2 + size.Y / 12 - gap);
-        check1.Size = new Vector2(gap * 1.5f, size.Y / 2f);
+
+        check1.Position = CheckMark.Position + new Vector2(checkSize.X / 2 - checkSize.X / 3, checkSize.Y / 2 + checkSize.Y / 12);
+        check1.Size = new Vector2(3 * ThemeScale, checkSize.Y / 1.8f);
 
         var check2 = check1;
         check2.RotationOrScale = MathHelper.PiOver4;
-        check2.Position = Position + new Vector2(size.X / 2 + size.X / 5, size.Y / 2 + size.X / 14 - gap);
-        check2.Size = new Vector2(gap * 1.8f, size.Y / 1.25f);
+        check2.Position = CheckMark.Position + new Vector2(checkSize.X / 2 + checkSize.X / 8, checkSize.Y / 2);
+        check2.Size = new Vector2(3.6f * ThemeScale, checkSize.Y);
 
-        Sprites.Add(check1);
-        Sprites.Add(check2);
+        CheckMark.GetSprites().Add(check1);
+        CheckMark.GetSprites().Add(check2);
       }
     }
   }
