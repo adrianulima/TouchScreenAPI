@@ -1,4 +1,3 @@
-using VRage.Game.GUI.TextPanel;
 using VRageMath;
 
 namespace Lima.Fancy.Elements
@@ -80,7 +79,7 @@ namespace Lima.Fancy.Elements
           {
             ScrollBar.Bar.BgColor = App.Theme.MainColor_6;
             var cursorRatio = (App.Cursor.Position.Y - _handler.HitArea.Y) / (_handler.HitArea.W - _handler.HitArea.Y);
-            Scroll = cursorRatio * (1 + 2 * ScrollBar.Ratio) - (ScrollBar.Ratio * 0.5f);
+            Scroll = cursorRatio * (1 + ScrollBar.Ratio) - (ScrollBar.Ratio * 0.5f);
           }
         }
         else

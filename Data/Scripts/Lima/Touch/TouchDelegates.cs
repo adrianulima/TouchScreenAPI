@@ -223,11 +223,15 @@ namespace Lima.Touch
         { "FancySlider_SetIsInteger", new Action<object, bool>(FancySlider_SetIsInteger) },
         { "FancySlider_GetAllowInput", new Func<object, bool>(FancySlider_GetAllowInput) },
         { "FancySlider_SetAllowInput", new Action<object, bool>(FancySlider_SetAllowInput) },
+        { "FancySlider_GetBar", new Func<object, object>(FancySlider_GetBar) },
+        { "FancySlider_GetThumb", new Func<object, object>(FancySlider_GetThumb) },
+        { "FancySlider_GetTextInput", new Func<object, object>(FancySlider_GetTextInput) },
 
         { "FancySliderRange_NewR", new Func<float, float, Action<float, float>, object>(FancySliderRange_NewR) },
         { "FancySliderRange_GetValueLower", new Func<object, float>(FancySliderRange_GetValueLower) },
         { "FancySliderRange_SetValueLower", new Action<object, float>(FancySliderRange_SetValueLower) },
         { "FancySliderRange_SetOnChangeR", new Action<object, Action<float, float>>(FancySliderRange_SetOnChangeR) },
+        { "FancySliderRange_GetThumbLower", new Func<object, object>(FancySliderRange_GetThumbLower) },
 
         { "FancySwitch_New", new Func<string[], int, Action<int>, object>(FancySwitch_New) },
         { "FancySwitch_GetIndex", new Func<object, int>(FancySwitch_GetIndex) },
@@ -236,6 +240,7 @@ namespace Lima.Touch
         { "FancySwitch_SetOnChange", new Action<object, Action<int>>(FancySwitch_SetOnChange) },
 
         { "FancyTextField_New", new Func<string, Action<string>, object>(FancyTextField_New) },
+        { "FancyTextField_GetIsEditing", new Func<object, bool>(FancyTextField_GetIsEditing) },
         { "FancyTextField_GetText", new Func<object, string>(FancyTextField_GetText) },
         { "FancyTextField_SetText", new Action<object, string>(FancyTextField_SetText) },
         { "FancyTextField_SetOnChange", new Action<object, Action<string>>(FancyTextField_SetOnChange) },
@@ -465,11 +470,15 @@ namespace Lima.Touch
     private void FancySlider_SetIsInteger(object obj, bool interger) => (obj as FancySlider).IsInteger = interger;
     private bool FancySlider_GetAllowInput(object obj) => (obj as FancySlider).AllowInput;
     private void FancySlider_SetAllowInput(object obj, bool allowInput) => (obj as FancySlider).AllowInput = allowInput;
+    private FancyBarContainer FancySlider_GetBar(object obj) => (obj as FancySlider).Bar;
+    private FancyEmptyElement FancySlider_GetThumb(object obj) => (obj as FancySlider).Thumb;
+    private FancyTextField FancySlider_GetTextInput(object obj) => (obj as FancySlider).InnerTextField;
 
     private FancySliderRange FancySliderRange_NewR(float min, float max, Action<float, float> onChange) => new FancySliderRange(min, max, onChange);
     private float FancySliderRange_GetValueLower(object obj) => (obj as FancySliderRange).ValueLower;
     private void FancySliderRange_SetValueLower(object obj, float value) => (obj as FancySliderRange).ValueLower = value;
     private void FancySliderRange_SetOnChangeR(object obj, Action<float, float> onChange) => (obj as FancySliderRange).OnChangeR = onChange;
+    private FancyEmptyElement FancySliderRange_GetThumbLower(object obj) => (obj as FancySliderRange).ThumbLower;
 
     private FancySwitch FancySwitch_New(string[] labels, int index = 0, Action<int> onChange = null) => new FancySwitch(labels, index, onChange);
     private int FancySwitch_GetIndex(object obj) => (obj as FancySwitch).Index;
@@ -478,6 +487,7 @@ namespace Lima.Touch
     private void FancySwitch_SetOnChange(object obj, Action<int> onChange) => (obj as FancySwitch).OnChange = onChange;
 
     private FancyTextField FancyTextField_New(string text, Action<string> onChange) => new FancyTextField(text, onChange);
+    private bool FancyTextField_GetIsEditing(object obj) => (obj as FancyTextField).IsEditing;
     private string FancyTextField_GetText(object obj) => (obj as FancyTextField).Text;
     private void FancyTextField_SetText(object obj, string text) => (obj as FancyTextField).Text = text;
     private void FancyTextField_SetOnChange(object obj, Action<string> onChange) => (obj as FancyTextField).OnChange = onChange;

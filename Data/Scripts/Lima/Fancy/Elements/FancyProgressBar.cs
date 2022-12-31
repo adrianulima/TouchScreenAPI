@@ -52,8 +52,6 @@ namespace Lima.Fancy.Elements
     {
       Sprites.Clear();
 
-
-
       Ratio = (Value - MinValue) / (MaxValue - MinValue);
       Offset = IsVertical ? 1 : 0;
 

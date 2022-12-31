@@ -229,16 +229,21 @@ namespace Lima.API
       AssignMethod(delegates, "FancySlider_SetIsInteger", ref FancySlider_SetIsInteger);
       AssignMethod(delegates, "FancySlider_GetAllowInput", ref FancySlider_GetAllowInput);
       AssignMethod(delegates, "FancySlider_SetAllowInput", ref FancySlider_SetAllowInput);
+      AssignMethod(delegates, "FancySlider_GetBar", ref FancySlider_GetBar);
+      AssignMethod(delegates, "FancySlider_GetThumb", ref FancySlider_GetThumb);
+      AssignMethod(delegates, "FancySlider_GetTextInput", ref FancySlider_GetTextInput);
       AssignMethod(delegates, "FancySliderRange_NewR", ref FancySliderRange_NewR);
       AssignMethod(delegates, "FancySliderRange_GetValueLower", ref FancySliderRange_GetValueLower);
       AssignMethod(delegates, "FancySliderRange_SetValueLower", ref FancySliderRange_SetValueLower);
       AssignMethod(delegates, "FancySliderRange_SetOnChangeR", ref FancySliderRange_SetOnChangeR);
+      AssignMethod(delegates, "FancySliderRange_GetThumbLower", ref FancySliderRange_GetThumbLower);
       AssignMethod(delegates, "FancySwitch_New", ref FancySwitch_New);
       AssignMethod(delegates, "FancySwitch_GetIndex", ref FancySwitch_GetIndex);
       AssignMethod(delegates, "FancySwitch_SetIndex", ref FancySwitch_SetIndex);
       AssignMethod(delegates, "FancySwitch_GetLabels", ref FancySwitch_GetLabels);
       AssignMethod(delegates, "FancySwitch_SetOnChange", ref FancySwitch_SetOnChange);
       AssignMethod(delegates, "FancyTextField_New", ref FancyTextField_New);
+      AssignMethod(delegates, "FancyTextField_GetIsEditing", ref FancyTextField_GetIsEditing);
       AssignMethod(delegates, "FancyTextField_GetText", ref FancyTextField_GetText);
       AssignMethod(delegates, "FancyTextField_SetText", ref FancyTextField_SetText);
       AssignMethod(delegates, "FancyTextField_SetOnChange", ref FancyTextField_SetOnChange);
@@ -445,11 +450,15 @@ namespace Lima.API
     public Action<object, bool> FancySlider_SetIsInteger;
     public Func<object, bool> FancySlider_GetAllowInput;
     public Action<object, bool> FancySlider_SetAllowInput;
+    public Func<object, object> FancySlider_GetBar;
+    public Func<object, object> FancySlider_GetThumb;
+    public Func<object, object> FancySlider_GetTextInput;
 
     public Func<float, float, Action<float, float>, object> FancySliderRange_NewR;
     public Func<object, float> FancySliderRange_GetValueLower;
     public Action<object, float> FancySliderRange_SetValueLower;
     public Action<object, Action<float, float>> FancySliderRange_SetOnChangeR;
+    public Func<object, object> FancySliderRange_GetThumbLower;
 
     public Func<string[], int, Action<int>, object> FancySwitch_New;
     public Func<object, int> FancySwitch_GetIndex;
@@ -458,6 +467,7 @@ namespace Lima.API
     public Action<object, Action<int>> FancySwitch_SetOnChange;
 
     public Func<string, Action<string>, object> FancyTextField_New;
+    public Func<object, bool> FancyTextField_GetIsEditing;
     public Func<object, string> FancyTextField_GetText;
     public Action<object, string> FancyTextField_SetText;
     public Action<object, Action<string>> FancyTextField_SetOnChange;
@@ -676,8 +686,11 @@ namespace Lima.API
     public int Selected { get { return Api.FancySelector_GetSelected.Invoke(InternalObj); } set { Api.FancySelector_SetSelected.Invoke(InternalObj, value); } }
     public Action<int, string> OnChange { set { Api.FancySelector_SetOnChange.Invoke(InternalObj, value); } }
   }
-  public class FancySlider : FancyButtonBase
+  public class FancySlider : FancyView
   {
+    private FancyBarContainer _bar;
+    private FancyEmptyElement _thumb;
+    private FancyTextField _textInput;
     public FancySlider(float min, float max, Action<float> onChange) : base(Api.FancySlider_New(min, max, onChange)) { }
     public FancySlider(object internalObject) : base(internalObject) { }
     public float MaxValue { get { return Api.FancySlider_GetMaxValue.Invoke(InternalObj); } set { Api.FancySlider_SetMaxValue.Invoke(InternalObj, value); } }
@@ -686,13 +699,18 @@ namespace Lima.API
     public bool IsInteger { get { return Api.FancySlider_GetIsInteger.Invoke(InternalObj); } set { Api.FancySlider_SetIsInteger.Invoke(InternalObj, value); } }
     public bool AllowInput { get { return Api.FancySlider_GetAllowInput.Invoke(InternalObj); } set { Api.FancySlider_SetAllowInput.Invoke(InternalObj, value); } }
     public Action<float> OnChange { set { Api.FancySlider_SetOnChange.Invoke(InternalObj, value); } }
+    public FancyBarContainer Bar { get { return _bar ?? (_bar = Wrap<FancyBarContainer>(Api.FancySlider_GetBar.Invoke(InternalObj), (obj) => new FancyBarContainer(obj))); } }
+    public FancyEmptyElement Thumb { get { return _thumb ?? (_thumb = Wrap<FancyEmptyElement>(Api.FancySlider_GetThumb.Invoke(InternalObj), (obj) => new FancyEmptyElement(obj))); } }
+    public FancyTextField TextInput { get { return _textInput ?? (_textInput = Wrap<FancyTextField>(Api.FancySlider_GetTextInput.Invoke(InternalObj), (obj) => new FancyTextField(obj))); } }
   }
   public class FancySliderRange : FancySlider
   {
+    private FancyEmptyElement _thumbLower;
     public FancySliderRange(float min, float max, Action<float, float> onChange) : base(Api.FancySliderRange_NewR(min, max, onChange)) { }
     public FancySliderRange(object internalObject) : base(internalObject) { }
     public float ValueLower { get { return Api.FancySliderRange_GetValueLower.Invoke(InternalObj); } set { Api.FancySliderRange_SetValueLower.Invoke(InternalObj, value); } }
     public Action<float, float> OnChangeRange { set { Api.FancySliderRange_SetOnChangeR.Invoke(InternalObj, value); } }
+    public FancyEmptyElement ThumbLower { get { return _thumbLower ?? (_thumbLower = Wrap<FancyEmptyElement>(Api.FancySliderRange_GetThumbLower.Invoke(InternalObj), (obj) => new FancyEmptyElement(obj))); } }
   }
   public class FancySwitch : FancyButtonBase
   {
@@ -706,6 +724,7 @@ namespace Lima.API
   {
     public FancyTextField(string text, Action<string> onChange) : base(Api.FancyTextField_New(text, onChange)) { }
     public FancyTextField(object internalObject) : base(internalObject) { }
+    public bool IsEditing { get { return Api.FancyTextField_GetIsEditing.Invoke(InternalObj); } }
     public string Text { get { return Api.FancyTextField_GetText.Invoke(InternalObj); } set { Api.FancyTextField_SetText.Invoke(InternalObj, value); } }
     public bool IsNumeric { get { return Api.FancyTextField_GetIsNumeric.Invoke(InternalObj); } set { Api.FancyTextField_SetIsNumeric.Invoke(InternalObj, value); } }
     public bool IsInteger { get { return Api.FancyTextField_GetIsInteger.Invoke(InternalObj); } set { Api.FancyTextField_SetIsInteger.Invoke(InternalObj, value); } }

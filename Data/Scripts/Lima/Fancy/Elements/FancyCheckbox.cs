@@ -26,7 +26,6 @@ namespace Lima.Fancy.Elements
       Alignment = ViewAlignment.Center;
 
       CheckMark = new FancyEmptyElement();
-      // CheckMark.Scale = new Vector2(0.75f);
       AddChild(CheckMark);
     }
 

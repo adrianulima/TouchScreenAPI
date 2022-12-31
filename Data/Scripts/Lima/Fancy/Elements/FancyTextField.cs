@@ -1,5 +1,6 @@
 using System;
 using Lima.Utils;
+using Sandbox.ModAPI;
 using VRage.Game.GUI.TextPanel;
 using VRageMath;
 
@@ -17,8 +18,8 @@ namespace Lima.Fancy.Elements
     private string _maxText;
     private bool _blink = false;
     private bool _blinkCaret = false;
-    private bool _edit = false;
 
+    public bool IsEditing { get; private set; } = false;
     public bool IsNumeric = false;
     public bool IsInteger = false;
     public bool AllowNegative = true;
@@ -39,12 +40,15 @@ namespace Lima.Fancy.Elements
       base.OnAddedToApp();
       App.UpdateAfterSimulationEvent -= UpdateAfterSimulation;
       App.UpdateAfterSimulationEvent += UpdateAfterSimulation;
+      MyAPIGateway.Gui.GuiControlCreated -= OnGuiControlCreated;
+      MyAPIGateway.Gui.GuiControlCreated += OnGuiControlCreated;
     }
 
     public override void Dispose()
     {
       base.Dispose();
       App.UpdateAfterSimulationEvent -= UpdateAfterSimulation;
+      MyAPIGateway.Gui.GuiControlCreated -= OnGuiControlCreated;
     }
 
     private void AddChar(char ch)
@@ -73,22 +77,28 @@ namespace Lima.Fancy.Elements
       return ch >= ' ';
     }
 
+    private void OnGuiControlCreated(object _)
+    {
+      if (IsEditing)
+        ToggleEdit(true, false);
+    }
+
     public void ToggleEdit(bool force = false, bool value = false)
     {
       if (force)
-        _edit = value;
+        IsEditing = value;
       else
-        _edit = !_edit;
+        IsEditing = !IsEditing;
 
-      if (!_edit)
+      if (!IsEditing)
         OnChange(Text);
 
-      InputUtils.SetPlayerKeyboardBlacklistState(_edit);
+      InputUtils.SetPlayerKeyboardBlacklistState(IsEditing);
     }
 
     public void UpdateAfterSimulation()
     {
-      if (_edit)
+      if (IsEditing)
         _inputHandler.Update();
     }
 
@@ -117,7 +127,7 @@ namespace Lima.Fancy.Elements
         FontId = App.Theme.Font
       };
 
-      if (_edit)
+      if (IsEditing)
       {
         Blink();
         _bgSprite.Color = _blink ? App.Theme.MainColor_3 : App.Theme.MainColor_2;
@@ -131,11 +141,11 @@ namespace Lima.Fancy.Elements
         _bgSprite.Color = App.Theme.MainColor_2;
       }
 
-      if (Handler.JustReleased)
+      if (Handler.JustPressed)
       {
         ToggleEdit();
       }
-      else if (_edit && !Handler.IsMouseOver)
+      else if (IsEditing && !Handler.IsMouseOver)
       {
         ToggleEdit(true, false);
       }
@@ -155,12 +165,11 @@ namespace Lima.Fancy.Elements
       }
 
       var caretX = 1.5f * ThemeScale;
-      if (_edit && _blinkCaret && _textSprite.Data != _maxText)
+      if (IsEditing && _blinkCaret && _textSprite.Data != _maxText)
       {
         _textSprite.Data = _textSprite.Data + "|";
         caretX = 0;
       }
-
 
       if (Alignment == TextAlignment.LEFT)
         _textSprite.Position = Position + new Vector2(0, size.Y * 0.5f - (_textSprite.RotationOrScale * 16.6f));
@@ -168,7 +177,6 @@ namespace Lima.Fancy.Elements
         _textSprite.Position = Position + new Vector2(size.X - caretX * 2, size.Y * 0.5f - (_textSprite.RotationOrScale * 16.6f));
       else
         _textSprite.Position = Position + new Vector2(size.X / 2 - caretX, size.Y * 0.5f - (_textSprite.RotationOrScale * 16.6f));
-
 
       Sprites.Add(_bgSprite);
       Sprites.Add(_textSprite);

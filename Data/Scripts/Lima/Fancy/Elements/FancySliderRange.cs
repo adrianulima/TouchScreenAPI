@@ -10,12 +10,52 @@ namespace Lima.Fancy.Elements
 
     public float ValueLower = 0;
 
+    public FancyEmptyElement ThumbLower;
+
     public FancySliderRange(float min, float max, Action<float, float> onChange = null) : base(min, max)
     {
       OnChangeR = onChange;
 
       Scale = new Vector2(1, 0);
       Pixels = new Vector2(0, 24);
+
+      ThumbLower = new FancyEmptyElement();
+      ThumbLower.Scale = Vector2.Zero;
+      ThumbLower.Absolute = true;
+      Bar.AddChild(ThumbLower);
+    }
+
+    public override void Update()
+    {
+      if (InputOpen)
+      {
+        base.Update();
+        return;
+      }
+
+      base.Update();
+
+      var ratio = (ValueLower - MinValue) / (MaxValue - MinValue);
+
+      ThumbLower.Pixels = Thumb.Pixels;
+
+      var thumbSize = Bar.Pixels.Y + 8;
+      var barSize = Bar.GetSize();
+      var scaledPixelsY = Bar.Pixels.Y * ThemeScale;
+      thumbSize *= ThemeScale;
+
+      var offsetWidth = thumbSize / 2;
+      var handlerOffset = ratio * -(1 + offsetWidth) + (offsetWidth * 0.5f);
+      ThumbLower.Position = Bar.Position + new Vector2(barSize.X * ratio + handlerOffset - thumbSize / 2, scaledPixelsY / 2 - thumbSize / 2);
+
+      var sprites = Thumb.GetSprites();
+      var handlerSprite = sprites[0];
+      var handlerInnerSprite = sprites[1];
+      handlerSprite.Position = ThumbLower.Position + new Vector2(0, thumbSize / 2);
+      handlerInnerSprite.Position = ThumbLower.Position + new Vector2(thumbSize / 2 - scaledPixelsY / 2, thumbSize / 2);
+      ThumbLower.GetSprites().Clear();
+      ThumbLower.GetSprites().Add(handlerSprite);
+      ThumbLower.GetSprites().Add(handlerInnerSprite);
     }
 
     protected override void UpdateValue(float value)
@@ -51,51 +91,12 @@ namespace Lima.Fancy.Elements
         OnChangeR(ValueLower, Value);
     }
 
-    public override void Update()
+    protected override void UpdateBar()
     {
-      var skip = SkipNext;
-      var input = InputOpen;
-
-      base.Update();
-
-      if (input || skip)
-        return;
-
-      var handlerLowerSprite = HandlerSprite;
-      var handlerInnerLowerSprite = HandlerInnerSprite;
-      var bgLowerSprite = BgSprite;
-      if (Handler.IsMousePressed || Handler.IsMouseOver)
-        bgLowerSprite.Color = App.Theme.MainColor_3;
-      else
-        bgLowerSprite.Color = App.Theme.MainColor_2;
-
-      var size = GetSize();
-      var ratio = (ValueLower - MinValue) / (MaxValue - MinValue);
-      var prgW = size.X * ratio;
-
-      var handlerOffset = -(size.Y * 0.4f) - (size.Y * 0.4f) * (ratio * 1.8f - 0.9f);
-      handlerLowerSprite.Position = Position + new Vector2(prgW + handlerOffset, size.Y - size.Y / 2);
-      handlerLowerSprite.Size = new Vector2(size.Y * 0.8f, size.Y * 0.8f);
-
-      handlerInnerLowerSprite.Position = Position + new Vector2(prgW + handlerOffset + size.Y * 0.15f, size.Y - size.Y / 2);
-      handlerInnerLowerSprite.Size = new Vector2(size.Y * 0.5f, size.Y * 0.5f);
-
-      bgLowerSprite.Position = Position + new Vector2(0, size.Y - size.Y / 2);
-      bgLowerSprite.Size = new Vector2(prgW, size.Y / 2);
-
-      var ratioRange = (Value - ValueLower) / (MaxValue - MinValue);
-      ProgressSprite.Position = Position + new Vector2(prgW, size.Y - size.Y / 2);
-      ProgressSprite.Size = new Vector2(size.X * ratioRange, size.Y / 2);
-
-      Sprites.Clear();
-
-      Sprites.Add(BgSprite);
-      Sprites.Add(bgLowerSprite);
-      Sprites.Add(ProgressSprite);
-      Sprites.Add(handlerLowerSprite);
-      Sprites.Add(handlerInnerLowerSprite);
-      Sprites.Add(HandlerSprite);
-      Sprites.Add(HandlerInnerSprite);
+      var ratio = (Value - ValueLower) / (MaxValue - MinValue);
+      var offset = (ValueLower - MinValue) / ((ValueLower - MinValue) + (MaxValue - Value));
+      Bar.Ratio = ratio;
+      Bar.Offset = float.IsNaN(offset) ? 0 : offset;
     }
 
   }
