@@ -175,6 +175,7 @@ namespace Lima.Touch
         { "FancyLabel_New", new Func<string, float, TextAlignment, object>(FancyLabel_New) },
         { "FancyLabel_GetOverflow", new Func<object, bool>(FancyLabel_GetOverflow) },
         { "FancyLabel_SetOverflow", new Action<object, bool>(FancyLabel_SetOverflow) },
+        { "FancyLabel_GetIsShortened", new Func<object, bool>(FancyLabel_GetIsShortened) },
         { "FancyLabel_GetText", new Func<object, string>(FancyLabel_GetText) },
         { "FancyLabel_SetText", new Action<object, string>(FancyLabel_SetText) },
         { "FancyLabel_GetTextColor", new Func<object, Color?>(FancyLabel_GetTextColor) },
@@ -239,19 +240,18 @@ namespace Lima.Touch
         { "FancySwitch_GetLabels", new Func<object, string[]>(FancySwitch_GetLabels) },
         { "FancySwitch_SetOnChange", new Action<object, Action<int>>(FancySwitch_SetOnChange) },
 
-        { "FancyTextField_New", new Func<string, Action<string>, object>(FancyTextField_New) },
+        { "FancyTextField_New", new Func<string, Action<string, bool>, object>(FancyTextField_New) },
         { "FancyTextField_GetIsEditing", new Func<object, bool>(FancyTextField_GetIsEditing) },
         { "FancyTextField_GetText", new Func<object, string>(FancyTextField_GetText) },
         { "FancyTextField_SetText", new Action<object, string>(FancyTextField_SetText) },
-        { "FancyTextField_SetOnChange", new Action<object, Action<string>>(FancyTextField_SetOnChange) },
+        { "FancyTextField_SetOnChange", new Action<object, Action<string, bool>>(FancyTextField_SetOnChange) },
         { "FancyTextField_GetIsNumeric", new Func<object, bool>(FancyTextField_GetIsNumeric) },
         { "FancyTextField_SetIsNumeric", new Action<object, bool>(FancyTextField_SetIsNumeric) },
         { "FancyTextField_GetIsInteger", new Func<object, bool>(FancyTextField_GetIsInteger) },
         { "FancyTextField_SetIsInteger", new Action<object, bool>(FancyTextField_SetIsInteger) },
         { "FancyTextField_GetAllowNegative", new Func<object, bool>(FancyTextField_GetAllowNegative) },
         { "FancyTextField_SetAllowNegative", new Action<object, bool>(FancyTextField_SetAllowNegative) },
-        { "FancyTextField_GetAlignment", new Func<object, TextAlignment>(FancyTextField_GetAlignment) },
-        { "FancyTextField_SetAlignment", new Action<object, TextAlignment>(FancyTextField_SetAlignment) },
+        { "FancyTextField_GetLabel", new Func<object, object>(FancyTextField_GetLabel) },
 
         { "FancyWindowBar_New", new Func<string, object>(FancyWindowBar_New) },
         { "FancyWindowBar_GetLabel", new Func<object, object>(FancyWindowBar_GetLabel) },
@@ -422,6 +422,7 @@ namespace Lima.Touch
     private FancyLabel FancyLabel_New(string text, float fontSize = 0.5f, TextAlignment alignment = TextAlignment.CENTER) => new FancyLabel(text, fontSize, alignment);
     private bool FancyLabel_GetOverflow(object obj) => (obj as FancyLabel).Overflow;
     private void FancyLabel_SetOverflow(object obj, bool overflow) => (obj as FancyLabel).Overflow = overflow;
+    private bool FancyLabel_GetIsShortened(object obj) => (obj as FancyLabel).IsShortened;
     private string FancyLabel_GetText(object obj) => (obj as FancyLabel).Text;
     private void FancyLabel_SetText(object obj, string text) => (obj as FancyLabel).Text = text;
     private Color? FancyLabel_GetTextColor(object obj) => (obj as FancyLabel).TextColor;
@@ -486,19 +487,18 @@ namespace Lima.Touch
     private string[] FancySwitch_GetLabels(object obj) => (obj as FancySwitch).Labels;
     private void FancySwitch_SetOnChange(object obj, Action<int> onChange) => (obj as FancySwitch).OnChange = onChange;
 
-    private FancyTextField FancyTextField_New(string text, Action<string> onChange) => new FancyTextField(text, onChange);
+    private FancyTextField FancyTextField_New(string text, Action<string, bool> onChange) => new FancyTextField(text, onChange);
     private bool FancyTextField_GetIsEditing(object obj) => (obj as FancyTextField).IsEditing;
     private string FancyTextField_GetText(object obj) => (obj as FancyTextField).Text;
     private void FancyTextField_SetText(object obj, string text) => (obj as FancyTextField).Text = text;
-    private void FancyTextField_SetOnChange(object obj, Action<string> onChange) => (obj as FancyTextField).OnChange = onChange;
+    private void FancyTextField_SetOnChange(object obj, Action<string, bool> onChange) => (obj as FancyTextField).OnChange = onChange;
     private bool FancyTextField_GetIsNumeric(object obj) => (obj as FancyTextField).IsNumeric;
     private void FancyTextField_SetIsNumeric(object obj, bool isNumeric) => (obj as FancyTextField).IsNumeric = isNumeric;
     private bool FancyTextField_GetIsInteger(object obj) => (obj as FancyTextField).IsInteger;
     private void FancyTextField_SetIsInteger(object obj, bool isInterger) => (obj as FancyTextField).IsInteger = isInterger;
     private bool FancyTextField_GetAllowNegative(object obj) => (obj as FancyTextField).AllowNegative;
     private void FancyTextField_SetAllowNegative(object obj, bool allowNegative) => (obj as FancyTextField).AllowNegative = allowNegative;
-    private TextAlignment FancyTextField_GetAlignment(object obj) => (obj as FancyTextField).Alignment;
-    private void FancyTextField_SetAlignment(object obj, TextAlignment alignment) => (obj as FancyTextField).Alignment = alignment;
+    private FancyLabel FancyTextField_GetLabel(object obj) => (obj as FancyTextField).Label;
 
     private FancyWindowBar FancyWindowBar_New(string text) => new FancyWindowBar(text);
     private FancyLabel FancyWindowBar_GetLabel(object obj) => (obj as FancyWindowBar).Label;

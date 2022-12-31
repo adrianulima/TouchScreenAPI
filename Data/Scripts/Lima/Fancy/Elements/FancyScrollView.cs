@@ -55,8 +55,6 @@ namespace Lima.Fancy.Elements
         return;
       }
 
-      _handler.UpdateStatus(App.Screen);
-
       var size = GetSize();
 
       ScrollBar.Enabled = true;
@@ -68,6 +66,7 @@ namespace Lima.Fancy.Elements
       {
         var bgPos = ScrollBar.Position;
         _handler.HitArea = new Vector4(bgPos.X, bgPos.Y, bgPos.X + ScrollBar.Pixels.X * ThemeScale, bgPos.Y + ScrollBar.Pixels.Y * ThemeScale);
+        _handler.UpdateStatus(App.Screen);
 
         var barSize = 1 - (-_flexSize.Y / (ScrollBar.Pixels.Y * ThemeScale));
         ScrollBar.Ratio = MathHelper.Clamp(barSize, 0.1f, 0.9f);

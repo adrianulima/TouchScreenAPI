@@ -12,6 +12,7 @@ namespace Lima.Fancy.Elements
     public Color? TextColor;
 
     public bool Overflow = false;
+    public bool IsShortened { get; private set; } = false;
 
     public float FontSize
     {
@@ -69,7 +70,8 @@ namespace Lima.Fancy.Elements
         while (text.Length > 0 && size.X < App.Theme.MeasureStringInPixels(text, textSprite.FontId, textSprite.RotationOrScale).X)
           text = text.Substring(0, text.Length - 1).TrimEnd();
 
-        if (text != Text)
+        IsShortened = text != Text;
+        if (IsShortened)
           textSprite.Data = $"{text.Substring(0, Math.Max(0, text.Length - 2)).TrimEnd()}...";
       }
 

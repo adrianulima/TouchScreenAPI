@@ -162,10 +162,13 @@ namespace Lima.Fancy.Elements
       InnerTextField.Text = $"{v}";
     }
 
-    protected void OnTextSubmit(string textValue)
+    protected void OnTextSubmit(string textValue, bool wasCanceled = false)
     {
-      float v = MathHelper.Clamp(float.Parse(textValue), MinValue, MaxValue);
-      UpdateValue(v);
+      if (!wasCanceled)
+      {
+        var v = MathHelper.Clamp(float.Parse(textValue), MinValue, MaxValue);
+        UpdateValue(v);
+      }
       InputOpen = false;
       InnerTextField.Enabled = false;
       Bar.Enabled = true;

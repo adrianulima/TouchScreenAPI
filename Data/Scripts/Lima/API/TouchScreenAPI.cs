@@ -187,6 +187,7 @@ namespace Lima.API
       AssignMethod(delegates, "FancyLabel_New", ref FancyLabel_New);
       AssignMethod(delegates, "FancyLabel_GetOverflow", ref FancyLabel_GetOverflow);
       AssignMethod(delegates, "FancyLabel_SetOverflow", ref FancyLabel_SetOverflow);
+      AssignMethod(delegates, "FancyLabel_GetIsShortened", ref FancyLabel_GetIsShortened);
       AssignMethod(delegates, "FancyLabel_GetText", ref FancyLabel_GetText);
       AssignMethod(delegates, "FancyLabel_SetText", ref FancyLabel_SetText);
       AssignMethod(delegates, "FancyLabel_GetTextColor", ref FancyLabel_GetTextColor);
@@ -253,8 +254,7 @@ namespace Lima.API
       AssignMethod(delegates, "FancyTextField_SetIsInteger", ref FancyTextField_SetIsInteger);
       AssignMethod(delegates, "FancyTextField_GetAllowNegative", ref FancyTextField_GetAllowNegative);
       AssignMethod(delegates, "FancyTextField_SetAllowNegative", ref FancyTextField_SetAllowNegative);
-      AssignMethod(delegates, "FancyTextField_GetAlignment", ref FancyTextField_GetAlignment);
-      AssignMethod(delegates, "FancyTextField_SetAlignment", ref FancyTextField_SetAlignment);
+      AssignMethod(delegates, "FancyTextField_GetLabel", ref FancyTextField_GetLabel);
       AssignMethod(delegates, "FancyWindowBar_New", ref FancyWindowBar_New);
       AssignMethod(delegates, "FancyWindowBar_GetLabel", ref FancyWindowBar_GetLabel);
       AssignMethod(delegates, "FancyChart_New", ref FancyChart_New);
@@ -402,6 +402,7 @@ namespace Lima.API
     public Func<string, float, TextAlignment, object> FancyLabel_New;
     public Func<object, bool> FancyLabel_GetOverflow;
     public Action<object, bool> FancyLabel_SetOverflow;
+    public Func<object, bool> FancyLabel_GetIsShortened;
     public Func<object, string> FancyLabel_GetText;
     public Action<object, string> FancyLabel_SetText;
     public Func<object, Color?> FancyLabel_GetTextColor;
@@ -466,19 +467,19 @@ namespace Lima.API
     public Func<object, string[]> FancySwitch_GetLabels;
     public Action<object, Action<int>> FancySwitch_SetOnChange;
 
-    public Func<string, Action<string>, object> FancyTextField_New;
+    public Func<string, Action<string, bool>, object> FancyTextField_New;
     public Func<object, bool> FancyTextField_GetIsEditing;
     public Func<object, string> FancyTextField_GetText;
     public Action<object, string> FancyTextField_SetText;
-    public Action<object, Action<string>> FancyTextField_SetOnChange;
+    public Action<object, Action<string, bool>> FancyTextField_SetOnChange;
     public Func<object, bool> FancyTextField_GetIsNumeric;
     public Action<object, bool> FancyTextField_SetIsNumeric;
     public Func<object, bool> FancyTextField_GetIsInteger;
     public Action<object, bool> FancyTextField_SetIsInteger;
     public Func<object, bool> FancyTextField_GetAllowNegative;
     public Action<object, bool> FancyTextField_SetAllowNegative;
-    public Func<object, TextAlignment> FancyTextField_GetAlignment;
-    public Action<object, TextAlignment> FancyTextField_SetAlignment;
+    public Func<object, object> FancyTextField_GetLabel;
+
     public Func<string, object> FancyWindowBar_New;
     public Func<object, object> FancyWindowBar_GetLabel;
 
@@ -638,7 +639,7 @@ namespace Lima.API
     public FancyLabel Label { get { return _label ?? (_label = Wrap<FancyLabel>(Api.FancyButton_GetLabel.Invoke(InternalObj), (obj) => new FancyLabel(obj))); } }
     public Action OnChange { set { Api.FancyButton_SetOnChange.Invoke(InternalObj, value); } }
   }
-  public class FancyCheckbox : FancyButtonBase
+  public class FancyCheckbox : FancyView
   {
     private FancyEmptyElement _checkMark;
     public FancyCheckbox(Action<bool> onChange, bool value = false) : base(Api.FancyCheckbox_New(onChange, value)) { }
@@ -652,6 +653,7 @@ namespace Lima.API
     public FancyLabel(string text, float fontSize = 0.5f, TextAlignment alignment = TextAlignment.CENTER) : base(Api.FancyLabel_New(text, fontSize, alignment)) { }
     public FancyLabel(object internalObject) : base(internalObject) { }
     public bool Overflow { get { return Api.FancyLabel_GetOverflow.Invoke(InternalObj); } set { Api.FancyLabel_SetOverflow.Invoke(InternalObj, value); } }
+    public bool IsShortened { get { return Api.FancyLabel_GetIsShortened.Invoke(InternalObj); } }
     public string Text { get { return Api.FancyLabel_GetText.Invoke(InternalObj); } set { Api.FancyLabel_SetText.Invoke(InternalObj, value); } }
     public Color? TextColor { get { return Api.FancyLabel_GetTextColor.Invoke(InternalObj); } set { Api.FancyLabel_SetTextColor.Invoke(InternalObj, (Color)value); } }
     public float FontSize { get { return Api.FancyLabel_GetFontSize.Invoke(InternalObj); } set { Api.FancyLabel_SetFontSize.Invoke(InternalObj, value); } }
@@ -720,17 +722,18 @@ namespace Lima.API
     public string[] Labels { get { return Api.FancySwitch_GetLabels.Invoke(InternalObj); } }
     public Action<int> OnChange { set { Api.FancySwitch_SetOnChange.Invoke(InternalObj, value); } }
   }
-  public class FancyTextField : FancyButtonBase
+  public class FancyTextField : FancyView
   {
-    public FancyTextField(string text, Action<string> onChange) : base(Api.FancyTextField_New(text, onChange)) { }
+    private FancyLabel _label;
+    public FancyTextField(string text, Action<string, bool> onChange) : base(Api.FancyTextField_New(text, onChange)) { }
     public FancyTextField(object internalObject) : base(internalObject) { }
     public bool IsEditing { get { return Api.FancyTextField_GetIsEditing.Invoke(InternalObj); } }
     public string Text { get { return Api.FancyTextField_GetText.Invoke(InternalObj); } set { Api.FancyTextField_SetText.Invoke(InternalObj, value); } }
     public bool IsNumeric { get { return Api.FancyTextField_GetIsNumeric.Invoke(InternalObj); } set { Api.FancyTextField_SetIsNumeric.Invoke(InternalObj, value); } }
     public bool IsInteger { get { return Api.FancyTextField_GetIsInteger.Invoke(InternalObj); } set { Api.FancyTextField_SetIsInteger.Invoke(InternalObj, value); } }
     public bool AllowNegative { get { return Api.FancyTextField_GetAllowNegative.Invoke(InternalObj); } set { Api.FancyTextField_SetAllowNegative.Invoke(InternalObj, value); } }
-    public TextAlignment Alignment { get { return Api.FancyTextField_GetAlignment.Invoke(InternalObj); } set { Api.FancyTextField_SetAlignment.Invoke(InternalObj, value); } }
-    public Action<string> OnChange { set { Api.FancyTextField_SetOnChange.Invoke(InternalObj, value); } }
+    public FancyLabel Label { get { return _label ?? (_label = Wrap<FancyLabel>(Api.FancyTextField_GetLabel.Invoke(InternalObj), (obj) => new FancyLabel(obj))); } }
+    public Action<string, bool> OnChange { set { Api.FancyTextField_SetOnChange.Invoke(InternalObj, value); } }
   }
   public class FancyWindowBar : FancyView
   {

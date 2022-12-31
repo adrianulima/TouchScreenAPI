@@ -6,16 +6,17 @@ using VRageMath;
 
 namespace Lima.Fancy.Elements
 {
-  public class FancyTextField : FancyButtonBase
+  public class FancyTextField : FancyView
   {
-    private MySprite _bgSprite;
-    private MySprite _textSprite;
+    public ClickHandler Handler = new ClickHandler();
+
+    public FancyLabel Label;
 
     public string Text;
-    public Action<string> OnChange;
+    public Action<string, bool> OnChange;
 
     private TextInputHandler _inputHandler;
-    private string _maxText;
+    private string _saveText = "";
     private bool _blink = false;
     private bool _blinkCaret = false;
 
@@ -23,9 +24,8 @@ namespace Lima.Fancy.Elements
     public bool IsNumeric = false;
     public bool IsInteger = false;
     public bool AllowNegative = true;
-    public TextAlignment Alignment = TextAlignment.CENTER;
 
-    public FancyTextField(string text, Action<string> onChange)
+    public FancyTextField(string text, Action<string, bool> onChange)
     {
       Text = text;
       OnChange = onChange;
@@ -33,6 +33,12 @@ namespace Lima.Fancy.Elements
 
       Scale = new Vector2(1, 0);
       Pixels = new Vector2(0, 24);
+
+      Anchor = ViewAlignment.Center;
+      Alignment = ViewAlignment.Center;
+
+      Label = new FancyLabel(text, 0.6f, TextAlignment.CENTER);
+      AddChild(Label);
     }
 
     public override void OnAddedToApp()
@@ -80,10 +86,10 @@ namespace Lima.Fancy.Elements
     private void OnGuiControlCreated(object _)
     {
       if (IsEditing)
-        ToggleEdit(true, false);
+        ToggleEdit(true, false, true);
     }
 
-    public void ToggleEdit(bool force = false, bool value = false)
+    public void ToggleEdit(bool force = false, bool value = false, bool revert = false)
     {
       if (force)
         IsEditing = value;
@@ -91,7 +97,14 @@ namespace Lima.Fancy.Elements
         IsEditing = !IsEditing;
 
       if (!IsEditing)
-        OnChange(Text);
+      {
+        if (revert)
+          Text = _saveText;
+
+        OnChange(Text, revert);
+      }
+      else
+        _saveText = Text;
 
       InputUtils.SetPlayerKeyboardBlacklistState(IsEditing);
     }
@@ -105,81 +118,47 @@ namespace Lima.Fancy.Elements
     public override void Update()
     {
       var size = GetSize();
+
       Handler.HitArea = new Vector4(Position.X, Position.Y, Position.X + size.X, Position.Y + size.Y);
-
-      base.Update();
-
-      _bgSprite = new MySprite()
-      {
-        Type = SpriteType.TEXTURE,
-        Data = "SquareSimple",
-        RotationOrScale = 0,
-        Color = App.Theme.MainColor_2
-      };
-
-      _textSprite = new MySprite()
-      {
-        Type = SpriteType.TEXT,
-        Data = Text,
-        RotationOrScale = 0.6f * ThemeScale,
-        Color = App.Theme.WhiteColor,//Theme.Main,
-        Alignment = Alignment,
-        FontId = App.Theme.Font
-      };
+      Handler.UpdateStatus(App.Screen);
 
       if (IsEditing)
       {
         Blink();
-        _bgSprite.Color = _blink ? App.Theme.MainColor_3 : App.Theme.MainColor_2;
+        BgColor = _blink ? App.Theme.MainColor_3 : App.Theme.MainColor_2;
       }
       else if (Handler.IsMousePressed || Handler.IsMouseOver)
-      {
-        _bgSprite.Color = App.Theme.MainColor_3;
-      }
+        BgColor = App.Theme.MainColor_3;
       else
-      {
-        _bgSprite.Color = App.Theme.MainColor_2;
-      }
+        BgColor = App.Theme.MainColor_2;
 
       if (Handler.JustPressed)
-      {
-        ToggleEdit();
-      }
+        ToggleEdit(false, false, Text == _saveText);
       else if (IsEditing && !Handler.IsMouseOver)
+        ToggleEdit(true, false, Text == _saveText);
+
+      Label.Text = Text;
+
+      if (IsEditing && _blinkCaret && !Label.IsShortened)
       {
-        ToggleEdit(true, false);
+        Label.Text = Label.Text + "|";
+        base.Update();
       }
-
-      Sprites.Clear();
-
-      _bgSprite.Position = Position + new Vector2(0, size.Y / 2);
-      _bgSprite.Size = size;
-
-      if (_maxText != Text)
-      {
-        var tx = App.Theme.MeasureStringInPixels(Text, _textSprite.FontId, _textSprite.RotationOrScale).X;
-        if (tx <= size.X)
-          _maxText = Text.Substring(0, Math.Max(0, Text.Length - 3)) + "...";
-        else
-          _textSprite.Data = _maxText;
-      }
-
-      var caretX = 1.5f * ThemeScale;
-      if (IsEditing && _blinkCaret && _textSprite.Data != _maxText)
-      {
-        _textSprite.Data = _textSprite.Data + "|";
-        caretX = 0;
-      }
-
-      if (Alignment == TextAlignment.LEFT)
-        _textSprite.Position = Position + new Vector2(0, size.Y * 0.5f - (_textSprite.RotationOrScale * 16.6f));
-      else if (Alignment == TextAlignment.RIGHT)
-        _textSprite.Position = Position + new Vector2(size.X - caretX * 2, size.Y * 0.5f - (_textSprite.RotationOrScale * 16.6f));
       else
-        _textSprite.Position = Position + new Vector2(size.X / 2 - caretX, size.Y * 0.5f - (_textSprite.RotationOrScale * 16.6f));
+      {
+        base.Update();
+        if (Label.GetSprites().Count > 0)
+        {
+          var textSrite = Label.GetSprites()[0];
+          var caretX = 1.5f * ThemeScale;
+          if (Label.Alignment == TextAlignment.RIGHT)
+            textSrite.Position = textSrite.Position + new Vector2(-caretX * 2, 0);
+          else if (Label.Alignment == TextAlignment.CENTER)
+            textSrite.Position = textSrite.Position + new Vector2(-caretX, 0);
 
-      Sprites.Add(_bgSprite);
-      Sprites.Add(_textSprite);
+          Label.GetSprites()[0] = textSrite;
+        }
+      }
     }
 
     private void Blink()
