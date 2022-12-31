@@ -211,8 +211,6 @@ namespace Lima.Touch
         { "FancySelector_SetSelected", new Action<object, int>(FancySelector_SetSelected) },
         { "FancySelector_SetOnChange", new Action<object, Action<int, string>>(FancySelector_SetOnChange) },
 
-        { "FancySeparator_New", new Func<object>(FancySeparator_New) },
-
         { "FancySlider_New", new Func<float, float, Action<float>, object>(FancySlider_New) },
         { "FancySlider_GetMaxValue", new Func<object, float>(FancySlider_GetMaxValue) },
         { "FancySlider_SetMaxValue", new Action<object, float>(FancySlider_SetMaxValue) },
@@ -454,8 +452,6 @@ namespace Lima.Touch
     private int FancySelector_GetSelected(object obj) => (obj as FancySelector).Selected;
     private void FancySelector_SetSelected(object obj, int selected) => (obj as FancySelector).Selected = selected;
     private void FancySelector_SetOnChange(object obj, Action<int, string> onChange) => (obj as FancySelector).OnChange = onChange;
-
-    private FancySeparator FancySeparator_New() => new FancySeparator();
 
     private FancySlider FancySlider_New(float min, float max, Action<float> onChange) => new FancySlider(min, max, onChange);
     private float FancySlider_GetMaxValue(object obj) => (obj as FancySlider).MaxValue;

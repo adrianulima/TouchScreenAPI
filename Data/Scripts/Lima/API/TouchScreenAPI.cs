@@ -219,7 +219,6 @@ namespace Lima.API
       AssignMethod(delegates, "FancySelector_GetSelected", ref FancySelector_GetSelected);
       AssignMethod(delegates, "FancySelector_SetSelected", ref FancySelector_SetSelected);
       AssignMethod(delegates, "FancySelector_SetOnChange", ref FancySelector_SetOnChange);
-      AssignMethod(delegates, "FancySeparator_New", ref FancySeparator_New);
       AssignMethod(delegates, "FancySlider_New", ref FancySlider_New);
       AssignMethod(delegates, "FancySlider_GetMaxValue", ref FancySlider_GetMaxValue);
       AssignMethod(delegates, "FancySlider_SetMaxValue", ref FancySlider_SetMaxValue);
@@ -434,8 +433,6 @@ namespace Lima.API
     public Action<object, int> FancySelector_SetSelected;
     public Action<object, Action<int, string>> FancySelector_SetOnChange;
 
-    public Func<object> FancySeparator_New;
-
     public Func<float, float, Action<float>, object> FancySlider_New;
     public Func<object, float> FancySlider_GetMaxValue;
     public Action<object, float> FancySlider_SetMaxValue;
@@ -492,14 +489,14 @@ namespace Lima.API
   {
     static protected TouchScreenAPI Api;
     internal static void SetApi(TouchScreenAPI api) => Api = api;
-    public WrapperBase(object internalObject) { InternalObj = internalObject; }
-    internal object InternalObj { get; private set; }
 
     static protected T Wrap<T>(object obj, Func<object, T> ctor) where T : WrapperBase
     {
-      if (obj == null) return null;
-      return ctor(obj) as T;
+      return (obj == null) ? null : ctor(obj);
     }
+
+    internal object InternalObj { get; private set; }
+    public WrapperBase(object internalObject) { InternalObj = internalObject; }
   }
   public class TouchScreen : WrapperBase
   {
@@ -678,11 +675,6 @@ namespace Lima.API
     public bool Loop { get { return Api.FancySelector_GetLoop.Invoke(InternalObj); } set { Api.FancySelector_SetLoop.Invoke(InternalObj, value); } }
     public int Selected { get { return Api.FancySelector_GetSelected.Invoke(InternalObj); } set { Api.FancySelector_SetSelected.Invoke(InternalObj, value); } }
     public Action<int, string> OnChange { set { Api.FancySelector_SetOnChange.Invoke(InternalObj, value); } }
-  }
-  public class FancySeparator : FancyElementBase
-  {
-    public FancySeparator() : base(Api.FancySeparator_New()) { }
-    public FancySeparator(object internalObject) : base(internalObject) { }
   }
   public class FancySlider : FancyButtonBase
   {
