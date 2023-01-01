@@ -4,6 +4,8 @@ namespace Lima.Fancy.Elements
 {
   public class FancyScrollView : FancyView
   {
+    public ClickHandler Handler = new ClickHandler();
+
     public bool ScrollAlwaysVisible = false;
 
     public FancyBarContainer ScrollBar;
@@ -14,8 +16,6 @@ namespace Lima.Fancy.Elements
       get { return _scroll; }
       set { _scroll = MathHelper.Clamp(value, 0, 1); }
     }
-
-    private ClickHandler _handler = new ClickHandler();
     private Vector2 _flexSize;
 
     public FancyScrollView(ViewDirection direction = ViewDirection.Column, Color? bgColor = null) : base(direction, bgColor)
@@ -26,6 +26,7 @@ namespace Lima.Fancy.Elements
       ScrollBar.Pixels = new Vector2(12, 0);
       ScrollBar.Scale = Vector2.Zero;
       ScrollBar.Absolute = true;
+      ScrollBar.UseThemeColors = false;
       AddChild(ScrollBar);
     }
 
@@ -65,35 +66,42 @@ namespace Lima.Fancy.Elements
       if (needsScroll)
       {
         var bgPos = ScrollBar.Position;
-        _handler.HitArea = new Vector4(bgPos.X, bgPos.Y, bgPos.X + ScrollBar.Pixels.X * ThemeScale, bgPos.Y + ScrollBar.Pixels.Y * ThemeScale);
-        _handler.UpdateStatus(App.Screen);
+        Handler.HitArea = new Vector4(bgPos.X, bgPos.Y, bgPos.X + ScrollBar.Pixels.X * ThemeScale, bgPos.Y + ScrollBar.Pixels.Y * ThemeScale);
+        Handler.UpdateStatus(App.Screen);
 
         var barSize = 1 - (-_flexSize.Y / (ScrollBar.Pixels.Y * ThemeScale));
         ScrollBar.Ratio = MathHelper.Clamp(barSize, 0.1f, 0.9f);
 
-        if (_handler.IsMouseOver)
+        if (Handler.IsMousePressed)
         {
-          ScrollBar.Bar.BgColor = App.Theme.MainColor_5;
-          if (_handler.IsMousePressed)
-          {
-            ScrollBar.Bar.BgColor = App.Theme.MainColor_6;
-            var cursorRatio = (App.Cursor.Position.Y - _handler.HitArea.Y) / (_handler.HitArea.W - _handler.HitArea.Y);
-            Scroll = cursorRatio * (1 + ScrollBar.Ratio) - (ScrollBar.Ratio * 0.5f);
-          }
+          var cursorRatio = (App.Cursor.Position.Y - Handler.HitArea.Y) / (Handler.HitArea.W - Handler.HitArea.Y);
+          Scroll = cursorRatio * (1 + ScrollBar.Ratio) - (ScrollBar.Ratio * 0.5f);
         }
-        else
-          ScrollBar.Bar.BgColor = App.Theme.MainColor_4;
       }
       else
         ScrollBar.Ratio = 0;
 
       ScrollBar.Offset = Scroll;
 
+      if (UseThemeColors)
+        ApplyThemeStyle();
+
       // Adds an extra podding to give inside space for the scrollbar
       var prevPad = Padding;
       Padding.Z += ScrollBar.Pixels.X;
       base.Update();
       Padding = prevPad;
+    }
+
+    private void ApplyThemeStyle()
+    {
+      ScrollBar.BgColor = App.Theme.MainColor_2;
+      if (Handler.IsMousePressed)
+        ScrollBar.Bar.BgColor = App.Theme.MainColor_6;
+      else if (Handler.IsMouseOver)
+        ScrollBar.Bar.BgColor = App.Theme.MainColor_5;
+      else
+        ScrollBar.Bar.BgColor = App.Theme.MainColor_4;
     }
   }
 }

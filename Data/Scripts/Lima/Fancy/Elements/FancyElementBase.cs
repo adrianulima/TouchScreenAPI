@@ -15,7 +15,7 @@ namespace Lima.Fancy.Elements
     public bool Enabled = true;
     public bool Absolute = false;
 
-    public FancyView.ViewAlignment? SelfAlignment;
+    public ViewAlignment? SelfAlignment;
 
     public Vector2 Position = Vector2.Zero;
     public Vector2 Pixels = Vector2.Zero;

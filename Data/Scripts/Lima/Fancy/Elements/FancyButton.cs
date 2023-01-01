@@ -9,7 +9,6 @@ namespace Lima.Fancy.Elements
     public ClickHandler Handler = new ClickHandler();
 
     public FancyLabel Label;
-
     public Action OnChange;
 
     public FancyButton(string text, Action onChange)
@@ -33,6 +32,17 @@ namespace Lima.Fancy.Elements
       Handler.HitArea = new Vector4(Position.X, Position.Y, Position.X + size.X, Position.Y + size.Y);
       Handler.UpdateStatus(App.Screen);
 
+      if (Handler.JustReleased)
+        OnChange();
+
+      if (UseThemeColors)
+        ApplyThemeStyle();
+
+      base.Update();
+    }
+
+    private void ApplyThemeStyle()
+    {
       if (Handler.IsMousePressed)
       {
         Label.TextColor = App.Theme.MainColor_4;
@@ -48,13 +58,6 @@ namespace Lima.Fancy.Elements
         Label.TextColor = App.Theme.WhiteColor;
         BgColor = App.Theme.MainColor_4;
       }
-
-      if (Handler.JustReleased)
-      {
-        OnChange();
-      }
-
-      base.Update();
     }
 
   }

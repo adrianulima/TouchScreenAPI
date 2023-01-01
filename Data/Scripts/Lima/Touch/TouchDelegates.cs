@@ -237,7 +237,7 @@ namespace Lima.Touch
         { "FancySwitch_New", new Func<string[], int, Action<int>, object>(FancySwitch_New) },
         { "FancySwitch_GetIndex", new Func<object, int>(FancySwitch_GetIndex) },
         { "FancySwitch_SetIndex", new Action<object, int>(FancySwitch_SetIndex) },
-        { "FancySwitch_GetLabels", new Func<object, string[]>(FancySwitch_GetLabels) },
+        { "FancySwitch_GetButtons", new Func<object, FancyButton[]>(FancySwitch_GetButtons) },
         { "FancySwitch_SetOnChange", new Action<object, Action<int>>(FancySwitch_SetOnChange) },
 
         { "FancyTextField_New", new Func<string, Action<string, bool>, object>(FancyTextField_New) },
@@ -307,7 +307,7 @@ namespace Lima.Touch
     private bool FancyElementBase_GetAbsolute(object obj) => (obj as FancyElementBase).Absolute;
     private void FancyElementBase_SetAbsolute(object obj, bool absolute) => (obj as FancyElementBase).Absolute = absolute;
     private byte FancyElementBase_GetSelfAlignment(object obj) => (byte)(obj as FancyElementBase).SelfAlignment;
-    private void FancyElementBase_SetSelfAlignment(object obj, byte alignment) => (obj as FancyElementBase).SelfAlignment = (FancyView.ViewAlignment)alignment;
+    private void FancyElementBase_SetSelfAlignment(object obj, byte alignment) => (obj as FancyElementBase).SelfAlignment = (ViewAlignment)alignment;
     private Vector2 FancyElementBase_GetPosition(object obj) => (obj as FancyElementBase).Position;
     private void FancyElementBase_SetPosition(object obj, Vector2 position) => (obj as FancyElementBase).Position = position;
     private Vector4 FancyElementBase_GetMargin(object obj) => (obj as FancyElementBase).Margin;
@@ -331,15 +331,15 @@ namespace Lima.Touch
     private void FancyContainerBase_AddChild(object obj, object child) => (obj as FancyContainerBase).AddChild((FancyElementBase)child);
     private void FancyContainerBase_RemoveChild(object obj, object child) => (obj as FancyContainerBase).RemoveChild((FancyElementBase)child);
 
-    private FancyView FancyView_New(int direction, Color? bgColor = null) => new FancyView((FancyView.ViewDirection)direction, bgColor);
+    private FancyView FancyView_New(int direction, Color? bgColor = null) => new FancyView((ViewDirection)direction, bgColor);
     private bool FancyView_GetOverflow(object obj) => (obj as FancyView).Overflow;
     private void FancyView_SetOverflow(object obj, bool overflow) => (obj as FancyView).Overflow = overflow;
     private int FancyView_GetDirection(object obj) => (int)(obj as FancyView).Direction;
-    private void FancyView_SetDirection(object obj, int direction) => (obj as FancyView).Direction = (FancyView.ViewDirection)direction;
+    private void FancyView_SetDirection(object obj, int direction) => (obj as FancyView).Direction = (ViewDirection)direction;
     private byte FancyView_GetAlignment(object obj) => (byte)(obj as FancyView).Alignment;
-    private void FancyView_SetAlignment(object obj, byte alignment) => (obj as FancyView).Alignment = (FancyView.ViewAlignment)alignment;
+    private void FancyView_SetAlignment(object obj, byte alignment) => (obj as FancyView).Alignment = (ViewAlignment)alignment;
     private byte FancyView_GetAnchor(object obj) => (byte)(obj as FancyView).Anchor;
-    private void FancyView_SetAnchor(object obj, byte anchor) => (obj as FancyView).Anchor = (FancyView.ViewAlignment)anchor;
+    private void FancyView_SetAnchor(object obj, byte anchor) => (obj as FancyView).Anchor = (ViewAlignment)anchor;
     private Color FancyView_GetBgColor(object obj) => (Color)(obj as FancyView).BgColor;
     private void FancyView_SetBgColor(object obj, Color bgColor) => (obj as FancyView).BgColor = bgColor;
     private Color FancyView_GetBorderColor(object obj) => (Color)(obj as FancyView).BorderColor;
@@ -351,7 +351,7 @@ namespace Lima.Touch
     private int FancyView_GetGap(object obj) => (int)(obj as FancyView).Gap;
     private void FancyView_SetGap(object obj, int gap) => (obj as FancyView).Gap = gap;
 
-    private FancyScrollView FancyScrollView_New(int direction, Color? bgColor = null) => new FancyScrollView((FancyView.ViewDirection)direction, bgColor);
+    private FancyScrollView FancyScrollView_New(int direction, Color? bgColor = null) => new FancyScrollView((ViewDirection)direction, bgColor);
     private float FancyScrollView_GetScroll(object obj) => (obj as FancyScrollView).Scroll;
     private void FancyScrollView_SetScroll(object obj, float scroll) => (obj as FancyScrollView).Scroll = scroll;
     private bool FancyScrollView_GetScrollAlwaysVisible(object obj) => (obj as FancyScrollView).ScrollAlwaysVisible;
@@ -484,7 +484,7 @@ namespace Lima.Touch
     private FancySwitch FancySwitch_New(string[] labels, int index = 0, Action<int> onChange = null) => new FancySwitch(labels, index, onChange);
     private int FancySwitch_GetIndex(object obj) => (obj as FancySwitch).Index;
     private void FancySwitch_SetIndex(object obj, int index) => (obj as FancySwitch).Index = index;
-    private string[] FancySwitch_GetLabels(object obj) => (obj as FancySwitch).Labels;
+    private FancyButton[] FancySwitch_GetButtons(object obj) => (obj as FancySwitch).Buttons;
     private void FancySwitch_SetOnChange(object obj, Action<int> onChange) => (obj as FancySwitch).OnChange = onChange;
 
     private FancyTextField FancyTextField_New(string text, Action<string, bool> onChange) => new FancyTextField(text, onChange);

@@ -1,3 +1,4 @@
+using System;
 using VRageMath;
 
 namespace Lima.Fancy.Elements
@@ -18,7 +19,6 @@ namespace Lima.Fancy.Elements
     }
 
     public FancyView Bar;
-
     public bool IsVertical;
 
     public FancyBarContainer(bool vertical = false)
@@ -39,8 +39,6 @@ namespace Lima.Fancy.Elements
 
     public override void Update()
     {
-      Sprites.Clear();
-
       var size = GetSize();
       if (Ratio > 0)
         Bar.Pixels = IsVertical ? new Vector2(0, Ratio * (size.Y / ThemeScale)) : new Vector2(Ratio * (size.X / ThemeScale), 0);
@@ -57,10 +55,16 @@ namespace Lima.Fancy.Elements
 
       Bar.Position = Position + new Vector2(Padding.X, Padding.Y) * ThemeScale + anchor;
 
-      Bar.BgColor = App.Theme.MainColor_7;
-      BgColor = App.Theme.MainColor_2;
+      if (UseThemeColors)
+        ApplyThemeStyle();
 
       base.Update();
+    }
+
+    private void ApplyThemeStyle()
+    {
+      Bar.BgColor = App.Theme.MainColor_7;
+      BgColor = App.Theme.MainColor_2;
     }
 
   }

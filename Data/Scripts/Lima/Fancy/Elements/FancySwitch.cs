@@ -1,128 +1,88 @@
 using System;
-using VRage.Game.GUI.TextPanel;
 using VRageMath;
 
 namespace Lima.Fancy.Elements
 {
-  public class FancySwitch : FancyButtonBase
+  public class FancySwitch : FancyView
   {
-    private MySprite _bgSprite;
-    private MySprite _handlerSprite;
-    private MySprite _selectedSprite;
-    private MySprite[] _textSprites;
-
     public int Index;
-    public readonly string[] Labels;
+    public FancyButton[] Buttons { get; private set; }
     public Action<int> OnChange;
 
     public FancySwitch(string[] labels, int index = 0, Action<int> onChange = null)
     {
-      Labels = labels;
       Index = index;
       OnChange = onChange;
 
-      _textSprites = new MySprite[Labels.Length];
-
       Scale = new Vector2(1, 0);
       Pixels = new Vector2(0, 20);
+
+      Direction = ViewDirection.Row;
+
+      Buttons = new FancyButton[labels.Length];
+      for (int i = 0; i < Buttons.Length; i++)
+      {
+        Buttons[i] = new FancyButton(labels[i], OnClickAction(i));
+        Buttons[i].Pixels = Vector2.Zero;
+        Buttons[i].Scale = Vector2.One;
+        Buttons[i].Label.FontSize = 0.5f;
+        Buttons[i].UseThemeColors = false;
+        AddChild(Buttons[i]);
+      }
+    }
+
+    private Action OnClickAction(int i)
+    {
+      return () =>
+      {
+        if (OnChange != null && Index != i)
+          OnChange(Index = i);
+      };
     }
 
     public override void Update()
     {
-      var size = GetSize();
-      Handler.HitArea = new Vector4(Position.X, Position.Y, Position.X + size.X, Position.Y + size.Y);
-
-      var width = size.X / _textSprites.Length;
-      var halfWidth = width / 2f;
+      if (UseThemeColors)
+        ApplyThemeStyle();
 
       base.Update();
-
-      _bgSprite = new MySprite()
-      {
-        Type = SpriteType.TEXTURE,
-        Data = "SquareSimple",
-        RotationOrScale = 0,
-        Color = App.Theme.MainColor_2
-      };
-
-      _handlerSprite = new MySprite()
-      {
-        Type = SpriteType.TEXTURE,
-        Data = "SquareSimple",
-        RotationOrScale = 0,
-        Color = App.Theme.MainColor_4
-      };
-
-      _selectedSprite = new MySprite()
-      {
-        Type = SpriteType.TEXTURE,
-        Data = "SquareSimple",
-        RotationOrScale = 0,
-        Color = App.Theme.MainColor_7
-      };
-
-      for (int i = 0; i < _textSprites.Length; i++)
-      {
-        _textSprites[i] = new MySprite()
-        {
-          Type = SpriteType.TEXT,
-          Data = Labels[i],
-          RotationOrScale = 0.5f * ThemeScale,
-          Color = App.Theme.WhiteColor,
-          Alignment = TextAlignment.CENTER,
-          FontId = App.Theme.Font
-        };
-      }
-
-      if (Handler.JustReleased)
-      {
-        var mouseX = App.Cursor.Position.X - Handler.HitArea.X;
-        var prev = Index;
-        Index = (int)Math.Floor(mouseX / width);
-
-        if (OnChange != null && prev != Index)
-          OnChange(Index);
-      }
-
-      Sprites.Clear();
-
-      _bgSprite.Position = Position + new Vector2(0, size.Y / 2);
-      _bgSprite.Size = size;
-
-      Sprites.Add(_bgSprite);
-
-      if (Handler.IsMousePressed || Handler.IsMouseOver)
-      {
-        var mouseX = App.Cursor.Position.X - Handler.HitArea.X;
-        var p = (int)Math.Floor(mouseX / width);
-
-        if (p != Index)
-        {
-          _handlerSprite.Position = Position + new Vector2(width * p, size.Y / 2);
-          _handlerSprite.Size = new Vector2(width, size.Y);
-
-          Sprites.Add(_handlerSprite);
-        }
-      }
-
-      _selectedSprite.Position = Position + new Vector2(width * Index, size.Y / 2);
-      _selectedSprite.Size = new Vector2(width, size.Y);
-
-      Sprites.Add(_selectedSprite);
-
-      for (int j = 0; j < _textSprites.Length; j++)
-      {
-        _textSprites[j].Position = Position + new Vector2(j * width + halfWidth, size.Y * 0.5f - (_textSprites[j].RotationOrScale * 16.6f));
-        _textSprites[j].Color = j == Index ? App.Theme.WhiteColor : App.Theme.MainColor_8;
-        Sprites.Add(_textSprites[j]);
-      }
     }
 
     public override void Dispose()
     {
       base.Dispose();
 
-      _textSprites = null;
+      Buttons = null;
+    }
+
+    private void ApplyThemeStyle()
+    {
+      BgColor = App.Theme.MainColor_2;
+
+      for (int i = 0; i < Buttons.Length; i++)
+      {
+        if (Index == i)
+        {
+          Buttons[i].Label.TextColor = App.Theme.WhiteColor;
+          Buttons[i].BgColor = App.Theme.MainColor_7;
+        }
+        else
+        {
+          Buttons[i].Label.TextColor = App.Theme.MainColor_8;
+          if (Buttons[i].Handler.IsMousePressed)
+            Buttons[i].BgColor = App.Theme.MainColor_4;
+          else if (Buttons[i].Handler.IsMouseOver)
+            Buttons[i].BgColor = App.Theme.MainColor_5;
+          else
+            Buttons[i].BgColor = App.Theme.MainColor_2;
+        }
+      }
+    }
+
+    private void ApplyButtonThemeStyle(FancyButton button, bool selected)
+    {
+
+
     }
   }
 }

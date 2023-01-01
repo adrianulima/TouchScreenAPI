@@ -241,7 +241,7 @@ namespace Lima.API
       AssignMethod(delegates, "FancySwitch_New", ref FancySwitch_New);
       AssignMethod(delegates, "FancySwitch_GetIndex", ref FancySwitch_GetIndex);
       AssignMethod(delegates, "FancySwitch_SetIndex", ref FancySwitch_SetIndex);
-      AssignMethod(delegates, "FancySwitch_GetLabels", ref FancySwitch_GetLabels);
+      AssignMethod(delegates, "FancySwitch_GetButtons", ref FancySwitch_GetButtons);
       AssignMethod(delegates, "FancySwitch_SetOnChange", ref FancySwitch_SetOnChange);
       AssignMethod(delegates, "FancyTextField_New", ref FancyTextField_New);
       AssignMethod(delegates, "FancyTextField_GetIsEditing", ref FancyTextField_GetIsEditing);
@@ -464,7 +464,7 @@ namespace Lima.API
     public Func<string[], int, Action<int>, object> FancySwitch_New;
     public Func<object, int> FancySwitch_GetIndex;
     public Action<object, int> FancySwitch_SetIndex;
-    public Func<object, string[]> FancySwitch_GetLabels;
+    public Func<object, object[]> FancySwitch_GetButtons;
     public Action<object, Action<int>> FancySwitch_SetOnChange;
 
     public Func<string, Action<string, bool>, object> FancyTextField_New;
@@ -504,6 +504,15 @@ namespace Lima.API
     static protected T Wrap<T>(object obj, Func<object, T> ctor) where T : WrapperBase
     {
       return (obj == null) ? null : ctor(obj);
+    }
+
+    static protected T[] WrapArray<T>(object[] objArray, Func<object, T> ctor) where T : WrapperBase
+    {
+      var newArray = new T[objArray.Length];
+      for (int i = 0; i < objArray.Length; i++)
+        newArray[i] = Wrap<T>(objArray[i], ctor);
+
+      return newArray;
     }
 
     internal object InternalObj { get; private set; }
@@ -563,7 +572,7 @@ namespace Lima.API
     public FancyElementBase(object internalObject) : base(internalObject) { }
     public bool Enabled { get { return Api.FancyElementBase_GetEnabled.Invoke(InternalObj); } set { Api.FancyElementBase_SetEnabled.Invoke(InternalObj, value); } }
     public bool Absolute { get { return Api.FancyElementBase_GetAbsolute.Invoke(InternalObj); } set { Api.FancyElementBase_SetAbsolute.Invoke(InternalObj, value); } }
-    public FancyApp.ViewAlignment SelfAlignment { get { return (FancyApp.ViewAlignment)Api.FancyElementBase_GetSelfAlignment.Invoke(InternalObj); } set { Api.FancyElementBase_SetSelfAlignment.Invoke(InternalObj, (byte)value); } }
+    public ViewAlignment SelfAlignment { get { return (ViewAlignment)Api.FancyElementBase_GetSelfAlignment.Invoke(InternalObj); } set { Api.FancyElementBase_SetSelfAlignment.Invoke(InternalObj, (byte)value); } }
     public Vector2 Position { get { return Api.FancyElementBase_GetPosition.Invoke(InternalObj); } set { Api.FancyElementBase_SetPosition.Invoke(InternalObj, value); } }
     public Vector4 Margin { get { return Api.FancyElementBase_GetMargin.Invoke(InternalObj); } set { Api.FancyElementBase_SetMargin.Invoke(InternalObj, value); } }
     public Vector2 Scale { get { return Api.FancyElementBase_GetScale.Invoke(InternalObj); } set { Api.FancyElementBase_SetScale.Invoke(InternalObj, value); } }
@@ -587,10 +596,10 @@ namespace Lima.API
     public void RemoveChild(FancyElementBase child) => Api.FancyContainerBase_RemoveChild.Invoke(InternalObj, child.InternalObj);
     public void RemoveChild(object child) => Api.FancyContainerBase_RemoveChild.Invoke(InternalObj, child);
   }
+  public enum ViewDirection : byte { None = 0, Row = 1, Column = 2 }
+  public enum ViewAlignment : byte { Start = 0, Center = 1, End = 2 }
   public class FancyView : FancyContainerBase
   {
-    public enum ViewDirection : byte { None = 0, Row = 1, Column = 2 }
-    public enum ViewAlignment : byte { Start = 0, Center = 1, End = 2 }
     public FancyView(ViewDirection direction = ViewDirection.Column, Color? bgColor = null) : base(Api.FancyView_New((int)direction, bgColor)) { }
     public FancyView(object internalObject) : base(internalObject) { }
     public bool Overflow { get { return Api.FancyView_GetOverflow.Invoke(InternalObj); } set { Api.FancyView_SetOverflow.Invoke(InternalObj, value); } }
@@ -716,10 +725,11 @@ namespace Lima.API
   }
   public class FancySwitch : FancyButtonBase
   {
+    private FancyButton[] _buttons;
     public FancySwitch(string[] labels, int index = 0, Action<int> onChange = null) : base(Api.FancySwitch_New(labels, index, onChange)) { }
     public FancySwitch(object internalObject) : base(internalObject) { }
     public int Index { get { return Api.FancySwitch_GetIndex.Invoke(InternalObj); } set { Api.FancySwitch_SetIndex.Invoke(InternalObj, value); } }
-    public string[] Labels { get { return Api.FancySwitch_GetLabels.Invoke(InternalObj); } }
+    public FancyButton[] Buttons { get { return _buttons ?? (_buttons = WrapArray<FancyButton>(Api.FancySwitch_GetButtons.Invoke(InternalObj), (obj) => new FancyButton(obj))); } }
     public Action<int> OnChange { set { Api.FancySwitch_SetOnChange.Invoke(InternalObj, value); } }
   }
   public class FancyTextField : FancyView

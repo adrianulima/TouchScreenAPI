@@ -3,21 +3,17 @@ using VRageMath;
 
 namespace Lima.Fancy.Elements
 {
+  public enum ViewDirection : byte
+  {
+    None = 0, Row = 1, Column = 2
+  }
+  public enum ViewAlignment : byte
+  {
+    Start = 0, Center = 1, End = 2
+  }
+
   public class FancyView : FancyContainerBase
   {
-    public enum ViewDirection : byte
-    {
-      None = 0,
-      Row = 1,
-      Column = 2
-    }
-    public enum ViewAlignment : byte
-    {
-      Start = 0,
-      Center = 1,
-      End = 2
-    }
-
     public ViewDirection Direction = ViewDirection.Column;
     public ViewAlignment Alignment = ViewAlignment.Start;
     public ViewAlignment Anchor = ViewAlignment.Start;
@@ -34,6 +30,7 @@ namespace Lima.Fancy.Elements
     public Vector4 Border;
     public Vector4 Padding;
     public int Gap = 0;
+    public bool UseThemeColors = true;
 
     public FancyView(ViewDirection direction = ViewDirection.Column, Color? bgColor = null)
     {
