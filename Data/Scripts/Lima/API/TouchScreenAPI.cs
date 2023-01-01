@@ -175,10 +175,10 @@ namespace Lima.API
       AssignMethod(delegates, "FancyApp_GetDefaultBg", ref FancyApp_GetDefaultBg);
       AssignMethod(delegates, "FancyApp_SetDefaultBg", ref FancyApp_SetDefaultBg);
       AssignMethod(delegates, "FancyApp_InitApp", ref FancyApp_InitApp);
-      AssignMethod(delegates, "FancyButtonBase_GetHandler", ref FancyButtonBase_GetHandler);
+      AssignMethod(delegates, "FancyEmptyButton_New", ref FancyEmptyButton_New);
+      AssignMethod(delegates, "FancyEmptyButton_SetOnChange", ref FancyEmptyButton_SetOnChange);
       AssignMethod(delegates, "FancyButton_New", ref FancyButton_New);
       AssignMethod(delegates, "FancyButton_GetLabel", ref FancyButton_GetLabel);
-      AssignMethod(delegates, "FancyButton_SetOnChange", ref FancyButton_SetOnChange);
       AssignMethod(delegates, "FancyCheckbox_New", ref FancyCheckbox_New);
       AssignMethod(delegates, "FancyCheckbox_GetValue", ref FancyCheckbox_GetValue);
       AssignMethod(delegates, "FancyCheckbox_SetValue", ref FancyCheckbox_SetValue);
@@ -387,11 +387,11 @@ namespace Lima.API
     public Action<object, bool> FancyApp_SetDefaultBg;
     public Action<object, MyCubeBlock, Sandbox.ModAPI.Ingame.IMyTextSurface> FancyApp_InitApp;
 
-    public Func<object, object> FancyButtonBase_GetHandler;
+    public Func<Action, object> FancyEmptyButton_New;
+    public Action<object, Action> FancyEmptyButton_SetOnChange;
 
     public Func<string, Action, object> FancyButton_New;
     public Func<object, object> FancyButton_GetLabel;
-    public Action<object, Action> FancyButton_SetOnChange;
 
     public Func<Action<bool>, bool, object> FancyCheckbox_New;
     public Func<object, bool> FancyCheckbox_GetValue;
@@ -634,19 +634,18 @@ namespace Lima.API
     public bool DefaultBg { get { return Api.FancyApp_GetDefaultBg.Invoke(InternalObj); } set { Api.FancyApp_SetDefaultBg.Invoke(InternalObj, value); } }
     public virtual void InitApp(MyCubeBlock block, Sandbox.ModAPI.Ingame.IMyTextSurface surface) => Api.FancyApp_InitApp.Invoke(InternalObj, block, surface);
   }
-  public abstract class FancyButtonBase : FancyElementBase
+  public class FancyEmptyButton : FancyView
   {
-    private ClickHandler _handler;
-    public FancyButtonBase(object internalObject) : base(internalObject) { }
-    public ClickHandler Handler { get { return _handler ?? (_handler = Wrap<ClickHandler>(Api.FancyButtonBase_GetHandler.Invoke(InternalObj), (obj) => new ClickHandler(obj))); } }
+    public FancyEmptyButton(Action onChange) : base(Api.FancyEmptyButton_New(onChange)) { }
+    public FancyEmptyButton(object internalObject) : base(internalObject) { }
+    public Action OnChange { set { Api.FancyEmptyButton_SetOnChange.Invoke(InternalObj, value); } }
   }
-  public class FancyButton : FancyView
+  public class FancyButton : FancyEmptyButton
   {
     private FancyLabel _label;
     public FancyButton(string text, Action onChange) : base(Api.FancyButton_New(text, onChange)) { }
     public FancyButton(object internalObject) : base(internalObject) { }
     public FancyLabel Label { get { return _label ?? (_label = Wrap<FancyLabel>(Api.FancyButton_GetLabel.Invoke(InternalObj), (obj) => new FancyLabel(obj))); } }
-    public Action OnChange { set { Api.FancyButton_SetOnChange.Invoke(InternalObj, value); } }
   }
   public class FancyCheckbox : FancyView
   {
@@ -689,7 +688,7 @@ namespace Lima.API
     public float BarsGap { get { return Api.FancyProgressBar_GetBarsGap.Invoke(InternalObj); } set { Api.FancyProgressBar_SetBarsGap.Invoke(InternalObj, value); } }
     public FancyLabel Label { get { return _label ?? (_label = Wrap<FancyLabel>(Api.FancyProgressBar_GetLabel.Invoke(InternalObj), (obj) => new FancyLabel(obj))); } }
   }
-  public class FancySelector : FancyButtonBase
+  public class FancySelector : FancyView
   {
     public FancySelector(List<string> labels, Action<int, string> onChange, bool loop = true) : base(Api.FancySelector_New(labels, onChange, loop)) { }
     public FancySelector(object internalObject) : base(internalObject) { }
@@ -723,7 +722,7 @@ namespace Lima.API
     public Action<float, float> OnChangeRange { set { Api.FancySliderRange_SetOnChangeR.Invoke(InternalObj, value); } }
     public FancyEmptyElement ThumbLower { get { return _thumbLower ?? (_thumbLower = Wrap<FancyEmptyElement>(Api.FancySliderRange_GetThumbLower.Invoke(InternalObj), (obj) => new FancyEmptyElement(obj))); } }
   }
-  public class FancySwitch : FancyButtonBase
+  public class FancySwitch : FancyView
   {
     private FancyButton[] _buttons;
     public FancySwitch(string[] labels, int index = 0, Action<int> onChange = null) : base(Api.FancySwitch_New(labels, index, onChange)) { }

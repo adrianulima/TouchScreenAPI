@@ -150,8 +150,6 @@ namespace Lima.Touch
         { "FancyTheme_GetFont", new Func<object, string>(FancyTheme_GetFont) },
         { "FancyTheme_SetFont", new Action<object, string>(FancyTheme_SetFont) },
 
-        { "FancyButtonBase_GetHandler", new Func<object, ClickHandler>(FancyButtonBase_GetHandler) },
-
         { "ClickHandler_New", new Func<object>(ClickHandler_New) },
         { "ClickHandler_GetHitArea", new Func<object, Vector4>(ClickHandler_GetHitArea) },
         { "ClickHandler_SetHitArea", new Action<object, Vector4>(ClickHandler_SetHitArea) },
@@ -162,9 +160,11 @@ namespace Lima.Touch
         { "ClickHandler_JustPressed", new Func<object, bool>(ClickHandler_JustPressed) },
         { "ClickHandler_UpdateStatus", new Action<object, object>(ClickHandler_UpdateStatus) },
 
+        { "FancyEmptyButton_New", new Func<Action, object>(FancyEmptyButton_New) },
+        { "FancyEmptyButton_SetOnChange", new Action<object, Action>(FancyEmptyButton_SetOnChange) },
+
         { "FancyButton_New", new Func<string, Action, object>(FancyButton_New) },
         { "FancyButton_GetLabel", new Func<object, object>(FancyButton_GetLabel) },
-        { "FancyButton_SetOnChange", new Action<object, Action>(FancyButton_SetOnChange) },
 
         { "FancyCheckbox_New", new Func<Action<bool>, bool, object>(FancyCheckbox_New) },
         { "FancyCheckbox_GetValue", new Func<object, bool>(FancyCheckbox_GetValue) },
@@ -397,8 +397,6 @@ namespace Lima.Touch
     private string FancyTheme_GetFont(object obj) => (obj as FancyTheme).Font;
     private void FancyTheme_SetFont(object obj, string font) => (obj as FancyTheme).Font = font;
 
-    private ClickHandler FancyButtonBase_GetHandler(object obj) => (obj as FancyButtonBase).Handler;
-
     private ClickHandler ClickHandler_New() => new ClickHandler();
     private Vector4 ClickHandler_GetHitArea(object obj) => (obj as ClickHandler).HitArea;
     private void ClickHandler_SetHitArea(object obj, Vector4 hitArea) => (obj as ClickHandler).HitArea = hitArea;
@@ -409,9 +407,11 @@ namespace Lima.Touch
     private bool ClickHandler_JustPressed(object obj) => (obj as ClickHandler).JustPressed;
     private void ClickHandler_UpdateStatus(object obj, object screen) => (obj as ClickHandler).UpdateStatus(screen as TouchScreen);
 
+    private FancyEmptyButton FancyEmptyButton_New(Action onChange) => new FancyEmptyButton(onChange);
+    private void FancyEmptyButton_SetOnChange(object obj, Action onChange) => (obj as FancyEmptyButton).OnChange = onChange;
+
     private FancyButton FancyButton_New(string text, Action onChange) => new FancyButton(text, onChange);
     private FancyLabel FancyButton_GetLabel(object obj) => (obj as FancyWindowBar).Label;
-    private void FancyButton_SetOnChange(object obj, Action onChange) => (obj as FancyButton).OnChange = onChange;
 
     private FancyCheckbox FancyCheckbox_New(Action<bool> onChange, bool value = false) => new FancyCheckbox(onChange, value);
     private bool FancyCheckbox_GetValue(object obj) => (obj as FancyCheckbox).Value;

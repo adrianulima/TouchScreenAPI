@@ -5,19 +5,20 @@ using VRageMath;
 
 namespace Lima.Fancy.Elements
 {
-  public class FancySelector : FancyButtonBase
+  public class FancySelector : FancyView
   {
-    private MySprite _bgSprite;
-    private MySprite _arrowSprite;
-    private MySprite _arrowBgSprite;
-    private MySprite _arrow2Sprite;
-    private MySprite _arrow2BgSprite;
-    private MySprite _textSprite;
+    public ClickHandler Handler = new ClickHandler();
 
     public int Selected = 0;
     public readonly List<string> Labels;
     public Action<int, string> OnChange;
     public bool Loop;
+
+    public FancyEmptyButton LeftButton;
+    public FancyEmptyButton RightButton;
+    public FancyEmptyElement LeftArrow;
+    public FancyEmptyElement RightArrow;
+    public FancyLabel Label;
 
     public FancySelector(List<string> labels, Action<int, string> onChange, bool loop = true)
     {
@@ -25,50 +26,68 @@ namespace Lima.Fancy.Elements
       OnChange = onChange;
       Loop = loop;
 
+      Direction = ViewDirection.Row;
+      Anchor = ViewAlignment.Center;
+      Alignment = ViewAlignment.Center;
+
       Scale = new Vector2(1, 0);
       Pixels = new Vector2(0, 24);
+
+      LeftButton = new FancyEmptyButton(Prev);
+      LeftButton.Pixels = new Vector2(24, 0);
+      LeftButton.Scale = new Vector2(0, 1);
+      AddChild(LeftButton);
+      LeftArrow = new FancyEmptyElement();
+      LeftButton.AddChild(LeftArrow);
+      Label = new FancyLabel(Labels[Selected], 0.6f, TextAlignment.CENTER);
+      AddChild(Label);
+      RightButton = new FancyEmptyButton(Next);
+      RightButton.Pixels = new Vector2(24, 0);
+      RightButton.Scale = new Vector2(0, 1);
+      AddChild(RightButton);
+      RightArrow = new FancyEmptyElement();
+      RightButton.AddChild(RightArrow);
+    }
+
+    private void Next()
+    {
+      UpdateSelected(1);
+    }
+
+    private void Prev()
+    {
+      UpdateSelected(-1);
+    }
+
+    private void UpdateSelected(int diff)
+    {
+      var prev = Selected;
+      Selected += diff;
+
+      var count = Labels.Count;
+      if (Selected < 0)
+        Selected = Loop ? count - 1 : 0;
+
+      if (Selected >= count)
+        Selected = Loop ? 0 : count - 1;
+
+      if (prev != Selected)
+        OnChange(Selected, Labels[Selected]);
     }
 
     public override void Update()
     {
       var size = GetSize();
+
       Handler.HitArea = new Vector4(Position.X, Position.Y, Position.X + size.X, Position.Y + size.Y);
+      Handler.UpdateStatus(App.Screen);
+
+      if (UseThemeColors)
+        BgColor = App.Theme.MainColor_2;
 
       base.Update();
 
-      _bgSprite = new MySprite()
-      {
-        Type = SpriteType.TEXTURE,
-        Data = "SquareSimple",
-        RotationOrScale = 0,
-        Color = App.Theme.MainColor_2
-      };
-
-      _arrowBgSprite = new MySprite()
-      {
-        Type = SpriteType.TEXTURE,
-        Data = "SquareSimple",
-        RotationOrScale = 0,
-        Color = App.Theme.MainColor_4
-      };
-
-      _arrow2BgSprite = new MySprite()
-      {
-        Type = SpriteType.TEXTURE,
-        Data = "SquareSimple",
-        RotationOrScale = 0,
-        Color = App.Theme.MainColor_4
-      };
-
-      _arrowSprite = new MySprite()
-      {
-        Type = SpriteType.TEXTURE,
-        Data = "AH_BoreSight",
-        RotationOrScale = MathHelper.Pi,
-        Color = App.Theme.WhiteColor
-      };
-
-      _arrow2Sprite = new MySprite()
+      var arrowSprite = new MySprite()
       {
         Type = SpriteType.TEXTURE,
         Data = "AH_BoreSight",
@@ -76,80 +95,19 @@ namespace Lima.Fancy.Elements
         Color = App.Theme.WhiteColor
       };
 
-      _textSprite = new MySprite()
-      {
-        Type = SpriteType.TEXT,
-        Data = Labels[Selected],
-        RotationOrScale = 0.6f * ThemeScale,
-        Color = App.Theme.WhiteColor,
-        Alignment = TextAlignment.CENTER,
-        FontId = App.Theme.Font
-      };
+      var leftSize = LeftArrow.GetSize();
+      arrowSprite.RotationOrScale = MathHelper.Pi;
+      arrowSprite.Position = LeftArrow.Position + Vector2.UnitY * leftSize.Y * 0.5f;
+      arrowSprite.Size = leftSize;
+      LeftArrow.GetSprites().Clear();
+      LeftArrow.GetSprites().Add(arrowSprite);
 
-      if (Handler.IsMouseOver)
-      {
-        var mouseX = App.Cursor.Position.X - Handler.HitArea.X;
-        if (Handler.IsMousePressed)
-        {
-          if (mouseX < size.Y)
-            _arrowBgSprite.Color = App.Theme.MainColor_8;
-          else if (mouseX > size.X - size.Y)
-            _arrow2BgSprite.Color = App.Theme.MainColor_8;
-        }
-        else
-        {
-          if (mouseX < size.Y)
-            _arrowBgSprite.Color = App.Theme.MainColor_5;
-          else if (mouseX > size.X - size.Y)
-            _arrow2BgSprite.Color = App.Theme.MainColor_5;
-        }
-      }
-      else
-      {
-        _arrowBgSprite.Color = App.Theme.MainColor_4;
-        _arrow2BgSprite.Color = App.Theme.MainColor_4;
-      }
-
-      if (Handler.JustReleased)
-      {
-        var mouseX = App.Cursor.Position.X - Handler.HitArea.X;
-        var prev = Selected;
-        if (mouseX < size.Y)
-          Selected -= 1;
-        else if (mouseX > size.X - size.Y)
-          Selected += 1;
-
-        var count = Labels.Count;
-        if (Selected < 0)
-          Selected = Loop ? count - 1 : 0;
-
-        if (Selected >= count)
-          Selected = Loop ? 0 : count - 1;
-
-        if (prev != Selected)
-          OnChange(Selected, Labels[Selected]);
-      }
-
-      Sprites.Clear();
-
-      _bgSprite.Position = Position + new Vector2(0, size.Y / 2);
-      _bgSprite.Size = size;
-
-      _arrowSprite.Position = _arrowBgSprite.Position = Position + new Vector2(0, size.Y / 2);
-      _arrowSprite.Size = _arrowBgSprite.Size = new Vector2(size.Y, size.Y);
-
-      _arrow2Sprite.Position = _arrow2BgSprite.Position = Position + new Vector2(size.X - size.Y, size.Y / 2);
-      _arrow2Sprite.Size = _arrow2BgSprite.Size = new Vector2(size.Y, size.Y);
-
-      _textSprite.Position = Position + new Vector2(size.X / 2, size.Y * 0.5f - (_textSprite.RotationOrScale * 16.6f));
-      // textSprite.Size = Size;
-
-      Sprites.Add(_bgSprite);
-      Sprites.Add(_arrowBgSprite);
-      Sprites.Add(_arrow2BgSprite);
-      Sprites.Add(_arrowSprite);
-      Sprites.Add(_arrow2Sprite);
-      Sprites.Add(_textSprite);
+      var rightSize = RightArrow.GetSize();
+      arrowSprite.RotationOrScale = 0;
+      arrowSprite.Position = RightArrow.Position + Vector2.UnitY * rightSize.Y * 0.5f;
+      arrowSprite.Size = rightSize;
+      RightArrow.GetSprites().Clear();
+      RightArrow.GetSprites().Add(arrowSprite);
     }
 
   }

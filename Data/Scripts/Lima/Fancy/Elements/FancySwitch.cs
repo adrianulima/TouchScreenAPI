@@ -78,11 +78,5 @@ namespace Lima.Fancy.Elements
         }
       }
     }
-
-    private void ApplyButtonThemeStyle(FancyButton button, bool selected)
-    {
-
-
-    }
   }
 }

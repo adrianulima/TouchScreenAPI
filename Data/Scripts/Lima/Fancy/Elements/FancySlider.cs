@@ -64,39 +64,19 @@ namespace Lima.Fancy.Elements
       var size = GetSize();
       Handler.HitArea = new Vector4(Position.X, Position.Y, Position.X + size.X, Position.Y + size.Y);
 
-      Bar.Bar.BgColor = App.Theme.MainColor_7;
-
       if (Handler.IsMousePressed)
       {
-        Bar.BgColor = App.Theme.MainColor_3;
-
         var offset = size.Y / size.X;
         var cursorRatio = (App.Cursor.Position.X - Handler.HitArea.X) / (Handler.HitArea.Z - Handler.HitArea.X);
         var offsetRatio = MathHelper.Clamp(cursorRatio * (1 + offset) - (offset * 0.5f), 0, 1);
         UpdateValue(MinValue + offsetRatio * (MaxValue - MinValue));
       }
-      else if (Handler.IsMouseOver)
-        Bar.BgColor = App.Theme.MainColor_3;
-      else
-        Bar.BgColor = App.Theme.MainColor_2;
 
-      var handlerSprite = new MySprite()
-      {
-        Type = SpriteType.TEXTURE,
-        Data = "Circle",
-        RotationOrScale = 0,
-        Color = App.Theme.WhiteColor
-      };
-
-      var handlerInnerSprite = new MySprite()
-      {
-        Type = SpriteType.TEXTURE,
-        Data = "Circle",
-        RotationOrScale = 0,
-        Color = App.Theme.MainColor_7
-      };
+      if (UseThemeColors)
+        ApplyThemeStyle();
 
       UpdateBar();
+
       base.Update();
 
       var ratio = ((Value - MinValue) / (MaxValue - MinValue));
@@ -113,6 +93,22 @@ namespace Lima.Fancy.Elements
       var handlerOffset = ratio * -(1 + offsetWidth) + (offsetWidth * 0.5f);
       Thumb.Position = Bar.Position + new Vector2(barSize.X * ratio + handlerOffset - thumbSize / 2, scaledPixelsY / 2 - thumbSize / 2);
 
+      var handlerSprite = new MySprite()
+      {
+        Type = SpriteType.TEXTURE,
+        Data = "Circle",
+        RotationOrScale = 0,
+        Color = App.Theme.WhiteColor
+      };
+
+      var handlerInnerSprite = new MySprite()
+      {
+        Type = SpriteType.TEXTURE,
+        Data = "Circle",
+        RotationOrScale = 0,
+        Color = Bar.Bar.BgColor
+      };
+
       handlerSprite.Position = Thumb.Position + new Vector2(0, thumbSize / 2);
       handlerSprite.Size = new Vector2(thumbSize, thumbSize);
 
@@ -123,6 +119,18 @@ namespace Lima.Fancy.Elements
 
       Thumb.GetSprites().Add(handlerSprite);
       Thumb.GetSprites().Add(handlerInnerSprite);
+    }
+
+    private void ApplyThemeStyle()
+    {
+      Bar.Bar.BgColor = App.Theme.MainColor_7;
+
+      if (Handler.IsMousePressed)
+        Bar.BgColor = App.Theme.MainColor_3;
+      else if (Handler.IsMouseOver)
+        Bar.BgColor = App.Theme.MainColor_3;
+      else
+        Bar.BgColor = App.Theme.MainColor_2;
     }
 
     protected virtual void UpdateValue(float value)
