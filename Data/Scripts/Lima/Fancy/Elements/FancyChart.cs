@@ -47,6 +47,7 @@ namespace Lima.Fancy.Elements
       base.Dispose();
 
       DataSets.Clear();
+      DataColors.Clear();
     }
 
     private void UpdateLimitValues()

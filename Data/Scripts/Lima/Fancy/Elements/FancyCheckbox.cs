@@ -31,7 +31,7 @@ namespace Lima.Fancy.Elements
 
     public override void Update()
     {
-      var size = GetSize();
+      var size = GetBoundaries();
 
       Handler.HitArea = new Vector4(Position.X, Position.Y, Position.X + size.X, Position.Y + size.Y);
       Handler.UpdateStatus(App.Screen);

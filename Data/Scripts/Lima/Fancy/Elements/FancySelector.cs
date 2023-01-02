@@ -7,8 +7,6 @@ namespace Lima.Fancy.Elements
 {
   public class FancySelector : FancyView
   {
-    public ClickHandler Handler = new ClickHandler();
-
     public int Selected = 0;
     public readonly List<string> Labels;
     public Action<int, string> OnChange;
@@ -77,11 +75,6 @@ namespace Lima.Fancy.Elements
 
     public override void Update()
     {
-      var size = GetSize();
-
-      Handler.HitArea = new Vector4(Position.X, Position.Y, Position.X + size.X, Position.Y + size.Y);
-      Handler.UpdateStatus(App.Screen);
-
       if (UseThemeColors)
         BgColor = App.Theme.MainColor_2;
 
