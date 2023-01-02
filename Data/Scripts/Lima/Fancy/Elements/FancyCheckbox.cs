@@ -36,21 +36,9 @@ namespace Lima.Fancy.Elements
       Handler.HitArea = new Vector4(Position.X, Position.Y, Position.X + size.X, Position.Y + size.Y);
       Handler.UpdateStatus(App.Screen);
 
-      if (Handler.IsMousePressed)
-      {
-        BorderColor = App.Theme.MainColor_8;
-        BgColor = App.Theme.MainColor_6;
-      }
-      else if (Handler.IsMouseOver)
-      {
-        BorderColor = App.Theme.MainColor_5;
-        BgColor = App.Theme.MainColor_3;
-      }
-      else
-      {
-        BorderColor = App.Theme.MainColor_4;
-        BgColor = App.Theme.MainColor_2;
-      }
+      if (UseThemeColors)
+        ApplyThemeStyle();
+
 
       if (Handler.JustReleased)
       {
@@ -83,6 +71,25 @@ namespace Lima.Fancy.Elements
 
         CheckMark.GetSprites().Add(check1);
         CheckMark.GetSprites().Add(check2);
+      }
+    }
+
+    private void ApplyThemeStyle()
+    {
+      if (Handler.IsMousePressed)
+      {
+        BorderColor = App.Theme.MainColor_8;
+        BgColor = App.Theme.MainColor_6;
+      }
+      else if (Handler.IsMouseOver)
+      {
+        BorderColor = App.Theme.MainColor_5;
+        BgColor = App.Theme.MainColor_3;
+      }
+      else
+      {
+        BorderColor = App.Theme.MainColor_4;
+        BgColor = App.Theme.MainColor_2;
       }
     }
   }

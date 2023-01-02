@@ -94,7 +94,10 @@ namespace Lima.Touch
         { "FancyContainerBase_GetChildren", new Func<object, List<object>>(FancyContainerBase_GetChildren) },
         { "FancyContainerBase_GetFlexSize", new Func<object, Vector2>(FancyContainerBase_GetFlexSize) },
         { "FancyContainerBase_AddChild", new Action<object, object>(FancyContainerBase_AddChild) },
+        { "FancyContainerBase_AddChildAt", new Action<object, object, int>(FancyContainerBase_AddChildAt) },
         { "FancyContainerBase_RemoveChild", new Action<object, object>(FancyContainerBase_RemoveChild) },
+        { "FancyContainerBase_RemoveChildAt", new Action<object, int>(FancyContainerBase_RemoveChildAt) },
+        { "FancyContainerBase_MoveChild", new Action<object, object, int>(FancyContainerBase_MoveChild) },
 
         { "FancyView_New", new Func<int, Color?, FancyView>(FancyView_New) },
         { "FancyView_GetOverflow", new Func<object, bool>(FancyView_GetOverflow) },
@@ -105,6 +108,8 @@ namespace Lima.Touch
         { "FancyView_SetAlignment", new Action<object, byte>(FancyView_SetAlignment) },
         { "FancyView_GetAnchor", new Func<object, byte>(FancyView_GetAnchor) },
         { "FancyView_SetAnchor", new Action<object, byte>(FancyView_SetAnchor) },
+        { "FancyView_GetUseThemeColors", new Func<object, bool>(FancyView_GetUseThemeColors) },
+        { "FancyView_SetUseThemeColors", new Action<object, bool>(FancyView_SetUseThemeColors) },
         { "FancyView_GetBgColor", new Func<object, Color>(FancyView_GetBgColor) },
         { "FancyView_SetBgColor", new Action<object, Color>(FancyView_SetBgColor) },
         { "FancyView_GetBorderColor", new Func<object, Color>(FancyView_GetBorderColor) },
@@ -161,6 +166,7 @@ namespace Lima.Touch
         { "ClickHandler_UpdateStatus", new Action<object, object>(ClickHandler_UpdateStatus) },
 
         { "FancyEmptyButton_New", new Func<Action, object>(FancyEmptyButton_New) },
+        { "FancyEmptyButton_GetHandler", new Func<object, object>(FancyEmptyButton_GetHandler) },
         { "FancyEmptyButton_SetOnChange", new Action<object, Action>(FancyEmptyButton_SetOnChange) },
 
         { "FancyButton_New", new Func<string, Action, object>(FancyButton_New) },
@@ -265,6 +271,8 @@ namespace Lima.Touch
         { "FancyChart_SetGridVerticalLines", new Action<object, int>(FancyChart_SetGridVerticalLines) },
         { "FancyChart_GetMaxValue", new Func<object, float>(FancyChart_GetMaxValue) },
         { "FancyChart_GetMinValue", new Func<object, float>(FancyChart_GetMinValue) },
+        { "FancyChart_GetGridColor", new Func<object, Color?>(FancyChart_GetGridColor) },
+        { "FancyChart_SetGridColor", new Action<object, Color>(FancyChart_SetGridColor) },
 
         { "FancyEmptyElement_New", new Func<object>(FancyEmptyElement_New) }
       };
@@ -329,7 +337,10 @@ namespace Lima.Touch
     private List<object> FancyContainerBase_GetChildren(object obj) => (obj as FancyContainerBase).Children.Cast<object>().ToList();
     private Vector2 FancyContainerBase_GetFlexSize(object obj) => (obj as FancyContainerBase).GetFlexSize();
     private void FancyContainerBase_AddChild(object obj, object child) => (obj as FancyContainerBase).AddChild((FancyElementBase)child);
+    private void FancyContainerBase_AddChildAt(object obj, object child, int index) => (obj as FancyContainerBase).AddChild((FancyElementBase)child, index);
     private void FancyContainerBase_RemoveChild(object obj, object child) => (obj as FancyContainerBase).RemoveChild((FancyElementBase)child);
+    private void FancyContainerBase_RemoveChildAt(object obj, int index) => (obj as FancyContainerBase).RemoveChild(index);
+    private void FancyContainerBase_MoveChild(object obj, object child, int index) => (obj as FancyContainerBase).MoveChild((FancyElementBase)child, index);
 
     private FancyView FancyView_New(int direction, Color? bgColor = null) => new FancyView((ViewDirection)direction, bgColor);
     private bool FancyView_GetOverflow(object obj) => (obj as FancyView).Overflow;
@@ -340,6 +351,8 @@ namespace Lima.Touch
     private void FancyView_SetAlignment(object obj, byte alignment) => (obj as FancyView).Alignment = (ViewAlignment)alignment;
     private byte FancyView_GetAnchor(object obj) => (byte)(obj as FancyView).Anchor;
     private void FancyView_SetAnchor(object obj, byte anchor) => (obj as FancyView).Anchor = (ViewAnchor)anchor;
+    private bool FancyView_GetUseThemeColors(object obj) => (obj as FancyView).UseThemeColors;
+    private void FancyView_SetUseThemeColors(object obj, bool useTheme) => (obj as FancyView).UseThemeColors = useTheme;
     private Color FancyView_GetBgColor(object obj) => (Color)(obj as FancyView).BgColor;
     private void FancyView_SetBgColor(object obj, Color bgColor) => (obj as FancyView).BgColor = bgColor;
     private Color FancyView_GetBorderColor(object obj) => (Color)(obj as FancyView).BorderColor;
@@ -408,10 +421,11 @@ namespace Lima.Touch
     private void ClickHandler_UpdateStatus(object obj, object screen) => (obj as ClickHandler).UpdateStatus(screen as TouchScreen);
 
     private FancyEmptyButton FancyEmptyButton_New(Action onChange) => new FancyEmptyButton(onChange);
+    private ClickHandler FancyEmptyButton_GetHandler(object obj) => (obj as FancyEmptyButton).Handler;
     private void FancyEmptyButton_SetOnChange(object obj, Action onChange) => (obj as FancyEmptyButton).OnChange = onChange;
 
     private FancyButton FancyButton_New(string text, Action onChange) => new FancyButton(text, onChange);
-    private FancyLabel FancyButton_GetLabel(object obj) => (obj as FancyWindowBar).Label;
+    private FancyLabel FancyButton_GetLabel(object obj) => (obj as FancyButton).Label;
 
     private FancyCheckbox FancyCheckbox_New(Action<bool> onChange, bool value = false) => new FancyCheckbox(onChange, value);
     private bool FancyCheckbox_GetValue(object obj) => (obj as FancyCheckbox).Value;
@@ -512,6 +526,8 @@ namespace Lima.Touch
     private void FancyChart_SetGridVerticalLines(object obj, int lines) => (obj as FancyChart).GridVerticalLines = lines;
     private float FancyChart_GetMaxValue(object obj) => (obj as FancyChart).MaxValue;
     private float FancyChart_GetMinValue(object obj) => (obj as FancyChart).MinValue;
+    private Color? FancyChart_GetGridColor(object obj) => (obj as FancyChart).GridColor;
+    private void FancyChart_SetGridColor(object obj, Color color) => (obj as FancyChart).GridColor = color;
 
     private FancyEmptyElement FancyEmptyElement_New() => new FancyEmptyElement();
   }

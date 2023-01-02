@@ -23,6 +23,8 @@ namespace Lima.Fancy.Elements
     public int GridHorizontalLines = 2;
     public int GridVerticalLines = 2;
 
+    public Color? GridColor;
+
     public FancyChart(int intervals)
     {
       _intervals = intervals;
@@ -128,7 +130,7 @@ namespace Lima.Fancy.Elements
           Type = SpriteType.TEXTURE,
           Data = "SquareSimple",
           RotationOrScale = 0,
-          Color = App.Theme.MainColor_2,
+          Color = GridColor ?? App.Theme.MainColor_2,
           Position = Position + new Vector2(0, stepY * i),
           Size = new Vector2(_cacheSize.X, 1)
         });
@@ -145,7 +147,7 @@ namespace Lima.Fancy.Elements
           Type = SpriteType.TEXTURE,
           Data = "SquareSimple",
           RotationOrScale = 0,
-          Color = App.Theme.MainColor_2,
+          Color = GridColor ?? App.Theme.MainColor_2,
           Position = Position + new Vector2(stepX * (i + 1), _cacheSize.Y / 2),
           Size = new Vector2(1, _cacheSize.Y)
         });

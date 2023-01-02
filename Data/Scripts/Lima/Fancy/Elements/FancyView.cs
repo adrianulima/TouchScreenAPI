@@ -188,7 +188,7 @@ namespace Lima.Fancy.Elements
 
       base.Update();
 
-      if (BgColor != null)
+      if (BgColor != null && BgColor != Color.Transparent)
       {
         BgSprite = new MySprite()
         {
@@ -216,7 +216,7 @@ namespace Lima.Fancy.Elements
       var size = GetSize();
       var extraBounds = GetExtraBounds();
 
-      if (BgColor != null)
+      if (BgColor != null && BgColor != Color.Transparent)
       {
         BgSprite.Position = Position + new Vector2(0, (size.Y + extraBounds.Y) / 2);
         BgSprite.Size = size + extraBounds;

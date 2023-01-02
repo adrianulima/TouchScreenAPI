@@ -36,7 +36,7 @@ namespace Lima.Fancy.Elements
       base.Update();
     }
 
-    private void ApplyThemeStyle()
+    protected virtual void ApplyThemeStyle()
     {
       if (Handler.IsMousePressed)
         BgColor = App.Theme.MainColor_8;

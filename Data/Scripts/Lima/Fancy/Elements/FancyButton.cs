@@ -20,16 +20,10 @@ namespace Lima.Fancy.Elements
       AddChild(Label);
     }
 
-    public override void Update()
+    protected override void ApplyThemeStyle()
     {
-      if (UseThemeColors)
-        ApplyThemeStyle();
+      base.ApplyThemeStyle();
 
-      base.Update();
-    }
-
-    private void ApplyThemeStyle()
-    {
       if (Handler.IsMousePressed)
         Label.TextColor = App.Theme.MainColor_4;
       else if (Handler.IsMouseOver)

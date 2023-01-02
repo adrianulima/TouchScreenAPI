@@ -57,9 +57,8 @@ namespace Lima.Fancy.Elements
 
       base.Update();
 
-      Label.TextColor = App.Theme.WhiteColor;
-      Bar.BgColor = App.Theme.MainColor_7;
-      BgColor = App.Theme.MainColor_2;
+      if (UseThemeColors)
+        ApplyThemeStyle();
 
       if (BarsGap > 0 && Ratio > MinValue)
       {
@@ -94,6 +93,13 @@ namespace Lima.Fancy.Elements
           }
         }
       }
+    }
+
+    private void ApplyThemeStyle()
+    {
+      Label.TextColor = App.Theme.WhiteColor;
+      Bar.BgColor = App.Theme.MainColor_7;
+      BgColor = App.Theme.MainColor_2;
     }
 
   }

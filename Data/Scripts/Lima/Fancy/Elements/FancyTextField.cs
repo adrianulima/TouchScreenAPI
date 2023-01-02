@@ -123,14 +123,10 @@ namespace Lima.Fancy.Elements
       Handler.UpdateStatus(App.Screen);
 
       if (IsEditing)
-      {
         Blink();
-        BgColor = _blink ? App.Theme.MainColor_3 : App.Theme.MainColor_2;
-      }
-      else if (Handler.IsMousePressed || Handler.IsMouseOver)
-        BgColor = App.Theme.MainColor_3;
-      else
-        BgColor = App.Theme.MainColor_2;
+
+      if (UseThemeColors)
+        ApplyThemeStyle();
 
       if (Handler.JustPressed)
         ToggleEdit(false, false, Text == _saveText);
@@ -159,6 +155,16 @@ namespace Lima.Fancy.Elements
           Label.GetSprites()[0] = textSrite;
         }
       }
+    }
+
+    private void ApplyThemeStyle()
+    {
+      if (IsEditing)
+        BgColor = _blink ? App.Theme.MainColor_3 : App.Theme.MainColor_2;
+      else if (Handler.IsMousePressed || Handler.IsMouseOver)
+        BgColor = App.Theme.MainColor_3;
+      else
+        BgColor = App.Theme.MainColor_2;
     }
 
     private void Blink()
