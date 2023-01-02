@@ -5,7 +5,7 @@ namespace Lima.Fancy.Elements
 {
   public enum ViewDirection : byte
   {
-    None = 0, Row = 1, Column = 2
+    None = 0, Row = 1, Column = 2, RowReverse = 3, ColumnReverse = 4
   }
   public enum ViewAlignment : byte
   {
@@ -64,14 +64,14 @@ namespace Lima.Fancy.Elements
         var size = GetSize();
         var before = new Vector2(Border.X + Padding.X, Border.Y + Padding.Y) * ThemeScale;
         var childSize = child.GetSize();
-        if (Direction == ViewDirection.Row)
+        if (Direction == ViewDirection.Row || Direction == ViewDirection.RowReverse)
         {
           if (child.Position.X + childSize.X > Position.X + size.X + before.X + 1)
             return false;
           if (child.Position.X < Position.X + before.Y - 1)
             return false;
         }
-        else if (Direction == ViewDirection.Column)
+        else if (Direction == ViewDirection.Column || Direction == ViewDirection.ColumnReverse)
         {
           if (child.Position.Y + childSize.Y > Position.Y + size.Y + before.Y + 1)
             return false;
@@ -95,13 +95,13 @@ namespace Lima.Fancy.Elements
         {
           if (!child.Enabled || child.Absolute) continue;
 
-          if (Direction == ViewDirection.Row)
+          if (Direction == ViewDirection.Row || Direction == ViewDirection.RowReverse)
           {
             ChildrenPixels.X += child.Pixels.X;
             ChildrenScales.X += child.Scale.X;
             ChildrenPixels += new Vector2(child.Margin.X + child.Margin.Z, 0);
           }
-          else if (Direction == ViewDirection.Column)
+          else if (Direction == ViewDirection.Column || Direction == ViewDirection.ColumnReverse)
           {
             ChildrenPixels.Y += child.Pixels.Y;
             ChildrenScales.Y += child.Scale.Y;
@@ -109,19 +109,19 @@ namespace Lima.Fancy.Elements
           }
         }
 
-        if (Direction == ViewDirection.Row)
+        if (Direction == ViewDirection.Row || Direction == ViewDirection.RowReverse)
           ChildrenPixels.X += Gap * (childrenCount - 1);
-        else if (Direction == ViewDirection.Column)
+        else if (Direction == ViewDirection.Column || Direction == ViewDirection.ColumnReverse)
           ChildrenPixels.Y += Gap * (childrenCount - 1);
       }
     }
 
     protected virtual void UpdateChildrenPositions()
     {
-      FancyElementBase prevChild = null;
       if (Direction != ViewDirection.None)
       {
-        var isRow = Direction == ViewDirection.Row;
+        var isRow = Direction == ViewDirection.Row || Direction == ViewDirection.RowReverse;
+        var isReverse = Direction == ViewDirection.RowReverse || Direction == ViewDirection.ColumnReverse;
         var before = new Vector2(Border.X + Padding.X, Border.Y + Padding.Y) * ThemeScale;
 
         var anchorStart = Vector2.Zero;
@@ -134,9 +134,14 @@ namespace Lima.Fancy.Elements
             anchorStart = isRow ? new Vector2(remainingFlex.X, 0) : new Vector2(0, remainingFlex.Y);
         }
 
+
         var size = GetSize();
-        foreach (var child in Children)
+        FancyElementBase prevChild = null;
+        var childrenCount = Children.Count;
+        for (int i = 0; i < childrenCount; i++)
         {
+          var child = isReverse ? Children[childrenCount - 1 - i] : Children[i];
+
           if (!child.Enabled || child.Absolute) continue;
 
           var originPos = before + Position + new Vector2(child.Margin.X, child.Margin.Y) * ThemeScale;

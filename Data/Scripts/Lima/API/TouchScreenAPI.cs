@@ -596,7 +596,7 @@ namespace Lima.API
     public void RemoveChild(FancyElementBase child) => Api.FancyContainerBase_RemoveChild.Invoke(InternalObj, child.InternalObj);
     public void RemoveChild(object child) => Api.FancyContainerBase_RemoveChild.Invoke(InternalObj, child);
   }
-  public enum ViewDirection : byte { None = 0, Row = 1, Column = 2 }
+  public enum ViewDirection : byte { None = 0, Row = 1, Column = 2, RowReverse = 3, ColumnReverse = 4 }
   public enum ViewAlignment : byte { Start = 0, Center = 1, End = 2 }
   public class FancyView : FancyContainerBase
   {
