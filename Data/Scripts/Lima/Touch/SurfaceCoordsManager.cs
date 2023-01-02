@@ -91,7 +91,7 @@ namespace Lima.Touch
       CoordsList.AddRange(coords);
     }
 
-    public void UnloadData()
+    public void Dispose()
     {
       MyAPIGateway.Utilities.MessageEntered -= MessageHandler;
     }

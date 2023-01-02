@@ -14,7 +14,6 @@ namespace Lima.Touch
     public float MaxInteractiveDistance = 50f;
     public float DefaultInteractiveDistance = 10f;
 
-    // TODO: Implement Dispose to clear this array and possible more garbage
     public readonly List<TouchScreen> Screens = new List<TouchScreen>();
 
     public TouchScreen CurrentScreen;
@@ -89,12 +88,20 @@ namespace Lima.Touch
 
     public void RemoveScreen(IMyCubeBlock block, IMyTextSurface surface)
     {
-      var screen = TouchSession.Instance.TouchMan.Screens.SingleOrDefault(s => s.CompareWithBlockAndSurface(block, surface));
+      var screen = Screens.SingleOrDefault(s => s.CompareWithBlockAndSurface(block, surface));
       if (screen != null)
       {
         screen.Dispose();
         Screens.Remove(screen);
       }
+    }
+
+    public void Dispose()
+    {
+      foreach (var screen in Screens)
+        screen.Dispose();
+
+      Screens.Clear();
     }
   }
 }

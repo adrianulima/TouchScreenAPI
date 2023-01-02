@@ -39,9 +39,11 @@ namespace Lima.Touch
 
     protected override void UnloadData()
     {
-      SurfaceCoordsMan.UnloadData();
+      TouchMan.Dispose();
+      SurfaceCoordsMan.Dispose();
       _delegator.Unload();
       Instance = null;
+      ModEnabled = false;
     }
 
     public override void UpdateAfterSimulation()
