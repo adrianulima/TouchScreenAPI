@@ -13,7 +13,7 @@ namespace Lima.Fancy.Elements
       Scale = new Vector2(1, 0);
       Pixels = new Vector2(0, 24);
 
-      Anchor = ViewAlignment.Center;
+      Anchor = ViewAnchor.Center;
       Alignment = ViewAlignment.Center;
 
       Label = new FancyLabel(text, 0.6f, TextAlignment.CENTER);

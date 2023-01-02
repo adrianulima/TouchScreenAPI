@@ -11,12 +11,16 @@ namespace Lima.Fancy.Elements
   {
     Start = 0, Center = 1, End = 2
   }
+  public enum ViewAnchor : byte
+  {
+    Start = 0, Center = 1, End = 2, SpaceBetween = 3, SpaceAround = 4
+  }
 
   public class FancyView : FancyContainerBase
   {
     public ViewDirection Direction = ViewDirection.Column;
     public ViewAlignment Alignment = ViewAlignment.Start;
-    public ViewAlignment Anchor = ViewAlignment.Start;
+    public ViewAnchor Anchor = ViewAnchor.Start;
 
     public bool Overflow = true;
 
@@ -121,23 +125,30 @@ namespace Lima.Fancy.Elements
       if (Direction != ViewDirection.None)
       {
         var isRow = Direction == ViewDirection.Row || Direction == ViewDirection.RowReverse;
-        var isReverse = Direction == ViewDirection.RowReverse || Direction == ViewDirection.ColumnReverse;
-        var before = new Vector2(Border.X + Padding.X, Border.Y + Padding.Y) * ThemeScale;
+        var childrenCount = Children.Count;
 
+        var anchorGap = Vector2.Zero;
         var anchorStart = Vector2.Zero;
         var remainingFlex = GetFlexSize() * new Vector2(1 - ChildrenScales.X, 1 - ChildrenScales.Y);
         if ((isRow && remainingFlex.X > 0) || (!isRow && remainingFlex.Y > 0))
         {
-          if (Anchor == ViewAlignment.Center)
+          if (Anchor == ViewAnchor.Center)
             anchorStart = isRow ? new Vector2(remainingFlex.X * 0.5f, 0) : new Vector2(0, remainingFlex.Y * 0.5f);
-          else if (Anchor == ViewAlignment.End)
+          else if (Anchor == ViewAnchor.End)
             anchorStart = isRow ? new Vector2(remainingFlex.X, 0) : new Vector2(0, remainingFlex.Y);
+          else if (Anchor == ViewAnchor.SpaceAround)
+          {
+            anchorGap = new Vector2(remainingFlex.X / (childrenCount + 1), remainingFlex.Y / (childrenCount + 1));
+            anchorStart = isRow ? new Vector2(anchorGap.X, 0) : new Vector2(0, anchorGap.Y);
+          }
+          else if (Anchor == ViewAnchor.SpaceBetween)
+            anchorGap = new Vector2(remainingFlex.X / (childrenCount - 1), remainingFlex.Y / (childrenCount - 1));
         }
 
-
+        var isReverse = Direction == ViewDirection.RowReverse || Direction == ViewDirection.ColumnReverse;
+        var before = new Vector2(Border.X + Padding.X, Border.Y + Padding.Y) * ThemeScale;
         var size = GetSize();
         FancyElementBase prevChild = null;
-        var childrenCount = Children.Count;
         for (int i = 0; i < childrenCount; i++)
         {
           var child = isReverse ? Children[childrenCount - 1 - i] : Children[i];
@@ -160,8 +171,8 @@ namespace Lima.Fancy.Elements
           }
 
           var prevChildBounds = prevChild.GetBoundaries();
-          var oX = isRow ? prevChild.Position.X + prevChildBounds.X - Position.X + (Gap + prevChild.Margin.Z - Border.X - Padding.X) * ThemeScale : 0;
-          var oY = !isRow ? prevChild.Position.Y + prevChildBounds.Y - Position.Y + (Gap + prevChild.Margin.W - Border.Y - Padding.Y) * ThemeScale : 0;
+          var oX = isRow ? prevChild.Position.X + prevChildBounds.X - Position.X + anchorGap.X + (Gap + prevChild.Margin.Z - Border.X - Padding.X) * ThemeScale : 0;
+          var oY = !isRow ? prevChild.Position.Y + prevChildBounds.Y - Position.Y + anchorGap.Y + (Gap + prevChild.Margin.W - Border.Y - Padding.Y) * ThemeScale : 0;
           child.Position = originPos + new Vector2(oX, oY) + align;
           prevChild = child;
         }

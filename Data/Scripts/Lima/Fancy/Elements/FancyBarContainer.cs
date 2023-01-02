@@ -27,7 +27,7 @@ namespace Lima.Fancy.Elements
       Pixels = new Vector2(0, 24);
 
       Direction = vertical ? ViewDirection.Column : ViewDirection.Row;
-      Anchor = vertical ? ViewAlignment.End : ViewAlignment.Start;
+      Anchor = vertical ? ViewAnchor.End : ViewAnchor.Start;
       Alignment = ViewAlignment.Center;
 
       IsVertical = vertical;

@@ -22,7 +22,7 @@ namespace Lima.Fancy.Elements
       Pixels = new Vector2(20, 20);
       Border = new Vector4(2);
 
-      Anchor = ViewAlignment.Center;
+      Anchor = ViewAnchor.Center;
       Alignment = ViewAlignment.Center;
 
       CheckMark = new FancyEmptyElement();

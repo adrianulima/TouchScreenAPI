@@ -598,6 +598,7 @@ namespace Lima.API
   }
   public enum ViewDirection : byte { None = 0, Row = 1, Column = 2, RowReverse = 3, ColumnReverse = 4 }
   public enum ViewAlignment : byte { Start = 0, Center = 1, End = 2 }
+  public enum ViewAnchor : byte { Start = 0, Center = 1, End = 2, SpaceBetween = 3, SpaceAround = 4 }
   public class FancyView : FancyContainerBase
   {
     public FancyView(ViewDirection direction = ViewDirection.Column, Color? bgColor = null) : base(Api.FancyView_New((int)direction, bgColor)) { }
@@ -605,7 +606,7 @@ namespace Lima.API
     public bool Overflow { get { return Api.FancyView_GetOverflow.Invoke(InternalObj); } set { Api.FancyView_SetOverflow.Invoke(InternalObj, value); } }
     public ViewDirection Direction { get { return (ViewDirection)Api.FancyView_GetDirection.Invoke(InternalObj); } set { Api.FancyView_SetDirection.Invoke(InternalObj, (byte)value); } }
     public ViewAlignment Alignment { get { return (ViewAlignment)Api.FancyView_GetAlignment.Invoke(InternalObj); } set { Api.FancyView_SetAlignment.Invoke(InternalObj, (byte)value); } }
-    public ViewAlignment Anchor { get { return (ViewAlignment)Api.FancyView_GetAnchor.Invoke(InternalObj); } set { Api.FancyView_SetAnchor.Invoke(InternalObj, (byte)value); } }
+    public ViewAnchor Anchor { get { return (ViewAnchor)Api.FancyView_GetAnchor.Invoke(InternalObj); } set { Api.FancyView_SetAnchor.Invoke(InternalObj, (byte)value); } }
     public Color BgColor { get { return Api.FancyView_GetBgColor.Invoke(InternalObj); } set { Api.FancyView_SetBgColor.Invoke(InternalObj, value); } }
     public Color BorderColor { get { return Api.FancyView_GetBorderColor.Invoke(InternalObj); } set { Api.FancyView_SetBorderColor.Invoke(InternalObj, value); } }
     public Vector4 Border { get { return Api.FancyView_GetBorder.Invoke(InternalObj); } set { Api.FancyView_SetBorder.Invoke(InternalObj, value); } }

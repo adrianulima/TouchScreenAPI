@@ -339,7 +339,7 @@ namespace Lima.Touch
     private byte FancyView_GetAlignment(object obj) => (byte)(obj as FancyView).Alignment;
     private void FancyView_SetAlignment(object obj, byte alignment) => (obj as FancyView).Alignment = (ViewAlignment)alignment;
     private byte FancyView_GetAnchor(object obj) => (byte)(obj as FancyView).Anchor;
-    private void FancyView_SetAnchor(object obj, byte anchor) => (obj as FancyView).Anchor = (ViewAlignment)anchor;
+    private void FancyView_SetAnchor(object obj, byte anchor) => (obj as FancyView).Anchor = (ViewAnchor)anchor;
     private Color FancyView_GetBgColor(object obj) => (Color)(obj as FancyView).BgColor;
     private void FancyView_SetBgColor(object obj, Color bgColor) => (obj as FancyView).BgColor = bgColor;
     private Color FancyView_GetBorderColor(object obj) => (Color)(obj as FancyView).BorderColor;

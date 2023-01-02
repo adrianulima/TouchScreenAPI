@@ -25,7 +25,7 @@ namespace Lima.Fancy.Elements
       Loop = loop;
 
       Direction = ViewDirection.Row;
-      Anchor = ViewAlignment.Center;
+      Anchor = ViewAnchor.Center;
       Alignment = ViewAlignment.Center;
 
       Scale = new Vector2(1, 0);

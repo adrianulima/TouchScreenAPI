@@ -10,11 +10,6 @@ namespace Lima.Fancy.Elements
 
     public FancyContainerBase() { }
 
-    public override Vector2 GetSize()
-    {
-      return base.GetSize();
-    }
-
     public virtual Vector2 GetFlexSize()
     {
       return GetSize();
@@ -67,13 +62,21 @@ namespace Lima.Fancy.Elements
 
     public virtual FancyElementBase AddChild(FancyElementBase child)
     {
+      return AddChild(child, -1);
+    }
+
+    public virtual FancyElementBase AddChild(FancyElementBase child, int index)
+    {
       if (child.Parent == null && !Children.Contains(child))
       {
-        Children.Add(child);
+        if (index >= 0)
+          Children.Insert(index, child);
+        else
+          Children.Add(child);
+
         child.Parent = this;
         return child;
       }
-
       return null;
     }
 
@@ -85,8 +88,34 @@ namespace Lima.Fancy.Elements
         Children.Remove(child);
         return child;
       }
-
       return null;
     }
+
+    public virtual FancyElementBase RemoveChild(int index)
+    {
+      if (Children.Count > index)
+      {
+        var child = Children[index];
+        child.Parent = null;
+        Children.RemoveAt(index);
+        return child;
+      }
+      return null;
+    }
+
+    public virtual FancyElementBase MoveChild(FancyElementBase child, int index)
+    {
+      if (child.Parent == this && Children.Contains(child))
+      {
+        if (index >= 0)
+        {
+          Children.Remove(child);
+          Children.Insert(index, child);
+        }
+        return child;
+      }
+      return null;
+    }
+
   }
 }
