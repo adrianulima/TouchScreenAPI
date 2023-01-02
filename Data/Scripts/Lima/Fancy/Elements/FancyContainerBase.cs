@@ -24,12 +24,12 @@ namespace Lima.Fancy.Elements
 
     public override void Update()
     {
-      base.Update();
       foreach (var child in Children)
       {
         if (child.Enabled)
           child.Update();
       }
+      base.Update();
     }
 
     public override void Dispose()

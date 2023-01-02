@@ -786,7 +786,7 @@ namespace Lima.API
     public float MinValue { get { return Api.FancyChart_GetMinValue.Invoke(InternalObj); } }
     public Color? GridColor { get { return Api.FancyChart_GetGridColor.Invoke(InternalObj); } set { Api.FancyChart_SetGridColor.Invoke(InternalObj, (Color)value); } }
   }
-  public class FancyEmptyElement : FancyView
+  public class FancyEmptyElement : FancyElementBase
   {
     public FancyEmptyElement() : base(Api.FancyEmptyElement_New()) { }
     public FancyEmptyElement(object internalObject) : base(internalObject) { }
