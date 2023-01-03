@@ -90,9 +90,13 @@ namespace Lima.Fancy
 
     public override void Dispose()
     {
-      Screen.UpdateAfterSimulationEvent -= UpdateAfterSimulation;
-      Screen.Dispose();
-      Cursor.Dispose();
+      if (Screen != null)
+      {
+        Screen.UpdateAfterSimulationEvent -= UpdateAfterSimulation;
+        Screen.Dispose();
+      }
+      Cursor?.Dispose();
+
       TouchSession.Instance.TouchMan.Screens.Remove(Screen);
       UpdateAfterSimulationEvent = null;
       InputUtils.SetPlayerKeyboardBlacklistState(false);
