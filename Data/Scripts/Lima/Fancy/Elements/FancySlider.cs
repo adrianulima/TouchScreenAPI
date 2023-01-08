@@ -163,6 +163,7 @@ namespace Lima.Fancy.Elements
       InnerTextField.Enabled = true;
       InnerTextField.IsNumeric = true;
       InnerTextField.IsInteger = IsInteger;
+      InnerTextField.AllowNegative = MinValue < 0;
       InnerTextField.Scale = Scale;
       InnerTextField.Position = Position;
       InnerTextField.Pixels = Pixels;
