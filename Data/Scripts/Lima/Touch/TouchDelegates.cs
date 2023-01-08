@@ -179,6 +179,8 @@ namespace Lima.Touch
         { "FancyCheckbox_GetCheckMark", new Func<object, object>(FancyCheckbox_GetCheckMark) },
 
         { "FancyLabel_New", new Func<string, float, TextAlignment, object>(FancyLabel_New) },
+        { "FancyLabel_GetAutoBreakLine", new Func<object, bool>(FancyLabel_GetAutoBreakLine) },
+        { "FancyLabel_SetAutoBreakLine", new Action<object, bool>(FancyLabel_SetAutoBreakLine) },
         { "FancyLabel_GetOverflow", new Func<object, bool>(FancyLabel_GetOverflow) },
         { "FancyLabel_SetOverflow", new Action<object, bool>(FancyLabel_SetOverflow) },
         { "FancyLabel_GetIsShortened", new Func<object, bool>(FancyLabel_GetIsShortened) },
@@ -434,6 +436,8 @@ namespace Lima.Touch
     private FancyEmptyElement FancyCheckbox_GetCheckMark(object obj) => (obj as FancyCheckbox).CheckMark;
 
     private FancyLabel FancyLabel_New(string text, float fontSize = 0.5f, TextAlignment alignment = TextAlignment.CENTER) => new FancyLabel(text, fontSize, alignment);
+    private bool FancyLabel_GetAutoBreakLine(object obj) => (obj as FancyLabel).AutoBreakLine;
+    private void FancyLabel_SetAutoBreakLine(object obj, bool breakLine) => (obj as FancyLabel).AutoBreakLine = breakLine;
     private bool FancyLabel_GetOverflow(object obj) => (obj as FancyLabel).Overflow;
     private void FancyLabel_SetOverflow(object obj, bool overflow) => (obj as FancyLabel).Overflow = overflow;
     private bool FancyLabel_GetIsShortened(object obj) => (obj as FancyLabel).IsShortened;

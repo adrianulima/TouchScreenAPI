@@ -95,9 +95,14 @@ namespace Lima.Fancy.Elements
         ChildrenPixels = Vector2.Zero;
         ChildrenScales = Vector2.Zero;
 
+        var disableCount = 0;
         foreach (var child in Children)
         {
-          if (!child.Enabled || child.Absolute) continue;
+          if (!child.Enabled || child.Absolute)
+          {
+            disableCount++;
+            continue;
+          }
 
           if (Direction == ViewDirection.Row || Direction == ViewDirection.RowReverse)
           {
@@ -114,9 +119,9 @@ namespace Lima.Fancy.Elements
         }
 
         if (Direction == ViewDirection.Row || Direction == ViewDirection.RowReverse)
-          ChildrenPixels.X += Gap * (childrenCount - 1);
+          ChildrenPixels.X += Gap * ((childrenCount - disableCount) - 1);
         else if (Direction == ViewDirection.Column || Direction == ViewDirection.ColumnReverse)
-          ChildrenPixels.Y += Gap * (childrenCount - 1);
+          ChildrenPixels.Y += Gap * ((childrenCount - disableCount) - 1);
       }
     }
 

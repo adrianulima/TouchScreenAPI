@@ -43,6 +43,7 @@ namespace Lima.Utils
     }
     internal static void SetPlayerKeyboardBlacklistState(bool blocked)
     {
+      // TODO: Consider setting the value back to what it was before instead of `blocked`
       if (MyAPIGateway.Session?.Player != null)
         foreach (string control in ControlIDs)
           MyVisualScriptLogicProvider.SetPlayerInputBlacklistState(control, MyAPIGateway.Session.Player.IdentityId, !blocked);

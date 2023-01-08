@@ -191,6 +191,8 @@ namespace Lima.API
       AssignMethod(delegates, "FancyCheckbox_SetOnChange", ref FancyCheckbox_SetOnChange);
       AssignMethod(delegates, "FancyCheckbox_GetCheckMark", ref FancyCheckbox_GetCheckMark);
       AssignMethod(delegates, "FancyLabel_New", ref FancyLabel_New);
+      AssignMethod(delegates, "FancyLabel_GetAutoBreakLine", ref FancyLabel_GetAutoBreakLine);
+      AssignMethod(delegates, "FancyLabel_SetAutoBreakLine", ref FancyLabel_SetAutoBreakLine);
       AssignMethod(delegates, "FancyLabel_GetOverflow", ref FancyLabel_GetOverflow);
       AssignMethod(delegates, "FancyLabel_SetOverflow", ref FancyLabel_SetOverflow);
       AssignMethod(delegates, "FancyLabel_GetIsShortened", ref FancyLabel_GetIsShortened);
@@ -414,6 +416,8 @@ namespace Lima.API
     public Func<object, object> FancyCheckbox_GetCheckMark;
 
     public Func<string, float, TextAlignment, object> FancyLabel_New;
+    public Func<object, bool> FancyLabel_GetAutoBreakLine;
+    public Action<object, bool> FancyLabel_SetAutoBreakLine;
     public Func<object, bool> FancyLabel_GetOverflow;
     public Action<object, bool> FancyLabel_SetOverflow;
     public Func<object, bool> FancyLabel_GetIsShortened;
@@ -683,6 +687,7 @@ namespace Lima.API
   {
     public FancyLabel(string text, float fontSize = 0.5f, TextAlignment alignment = TextAlignment.CENTER) : base(Api.FancyLabel_New(text, fontSize, alignment)) { }
     public FancyLabel(object internalObject) : base(internalObject) { }
+    public bool AutoBreakLine { get { return Api.FancyLabel_GetAutoBreakLine.Invoke(InternalObj); } set { Api.FancyLabel_SetAutoBreakLine.Invoke(InternalObj, value); } }
     public bool Overflow { get { return Api.FancyLabel_GetOverflow.Invoke(InternalObj); } set { Api.FancyLabel_SetOverflow.Invoke(InternalObj, value); } }
     public bool IsShortened { get { return Api.FancyLabel_GetIsShortened.Invoke(InternalObj); } }
     public string Text { get { return Api.FancyLabel_GetText.Invoke(InternalObj); } set { Api.FancyLabel_SetText.Invoke(InternalObj, value); } }
