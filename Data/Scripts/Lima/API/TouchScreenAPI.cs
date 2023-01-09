@@ -102,6 +102,8 @@ namespace Lima.API
       AssignMethod(delegates, "FancyCursor_New", ref FancyCursor_New);
       AssignMethod(delegates, "FancyCursor_GetActive", ref FancyCursor_GetActive);
       AssignMethod(delegates, "FancyCursor_SetActive", ref FancyCursor_SetActive);
+      AssignMethod(delegates, "FancyCursor_GetScale", ref FancyCursor_GetScale);
+      AssignMethod(delegates, "FancyCursor_SetScale", ref FancyCursor_SetScale);
       AssignMethod(delegates, "FancyCursor_GetPosition", ref FancyCursor_GetPosition);
       AssignMethod(delegates, "FancyCursor_IsInsideArea", ref FancyCursor_IsInsideArea);
       AssignMethod(delegates, "FancyCursor_GetSprites", ref FancyCursor_GetSprites);
@@ -317,6 +319,8 @@ namespace Lima.API
     public Func<object, object> FancyCursor_New;
     public Func<object, bool> FancyCursor_GetActive;
     public Action<object, bool> FancyCursor_SetActive;
+    public Func<object, float> FancyCursor_GetScale;
+    public Action<object, float> FancyCursor_SetScale;
     public Func<object, Vector2> FancyCursor_GetPosition;
     public Func<object, float, float, float, float, bool> FancyCursor_IsInsideArea;
     public Func<object, List<MySprite>> FancyCursor_GetSprites;
@@ -569,6 +573,7 @@ namespace Lima.API
     public FancyCursor(TouchScreen screen) : base(Api.FancyCursor_New(screen.InternalObj)) { }
     public FancyCursor(object internalObject) : base(internalObject) { }
     public bool Active { get { return Api.FancyCursor_GetActive.Invoke(InternalObj); } set { Api.FancyCursor_SetActive.Invoke(InternalObj, value); } }
+    public float Scale { get { return Api.FancyCursor_GetScale.Invoke(InternalObj); } set { Api.FancyCursor_SetScale.Invoke(InternalObj, value); } }
     public Vector2 Position { get { return Api.FancyCursor_GetPosition.Invoke(InternalObj); } }
     public bool IsInsideArea(float x, float y, float z, float w) => Api.FancyCursor_IsInsideArea.Invoke(InternalObj, x, y, z, w);
     public List<MySprite> GetSprites() => Api.FancyCursor_GetSprites.Invoke(InternalObj);

@@ -16,6 +16,7 @@ namespace Lima.Fancy
     public bool IsOnScreen { get { return _screen.IsOnScreen; } }
 
     public bool Active = true;
+    public float Scale = 1f;
 
     public FancyCursor(TouchScreen screen)
     {
@@ -47,7 +48,8 @@ namespace Lima.Fancy
       if (TouchSession.Instance.TouchMan.CurrentScreen != _screen)
         return Sprites;
 
-      _cursorSprite.Position = new Vector2(Position.X, Position.Y + 8);
+      _cursorSprite.Size = new Vector2(16, 26) * Scale;
+      _cursorSprite.Position = new Vector2(Position.X - 3 * Scale, Position.Y + 8 * Scale);
       Sprites.Add(_cursorSprite);
 
       return Sprites;

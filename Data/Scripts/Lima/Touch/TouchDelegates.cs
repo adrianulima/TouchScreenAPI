@@ -140,6 +140,8 @@ namespace Lima.Touch
         { "FancyCursor_New", new Func<object, FancyCursor>(FancyCursor_New) },
         { "FancyCursor_GetActive", new Func<object, bool>(FancyCursor_GetActive) },
         { "FancyCursor_SetActive", new Action<object, bool>(FancyCursor_SetActive) },
+        { "FancyCursor_GetScale", new Func<object, float>(FancyCursor_GetScale) },
+        { "FancyCursor_SetScale", new Action<object, float>(FancyCursor_SetScale) },
         { "FancyCursor_GetPosition", new Func<object, Vector2>(FancyCursor_GetPosition) },
         { "FancyCursor_IsInsideArea", new Func<object, float, float, float, float, bool>(FancyCursor_IsInsideArea) },
         { "FancyCursor_GetSprites", new Func<object, List<MySprite>>(FancyCursor_GetSprites) },
@@ -385,6 +387,8 @@ namespace Lima.Touch
     private FancyCursor FancyCursor_New(object screen) => new FancyCursor(screen as TouchScreen);
     private bool FancyCursor_GetActive(object obj) => (obj as FancyCursor).Active;
     private void FancyCursor_SetActive(object obj, bool active) => (obj as FancyCursor).Active = active;
+    private float FancyCursor_GetScale(object obj) => (obj as FancyCursor).Scale;
+    private void FancyCursor_SetScale(object obj, float scale) => (obj as FancyCursor).Scale = scale;
     private Vector2 FancyCursor_GetPosition(object obj) => (obj as FancyCursor).Position;
     private bool FancyCursor_IsInsideArea(object obj, float x, float y, float z, float w) => (obj as FancyCursor).IsInsideArea(x, y, z, w);
     private List<MySprite> FancyCursor_GetSprites(object obj) => (obj as FancyCursor).GetSprites();
