@@ -1,7 +1,6 @@
-
 using Sandbox.ModAPI;
-using VRage.Collections;
 using System;
+using VRage.Collections;
 
 namespace Lima.Touch.UiKit
 {

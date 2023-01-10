@@ -1,7 +1,7 @@
-using System;
 using Sandbox.ModAPI;
-using VRage.Game;
+using System;
 using VRage.Game.Components;
+using VRage.Game;
 using VRage.Utils;
 
 namespace Lima.Touch

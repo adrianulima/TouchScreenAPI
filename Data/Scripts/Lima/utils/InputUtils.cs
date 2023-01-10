@@ -1,9 +1,9 @@
-using System;
-using System.Collections.Generic;
+using Sandbox.Game;
 using Sandbox.ModAPI;
+using System.Collections.Generic;
+using System;
 using VRage.Input;
 using VRage.Utils;
-using Sandbox.Game;
 
 namespace Lima.Utils
 {
