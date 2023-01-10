@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using VRage.Game.GUI.TextPanel;
 using VRageMath;
 
-namespace Lima.Touch.UiKit
+namespace Lima.Touch
 {
   public class TouchCursor
   {

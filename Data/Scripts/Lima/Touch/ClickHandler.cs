@@ -1,7 +1,7 @@
 using Sandbox.ModAPI;
 using VRageMath;
 
-namespace Lima.Touch.UiKit
+namespace Lima.Touch
 {
   public class ClickHandler
   {
