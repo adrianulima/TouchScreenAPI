@@ -3,22 +3,22 @@ using System.Collections.Generic;
 using VRage.Game.GUI.TextPanel;
 using VRageMath;
 
-namespace Lima.Fancy.Elements
+namespace Lima.Touch.UiKit.Elements
 {
-  public class FancySelector : FancyView
+  public class TouchSelector : TouchView
   {
     public int Selected = 0;
     public readonly List<string> Labels;
     public Action<int, string> OnChange;
     public bool Loop;
 
-    public FancyEmptyButton LeftButton;
-    public FancyEmptyButton RightButton;
-    public FancyEmptyElement LeftArrow;
-    public FancyEmptyElement RightArrow;
-    public FancyLabel Label;
+    public TouchEmptyButton LeftButton;
+    public TouchEmptyButton RightButton;
+    public TouchEmptyElement LeftArrow;
+    public TouchEmptyElement RightArrow;
+    public TouchLabel Label;
 
-    public FancySelector(List<string> labels, Action<int, string> onChange, bool loop = true)
+    public TouchSelector(List<string> labels, Action<int, string> onChange, bool loop = true)
     {
       Labels = labels;
       OnChange = onChange;
@@ -31,19 +31,19 @@ namespace Lima.Fancy.Elements
       Scale = new Vector2(1, 0);
       Pixels = new Vector2(0, 24);
 
-      LeftButton = new FancyEmptyButton(Prev);
+      LeftButton = new TouchEmptyButton(Prev);
       LeftButton.Pixels = new Vector2(24, 0);
       LeftButton.Scale = new Vector2(0, 1);
       AddChild(LeftButton);
-      LeftArrow = new FancyEmptyElement();
+      LeftArrow = new TouchEmptyElement();
       LeftButton.AddChild(LeftArrow);
-      Label = new FancyLabel(Labels[Selected], 0.6f, TextAlignment.CENTER);
+      Label = new TouchLabel(Labels[Selected], 0.6f, TextAlignment.CENTER);
       AddChild(Label);
-      RightButton = new FancyEmptyButton(Next);
+      RightButton = new TouchEmptyButton(Next);
       RightButton.Pixels = new Vector2(24, 0);
       RightButton.Scale = new Vector2(0, 1);
       AddChild(RightButton);
-      RightArrow = new FancyEmptyElement();
+      RightArrow = new TouchEmptyElement();
       RightButton.AddChild(RightArrow);
     }
 

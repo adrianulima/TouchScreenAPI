@@ -2,13 +2,13 @@ using System.Collections.Generic;
 using VRage.Game.GUI.TextPanel;
 using VRageMath;
 
-namespace Lima.Fancy.Elements
+namespace Lima.Touch.UiKit.Elements
 {
-  public abstract class FancyContainerBase : FancyElementBase
+  public abstract class TouchContainerBase : TouchElementBase
   {
-    public readonly List<FancyElementBase> Children = new List<FancyElementBase>();
+    public readonly List<TouchElementBase> Children = new List<TouchElementBase>();
 
-    public FancyContainerBase() { }
+    public TouchContainerBase() { }
 
     public virtual Vector2 GetFlexSize()
     {
@@ -55,17 +55,17 @@ namespace Lima.Fancy.Elements
       return Sprites;
     }
 
-    protected virtual bool ValidateChild(FancyElementBase child)
+    protected virtual bool ValidateChild(TouchElementBase child)
     {
       return child.Enabled;
     }
 
-    public virtual FancyElementBase AddChild(FancyElementBase child)
+    public virtual TouchElementBase AddChild(TouchElementBase child)
     {
       return AddChild(child, -1);
     }
 
-    public virtual FancyElementBase AddChild(FancyElementBase child, int index)
+    public virtual TouchElementBase AddChild(TouchElementBase child, int index)
     {
       if (child.Parent == null && !Children.Contains(child))
       {
@@ -80,7 +80,7 @@ namespace Lima.Fancy.Elements
       return null;
     }
 
-    public virtual FancyElementBase RemoveChild(FancyElementBase child)
+    public virtual TouchElementBase RemoveChild(TouchElementBase child)
     {
       if (Children.Contains(child))
       {
@@ -91,7 +91,7 @@ namespace Lima.Fancy.Elements
       return null;
     }
 
-    public virtual FancyElementBase RemoveChild(int index)
+    public virtual TouchElementBase RemoveChild(int index)
     {
       if (Children.Count > index)
       {
@@ -103,7 +103,7 @@ namespace Lima.Fancy.Elements
       return null;
     }
 
-    public virtual FancyElementBase MoveChild(FancyElementBase child, int index)
+    public virtual TouchElementBase MoveChild(TouchElementBase child, int index)
     {
       if (child.Parent == this && Children.Contains(child))
       {

@@ -1,15 +1,15 @@
 using System;
 using VRageMath;
 
-namespace Lima.Fancy.Elements
+namespace Lima.Touch.UiKit.Elements
 {
-  public class FancyEmptyButton : FancyView
+  public class TouchEmptyButton : TouchView
   {
     public ClickHandler Handler = new ClickHandler();
 
     public Action OnChange;
 
-    public FancyEmptyButton(Action onChange)
+    public TouchEmptyButton(Action onChange)
     {
       OnChange = onChange;
 

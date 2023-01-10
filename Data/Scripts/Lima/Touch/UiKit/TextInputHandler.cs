@@ -3,7 +3,7 @@ using Sandbox.ModAPI;
 using VRage.Collections;
 using System;
 
-namespace Lima.Fancy
+namespace Lima.Touch.UiKit
 {
   public class TextInputHandler
   {

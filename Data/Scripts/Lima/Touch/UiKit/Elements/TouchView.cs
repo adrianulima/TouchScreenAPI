@@ -1,7 +1,7 @@
 using VRage.Game.GUI.TextPanel;
 using VRageMath;
 
-namespace Lima.Fancy.Elements
+namespace Lima.Touch.UiKit.Elements
 {
   public enum ViewDirection : byte
   {
@@ -16,7 +16,7 @@ namespace Lima.Fancy.Elements
     Start = 0, Center = 1, End = 2, SpaceBetween = 3, SpaceAround = 4
   }
 
-  public class FancyView : FancyContainerBase
+  public class TouchView : TouchContainerBase
   {
     public ViewDirection Direction = ViewDirection.Column;
     public ViewAlignment Alignment = ViewAlignment.Start;
@@ -36,7 +36,7 @@ namespace Lima.Fancy.Elements
     public int Gap = 0;
     public bool UseThemeColors = true;
 
-    public FancyView(ViewDirection direction = ViewDirection.Column, Color? bgColor = null)
+    public TouchView(ViewDirection direction = ViewDirection.Column, Color? bgColor = null)
     {
       Direction = direction;
       BgColor = bgColor;
@@ -58,7 +58,7 @@ namespace Lima.Fancy.Elements
       return base.GetBoundaries() + GetExtraBounds();
     }
 
-    protected override bool ValidateChild(FancyElementBase child)
+    protected override bool ValidateChild(TouchElementBase child)
     {
       if (Overflow || child.Absolute)
         return base.ValidateChild(child);
@@ -153,7 +153,7 @@ namespace Lima.Fancy.Elements
         var isReverse = Direction == ViewDirection.RowReverse || Direction == ViewDirection.ColumnReverse;
         var before = new Vector2(Border.X + Padding.X, Border.Y + Padding.Y) * ThemeScale;
         var size = GetSize();
-        FancyElementBase prevChild = null;
+        TouchElementBase prevChild = null;
         for (int i = 0; i < childrenCount; i++)
         {
           var child = isReverse ? Children[childrenCount - 1 - i] : Children[i];

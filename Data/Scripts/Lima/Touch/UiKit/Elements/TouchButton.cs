@@ -2,13 +2,13 @@ using System;
 using VRage.Game.GUI.TextPanel;
 using VRageMath;
 
-namespace Lima.Fancy.Elements
+namespace Lima.Touch.UiKit.Elements
 {
-  public class FancyButton : FancyEmptyButton
+  public class TouchButton : TouchEmptyButton
   {
-    public FancyLabel Label;
+    public TouchLabel Label;
 
-    public FancyButton(string text, Action onChange) : base(onChange)
+    public TouchButton(string text, Action onChange) : base(onChange)
     {
       Scale = new Vector2(1, 0);
       Pixels = new Vector2(0, 24);
@@ -16,7 +16,7 @@ namespace Lima.Fancy.Elements
       Anchor = ViewAnchor.Center;
       Alignment = ViewAlignment.Center;
 
-      Label = new FancyLabel(text, 0.6f, TextAlignment.CENTER);
+      Label = new TouchLabel(text, 0.6f, TextAlignment.CENTER);
       AddChild(Label);
     }
 

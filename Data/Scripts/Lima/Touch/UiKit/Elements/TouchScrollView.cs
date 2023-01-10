@@ -1,14 +1,14 @@
 using VRageMath;
 
-namespace Lima.Fancy.Elements
+namespace Lima.Touch.UiKit.Elements
 {
-  public class FancyScrollView : FancyView
+  public class TouchScrollView : TouchView
   {
     public ClickHandler Handler = new ClickHandler();
 
     public bool ScrollAlwaysVisible = false;
 
-    public FancyBarContainer ScrollBar;
+    public TouchBarContainer ScrollBar;
 
     private float _scroll = 0;
     public float Scroll
@@ -18,11 +18,11 @@ namespace Lima.Fancy.Elements
     }
     private Vector2 _flexSize;
 
-    public FancyScrollView(ViewDirection direction = ViewDirection.Column, Color? bgColor = null) : base(direction, bgColor)
+    public TouchScrollView(ViewDirection direction = ViewDirection.Column, Color? bgColor = null) : base(direction, bgColor)
     {
       Overflow = false;
 
-      ScrollBar = new FancyBarContainer(true);
+      ScrollBar = new TouchBarContainer(true);
       ScrollBar.Pixels = new Vector2(12, 0);
       ScrollBar.Scale = Vector2.Zero;
       ScrollBar.Absolute = true;

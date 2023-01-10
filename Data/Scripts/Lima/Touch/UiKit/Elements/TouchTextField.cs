@@ -4,13 +4,13 @@ using Sandbox.ModAPI;
 using VRage.Game.GUI.TextPanel;
 using VRageMath;
 
-namespace Lima.Fancy.Elements
+namespace Lima.Touch.UiKit.Elements
 {
-  public class FancyTextField : FancyView
+  public class TouchTextField : TouchView
   {
     public ClickHandler Handler = new ClickHandler();
 
-    public FancyLabel Label;
+    public TouchLabel Label;
 
     public string Text;
     public Action<string, bool> OnChange;
@@ -25,7 +25,7 @@ namespace Lima.Fancy.Elements
     public bool IsInteger = false;
     public bool AllowNegative = true;
 
-    public FancyTextField(string text, Action<string, bool> onChange)
+    public TouchTextField(string text, Action<string, bool> onChange)
     {
       Text = text;
       OnChange = onChange;
@@ -37,7 +37,7 @@ namespace Lima.Fancy.Elements
       Anchor = ViewAnchor.Center;
       Alignment = ViewAlignment.Center;
 
-      Label = new FancyLabel(text, 0.6f, TextAlignment.CENTER);
+      Label = new TouchLabel(text, 0.6f, TextAlignment.CENTER);
       AddChild(Label);
     }
 

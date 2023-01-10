@@ -4,9 +4,9 @@ using Lima.Utils;
 using VRage.Game.GUI.TextPanel;
 using VRageMath;
 
-namespace Lima.Fancy.Elements
+namespace Lima.Touch.UiKit.Elements
 {
-  public class FancyChart : FancyElementBase
+  public class TouchChart : TouchElementBase
   {
     public readonly List<float[]> DataSets = new List<float[]>();
     public readonly List<Color> DataColors = new List<Color>();
@@ -25,7 +25,7 @@ namespace Lima.Fancy.Elements
 
     public Color? GridColor;
 
-    public FancyChart(int intervals)
+    public TouchChart(int intervals)
     {
       _intervals = intervals;
     }

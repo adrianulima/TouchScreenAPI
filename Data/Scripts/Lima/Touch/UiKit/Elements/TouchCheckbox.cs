@@ -2,18 +2,18 @@ using System;
 using VRage.Game.GUI.TextPanel;
 using VRageMath;
 
-namespace Lima.Fancy.Elements
+namespace Lima.Touch.UiKit.Elements
 {
-  public class FancyCheckbox : FancyView
+  public class TouchCheckbox : TouchView
   {
     public ClickHandler Handler = new ClickHandler();
 
     public bool Value;
     public Action<bool> OnChange;
 
-    public FancyEmptyElement CheckMark;
+    public TouchEmptyElement CheckMark;
 
-    public FancyCheckbox(Action<bool> onChange, bool value = false)
+    public TouchCheckbox(Action<bool> onChange, bool value = false)
     {
       OnChange = onChange;
       Value = value;
@@ -25,7 +25,7 @@ namespace Lima.Fancy.Elements
       Anchor = ViewAnchor.Center;
       Alignment = ViewAlignment.Center;
 
-      CheckMark = new FancyEmptyElement();
+      CheckMark = new TouchEmptyElement();
       AddChild(CheckMark);
     }
 

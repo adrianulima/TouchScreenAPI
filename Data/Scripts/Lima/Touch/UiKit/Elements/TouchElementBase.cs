@@ -4,9 +4,9 @@ using Lima.Utils;
 using VRage.Game.GUI.TextPanel;
 using VRageMath;
 
-namespace Lima.Fancy.Elements
+namespace Lima.Touch.UiKit.Elements
 {
-  public abstract class FancyElementBase
+  public abstract class TouchElementBase
   {
     public event Action UpdateEvent;
 
@@ -22,8 +22,8 @@ namespace Lima.Fancy.Elements
     public Vector4 Margin = Vector4.Zero;
     public Vector2 Scale = Vector2.One;
 
-    private FancyApp _app;
-    public FancyApp App
+    private TouchApp _app;
+    public TouchApp App
     {
       get { return _app ?? Parent?.App; }
       protected set { _app = value; }
@@ -34,8 +34,8 @@ namespace Lima.Fancy.Elements
       get { return App != null ? App.Theme.Scale : 1f; }
     }
 
-    private FancyContainerBase _parent;
-    public FancyContainerBase Parent
+    private TouchContainerBase _parent;
+    public TouchContainerBase Parent
     {
       get { return _parent; }
       set
@@ -48,7 +48,7 @@ namespace Lima.Fancy.Elements
       }
     }
 
-    public FancyElementBase() { }
+    public TouchElementBase() { }
 
     public virtual Vector2 GetSize()
     {

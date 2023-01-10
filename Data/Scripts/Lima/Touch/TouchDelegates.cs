@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Lima.Fancy;
-using Lima.Fancy.Elements;
+using Lima.Touch.UiKit;
+using Lima.Touch.UiKit.Elements;
 using Sandbox.Game.Entities;
 using Sandbox.ModAPI;
 using VRage.Game.GUI.TextPanel;
@@ -25,7 +25,7 @@ namespace Lima.Touch
         MyAPIGateway.Utilities.RegisterMessageHandler(_channel, HandleMessage);
       }
       IsReady = true;
-      MyAPIGateway.Utilities.SendModMessage(_channel, GetApiDictionary());
+      MyAPIGateway.Utilities.SendModMessage(_channel, GetTouchAndUiApiDictionary());
     }
 
     public void Unload()
@@ -41,11 +41,13 @@ namespace Lima.Touch
 
     private void HandleMessage(object msg)
     {
-      if ((msg as string) == "ApiEndpointRequest")
-        MyAPIGateway.Utilities.SendModMessage(_channel, GetApiDictionary());
+      if ((msg as string) == "ApiRequestTouch")
+        MyAPIGateway.Utilities.SendModMessage(_channel, GetTouchApiDictionary());
+      else if ((msg as string) == "ApiRequestTouchAndUi")
+        MyAPIGateway.Utilities.SendModMessage(_channel, GetTouchAndUiApiDictionary());
     }
 
-    private Dictionary<string, Delegate> GetApiDictionary()
+    private Dictionary<string, Delegate> GetTouchAndUiApiDictionary()
     {
       var dict = new Dictionary<string, Delegate>
       {
@@ -67,95 +69,244 @@ namespace Lima.Touch
         { "TouchScreen_CompareWithBlockAndSurface", new Func<object, IMyCubeBlock, IMyTextSurface, bool>(TouchScreen_CompareWithBlockAndSurface) },
         { "TouchScreen_ForceDispose", new Action<object>(TouchScreen_ForceDispose) },
 
-        { "FancyElementBase_GetEnabled", new Func<object, bool>(FancyElementBase_GetEnabled) },
-        { "FancyElementBase_SetEnabled", new Action<object, bool>(FancyElementBase_SetEnabled) },
-        { "FancyElementBase_GetAbsolute", new Func<object, bool>(FancyElementBase_GetAbsolute) },
-        { "FancyElementBase_SetAbsolute", new Action<object, bool>(FancyElementBase_SetAbsolute) },
-        { "FancyElementBase_GetSelfAlignment", new Func<object, byte>(FancyElementBase_GetSelfAlignment) },
-        { "FancyElementBase_SetSelfAlignment", new Action<object, byte>(FancyElementBase_SetSelfAlignment) },
-        { "FancyElementBase_GetPosition", new Func<object, Vector2>(FancyElementBase_GetPosition) },
-        { "FancyElementBase_SetPosition", new Action<object, Vector2>(FancyElementBase_SetPosition) },
-        { "FancyElementBase_GetMargin", new Func<object, Vector4>(FancyElementBase_GetMargin) },
-        { "FancyElementBase_SetMargin", new Action<object, Vector4>(FancyElementBase_SetMargin) },
-        { "FancyElementBase_GetScale", new Func<object, Vector2>(FancyElementBase_GetScale) },
-        { "FancyElementBase_SetScale", new Action<object, Vector2>(FancyElementBase_SetScale) },
-        { "FancyElementBase_GetPixels", new Func<object, Vector2>(FancyElementBase_GetPixels) },
-        { "FancyElementBase_SetPixels", new Action<object, Vector2>(FancyElementBase_SetPixels) },
-        { "FancyElementBase_GetSize", new Func<object, Vector2>(FancyElementBase_GetSize) },
-        { "FancyElementBase_GetBoundaries", new Func<object, Vector2>(FancyElementBase_GetBoundaries) },
-        { "FancyElementBase_GetApp", new Func<object, FancyApp>(FancyElementBase_GetApp) },
-        { "FancyElementBase_GetParent", new Func<object, FancyContainerBase>(FancyElementBase_GetParent) },
-        { "FancyElementBase_GetSprites", new Func<object, List<MySprite>>(FancyElementBase_GetSprites) },
-        { "FancyElementBase_ForceUpdate", new Action<object>(FancyElementBase_ForceUpdate) },
-        { "FancyElementBase_ForceDispose", new Action<object>(FancyElementBase_ForceDispose) },
-        { "FancyElementBase_RegisterUpdate", new Action<object, Action>(FancyElementBase_RegisterUpdate) },
-        { "FancyElementBase_UnregisterUpdate", new Action<object, Action>(FancyElementBase_UnregisterUpdate) },
+        { "TouchCursor_New", new Func<object, TouchCursor>(TouchCursor_New) },
+        { "TouchCursor_GetActive", new Func<object, bool>(TouchCursor_GetActive) },
+        { "TouchCursor_SetActive", new Action<object, bool>(TouchCursor_SetActive) },
+        { "TouchCursor_GetScale", new Func<object, float>(TouchCursor_GetScale) },
+        { "TouchCursor_SetScale", new Action<object, float>(TouchCursor_SetScale) },
+        { "TouchCursor_GetPosition", new Func<object, Vector2>(TouchCursor_GetPosition) },
+        { "TouchCursor_IsInsideArea", new Func<object, float, float, float, float, bool>(TouchCursor_IsInsideArea) },
+        { "TouchCursor_GetSprites", new Func<object, List<MySprite>>(TouchCursor_GetSprites) },
+        { "TouchCursor_ForceDispose", new Action<object>(TouchCursor_ForceDispose) },
 
-        { "FancyContainerBase_GetChildren", new Func<object, List<object>>(FancyContainerBase_GetChildren) },
-        { "FancyContainerBase_GetFlexSize", new Func<object, Vector2>(FancyContainerBase_GetFlexSize) },
-        { "FancyContainerBase_AddChild", new Action<object, object>(FancyContainerBase_AddChild) },
-        { "FancyContainerBase_AddChildAt", new Action<object, object, int>(FancyContainerBase_AddChildAt) },
-        { "FancyContainerBase_RemoveChild", new Action<object, object>(FancyContainerBase_RemoveChild) },
-        { "FancyContainerBase_RemoveChildAt", new Action<object, int>(FancyContainerBase_RemoveChildAt) },
-        { "FancyContainerBase_MoveChild", new Action<object, object, int>(FancyContainerBase_MoveChild) },
+        { "TouchTheme_GetBgColor", new Func<object, Color>(TouchTheme_GetBgColor) },
+        { "TouchTheme_GetWhiteColor", new Func<object, Color>(TouchTheme_GetWhiteColor) },
+        { "TouchTheme_GetMainColor", new Func<object, Color>(TouchTheme_GetMainColor) },
+        { "TouchTheme_GetMainColorDarker", new Func<object, int, Color>(TouchTheme_GetMainColorDarker) },
+        { "TouchTheme_MeasureStringInPixels", new Func<object, string, string, float, Vector2>(TouchTheme_MeasureStringInPixels) },
+        { "TouchTheme_GetScale", new Func<object, float>(TouchTheme_GetScale) },
+        { "TouchTheme_SetScale", new Action<object, float>(TouchTheme_SetScale) },
+        { "TouchTheme_GetFont", new Func<object, string>(TouchTheme_GetFont) },
+        { "TouchTheme_SetFont", new Action<object, string>(TouchTheme_SetFont) },
 
-        { "FancyView_New", new Func<int, Color?, FancyView>(FancyView_New) },
-        { "FancyView_GetOverflow", new Func<object, bool>(FancyView_GetOverflow) },
-        { "FancyView_SetOverflow", new Action<object, bool>(FancyView_SetOverflow) },
-        { "FancyView_GetDirection", new Func<object, int>(FancyView_GetDirection) },
-        { "FancyView_SetDirection", new Action<object, int>(FancyView_SetDirection) },
-        { "FancyView_GetAlignment", new Func<object, byte>(FancyView_GetAlignment) },
-        { "FancyView_SetAlignment", new Action<object, byte>(FancyView_SetAlignment) },
-        { "FancyView_GetAnchor", new Func<object, byte>(FancyView_GetAnchor) },
-        { "FancyView_SetAnchor", new Action<object, byte>(FancyView_SetAnchor) },
-        { "FancyView_GetUseThemeColors", new Func<object, bool>(FancyView_GetUseThemeColors) },
-        { "FancyView_SetUseThemeColors", new Action<object, bool>(FancyView_SetUseThemeColors) },
-        { "FancyView_GetBgColor", new Func<object, Color>(FancyView_GetBgColor) },
-        { "FancyView_SetBgColor", new Action<object, Color>(FancyView_SetBgColor) },
-        { "FancyView_GetBorderColor", new Func<object, Color>(FancyView_GetBorderColor) },
-        { "FancyView_SetBorderColor", new Action<object, Color>(FancyView_SetBorderColor) },
-        { "FancyView_GetBorder", new Func<object, Vector4>(FancyView_GetBorder) },
-        { "FancyView_SetBorder", new Action<object, Vector4>(FancyView_SetBorder) },
-        { "FancyView_GetPadding", new Func<object, Vector4>(FancyView_GetPadding) },
-        { "FancyView_SetPadding", new Action<object, Vector4>(FancyView_SetPadding) },
-        { "FancyView_GetGap", new Func<object, int>(FancyView_GetGap) },
-        { "FancyView_SetGap", new Action<object, int>(FancyView_SetGap) },
+        { "TouchElementBase_GetEnabled", new Func<object, bool>(TouchElementBase_GetEnabled) },
+        { "TouchElementBase_SetEnabled", new Action<object, bool>(TouchElementBase_SetEnabled) },
+        { "TouchElementBase_GetAbsolute", new Func<object, bool>(TouchElementBase_GetAbsolute) },
+        { "TouchElementBase_SetAbsolute", new Action<object, bool>(TouchElementBase_SetAbsolute) },
+        { "TouchElementBase_GetSelfAlignment", new Func<object, byte>(TouchElementBase_GetSelfAlignment) },
+        { "TouchElementBase_SetSelfAlignment", new Action<object, byte>(TouchElementBase_SetSelfAlignment) },
+        { "TouchElementBase_GetPosition", new Func<object, Vector2>(TouchElementBase_GetPosition) },
+        { "TouchElementBase_SetPosition", new Action<object, Vector2>(TouchElementBase_SetPosition) },
+        { "TouchElementBase_GetMargin", new Func<object, Vector4>(TouchElementBase_GetMargin) },
+        { "TouchElementBase_SetMargin", new Action<object, Vector4>(TouchElementBase_SetMargin) },
+        { "TouchElementBase_GetScale", new Func<object, Vector2>(TouchElementBase_GetScale) },
+        { "TouchElementBase_SetScale", new Action<object, Vector2>(TouchElementBase_SetScale) },
+        { "TouchElementBase_GetPixels", new Func<object, Vector2>(TouchElementBase_GetPixels) },
+        { "TouchElementBase_SetPixels", new Action<object, Vector2>(TouchElementBase_SetPixels) },
+        { "TouchElementBase_GetSize", new Func<object, Vector2>(TouchElementBase_GetSize) },
+        { "TouchElementBase_GetBoundaries", new Func<object, Vector2>(TouchElementBase_GetBoundaries) },
+        { "TouchElementBase_GetApp", new Func<object, TouchApp>(TouchElementBase_GetApp) },
+        { "TouchElementBase_GetParent", new Func<object, TouchContainerBase>(TouchElementBase_GetParent) },
+        { "TouchElementBase_GetSprites", new Func<object, List<MySprite>>(TouchElementBase_GetSprites) },
+        { "TouchElementBase_ForceUpdate", new Action<object>(TouchElementBase_ForceUpdate) },
+        { "TouchElementBase_ForceDispose", new Action<object>(TouchElementBase_ForceDispose) },
+        { "TouchElementBase_RegisterUpdate", new Action<object, Action>(TouchElementBase_RegisterUpdate) },
+        { "TouchElementBase_UnregisterUpdate", new Action<object, Action>(TouchElementBase_UnregisterUpdate) },
 
-        { "FancyScrollView_New", new Func<int, Color?, FancyScrollView>(FancyScrollView_New) },
-        { "FancyScrollView_GetScroll", new Func<object, float>(FancyScrollView_GetScroll) },
-        { "FancyScrollView_SetScroll", new Action<object, float>(FancyScrollView_SetScroll) },
-        { "FancyScrollView_GetScrollAlwaysVisible", new Func<object, bool>(FancyScrollView_GetScrollAlwaysVisible) },
-        { "FancyScrollView_SetScrollAlwaysVisible", new Action<object, bool>(FancyScrollView_SetScrollAlwaysVisible) },
-        { "FancyScrollView_GetScrollBar", new Func<object, object>(FancyScrollView_GetScrollBar) },
+        { "TouchContainerBase_GetChildren", new Func<object, List<object>>(TouchContainerBase_GetChildren) },
+        { "TouchContainerBase_GetFlexSize", new Func<object, Vector2>(TouchContainerBase_GetFlexSize) },
+        { "TouchContainerBase_AddChild", new Action<object, object>(TouchContainerBase_AddChild) },
+        { "TouchContainerBase_AddChildAt", new Action<object, object, int>(TouchContainerBase_AddChildAt) },
+        { "TouchContainerBase_RemoveChild", new Action<object, object>(TouchContainerBase_RemoveChild) },
+        { "TouchContainerBase_RemoveChildAt", new Action<object, int>(TouchContainerBase_RemoveChildAt) },
+        { "TouchContainerBase_MoveChild", new Action<object, object, int>(TouchContainerBase_MoveChild) },
 
-        { "FancyApp_New", new Func<FancyApp>(FancyApp_New) },
-        { "FancyApp_GetScreen", new Func<object, TouchScreen>(FancyApp_GetScreen) },
-        { "FancyApp_GetViewport", new Func<object, RectangleF>(FancyApp_GetViewport) },
-        { "FancyApp_GetCursor", new Func<object, FancyCursor>(FancyApp_GetCursor) },
-        { "FancyApp_GetTheme", new Func<object, FancyTheme>(FancyApp_GetTheme) },
-        { "FancyApp_GetDefaultBg", new Func<object, bool>(FancyApp_GetDefaultBg) },
-        { "FancyApp_SetDefaultBg", new Action<object, bool>(FancyApp_SetDefaultBg) },
-        { "FancyApp_InitApp", new Action<object, MyCubeBlock, Sandbox.ModAPI.Ingame.IMyTextSurface>(FancyApp_InitApp) },
+        { "TouchView_New", new Func<int, Color?, TouchView>(TouchView_New) },
+        { "TouchView_GetOverflow", new Func<object, bool>(TouchView_GetOverflow) },
+        { "TouchView_SetOverflow", new Action<object, bool>(TouchView_SetOverflow) },
+        { "TouchView_GetDirection", new Func<object, int>(TouchView_GetDirection) },
+        { "TouchView_SetDirection", new Action<object, int>(TouchView_SetDirection) },
+        { "TouchView_GetAlignment", new Func<object, byte>(TouchView_GetAlignment) },
+        { "TouchView_SetAlignment", new Action<object, byte>(TouchView_SetAlignment) },
+        { "TouchView_GetAnchor", new Func<object, byte>(TouchView_GetAnchor) },
+        { "TouchView_SetAnchor", new Action<object, byte>(TouchView_SetAnchor) },
+        { "TouchView_GetUseThemeColors", new Func<object, bool>(TouchView_GetUseThemeColors) },
+        { "TouchView_SetUseThemeColors", new Action<object, bool>(TouchView_SetUseThemeColors) },
+        { "TouchView_GetBgColor", new Func<object, Color>(TouchView_GetBgColor) },
+        { "TouchView_SetBgColor", new Action<object, Color>(TouchView_SetBgColor) },
+        { "TouchView_GetBorderColor", new Func<object, Color>(TouchView_GetBorderColor) },
+        { "TouchView_SetBorderColor", new Action<object, Color>(TouchView_SetBorderColor) },
+        { "TouchView_GetBorder", new Func<object, Vector4>(TouchView_GetBorder) },
+        { "TouchView_SetBorder", new Action<object, Vector4>(TouchView_SetBorder) },
+        { "TouchView_GetPadding", new Func<object, Vector4>(TouchView_GetPadding) },
+        { "TouchView_SetPadding", new Action<object, Vector4>(TouchView_SetPadding) },
+        { "TouchView_GetGap", new Func<object, int>(TouchView_GetGap) },
+        { "TouchView_SetGap", new Action<object, int>(TouchView_SetGap) },
 
-        { "FancyCursor_New", new Func<object, FancyCursor>(FancyCursor_New) },
-        { "FancyCursor_GetActive", new Func<object, bool>(FancyCursor_GetActive) },
-        { "FancyCursor_SetActive", new Action<object, bool>(FancyCursor_SetActive) },
-        { "FancyCursor_GetScale", new Func<object, float>(FancyCursor_GetScale) },
-        { "FancyCursor_SetScale", new Action<object, float>(FancyCursor_SetScale) },
-        { "FancyCursor_GetPosition", new Func<object, Vector2>(FancyCursor_GetPosition) },
-        { "FancyCursor_IsInsideArea", new Func<object, float, float, float, float, bool>(FancyCursor_IsInsideArea) },
-        { "FancyCursor_GetSprites", new Func<object, List<MySprite>>(FancyCursor_GetSprites) },
-        { "FancyCursor_ForceDispose", new Action<object>(FancyCursor_ForceDispose) },
+        { "TouchScrollView_New", new Func<int, Color?, TouchScrollView>(TouchScrollView_New) },
+        { "TouchScrollView_GetScroll", new Func<object, float>(TouchScrollView_GetScroll) },
+        { "TouchScrollView_SetScroll", new Action<object, float>(TouchScrollView_SetScroll) },
+        { "TouchScrollView_GetScrollAlwaysVisible", new Func<object, bool>(TouchScrollView_GetScrollAlwaysVisible) },
+        { "TouchScrollView_SetScrollAlwaysVisible", new Action<object, bool>(TouchScrollView_SetScrollAlwaysVisible) },
+        { "TouchScrollView_GetScrollBar", new Func<object, object>(TouchScrollView_GetScrollBar) },
 
-        { "FancyTheme_GetBgColor", new Func<object, Color>(FancyTheme_GetBgColor) },
-        { "FancyTheme_GetWhiteColor", new Func<object, Color>(FancyTheme_GetWhiteColor) },
-        { "FancyTheme_GetMainColor", new Func<object, Color>(FancyTheme_GetMainColor) },
-        { "FancyTheme_GetMainColorDarker", new Func<object, int, Color>(FancyTheme_GetMainColorDarker) },
-        { "FancyTheme_MeasureStringInPixels", new Func<object, string, string, float, Vector2>(FancyTheme_MeasureStringInPixels) },
-        { "FancyTheme_GetScale", new Func<object, float>(FancyTheme_GetScale) },
-        { "FancyTheme_SetScale", new Action<object, float>(FancyTheme_SetScale) },
-        { "FancyTheme_GetFont", new Func<object, string>(FancyTheme_GetFont) },
-        { "FancyTheme_SetFont", new Action<object, string>(FancyTheme_SetFont) },
+        { "TouchApp_New", new Func<TouchApp>(TouchApp_New) },
+        { "TouchApp_GetScreen", new Func<object, TouchScreen>(TouchApp_GetScreen) },
+        { "TouchApp_GetViewport", new Func<object, RectangleF>(TouchApp_GetViewport) },
+        { "TouchApp_GetCursor", new Func<object, TouchCursor>(TouchApp_GetCursor) },
+        { "TouchApp_GetTheme", new Func<object, TouchTheme>(TouchApp_GetTheme) },
+        { "TouchApp_GetDefaultBg", new Func<object, bool>(TouchApp_GetDefaultBg) },
+        { "TouchApp_SetDefaultBg", new Action<object, bool>(TouchApp_SetDefaultBg) },
+        { "TouchApp_InitApp", new Action<object, MyCubeBlock, Sandbox.ModAPI.Ingame.IMyTextSurface>(TouchApp_InitApp) },
+
+        { "TouchEmptyButton_New", new Func<Action, object>(TouchEmptyButton_New) },
+        { "TouchEmptyButton_GetHandler", new Func<object, object>(TouchEmptyButton_GetHandler) },
+        { "TouchEmptyButton_SetOnChange", new Action<object, Action>(TouchEmptyButton_SetOnChange) },
+
+        { "TouchButton_New", new Func<string, Action, object>(TouchButton_New) },
+        { "TouchButton_GetLabel", new Func<object, object>(TouchButton_GetLabel) },
+
+        { "TouchCheckbox_New", new Func<Action<bool>, bool, object>(TouchCheckbox_New) },
+        { "TouchCheckbox_GetValue", new Func<object, bool>(TouchCheckbox_GetValue) },
+        { "TouchCheckbox_SetValue", new Action<object, bool>(TouchCheckbox_SetValue) },
+        { "TouchCheckbox_SetOnChange", new Action<object, Action<bool>>(TouchCheckbox_SetOnChange) },
+        { "TouchCheckbox_GetCheckMark", new Func<object, object>(TouchCheckbox_GetCheckMark) },
+
+        { "TouchLabel_New", new Func<string, float, TextAlignment, object>(TouchLabel_New) },
+        { "TouchLabel_GetAutoBreakLine", new Func<object, bool>(TouchLabel_GetAutoBreakLine) },
+        { "TouchLabel_SetAutoBreakLine", new Action<object, bool>(TouchLabel_SetAutoBreakLine) },
+        { "TouchLabel_GetOverflow", new Func<object, bool>(TouchLabel_GetOverflow) },
+        { "TouchLabel_SetOverflow", new Action<object, bool>(TouchLabel_SetOverflow) },
+        { "TouchLabel_GetIsShortened", new Func<object, bool>(TouchLabel_GetIsShortened) },
+        { "TouchLabel_GetText", new Func<object, string>(TouchLabel_GetText) },
+        { "TouchLabel_SetText", new Action<object, string>(TouchLabel_SetText) },
+        { "TouchLabel_GetTextColor", new Func<object, Color?>(TouchLabel_GetTextColor) },
+        { "TouchLabel_SetTextColor", new Action<object, Color>(TouchLabel_SetTextColor) },
+        { "TouchLabel_GetFontSize", new Func<object, float>(TouchLabel_GetFontSize) },
+        { "TouchLabel_SetFontSize", new Action<object, float>(TouchLabel_SetFontSize) },
+        { "TouchLabel_GetAlignment", new Func<object, TextAlignment>(TouchLabel_GetAlignment) },
+        { "TouchLabel_SetAlignment", new Action<object, TextAlignment>(TouchLabel_SetAlignment) },
+
+        { "TouchBarContainer_New", new Func<bool, object>(TouchBarContainer_New) },
+        { "TouchBarContainer_GetIsVertical", new Func<object, bool>(TouchBarContainer_GetIsVertical) },
+        { "TouchBarContainer_SetIsVertical", new Action<object, bool>(TouchBarContainer_SetIsVertical) },
+        { "TouchBarContainer_GetRatio", new Func<object, float>(TouchBarContainer_GetRatio) },
+        { "TouchBarContainer_SetRatio", new Action<object, float>(TouchBarContainer_SetRatio) },
+        { "TouchBarContainer_GetOffset", new Func<object, float>(TouchBarContainer_GetOffset) },
+        { "TouchBarContainer_SetOffset", new Action<object, float>(TouchBarContainer_SetOffset) },
+        { "TouchBarContainer_GetBar", new Func<object, object>(TouchBarContainer_GetBar) },
+
+        { "TouchProgressBar_New", new Func<float, float, bool, float, object>(TouchProgressBar_New) },
+        { "TouchProgressBar_GetValue", new Func<object, float>(TouchProgressBar_GetValue) },
+        { "TouchProgressBar_SetValue", new Action<object, float>(TouchProgressBar_SetValue) },
+        { "TouchProgressBar_GetMaxValue", new Func<object, float>(TouchProgressBar_GetMaxValue) },
+        { "TouchProgressBar_SetMaxValue", new Action<object, float>(TouchProgressBar_SetMaxValue) },
+        { "TouchProgressBar_GetMinValue", new Func<object, float>(TouchProgressBar_GetMinValue) },
+        { "TouchProgressBar_SetMinValue", new Action<object, float>(TouchProgressBar_SetMinValue) },
+        { "TouchProgressBar_GetBarsGap", new Func<object, float>(TouchProgressBar_GetBarsGap) },
+        { "TouchProgressBar_SetBarsGap", new Action<object, float>(TouchProgressBar_SetBarsGap) },
+        { "TouchProgressBar_GetLabel", new Func<object, object>(TouchProgressBar_GetLabel) },
+
+        { "TouchSelector_New", new Func<List<string>, Action<int, string>, bool, object>(TouchSelector_New) },
+        { "TouchSelector_GetLoop", new Func<object, bool>(TouchSelector_GetLoop) },
+        { "TouchSelector_SetLoop", new Action<object, bool>(TouchSelector_SetLoop) },
+        { "TouchSelector_GetSelected", new Func<object, int>(TouchSelector_GetSelected) },
+        { "TouchSelector_SetSelected", new Action<object, int>(TouchSelector_SetSelected) },
+        { "TouchSelector_SetOnChange", new Action<object, Action<int, string>>(TouchSelector_SetOnChange) },
+
+        { "TouchSlider_New", new Func<float, float, Action<float>, object>(TouchSlider_New) },
+        { "TouchSlider_GetMaxValue", new Func<object, float>(TouchSlider_GetMaxValue) },
+        { "TouchSlider_SetMaxValue", new Action<object, float>(TouchSlider_SetMaxValue) },
+        { "TouchSlider_GetMinValue", new Func<object, float>(TouchSlider_GetMinValue) },
+        { "TouchSlider_SetMinValue", new Action<object, float>(TouchSlider_SetMinValue) },
+        { "TouchSlider_GetValue", new Func<object, float>(TouchSlider_GetValue) },
+        { "TouchSlider_SetValue", new Action<object, float>(TouchSlider_SetValue) },
+        { "TouchSlider_SetOnChange", new Action<object, Action<float>>(TouchSlider_SetOnChange) },
+        { "TouchSlider_GetIsInteger", new Func<object, bool>(TouchSlider_GetIsInteger) },
+        { "TouchSlider_SetIsInteger", new Action<object, bool>(TouchSlider_SetIsInteger) },
+        { "TouchSlider_GetAllowInput", new Func<object, bool>(TouchSlider_GetAllowInput) },
+        { "TouchSlider_SetAllowInput", new Action<object, bool>(TouchSlider_SetAllowInput) },
+        { "TouchSlider_GetBar", new Func<object, object>(TouchSlider_GetBar) },
+        { "TouchSlider_GetThumb", new Func<object, object>(TouchSlider_GetThumb) },
+        { "TouchSlider_GetTextInput", new Func<object, object>(TouchSlider_GetTextInput) },
+
+        { "TouchSliderRange_NewR", new Func<float, float, Action<float, float>, object>(TouchSliderRange_NewR) },
+        { "TouchSliderRange_GetValueLower", new Func<object, float>(TouchSliderRange_GetValueLower) },
+        { "TouchSliderRange_SetValueLower", new Action<object, float>(TouchSliderRange_SetValueLower) },
+        { "TouchSliderRange_SetOnChangeR", new Action<object, Action<float, float>>(TouchSliderRange_SetOnChangeR) },
+        { "TouchSliderRange_GetThumbLower", new Func<object, object>(TouchSliderRange_GetThumbLower) },
+
+        { "TouchSwitch_New", new Func<string[], int, Action<int>, object>(TouchSwitch_New) },
+        { "TouchSwitch_GetIndex", new Func<object, int>(TouchSwitch_GetIndex) },
+        { "TouchSwitch_SetIndex", new Action<object, int>(TouchSwitch_SetIndex) },
+        { "TouchSwitch_GetButtons", new Func<object, TouchButton[]>(TouchSwitch_GetButtons) },
+        { "TouchSwitch_SetOnChange", new Action<object, Action<int>>(TouchSwitch_SetOnChange) },
+
+        { "TouchTextField_New", new Func<string, Action<string, bool>, object>(TouchTextField_New) },
+        { "TouchTextField_GetIsEditing", new Func<object, bool>(TouchTextField_GetIsEditing) },
+        { "TouchTextField_GetText", new Func<object, string>(TouchTextField_GetText) },
+        { "TouchTextField_SetText", new Action<object, string>(TouchTextField_SetText) },
+        { "TouchTextField_SetOnChange", new Action<object, Action<string, bool>>(TouchTextField_SetOnChange) },
+        { "TouchTextField_GetIsNumeric", new Func<object, bool>(TouchTextField_GetIsNumeric) },
+        { "TouchTextField_SetIsNumeric", new Action<object, bool>(TouchTextField_SetIsNumeric) },
+        { "TouchTextField_GetIsInteger", new Func<object, bool>(TouchTextField_GetIsInteger) },
+        { "TouchTextField_SetIsInteger", new Action<object, bool>(TouchTextField_SetIsInteger) },
+        { "TouchTextField_GetAllowNegative", new Func<object, bool>(TouchTextField_GetAllowNegative) },
+        { "TouchTextField_SetAllowNegative", new Action<object, bool>(TouchTextField_SetAllowNegative) },
+        { "TouchTextField_GetLabel", new Func<object, object>(TouchTextField_GetLabel) },
+
+        { "TouchWindowBar_New", new Func<string, object>(TouchWindowBar_New) },
+        { "TouchWindowBar_GetLabel", new Func<object, object>(TouchWindowBar_GetLabel) },
+
+        { "TouchChart_New", new Func<int, object>(TouchChart_New) },
+        { "TouchChart_GetDataSets", new Func<object, List<float[]>>(TouchChart_GetDataSets) },
+        { "TouchChart_GetDataColors", new Func<object, List<Color>>(TouchChart_GetDataColors) },
+        { "TouchChart_GetGridHorizontalLines", new Func<object, int>(TouchChart_GetGridHorizontalLines) },
+        { "TouchChart_SetGridHorizontalLines", new Action<object, int>(TouchChart_SetGridHorizontalLines) },
+        { "TouchChart_GetGridVerticalLines", new Func<object, int>(TouchChart_GetGridVerticalLines) },
+        { "TouchChart_SetGridVerticalLines", new Action<object, int>(TouchChart_SetGridVerticalLines) },
+        { "TouchChart_GetMaxValue", new Func<object, float>(TouchChart_GetMaxValue) },
+        { "TouchChart_GetMinValue", new Func<object, float>(TouchChart_GetMinValue) },
+        { "TouchChart_GetGridColor", new Func<object, Color?>(TouchChart_GetGridColor) },
+        { "TouchChart_SetGridColor", new Action<object, Color>(TouchChart_SetGridColor) },
+
+        { "TouchEmptyElement_New", new Func<object>(TouchEmptyElement_New) }
+      };
+
+      return GetTouchApiDictionary().Concat(dict).ToLookup(x => x.Key, x => x.Value).ToDictionary(x => x.Key, g => g.First());
+    }
+
+    private Dictionary<string, Delegate> GetTouchApiDictionary()
+    {
+      var dict = new Dictionary<string, Delegate>
+      {
+        { "CreateTouchScreen", new Func<IMyCubeBlock, IMyTextSurface, TouchScreen>(CreateTouchScreen) },
+        { "RemoveTouchScreen", new Action<IMyCubeBlock, IMyTextSurface>(RemoveTouchScreen) },
+        { "AddSurfaceCoords", new Action<string>(AddSurfaceCoords) },
+        { "RemoveSurfaceCoords", new Action<string>(RemoveSurfaceCoords) },
+        { "GetMaxInteractiveDistance", new Func<float>(GetMaxInteractiveDistance) },
+        { "SetMaxInteractiveDistance", new Action<float>(SetMaxInteractiveDistance) },
+
+        { "TouchScreen_GetBlock", new Func<object, IMyCubeBlock>(TouchScreen_GetBlock) },
+        { "TouchScreen_GetSurface", new Func<object, IMyTextSurface>(TouchScreen_GetSurface) },
+        { "TouchScreen_GetIndex", new Func<object, int>(TouchScreen_GetIndex) },
+        { "TouchScreen_IsOnScreen", new Func<object, bool>(TouchScreen_IsOnScreen) },
+        { "TouchScreen_GetCursorPosition", new Func<object, Vector2>(TouchScreen_GetCursorPosition) },
+        { "TouchScreen_GetInteractiveDistance", new Func<object, float>(TouchScreen_GetInteractiveDistance) },
+        { "TouchScreen_SetInteractiveDistance", new Action<object, float>(TouchScreen_SetInteractiveDistance) },
+        { "TouchScreen_GetRotation", new Func<object, int>(TouchScreen_GetRotation) },
+        { "TouchScreen_CompareWithBlockAndSurface", new Func<object, IMyCubeBlock, IMyTextSurface, bool>(TouchScreen_CompareWithBlockAndSurface) },
+        { "TouchScreen_ForceDispose", new Action<object>(TouchScreen_ForceDispose) },
+
+        { "TouchCursor_New", new Func<object, TouchCursor>(TouchCursor_New) },
+        { "TouchCursor_GetActive", new Func<object, bool>(TouchCursor_GetActive) },
+        { "TouchCursor_SetActive", new Action<object, bool>(TouchCursor_SetActive) },
+        { "TouchCursor_GetScale", new Func<object, float>(TouchCursor_GetScale) },
+        { "TouchCursor_SetScale", new Action<object, float>(TouchCursor_SetScale) },
+        { "TouchCursor_GetPosition", new Func<object, Vector2>(TouchCursor_GetPosition) },
+        { "TouchCursor_IsInsideArea", new Func<object, float, float, float, float, bool>(TouchCursor_IsInsideArea) },
+        { "TouchCursor_GetSprites", new Func<object, List<MySprite>>(TouchCursor_GetSprites) },
+        { "TouchCursor_ForceDispose", new Action<object>(TouchCursor_ForceDispose) },
 
         { "ClickHandler_New", new Func<object>(ClickHandler_New) },
         { "ClickHandler_GetHitArea", new Func<object, Vector4>(ClickHandler_GetHitArea) },
@@ -166,119 +317,6 @@ namespace Lima.Touch
         { "ClickHandler_JustReleased", new Func<object, bool>(ClickHandler_JustReleased) },
         { "ClickHandler_JustPressed", new Func<object, bool>(ClickHandler_JustPressed) },
         { "ClickHandler_UpdateStatus", new Action<object, object>(ClickHandler_UpdateStatus) },
-
-        { "FancyEmptyButton_New", new Func<Action, object>(FancyEmptyButton_New) },
-        { "FancyEmptyButton_GetHandler", new Func<object, object>(FancyEmptyButton_GetHandler) },
-        { "FancyEmptyButton_SetOnChange", new Action<object, Action>(FancyEmptyButton_SetOnChange) },
-
-        { "FancyButton_New", new Func<string, Action, object>(FancyButton_New) },
-        { "FancyButton_GetLabel", new Func<object, object>(FancyButton_GetLabel) },
-
-        { "FancyCheckbox_New", new Func<Action<bool>, bool, object>(FancyCheckbox_New) },
-        { "FancyCheckbox_GetValue", new Func<object, bool>(FancyCheckbox_GetValue) },
-        { "FancyCheckbox_SetValue", new Action<object, bool>(FancyCheckbox_SetValue) },
-        { "FancyCheckbox_SetOnChange", new Action<object, Action<bool>>(FancyCheckbox_SetOnChange) },
-        { "FancyCheckbox_GetCheckMark", new Func<object, object>(FancyCheckbox_GetCheckMark) },
-
-        { "FancyLabel_New", new Func<string, float, TextAlignment, object>(FancyLabel_New) },
-        { "FancyLabel_GetAutoBreakLine", new Func<object, bool>(FancyLabel_GetAutoBreakLine) },
-        { "FancyLabel_SetAutoBreakLine", new Action<object, bool>(FancyLabel_SetAutoBreakLine) },
-        { "FancyLabel_GetOverflow", new Func<object, bool>(FancyLabel_GetOverflow) },
-        { "FancyLabel_SetOverflow", new Action<object, bool>(FancyLabel_SetOverflow) },
-        { "FancyLabel_GetIsShortened", new Func<object, bool>(FancyLabel_GetIsShortened) },
-        { "FancyLabel_GetText", new Func<object, string>(FancyLabel_GetText) },
-        { "FancyLabel_SetText", new Action<object, string>(FancyLabel_SetText) },
-        { "FancyLabel_GetTextColor", new Func<object, Color?>(FancyLabel_GetTextColor) },
-        { "FancyLabel_SetTextColor", new Action<object, Color>(FancyLabel_SetTextColor) },
-        { "FancyLabel_GetFontSize", new Func<object, float>(FancyLabel_GetFontSize) },
-        { "FancyLabel_SetFontSize", new Action<object, float>(FancyLabel_SetFontSize) },
-        { "FancyLabel_GetAlignment", new Func<object, TextAlignment>(FancyLabel_GetAlignment) },
-        { "FancyLabel_SetAlignment", new Action<object, TextAlignment>(FancyLabel_SetAlignment) },
-
-        { "FancyBarContainer_New", new Func<bool, object>(FancyBarContainer_New) },
-        { "FancyBarContainer_GetIsVertical", new Func<object, bool>(FancyBarContainer_GetIsVertical) },
-        { "FancyBarContainer_SetIsVertical", new Action<object, bool>(FancyBarContainer_SetIsVertical) },
-        { "FancyBarContainer_GetRatio", new Func<object, float>(FancyBarContainer_GetRatio) },
-        { "FancyBarContainer_SetRatio", new Action<object, float>(FancyBarContainer_SetRatio) },
-        { "FancyBarContainer_GetOffset", new Func<object, float>(FancyBarContainer_GetOffset) },
-        { "FancyBarContainer_SetOffset", new Action<object, float>(FancyBarContainer_SetOffset) },
-        { "FancyBarContainer_GetBar", new Func<object, object>(FancyBarContainer_GetBar) },
-
-        { "FancyProgressBar_New", new Func<float, float, bool, float, object>(FancyProgressBar_New) },
-        { "FancyProgressBar_GetValue", new Func<object, float>(FancyProgressBar_GetValue) },
-        { "FancyProgressBar_SetValue", new Action<object, float>(FancyProgressBar_SetValue) },
-        { "FancyProgressBar_GetMaxValue", new Func<object, float>(FancyProgressBar_GetMaxValue) },
-        { "FancyProgressBar_SetMaxValue", new Action<object, float>(FancyProgressBar_SetMaxValue) },
-        { "FancyProgressBar_GetMinValue", new Func<object, float>(FancyProgressBar_GetMinValue) },
-        { "FancyProgressBar_SetMinValue", new Action<object, float>(FancyProgressBar_SetMinValue) },
-        { "FancyProgressBar_GetBarsGap", new Func<object, float>(FancyProgressBar_GetBarsGap) },
-        { "FancyProgressBar_SetBarsGap", new Action<object, float>(FancyProgressBar_SetBarsGap) },
-        { "FancyProgressBar_GetLabel", new Func<object, object>(FancyProgressBar_GetLabel) },
-
-        { "FancySelector_New", new Func<List<string>, Action<int, string>, bool, object>(FancySelector_New) },
-        { "FancySelector_GetLoop", new Func<object, bool>(FancySelector_GetLoop) },
-        { "FancySelector_SetLoop", new Action<object, bool>(FancySelector_SetLoop) },
-        { "FancySelector_GetSelected", new Func<object, int>(FancySelector_GetSelected) },
-        { "FancySelector_SetSelected", new Action<object, int>(FancySelector_SetSelected) },
-        { "FancySelector_SetOnChange", new Action<object, Action<int, string>>(FancySelector_SetOnChange) },
-
-        { "FancySlider_New", new Func<float, float, Action<float>, object>(FancySlider_New) },
-        { "FancySlider_GetMaxValue", new Func<object, float>(FancySlider_GetMaxValue) },
-        { "FancySlider_SetMaxValue", new Action<object, float>(FancySlider_SetMaxValue) },
-        { "FancySlider_GetMinValue", new Func<object, float>(FancySlider_GetMinValue) },
-        { "FancySlider_SetMinValue", new Action<object, float>(FancySlider_SetMinValue) },
-        { "FancySlider_GetValue", new Func<object, float>(FancySlider_GetValue) },
-        { "FancySlider_SetValue", new Action<object, float>(FancySlider_SetValue) },
-        { "FancySlider_SetOnChange", new Action<object, Action<float>>(FancySlider_SetOnChange) },
-        { "FancySlider_GetIsInteger", new Func<object, bool>(FancySlider_GetIsInteger) },
-        { "FancySlider_SetIsInteger", new Action<object, bool>(FancySlider_SetIsInteger) },
-        { "FancySlider_GetAllowInput", new Func<object, bool>(FancySlider_GetAllowInput) },
-        { "FancySlider_SetAllowInput", new Action<object, bool>(FancySlider_SetAllowInput) },
-        { "FancySlider_GetBar", new Func<object, object>(FancySlider_GetBar) },
-        { "FancySlider_GetThumb", new Func<object, object>(FancySlider_GetThumb) },
-        { "FancySlider_GetTextInput", new Func<object, object>(FancySlider_GetTextInput) },
-
-        { "FancySliderRange_NewR", new Func<float, float, Action<float, float>, object>(FancySliderRange_NewR) },
-        { "FancySliderRange_GetValueLower", new Func<object, float>(FancySliderRange_GetValueLower) },
-        { "FancySliderRange_SetValueLower", new Action<object, float>(FancySliderRange_SetValueLower) },
-        { "FancySliderRange_SetOnChangeR", new Action<object, Action<float, float>>(FancySliderRange_SetOnChangeR) },
-        { "FancySliderRange_GetThumbLower", new Func<object, object>(FancySliderRange_GetThumbLower) },
-
-        { "FancySwitch_New", new Func<string[], int, Action<int>, object>(FancySwitch_New) },
-        { "FancySwitch_GetIndex", new Func<object, int>(FancySwitch_GetIndex) },
-        { "FancySwitch_SetIndex", new Action<object, int>(FancySwitch_SetIndex) },
-        { "FancySwitch_GetButtons", new Func<object, FancyButton[]>(FancySwitch_GetButtons) },
-        { "FancySwitch_SetOnChange", new Action<object, Action<int>>(FancySwitch_SetOnChange) },
-
-        { "FancyTextField_New", new Func<string, Action<string, bool>, object>(FancyTextField_New) },
-        { "FancyTextField_GetIsEditing", new Func<object, bool>(FancyTextField_GetIsEditing) },
-        { "FancyTextField_GetText", new Func<object, string>(FancyTextField_GetText) },
-        { "FancyTextField_SetText", new Action<object, string>(FancyTextField_SetText) },
-        { "FancyTextField_SetOnChange", new Action<object, Action<string, bool>>(FancyTextField_SetOnChange) },
-        { "FancyTextField_GetIsNumeric", new Func<object, bool>(FancyTextField_GetIsNumeric) },
-        { "FancyTextField_SetIsNumeric", new Action<object, bool>(FancyTextField_SetIsNumeric) },
-        { "FancyTextField_GetIsInteger", new Func<object, bool>(FancyTextField_GetIsInteger) },
-        { "FancyTextField_SetIsInteger", new Action<object, bool>(FancyTextField_SetIsInteger) },
-        { "FancyTextField_GetAllowNegative", new Func<object, bool>(FancyTextField_GetAllowNegative) },
-        { "FancyTextField_SetAllowNegative", new Action<object, bool>(FancyTextField_SetAllowNegative) },
-        { "FancyTextField_GetLabel", new Func<object, object>(FancyTextField_GetLabel) },
-
-        { "FancyWindowBar_New", new Func<string, object>(FancyWindowBar_New) },
-        { "FancyWindowBar_GetLabel", new Func<object, object>(FancyWindowBar_GetLabel) },
-
-        { "FancyChart_New", new Func<int, object>(FancyChart_New) },
-        { "FancyChart_GetDataSets", new Func<object, List<float[]>>(FancyChart_GetDataSets) },
-        { "FancyChart_GetDataColors", new Func<object, List<Color>>(FancyChart_GetDataColors) },
-        { "FancyChart_GetGridHorizontalLines", new Func<object, int>(FancyChart_GetGridHorizontalLines) },
-        { "FancyChart_SetGridHorizontalLines", new Action<object, int>(FancyChart_SetGridHorizontalLines) },
-        { "FancyChart_GetGridVerticalLines", new Func<object, int>(FancyChart_GetGridVerticalLines) },
-        { "FancyChart_SetGridVerticalLines", new Action<object, int>(FancyChart_SetGridVerticalLines) },
-        { "FancyChart_GetMaxValue", new Func<object, float>(FancyChart_GetMaxValue) },
-        { "FancyChart_GetMinValue", new Func<object, float>(FancyChart_GetMinValue) },
-        { "FancyChart_GetGridColor", new Func<object, Color?>(FancyChart_GetGridColor) },
-        { "FancyChart_SetGridColor", new Action<object, Color>(FancyChart_SetGridColor) },
-
-        { "FancyEmptyElement_New", new Func<object>(FancyEmptyElement_New) }
       };
 
       return dict;
@@ -314,92 +352,92 @@ namespace Lima.Touch
     private bool TouchScreen_CompareWithBlockAndSurface(object obj, IMyCubeBlock block, IMyTextSurface surface) => (obj as TouchScreen).CompareWithBlockAndSurface(block, surface);
     private void TouchScreen_ForceDispose(object obj) => (obj as TouchScreen).Dispose();
 
-    private bool FancyElementBase_GetEnabled(object obj) => (obj as FancyElementBase).Enabled;
-    private void FancyElementBase_SetEnabled(object obj, bool enabled) => (obj as FancyElementBase).Enabled = enabled;
-    private bool FancyElementBase_GetAbsolute(object obj) => (obj as FancyElementBase).Absolute;
-    private void FancyElementBase_SetAbsolute(object obj, bool absolute) => (obj as FancyElementBase).Absolute = absolute;
-    private byte FancyElementBase_GetSelfAlignment(object obj) => (byte)(obj as FancyElementBase).SelfAlignment;
-    private void FancyElementBase_SetSelfAlignment(object obj, byte alignment) => (obj as FancyElementBase).SelfAlignment = (ViewAlignment)alignment;
-    private Vector2 FancyElementBase_GetPosition(object obj) => (obj as FancyElementBase).Position;
-    private void FancyElementBase_SetPosition(object obj, Vector2 position) => (obj as FancyElementBase).Position = position;
-    private Vector4 FancyElementBase_GetMargin(object obj) => (obj as FancyElementBase).Margin;
-    private void FancyElementBase_SetMargin(object obj, Vector4 margin) => (obj as FancyElementBase).Margin = margin;
-    private Vector2 FancyElementBase_GetScale(object obj) => (obj as FancyElementBase).Scale;
-    private void FancyElementBase_SetScale(object obj, Vector2 scale) => (obj as FancyElementBase).Scale = scale;
-    private Vector2 FancyElementBase_GetPixels(object obj) => (obj as FancyElementBase).Pixels;
-    private void FancyElementBase_SetPixels(object obj, Vector2 pixels) => (obj as FancyElementBase).Pixels = pixels;
-    private Vector2 FancyElementBase_GetSize(object obj) => (obj as FancyElementBase).GetSize();
-    private Vector2 FancyElementBase_GetBoundaries(object obj) => (obj as FancyElementBase).GetBoundaries();
-    private FancyApp FancyElementBase_GetApp(object obj) => (obj as FancyElementBase).App;
-    private FancyContainerBase FancyElementBase_GetParent(object obj) => (obj as FancyElementBase).Parent;
-    private List<MySprite> FancyElementBase_GetSprites(object obj) => (obj as FancyElementBase).GetSprites();
-    private void FancyElementBase_ForceUpdate(object obj) => (obj as FancyElementBase).Update();
-    private void FancyElementBase_ForceDispose(object obj) => (obj as FancyElementBase).Dispose();
-    private void FancyElementBase_RegisterUpdate(object obj, Action update) => (obj as FancyElementBase).UpdateEvent += update;
-    private void FancyElementBase_UnregisterUpdate(object obj, Action update) => (obj as FancyElementBase).UpdateEvent -= update;
+    private bool TouchElementBase_GetEnabled(object obj) => (obj as TouchElementBase).Enabled;
+    private void TouchElementBase_SetEnabled(object obj, bool enabled) => (obj as TouchElementBase).Enabled = enabled;
+    private bool TouchElementBase_GetAbsolute(object obj) => (obj as TouchElementBase).Absolute;
+    private void TouchElementBase_SetAbsolute(object obj, bool absolute) => (obj as TouchElementBase).Absolute = absolute;
+    private byte TouchElementBase_GetSelfAlignment(object obj) => (byte)(obj as TouchElementBase).SelfAlignment;
+    private void TouchElementBase_SetSelfAlignment(object obj, byte alignment) => (obj as TouchElementBase).SelfAlignment = (ViewAlignment)alignment;
+    private Vector2 TouchElementBase_GetPosition(object obj) => (obj as TouchElementBase).Position;
+    private void TouchElementBase_SetPosition(object obj, Vector2 position) => (obj as TouchElementBase).Position = position;
+    private Vector4 TouchElementBase_GetMargin(object obj) => (obj as TouchElementBase).Margin;
+    private void TouchElementBase_SetMargin(object obj, Vector4 margin) => (obj as TouchElementBase).Margin = margin;
+    private Vector2 TouchElementBase_GetScale(object obj) => (obj as TouchElementBase).Scale;
+    private void TouchElementBase_SetScale(object obj, Vector2 scale) => (obj as TouchElementBase).Scale = scale;
+    private Vector2 TouchElementBase_GetPixels(object obj) => (obj as TouchElementBase).Pixels;
+    private void TouchElementBase_SetPixels(object obj, Vector2 pixels) => (obj as TouchElementBase).Pixels = pixels;
+    private Vector2 TouchElementBase_GetSize(object obj) => (obj as TouchElementBase).GetSize();
+    private Vector2 TouchElementBase_GetBoundaries(object obj) => (obj as TouchElementBase).GetBoundaries();
+    private TouchApp TouchElementBase_GetApp(object obj) => (obj as TouchElementBase).App;
+    private TouchContainerBase TouchElementBase_GetParent(object obj) => (obj as TouchElementBase).Parent;
+    private List<MySprite> TouchElementBase_GetSprites(object obj) => (obj as TouchElementBase).GetSprites();
+    private void TouchElementBase_ForceUpdate(object obj) => (obj as TouchElementBase).Update();
+    private void TouchElementBase_ForceDispose(object obj) => (obj as TouchElementBase).Dispose();
+    private void TouchElementBase_RegisterUpdate(object obj, Action update) => (obj as TouchElementBase).UpdateEvent += update;
+    private void TouchElementBase_UnregisterUpdate(object obj, Action update) => (obj as TouchElementBase).UpdateEvent -= update;
 
-    private List<object> FancyContainerBase_GetChildren(object obj) => (obj as FancyContainerBase).Children.Cast<object>().ToList();
-    private Vector2 FancyContainerBase_GetFlexSize(object obj) => (obj as FancyContainerBase).GetFlexSize();
-    private void FancyContainerBase_AddChild(object obj, object child) => (obj as FancyContainerBase).AddChild((FancyElementBase)child);
-    private void FancyContainerBase_AddChildAt(object obj, object child, int index) => (obj as FancyContainerBase).AddChild((FancyElementBase)child, index);
-    private void FancyContainerBase_RemoveChild(object obj, object child) => (obj as FancyContainerBase).RemoveChild((FancyElementBase)child);
-    private void FancyContainerBase_RemoveChildAt(object obj, int index) => (obj as FancyContainerBase).RemoveChild(index);
-    private void FancyContainerBase_MoveChild(object obj, object child, int index) => (obj as FancyContainerBase).MoveChild((FancyElementBase)child, index);
+    private List<object> TouchContainerBase_GetChildren(object obj) => (obj as TouchContainerBase).Children.Cast<object>().ToList();
+    private Vector2 TouchContainerBase_GetFlexSize(object obj) => (obj as TouchContainerBase).GetFlexSize();
+    private void TouchContainerBase_AddChild(object obj, object child) => (obj as TouchContainerBase).AddChild((TouchElementBase)child);
+    private void TouchContainerBase_AddChildAt(object obj, object child, int index) => (obj as TouchContainerBase).AddChild((TouchElementBase)child, index);
+    private void TouchContainerBase_RemoveChild(object obj, object child) => (obj as TouchContainerBase).RemoveChild((TouchElementBase)child);
+    private void TouchContainerBase_RemoveChildAt(object obj, int index) => (obj as TouchContainerBase).RemoveChild(index);
+    private void TouchContainerBase_MoveChild(object obj, object child, int index) => (obj as TouchContainerBase).MoveChild((TouchElementBase)child, index);
 
-    private FancyView FancyView_New(int direction, Color? bgColor = null) => new FancyView((ViewDirection)direction, bgColor);
-    private bool FancyView_GetOverflow(object obj) => (obj as FancyView).Overflow;
-    private void FancyView_SetOverflow(object obj, bool overflow) => (obj as FancyView).Overflow = overflow;
-    private int FancyView_GetDirection(object obj) => (int)(obj as FancyView).Direction;
-    private void FancyView_SetDirection(object obj, int direction) => (obj as FancyView).Direction = (ViewDirection)direction;
-    private byte FancyView_GetAlignment(object obj) => (byte)(obj as FancyView).Alignment;
-    private void FancyView_SetAlignment(object obj, byte alignment) => (obj as FancyView).Alignment = (ViewAlignment)alignment;
-    private byte FancyView_GetAnchor(object obj) => (byte)(obj as FancyView).Anchor;
-    private void FancyView_SetAnchor(object obj, byte anchor) => (obj as FancyView).Anchor = (ViewAnchor)anchor;
-    private bool FancyView_GetUseThemeColors(object obj) => (obj as FancyView).UseThemeColors;
-    private void FancyView_SetUseThemeColors(object obj, bool useTheme) => (obj as FancyView).UseThemeColors = useTheme;
-    private Color FancyView_GetBgColor(object obj) => (Color)(obj as FancyView).BgColor;
-    private void FancyView_SetBgColor(object obj, Color bgColor) => (obj as FancyView).BgColor = bgColor;
-    private Color FancyView_GetBorderColor(object obj) => (Color)(obj as FancyView).BorderColor;
-    private void FancyView_SetBorderColor(object obj, Color borderColor) => (obj as FancyView).BorderColor = borderColor;
-    private Vector4 FancyView_GetBorder(object obj) => (Vector4)(obj as FancyView).Border;
-    private void FancyView_SetBorder(object obj, Vector4 border) => (obj as FancyView).Border = border;
-    private Vector4 FancyView_GetPadding(object obj) => (Vector4)(obj as FancyView).Padding;
-    private void FancyView_SetPadding(object obj, Vector4 padding) => (obj as FancyView).Padding = padding;
-    private int FancyView_GetGap(object obj) => (int)(obj as FancyView).Gap;
-    private void FancyView_SetGap(object obj, int gap) => (obj as FancyView).Gap = gap;
+    private TouchView TouchView_New(int direction, Color? bgColor = null) => new TouchView((ViewDirection)direction, bgColor);
+    private bool TouchView_GetOverflow(object obj) => (obj as TouchView).Overflow;
+    private void TouchView_SetOverflow(object obj, bool overflow) => (obj as TouchView).Overflow = overflow;
+    private int TouchView_GetDirection(object obj) => (int)(obj as TouchView).Direction;
+    private void TouchView_SetDirection(object obj, int direction) => (obj as TouchView).Direction = (ViewDirection)direction;
+    private byte TouchView_GetAlignment(object obj) => (byte)(obj as TouchView).Alignment;
+    private void TouchView_SetAlignment(object obj, byte alignment) => (obj as TouchView).Alignment = (ViewAlignment)alignment;
+    private byte TouchView_GetAnchor(object obj) => (byte)(obj as TouchView).Anchor;
+    private void TouchView_SetAnchor(object obj, byte anchor) => (obj as TouchView).Anchor = (ViewAnchor)anchor;
+    private bool TouchView_GetUseThemeColors(object obj) => (obj as TouchView).UseThemeColors;
+    private void TouchView_SetUseThemeColors(object obj, bool useTheme) => (obj as TouchView).UseThemeColors = useTheme;
+    private Color TouchView_GetBgColor(object obj) => (Color)(obj as TouchView).BgColor;
+    private void TouchView_SetBgColor(object obj, Color bgColor) => (obj as TouchView).BgColor = bgColor;
+    private Color TouchView_GetBorderColor(object obj) => (Color)(obj as TouchView).BorderColor;
+    private void TouchView_SetBorderColor(object obj, Color borderColor) => (obj as TouchView).BorderColor = borderColor;
+    private Vector4 TouchView_GetBorder(object obj) => (Vector4)(obj as TouchView).Border;
+    private void TouchView_SetBorder(object obj, Vector4 border) => (obj as TouchView).Border = border;
+    private Vector4 TouchView_GetPadding(object obj) => (Vector4)(obj as TouchView).Padding;
+    private void TouchView_SetPadding(object obj, Vector4 padding) => (obj as TouchView).Padding = padding;
+    private int TouchView_GetGap(object obj) => (int)(obj as TouchView).Gap;
+    private void TouchView_SetGap(object obj, int gap) => (obj as TouchView).Gap = gap;
 
-    private FancyScrollView FancyScrollView_New(int direction, Color? bgColor = null) => new FancyScrollView((ViewDirection)direction, bgColor);
-    private float FancyScrollView_GetScroll(object obj) => (obj as FancyScrollView).Scroll;
-    private void FancyScrollView_SetScroll(object obj, float scroll) => (obj as FancyScrollView).Scroll = scroll;
-    private bool FancyScrollView_GetScrollAlwaysVisible(object obj) => (obj as FancyScrollView).ScrollAlwaysVisible;
-    private void FancyScrollView_SetScrollAlwaysVisible(object obj, bool visible) => (obj as FancyScrollView).ScrollAlwaysVisible = visible;
-    private FancyBarContainer FancyScrollView_GetScrollBar(object obj) => (obj as FancyScrollView).ScrollBar;
+    private TouchScrollView TouchScrollView_New(int direction, Color? bgColor = null) => new TouchScrollView((ViewDirection)direction, bgColor);
+    private float TouchScrollView_GetScroll(object obj) => (obj as TouchScrollView).Scroll;
+    private void TouchScrollView_SetScroll(object obj, float scroll) => (obj as TouchScrollView).Scroll = scroll;
+    private bool TouchScrollView_GetScrollAlwaysVisible(object obj) => (obj as TouchScrollView).ScrollAlwaysVisible;
+    private void TouchScrollView_SetScrollAlwaysVisible(object obj, bool visible) => (obj as TouchScrollView).ScrollAlwaysVisible = visible;
+    private TouchBarContainer TouchScrollView_GetScrollBar(object obj) => (obj as TouchScrollView).ScrollBar;
 
-    private FancyApp FancyApp_New() => new FancyApp();
-    private TouchScreen FancyApp_GetScreen(object obj) => (obj as FancyApp).Screen;
-    private RectangleF FancyApp_GetViewport(object obj) => (obj as FancyApp).Viewport;
-    private FancyCursor FancyApp_GetCursor(object obj) => (obj as FancyApp).Cursor;
-    private FancyTheme FancyApp_GetTheme(object obj) => (obj as FancyApp).Theme;
-    private bool FancyApp_GetDefaultBg(object obj) => (obj as FancyApp).DefaultBg;
-    private void FancyApp_SetDefaultBg(object obj, bool defaultBg) => (obj as FancyApp).DefaultBg = defaultBg;
-    private void FancyApp_InitApp(object obj, MyCubeBlock block, Sandbox.ModAPI.Ingame.IMyTextSurface surface) => (obj as FancyApp).InitApp(block, surface);
+    private TouchApp TouchApp_New() => new TouchApp();
+    private TouchScreen TouchApp_GetScreen(object obj) => (obj as TouchApp).Screen;
+    private RectangleF TouchApp_GetViewport(object obj) => (obj as TouchApp).Viewport;
+    private TouchCursor TouchApp_GetCursor(object obj) => (obj as TouchApp).Cursor;
+    private TouchTheme TouchApp_GetTheme(object obj) => (obj as TouchApp).Theme;
+    private bool TouchApp_GetDefaultBg(object obj) => (obj as TouchApp).DefaultBg;
+    private void TouchApp_SetDefaultBg(object obj, bool defaultBg) => (obj as TouchApp).DefaultBg = defaultBg;
+    private void TouchApp_InitApp(object obj, MyCubeBlock block, Sandbox.ModAPI.Ingame.IMyTextSurface surface) => (obj as TouchApp).InitApp(block, surface);
 
-    private FancyCursor FancyCursor_New(object screen) => new FancyCursor(screen as TouchScreen);
-    private bool FancyCursor_GetActive(object obj) => (obj as FancyCursor).Active;
-    private void FancyCursor_SetActive(object obj, bool active) => (obj as FancyCursor).Active = active;
-    private float FancyCursor_GetScale(object obj) => (obj as FancyCursor).Scale;
-    private void FancyCursor_SetScale(object obj, float scale) => (obj as FancyCursor).Scale = scale;
-    private Vector2 FancyCursor_GetPosition(object obj) => (obj as FancyCursor).Position;
-    private bool FancyCursor_IsInsideArea(object obj, float x, float y, float z, float w) => (obj as FancyCursor).IsInsideArea(x, y, z, w);
-    private List<MySprite> FancyCursor_GetSprites(object obj) => (obj as FancyCursor).GetSprites();
-    private void FancyCursor_ForceDispose(object obj) => (obj as FancyCursor).Dispose();
+    private TouchCursor TouchCursor_New(object screen) => new TouchCursor(screen as TouchScreen);
+    private bool TouchCursor_GetActive(object obj) => (obj as TouchCursor).Active;
+    private void TouchCursor_SetActive(object obj, bool active) => (obj as TouchCursor).Active = active;
+    private float TouchCursor_GetScale(object obj) => (obj as TouchCursor).Scale;
+    private void TouchCursor_SetScale(object obj, float scale) => (obj as TouchCursor).Scale = scale;
+    private Vector2 TouchCursor_GetPosition(object obj) => (obj as TouchCursor).Position;
+    private bool TouchCursor_IsInsideArea(object obj, float x, float y, float z, float w) => (obj as TouchCursor).IsInsideArea(x, y, z, w);
+    private List<MySprite> TouchCursor_GetSprites(object obj) => (obj as TouchCursor).GetSprites();
+    private void TouchCursor_ForceDispose(object obj) => (obj as TouchCursor).Dispose();
 
-    private Color FancyTheme_GetBgColor(object obj) => (obj as FancyTheme).BgColor;
-    private Color FancyTheme_GetWhiteColor(object obj) => (obj as FancyTheme).WhiteColor;
-    private Color FancyTheme_GetMainColor(object obj) => (obj as FancyTheme).MainColor;
-    private Color FancyTheme_GetMainColorDarker(object obj, int value)
+    private Color TouchTheme_GetBgColor(object obj) => (obj as TouchTheme).BgColor;
+    private Color TouchTheme_GetWhiteColor(object obj) => (obj as TouchTheme).WhiteColor;
+    private Color TouchTheme_GetMainColor(object obj) => (obj as TouchTheme).MainColor;
+    private Color TouchTheme_GetMainColorDarker(object obj, int value)
     {
-      var theme = (obj as FancyTheme);
+      var theme = (obj as TouchTheme);
       if (value <= 1) return theme.MainColor_1;
       else if (value <= 2) return theme.MainColor_2;
       else if (value <= 3) return theme.MainColor_3;
@@ -410,11 +448,11 @@ namespace Lima.Touch
       else if (value <= 8) return theme.MainColor_8;
       return theme.MainColor_9;
     }
-    private Vector2 FancyTheme_MeasureStringInPixels(object obj, string text, string font, float scale) => (obj as FancyTheme).MeasureStringInPixels(text, font, scale);
-    private float FancyTheme_GetScale(object obj) => (obj as FancyTheme).Scale;
-    private void FancyTheme_SetScale(object obj, float scale) => (obj as FancyTheme).Scale = scale;
-    private string FancyTheme_GetFont(object obj) => (obj as FancyTheme).Font;
-    private void FancyTheme_SetFont(object obj, string font) => (obj as FancyTheme).Font = font;
+    private Vector2 TouchTheme_MeasureStringInPixels(object obj, string text, string font, float scale) => (obj as TouchTheme).MeasureStringInPixels(text, font, scale);
+    private float TouchTheme_GetScale(object obj) => (obj as TouchTheme).Scale;
+    private void TouchTheme_SetScale(object obj, float scale) => (obj as TouchTheme).Scale = scale;
+    private string TouchTheme_GetFont(object obj) => (obj as TouchTheme).Font;
+    private void TouchTheme_SetFont(object obj, string font) => (obj as TouchTheme).Font = font;
 
     private ClickHandler ClickHandler_New() => new ClickHandler();
     private Vector4 ClickHandler_GetHitArea(object obj) => (obj as ClickHandler).HitArea;
@@ -426,117 +464,117 @@ namespace Lima.Touch
     private bool ClickHandler_JustPressed(object obj) => (obj as ClickHandler).JustPressed;
     private void ClickHandler_UpdateStatus(object obj, object screen) => (obj as ClickHandler).UpdateStatus(screen as TouchScreen);
 
-    private FancyEmptyButton FancyEmptyButton_New(Action onChange) => new FancyEmptyButton(onChange);
-    private ClickHandler FancyEmptyButton_GetHandler(object obj) => (obj as FancyEmptyButton).Handler;
-    private void FancyEmptyButton_SetOnChange(object obj, Action onChange) => (obj as FancyEmptyButton).OnChange = onChange;
+    private TouchEmptyButton TouchEmptyButton_New(Action onChange) => new TouchEmptyButton(onChange);
+    private ClickHandler TouchEmptyButton_GetHandler(object obj) => (obj as TouchEmptyButton).Handler;
+    private void TouchEmptyButton_SetOnChange(object obj, Action onChange) => (obj as TouchEmptyButton).OnChange = onChange;
 
-    private FancyButton FancyButton_New(string text, Action onChange) => new FancyButton(text, onChange);
-    private FancyLabel FancyButton_GetLabel(object obj) => (obj as FancyButton).Label;
+    private TouchButton TouchButton_New(string text, Action onChange) => new TouchButton(text, onChange);
+    private TouchLabel TouchButton_GetLabel(object obj) => (obj as TouchButton).Label;
 
-    private FancyCheckbox FancyCheckbox_New(Action<bool> onChange, bool value = false) => new FancyCheckbox(onChange, value);
-    private bool FancyCheckbox_GetValue(object obj) => (obj as FancyCheckbox).Value;
-    private void FancyCheckbox_SetValue(object obj, bool value) => (obj as FancyCheckbox).Value = value;
-    private void FancyCheckbox_SetOnChange(object obj, Action<bool> onChange) => (obj as FancyCheckbox).OnChange = onChange;
-    private FancyEmptyElement FancyCheckbox_GetCheckMark(object obj) => (obj as FancyCheckbox).CheckMark;
+    private TouchCheckbox TouchCheckbox_New(Action<bool> onChange, bool value = false) => new TouchCheckbox(onChange, value);
+    private bool TouchCheckbox_GetValue(object obj) => (obj as TouchCheckbox).Value;
+    private void TouchCheckbox_SetValue(object obj, bool value) => (obj as TouchCheckbox).Value = value;
+    private void TouchCheckbox_SetOnChange(object obj, Action<bool> onChange) => (obj as TouchCheckbox).OnChange = onChange;
+    private TouchEmptyElement TouchCheckbox_GetCheckMark(object obj) => (obj as TouchCheckbox).CheckMark;
 
-    private FancyLabel FancyLabel_New(string text, float fontSize = 0.5f, TextAlignment alignment = TextAlignment.CENTER) => new FancyLabel(text, fontSize, alignment);
-    private bool FancyLabel_GetAutoBreakLine(object obj) => (obj as FancyLabel).AutoBreakLine;
-    private void FancyLabel_SetAutoBreakLine(object obj, bool breakLine) => (obj as FancyLabel).AutoBreakLine = breakLine;
-    private bool FancyLabel_GetOverflow(object obj) => (obj as FancyLabel).Overflow;
-    private void FancyLabel_SetOverflow(object obj, bool overflow) => (obj as FancyLabel).Overflow = overflow;
-    private bool FancyLabel_GetIsShortened(object obj) => (obj as FancyLabel).IsShortened;
-    private string FancyLabel_GetText(object obj) => (obj as FancyLabel).Text;
-    private void FancyLabel_SetText(object obj, string text) => (obj as FancyLabel).Text = text;
-    private Color? FancyLabel_GetTextColor(object obj) => (obj as FancyLabel).TextColor;
-    private void FancyLabel_SetTextColor(object obj, Color color) => (obj as FancyLabel).TextColor = color;
-    private float FancyLabel_GetFontSize(object obj) => (obj as FancyLabel).FontSize;
-    private void FancyLabel_SetFontSize(object obj, float fontSize) => (obj as FancyLabel).FontSize = fontSize;
-    private TextAlignment FancyLabel_GetAlignment(object obj) => (obj as FancyLabel).Alignment;
-    private void FancyLabel_SetAlignment(object obj, TextAlignment alignment) => (obj as FancyLabel).Alignment = alignment;
+    private TouchLabel TouchLabel_New(string text, float fontSize = 0.5f, TextAlignment alignment = TextAlignment.CENTER) => new TouchLabel(text, fontSize, alignment);
+    private bool TouchLabel_GetAutoBreakLine(object obj) => (obj as TouchLabel).AutoBreakLine;
+    private void TouchLabel_SetAutoBreakLine(object obj, bool breakLine) => (obj as TouchLabel).AutoBreakLine = breakLine;
+    private bool TouchLabel_GetOverflow(object obj) => (obj as TouchLabel).Overflow;
+    private void TouchLabel_SetOverflow(object obj, bool overflow) => (obj as TouchLabel).Overflow = overflow;
+    private bool TouchLabel_GetIsShortened(object obj) => (obj as TouchLabel).IsShortened;
+    private string TouchLabel_GetText(object obj) => (obj as TouchLabel).Text;
+    private void TouchLabel_SetText(object obj, string text) => (obj as TouchLabel).Text = text;
+    private Color? TouchLabel_GetTextColor(object obj) => (obj as TouchLabel).TextColor;
+    private void TouchLabel_SetTextColor(object obj, Color color) => (obj as TouchLabel).TextColor = color;
+    private float TouchLabel_GetFontSize(object obj) => (obj as TouchLabel).FontSize;
+    private void TouchLabel_SetFontSize(object obj, float fontSize) => (obj as TouchLabel).FontSize = fontSize;
+    private TextAlignment TouchLabel_GetAlignment(object obj) => (obj as TouchLabel).Alignment;
+    private void TouchLabel_SetAlignment(object obj, TextAlignment alignment) => (obj as TouchLabel).Alignment = alignment;
 
-    private FancyBarContainer FancyBarContainer_New(bool vertical = false) => new FancyBarContainer(vertical);
-    private bool FancyBarContainer_GetIsVertical(object obj) => (obj as FancyBarContainer).IsVertical;
-    private void FancyBarContainer_SetIsVertical(object obj, bool vertical) => (obj as FancyBarContainer).IsVertical = vertical;
-    private float FancyBarContainer_GetRatio(object obj) => (obj as FancyBarContainer).Ratio;
-    private void FancyBarContainer_SetRatio(object obj, float ratio) => (obj as FancyBarContainer).Ratio = ratio;
-    private float FancyBarContainer_GetOffset(object obj) => (obj as FancyBarContainer).Offset;
-    private void FancyBarContainer_SetOffset(object obj, float offset) => (obj as FancyBarContainer).Offset = offset;
-    private FancyView FancyBarContainer_GetBar(object obj) => (obj as FancyBarContainer).Bar;
+    private TouchBarContainer TouchBarContainer_New(bool vertical = false) => new TouchBarContainer(vertical);
+    private bool TouchBarContainer_GetIsVertical(object obj) => (obj as TouchBarContainer).IsVertical;
+    private void TouchBarContainer_SetIsVertical(object obj, bool vertical) => (obj as TouchBarContainer).IsVertical = vertical;
+    private float TouchBarContainer_GetRatio(object obj) => (obj as TouchBarContainer).Ratio;
+    private void TouchBarContainer_SetRatio(object obj, float ratio) => (obj as TouchBarContainer).Ratio = ratio;
+    private float TouchBarContainer_GetOffset(object obj) => (obj as TouchBarContainer).Offset;
+    private void TouchBarContainer_SetOffset(object obj, float offset) => (obj as TouchBarContainer).Offset = offset;
+    private TouchView TouchBarContainer_GetBar(object obj) => (obj as TouchBarContainer).Bar;
 
-    private FancyProgressBar FancyProgressBar_New(float min, float max, bool vertical = false, float barsGap = 0) => new FancyProgressBar(min, max, vertical, barsGap);
-    private float FancyProgressBar_GetValue(object obj) => (obj as FancyProgressBar).Value;
-    private void FancyProgressBar_SetValue(object obj, float value) => (obj as FancyProgressBar).Value = value;
-    private float FancyProgressBar_GetMaxValue(object obj) => (obj as FancyProgressBar).MaxValue;
-    private void FancyProgressBar_SetMaxValue(object obj, float max) => (obj as FancyProgressBar).MaxValue = max;
-    private float FancyProgressBar_GetMinValue(object obj) => (obj as FancyProgressBar).MinValue;
-    private void FancyProgressBar_SetMinValue(object obj, float min) => (obj as FancyProgressBar).MinValue = min;
-    private float FancyProgressBar_GetBarsGap(object obj) => (obj as FancyProgressBar).BarsGap;
-    private void FancyProgressBar_SetBarsGap(object obj, float gap) => (obj as FancyProgressBar).BarsGap = gap;
-    private FancyLabel FancyProgressBar_GetLabel(object obj) => (obj as FancyProgressBar).Label;
+    private TouchProgressBar TouchProgressBar_New(float min, float max, bool vertical = false, float barsGap = 0) => new TouchProgressBar(min, max, vertical, barsGap);
+    private float TouchProgressBar_GetValue(object obj) => (obj as TouchProgressBar).Value;
+    private void TouchProgressBar_SetValue(object obj, float value) => (obj as TouchProgressBar).Value = value;
+    private float TouchProgressBar_GetMaxValue(object obj) => (obj as TouchProgressBar).MaxValue;
+    private void TouchProgressBar_SetMaxValue(object obj, float max) => (obj as TouchProgressBar).MaxValue = max;
+    private float TouchProgressBar_GetMinValue(object obj) => (obj as TouchProgressBar).MinValue;
+    private void TouchProgressBar_SetMinValue(object obj, float min) => (obj as TouchProgressBar).MinValue = min;
+    private float TouchProgressBar_GetBarsGap(object obj) => (obj as TouchProgressBar).BarsGap;
+    private void TouchProgressBar_SetBarsGap(object obj, float gap) => (obj as TouchProgressBar).BarsGap = gap;
+    private TouchLabel TouchProgressBar_GetLabel(object obj) => (obj as TouchProgressBar).Label;
 
-    private FancySelector FancySelector_New(List<string> labels, Action<int, string> onChange, bool loop = true) => new FancySelector(labels, onChange, loop);
-    private bool FancySelector_GetLoop(object obj) => (obj as FancySelector).Loop;
-    private void FancySelector_SetLoop(object obj, bool loop) => (obj as FancySelector).Loop = loop;
-    private int FancySelector_GetSelected(object obj) => (obj as FancySelector).Selected;
-    private void FancySelector_SetSelected(object obj, int selected) => (obj as FancySelector).Selected = selected;
-    private void FancySelector_SetOnChange(object obj, Action<int, string> onChange) => (obj as FancySelector).OnChange = onChange;
+    private TouchSelector TouchSelector_New(List<string> labels, Action<int, string> onChange, bool loop = true) => new TouchSelector(labels, onChange, loop);
+    private bool TouchSelector_GetLoop(object obj) => (obj as TouchSelector).Loop;
+    private void TouchSelector_SetLoop(object obj, bool loop) => (obj as TouchSelector).Loop = loop;
+    private int TouchSelector_GetSelected(object obj) => (obj as TouchSelector).Selected;
+    private void TouchSelector_SetSelected(object obj, int selected) => (obj as TouchSelector).Selected = selected;
+    private void TouchSelector_SetOnChange(object obj, Action<int, string> onChange) => (obj as TouchSelector).OnChange = onChange;
 
-    private FancySlider FancySlider_New(float min, float max, Action<float> onChange) => new FancySlider(min, max, onChange);
-    private float FancySlider_GetMaxValue(object obj) => (obj as FancySlider).MaxValue;
-    private void FancySlider_SetMaxValue(object obj, float max) => (obj as FancySlider).MaxValue = max;
-    private float FancySlider_GetMinValue(object obj) => (obj as FancySlider).MinValue;
-    private void FancySlider_SetMinValue(object obj, float min) => (obj as FancySlider).MinValue = min;
-    private float FancySlider_GetValue(object obj) => (obj as FancySlider).Value;
-    private void FancySlider_SetValue(object obj, float value) => (obj as FancySlider).Value = value;
-    private void FancySlider_SetOnChange(object obj, Action<float> onChange) => (obj as FancySlider).OnChange = onChange;
-    private bool FancySlider_GetIsInteger(object obj) => (obj as FancySlider).IsInteger;
-    private void FancySlider_SetIsInteger(object obj, bool interger) => (obj as FancySlider).IsInteger = interger;
-    private bool FancySlider_GetAllowInput(object obj) => (obj as FancySlider).AllowInput;
-    private void FancySlider_SetAllowInput(object obj, bool allowInput) => (obj as FancySlider).AllowInput = allowInput;
-    private FancyBarContainer FancySlider_GetBar(object obj) => (obj as FancySlider).Bar;
-    private FancyEmptyElement FancySlider_GetThumb(object obj) => (obj as FancySlider).Thumb;
-    private FancyTextField FancySlider_GetTextInput(object obj) => (obj as FancySlider).InnerTextField;
+    private TouchSlider TouchSlider_New(float min, float max, Action<float> onChange) => new TouchSlider(min, max, onChange);
+    private float TouchSlider_GetMaxValue(object obj) => (obj as TouchSlider).MaxValue;
+    private void TouchSlider_SetMaxValue(object obj, float max) => (obj as TouchSlider).MaxValue = max;
+    private float TouchSlider_GetMinValue(object obj) => (obj as TouchSlider).MinValue;
+    private void TouchSlider_SetMinValue(object obj, float min) => (obj as TouchSlider).MinValue = min;
+    private float TouchSlider_GetValue(object obj) => (obj as TouchSlider).Value;
+    private void TouchSlider_SetValue(object obj, float value) => (obj as TouchSlider).Value = value;
+    private void TouchSlider_SetOnChange(object obj, Action<float> onChange) => (obj as TouchSlider).OnChange = onChange;
+    private bool TouchSlider_GetIsInteger(object obj) => (obj as TouchSlider).IsInteger;
+    private void TouchSlider_SetIsInteger(object obj, bool interger) => (obj as TouchSlider).IsInteger = interger;
+    private bool TouchSlider_GetAllowInput(object obj) => (obj as TouchSlider).AllowInput;
+    private void TouchSlider_SetAllowInput(object obj, bool allowInput) => (obj as TouchSlider).AllowInput = allowInput;
+    private TouchBarContainer TouchSlider_GetBar(object obj) => (obj as TouchSlider).Bar;
+    private TouchEmptyElement TouchSlider_GetThumb(object obj) => (obj as TouchSlider).Thumb;
+    private TouchTextField TouchSlider_GetTextInput(object obj) => (obj as TouchSlider).InnerTextField;
 
-    private FancySliderRange FancySliderRange_NewR(float min, float max, Action<float, float> onChange) => new FancySliderRange(min, max, onChange);
-    private float FancySliderRange_GetValueLower(object obj) => (obj as FancySliderRange).ValueLower;
-    private void FancySliderRange_SetValueLower(object obj, float value) => (obj as FancySliderRange).ValueLower = value;
-    private void FancySliderRange_SetOnChangeR(object obj, Action<float, float> onChange) => (obj as FancySliderRange).OnChangeR = onChange;
-    private FancyEmptyElement FancySliderRange_GetThumbLower(object obj) => (obj as FancySliderRange).ThumbLower;
+    private TouchSliderRange TouchSliderRange_NewR(float min, float max, Action<float, float> onChange) => new TouchSliderRange(min, max, onChange);
+    private float TouchSliderRange_GetValueLower(object obj) => (obj as TouchSliderRange).ValueLower;
+    private void TouchSliderRange_SetValueLower(object obj, float value) => (obj as TouchSliderRange).ValueLower = value;
+    private void TouchSliderRange_SetOnChangeR(object obj, Action<float, float> onChange) => (obj as TouchSliderRange).OnChangeR = onChange;
+    private TouchEmptyElement TouchSliderRange_GetThumbLower(object obj) => (obj as TouchSliderRange).ThumbLower;
 
-    private FancySwitch FancySwitch_New(string[] labels, int index = 0, Action<int> onChange = null) => new FancySwitch(labels, index, onChange);
-    private int FancySwitch_GetIndex(object obj) => (obj as FancySwitch).Index;
-    private void FancySwitch_SetIndex(object obj, int index) => (obj as FancySwitch).Index = index;
-    private FancyButton[] FancySwitch_GetButtons(object obj) => (obj as FancySwitch).Buttons;
-    private void FancySwitch_SetOnChange(object obj, Action<int> onChange) => (obj as FancySwitch).OnChange = onChange;
+    private TouchSwitch TouchSwitch_New(string[] labels, int index = 0, Action<int> onChange = null) => new TouchSwitch(labels, index, onChange);
+    private int TouchSwitch_GetIndex(object obj) => (obj as TouchSwitch).Index;
+    private void TouchSwitch_SetIndex(object obj, int index) => (obj as TouchSwitch).Index = index;
+    private TouchButton[] TouchSwitch_GetButtons(object obj) => (obj as TouchSwitch).Buttons;
+    private void TouchSwitch_SetOnChange(object obj, Action<int> onChange) => (obj as TouchSwitch).OnChange = onChange;
 
-    private FancyTextField FancyTextField_New(string text, Action<string, bool> onChange) => new FancyTextField(text, onChange);
-    private bool FancyTextField_GetIsEditing(object obj) => (obj as FancyTextField).IsEditing;
-    private string FancyTextField_GetText(object obj) => (obj as FancyTextField).Text;
-    private void FancyTextField_SetText(object obj, string text) => (obj as FancyTextField).Text = text;
-    private void FancyTextField_SetOnChange(object obj, Action<string, bool> onChange) => (obj as FancyTextField).OnChange = onChange;
-    private bool FancyTextField_GetIsNumeric(object obj) => (obj as FancyTextField).IsNumeric;
-    private void FancyTextField_SetIsNumeric(object obj, bool isNumeric) => (obj as FancyTextField).IsNumeric = isNumeric;
-    private bool FancyTextField_GetIsInteger(object obj) => (obj as FancyTextField).IsInteger;
-    private void FancyTextField_SetIsInteger(object obj, bool isInterger) => (obj as FancyTextField).IsInteger = isInterger;
-    private bool FancyTextField_GetAllowNegative(object obj) => (obj as FancyTextField).AllowNegative;
-    private void FancyTextField_SetAllowNegative(object obj, bool allowNegative) => (obj as FancyTextField).AllowNegative = allowNegative;
-    private FancyLabel FancyTextField_GetLabel(object obj) => (obj as FancyTextField).Label;
+    private TouchTextField TouchTextField_New(string text, Action<string, bool> onChange) => new TouchTextField(text, onChange);
+    private bool TouchTextField_GetIsEditing(object obj) => (obj as TouchTextField).IsEditing;
+    private string TouchTextField_GetText(object obj) => (obj as TouchTextField).Text;
+    private void TouchTextField_SetText(object obj, string text) => (obj as TouchTextField).Text = text;
+    private void TouchTextField_SetOnChange(object obj, Action<string, bool> onChange) => (obj as TouchTextField).OnChange = onChange;
+    private bool TouchTextField_GetIsNumeric(object obj) => (obj as TouchTextField).IsNumeric;
+    private void TouchTextField_SetIsNumeric(object obj, bool isNumeric) => (obj as TouchTextField).IsNumeric = isNumeric;
+    private bool TouchTextField_GetIsInteger(object obj) => (obj as TouchTextField).IsInteger;
+    private void TouchTextField_SetIsInteger(object obj, bool isInterger) => (obj as TouchTextField).IsInteger = isInterger;
+    private bool TouchTextField_GetAllowNegative(object obj) => (obj as TouchTextField).AllowNegative;
+    private void TouchTextField_SetAllowNegative(object obj, bool allowNegative) => (obj as TouchTextField).AllowNegative = allowNegative;
+    private TouchLabel TouchTextField_GetLabel(object obj) => (obj as TouchTextField).Label;
 
-    private FancyWindowBar FancyWindowBar_New(string text) => new FancyWindowBar(text);
-    private FancyLabel FancyWindowBar_GetLabel(object obj) => (obj as FancyWindowBar).Label;
+    private TouchWindowBar TouchWindowBar_New(string text) => new TouchWindowBar(text);
+    private TouchLabel TouchWindowBar_GetLabel(object obj) => (obj as TouchWindowBar).Label;
 
-    private FancyChart FancyChart_New(int intervals) => new FancyChart(intervals);
-    private List<float[]> FancyChart_GetDataSets(object obj) => (obj as FancyChart).DataSets;
-    private List<Color> FancyChart_GetDataColors(object obj) => (obj as FancyChart).DataColors;
-    private int FancyChart_GetGridHorizontalLines(object obj) => (obj as FancyChart).GridHorizontalLines;
-    private void FancyChart_SetGridHorizontalLines(object obj, int lines) => (obj as FancyChart).GridHorizontalLines = lines;
-    private int FancyChart_GetGridVerticalLines(object obj) => (obj as FancyChart).GridVerticalLines;
-    private void FancyChart_SetGridVerticalLines(object obj, int lines) => (obj as FancyChart).GridVerticalLines = lines;
-    private float FancyChart_GetMaxValue(object obj) => (obj as FancyChart).MaxValue;
-    private float FancyChart_GetMinValue(object obj) => (obj as FancyChart).MinValue;
-    private Color? FancyChart_GetGridColor(object obj) => (obj as FancyChart).GridColor;
-    private void FancyChart_SetGridColor(object obj, Color color) => (obj as FancyChart).GridColor = color;
+    private TouchChart TouchChart_New(int intervals) => new TouchChart(intervals);
+    private List<float[]> TouchChart_GetDataSets(object obj) => (obj as TouchChart).DataSets;
+    private List<Color> TouchChart_GetDataColors(object obj) => (obj as TouchChart).DataColors;
+    private int TouchChart_GetGridHorizontalLines(object obj) => (obj as TouchChart).GridHorizontalLines;
+    private void TouchChart_SetGridHorizontalLines(object obj, int lines) => (obj as TouchChart).GridHorizontalLines = lines;
+    private int TouchChart_GetGridVerticalLines(object obj) => (obj as TouchChart).GridVerticalLines;
+    private void TouchChart_SetGridVerticalLines(object obj, int lines) => (obj as TouchChart).GridVerticalLines = lines;
+    private float TouchChart_GetMaxValue(object obj) => (obj as TouchChart).MaxValue;
+    private float TouchChart_GetMinValue(object obj) => (obj as TouchChart).MinValue;
+    private Color? TouchChart_GetGridColor(object obj) => (obj as TouchChart).GridColor;
+    private void TouchChart_SetGridColor(object obj, Color color) => (obj as TouchChart).GridColor = color;
 
-    private FancyEmptyElement FancyEmptyElement_New() => new FancyEmptyElement();
+    private TouchEmptyElement TouchEmptyElement_New() => new TouchEmptyElement();
   }
 }

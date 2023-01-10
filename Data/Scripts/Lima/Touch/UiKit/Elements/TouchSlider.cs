@@ -3,9 +3,9 @@ using Sandbox.ModAPI;
 using VRage.Game.GUI.TextPanel;
 using VRageMath;
 
-namespace Lima.Fancy.Elements
+namespace Lima.Touch.UiKit.Elements
 {
-  public class FancySlider : FancyView
+  public class TouchSlider : TouchView
   {
     public ClickHandler Handler = new ClickHandler();
 
@@ -18,11 +18,11 @@ namespace Lima.Fancy.Elements
     public bool AllowInput = true;
     protected bool InputOpen = false;
 
-    public FancyBarContainer Bar;
-    public FancyEmptyElement Thumb;
-    public FancyTextField InnerTextField;
+    public TouchBarContainer Bar;
+    public TouchEmptyElement Thumb;
+    public TouchTextField InnerTextField;
 
-    public FancySlider(float min, float max, Action<float> onChange = null)
+    public TouchSlider(float min, float max, Action<float> onChange = null)
     {
       MinValue = min;
       MaxValue = max;
@@ -32,17 +32,17 @@ namespace Lima.Fancy.Elements
       Scale = new Vector2(1, 0);
       Pixels = new Vector2(0, 24);
 
-      InnerTextField = new FancyTextField($"{Value}", OnTextSubmit);
+      InnerTextField = new TouchTextField($"{Value}", OnTextSubmit);
       InnerTextField.Enabled = false;
       AddChild(InnerTextField);
 
-      Bar = new FancyBarContainer();
+      Bar = new TouchBarContainer();
       Bar.Pixels = new Vector2(0, 12);
       Bar.Scale = Vector2.UnitX;
       Bar.Margin = new Vector4(0, 6, 0, 6);
       AddChild(Bar);
 
-      Thumb = new FancyEmptyElement();
+      Thumb = new TouchEmptyElement();
       Thumb.Scale = Vector2.Zero;
       Thumb.Absolute = true;
       Bar.AddChild(Thumb);

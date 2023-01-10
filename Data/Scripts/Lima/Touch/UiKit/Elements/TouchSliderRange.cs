@@ -2,24 +2,24 @@ using System;
 using Sandbox.ModAPI;
 using VRageMath;
 
-namespace Lima.Fancy.Elements
+namespace Lima.Touch.UiKit.Elements
 {
-  public class FancySliderRange : FancySlider
+  public class TouchSliderRange : TouchSlider
   {
     public Action<float, float> OnChangeR;
 
     public float ValueLower = 0;
 
-    public FancyEmptyElement ThumbLower;
+    public TouchEmptyElement ThumbLower;
 
-    public FancySliderRange(float min, float max, Action<float, float> onChange = null) : base(min, max)
+    public TouchSliderRange(float min, float max, Action<float, float> onChange = null) : base(min, max)
     {
       OnChangeR = onChange;
 
       Scale = new Vector2(1, 0);
       Pixels = new Vector2(0, 24);
 
-      ThumbLower = new FancyEmptyElement();
+      ThumbLower = new TouchEmptyElement();
       ThumbLower.Scale = Vector2.Zero;
       ThumbLower.Absolute = true;
       Bar.AddChild(ThumbLower);

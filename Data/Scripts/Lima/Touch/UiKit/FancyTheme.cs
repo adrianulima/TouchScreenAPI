@@ -2,9 +2,9 @@ using System.Text;
 using VRage.Game;
 using VRageMath;
 
-namespace Lima.Fancy
+namespace Lima.Touch.UiKit
 {
-  public class FancyTheme
+  public class TouchTheme
   {
     private Sandbox.ModAPI.Ingame.IMyTextSurface _surface;
     private Color _lastBg;
@@ -50,7 +50,7 @@ namespace Lima.Fancy
 
     public bool IsMainDark { get { return IsColorDark(_surface.ScriptForegroundColor); } }
 
-    public FancyTheme(Sandbox.ModAPI.Ingame.IMyTextSurface surface)
+    public TouchTheme(Sandbox.ModAPI.Ingame.IMyTextSurface surface)
     {
       _surface = surface;
     }

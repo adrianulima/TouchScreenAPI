@@ -1,21 +1,19 @@
 using System;
 using System.Collections.Generic;
-using Lima.Fancy.Elements;
-using Lima.Touch;
 using Lima.Utils;
 using Sandbox.Game.Entities;
 using VRage.Game.GUI.TextPanel;
 using VRageMath;
 
-namespace Lima.Fancy
+namespace Lima.Touch.UiKit.Elements
 {
-  public class FancyApp : FancyView
+  public class TouchApp : TouchView
   {
     public event Action UpdateAfterSimulationEvent;
 
     public TouchScreen Screen { get; private set; }
-    public FancyCursor Cursor { get; private set; }
-    public FancyTheme Theme { get; private set; }
+    public TouchCursor Cursor { get; private set; }
+    public TouchTheme Theme { get; private set; }
 
     private RectangleF _viewport;
     public RectangleF Viewport
@@ -26,7 +24,7 @@ namespace Lima.Fancy
 
     public bool DefaultBg = false;
 
-    public FancyApp() { }
+    public TouchApp() { }
 
     public virtual void InitApp(MyCubeBlock block, Sandbox.ModAPI.Ingame.IMyTextSurface surface)
     {
@@ -35,8 +33,8 @@ namespace Lima.Fancy
       TouchSession.Instance.TouchMan.Screens.Add(Screen);
       Screen.UpdateAfterSimulationEvent += UpdateAfterSimulation;
 
-      Cursor = new FancyCursor(Screen);
-      Theme = new FancyTheme(surface);
+      Cursor = new TouchCursor(Screen);
+      Theme = new TouchTheme(surface);
 
       Viewport = new RectangleF(
         (surface.TextureSize - surface.SurfaceSize) / 2f,

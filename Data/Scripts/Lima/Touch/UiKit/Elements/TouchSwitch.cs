@@ -1,15 +1,15 @@
 using System;
 using VRageMath;
 
-namespace Lima.Fancy.Elements
+namespace Lima.Touch.UiKit.Elements
 {
-  public class FancySwitch : FancyView
+  public class TouchSwitch : TouchView
   {
     public int Index;
-    public FancyButton[] Buttons { get; private set; }
+    public TouchButton[] Buttons { get; private set; }
     public Action<int> OnChange;
 
-    public FancySwitch(string[] labels, int index = 0, Action<int> onChange = null)
+    public TouchSwitch(string[] labels, int index = 0, Action<int> onChange = null)
     {
       Index = index;
       OnChange = onChange;
@@ -19,10 +19,10 @@ namespace Lima.Fancy.Elements
 
       Direction = ViewDirection.Row;
 
-      Buttons = new FancyButton[labels.Length];
+      Buttons = new TouchButton[labels.Length];
       for (int i = 0; i < Buttons.Length; i++)
       {
-        Buttons[i] = new FancyButton(labels[i], OnClickAction(i));
+        Buttons[i] = new TouchButton(labels[i], OnClickAction(i));
         Buttons[i].Pixels = Vector2.Zero;
         Buttons[i].Scale = Vector2.One;
         Buttons[i].Label.FontSize = 0.5f;

@@ -1,11 +1,10 @@
 using System.Collections.Generic;
-using Lima.Touch;
 using VRage.Game.GUI.TextPanel;
 using VRageMath;
 
-namespace Lima.Fancy
+namespace Lima.Touch.UiKit
 {
-  public class FancyCursor
+  public class TouchCursor
   {
     protected readonly List<MySprite> Sprites = new List<MySprite>();
     private TouchScreen _screen;
@@ -18,7 +17,7 @@ namespace Lima.Fancy
     public bool Active = true;
     public float Scale = 1f;
 
-    public FancyCursor(TouchScreen screen)
+    public TouchCursor(TouchScreen screen)
     {
       _screen = screen;
 

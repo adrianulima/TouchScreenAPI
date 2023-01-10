@@ -2,9 +2,9 @@ using System;
 using VRage.Game.GUI.TextPanel;
 using VRageMath;
 
-namespace Lima.Fancy.Elements
+namespace Lima.Touch.UiKit.Elements
 {
-  public class FancyLabel : FancyElementBase
+  public class TouchLabel : TouchElementBase
   {
     public string Text;
     private float _fontSize;
@@ -28,7 +28,7 @@ namespace Lima.Fancy.Elements
       }
     }
 
-    public FancyLabel(string text, float fontSize = 0.5f, TextAlignment alignment = TextAlignment.CENTER)
+    public TouchLabel(string text, float fontSize = 0.5f, TextAlignment alignment = TextAlignment.CENTER)
     {
       Text = text;
       FontSize = fontSize;

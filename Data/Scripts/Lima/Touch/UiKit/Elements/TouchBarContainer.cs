@@ -1,9 +1,8 @@
-using System;
 using VRageMath;
 
-namespace Lima.Fancy.Elements
+namespace Lima.Touch.UiKit.Elements
 {
-  public class FancyBarContainer : FancyView
+  public class TouchBarContainer : TouchView
   {
     private float _ratio = 1;
     public virtual float Ratio
@@ -18,10 +17,10 @@ namespace Lima.Fancy.Elements
       set { this._offset = MathHelper.Clamp(value, 0, 1); }
     }
 
-    public FancyView Bar;
+    public TouchView Bar;
     public bool IsVertical;
 
-    public FancyBarContainer(bool vertical = false)
+    public TouchBarContainer(bool vertical = false)
     {
       Scale = new Vector2(1, 0);
       Pixels = new Vector2(0, 24);
@@ -32,7 +31,7 @@ namespace Lima.Fancy.Elements
 
       IsVertical = vertical;
 
-      Bar = new FancyView(Direction);
+      Bar = new TouchView(Direction);
       Bar.Absolute = true;
       AddChild(Bar);
     }

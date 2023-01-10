@@ -1,13 +1,13 @@
 using VRage.Game.GUI.TextPanel;
 using VRageMath;
 
-namespace Lima.Fancy.Elements
+namespace Lima.Touch.UiKit.Elements
 {
-  public class FancyWindowBar : FancyView
+  public class TouchWindowBar : TouchView
   {
-    public FancyLabel Label;
+    public TouchLabel Label;
 
-    public FancyWindowBar(string text)
+    public TouchWindowBar(string text)
     {
       Scale = new Vector2(1, 0);
       Pixels = new Vector2(0, 24);
@@ -15,7 +15,7 @@ namespace Lima.Fancy.Elements
       Direction = ViewDirection.Row;
       Alignment = ViewAlignment.Center;
 
-      Label = new FancyLabel(text, 0.5f, TextAlignment.LEFT);
+      Label = new TouchLabel(text, 0.5f, TextAlignment.LEFT);
       Label.Margin = new Vector4(4, 0, 4, 0);
       AddChild(Label);
     }

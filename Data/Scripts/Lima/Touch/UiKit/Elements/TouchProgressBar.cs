@@ -2,9 +2,9 @@ using System;
 using VRage.Game.GUI.TextPanel;
 using VRageMath;
 
-namespace Lima.Fancy.Elements
+namespace Lima.Touch.UiKit.Elements
 {
-  public class FancyProgressBar : FancyBarContainer
+  public class TouchProgressBar : TouchBarContainer
   {
     protected MySprite textSprite;
 
@@ -28,9 +28,9 @@ namespace Lima.Fancy.Elements
     public float MinValue;
     public float MaxValue;
     public float BarsGap = 2;
-    public FancyLabel Label;
+    public TouchLabel Label;
 
-    public FancyProgressBar(float min, float max, bool vertical = false, float barsGap = 0) : base(vertical)
+    public TouchProgressBar(float min, float max, bool vertical = false, float barsGap = 0) : base(vertical)
     {
       MinValue = min;
       MaxValue = max;
@@ -43,7 +43,7 @@ namespace Lima.Fancy.Elements
 
       IsVertical = vertical;
 
-      Label = new FancyLabel("", 0.6f, TextAlignment.CENTER);
+      Label = new TouchLabel("", 0.6f, TextAlignment.CENTER);
       Label.Margin = new Vector4(2, 0, 2, 0);
       AddChild(Label);
     }
