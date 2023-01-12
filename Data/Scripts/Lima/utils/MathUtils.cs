@@ -28,17 +28,17 @@ namespace Lima.Utils
       return new Vector2((float)x, (float)y);
     }
 
-    internal static Vector3 LocalToGlobal(Vector3 localPos, MatrixD worldMatrix)
+    internal static Vector3D LocalToGlobal(Vector3D localPos, MatrixD worldMatrix)
     {
       return Vector3D.Transform(localPos, worldMatrix);
     }
 
-    internal static Vector3 GlobalToLocal(Vector3D globalPos, MatrixD worldMatrix)
+    internal static Vector3D GlobalToLocal(Vector3D globalPos, MatrixD worldMatrix)
     {
       return Vector3D.TransformNormal(globalPos - worldMatrix.Translation, MatrixD.Transpose(worldMatrix));
     }
 
-    internal static Vector3 GlobalToLocalSlowerAlternative(Vector3D globalPos, MatrixD worldMatrixNormalizedInv)
+    internal static Vector3D GlobalToLocalSlowerAlternative(Vector3D globalPos, MatrixD worldMatrixNormalizedInv)
     {
       return Vector3D.Transform(globalPos, worldMatrixNormalizedInv);
     }

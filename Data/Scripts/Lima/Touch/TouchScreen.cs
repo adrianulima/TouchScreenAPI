@@ -22,7 +22,7 @@ namespace Lima.Touch
     public RectangleF Viewport { get; private set; }
     public bool IsOnScreen { get; private set; }
     public Vector2 CursorPosition { get; private set; }
-    public Vector3 Intersection { get; private set; }
+    public Vector3D Intersection { get; private set; }
     public float _interactiveDistance = TouchSession.Instance.TouchMan.DefaultInteractiveDistance;
     public float InteractiveDistance
     {
