@@ -459,7 +459,7 @@ namespace Lima.API
     /// </summary>
     public TouchElementBase(object internalObject) : base(internalObject) { }
     /// <summary>
-    /// If false, the element won't be draw, useful if you want to hide and show but not destroy. Better than removing it.
+    /// If false, the element will not be drawn, useful if you want to hide and show but not destroy. Better than removing it.
     /// </summary>
     public bool Enabled { get { return Api.TouchElementBase_GetEnabled.Invoke(InternalObj); } set { Api.TouchElementBase_SetEnabled.Invoke(InternalObj, value); } }
     /// <summary>
