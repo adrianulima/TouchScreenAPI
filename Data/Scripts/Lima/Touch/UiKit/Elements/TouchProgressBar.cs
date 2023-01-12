@@ -76,7 +76,7 @@ namespace Lima.Touch.UiKit.Elements
           var interval = size.Y / count;
           for (int i = 0; i < count - 1; i++)
           {
-            gapSprite.Position = Position + new Vector2(0, interval + interval * i) + new Vector2(Padding.X, Padding.Y);
+            gapSprite.Position = Position + new Vector2(0, interval + interval * i) + new Vector2(Padding.X, Padding.Y) * ThemeScale;
             gapSprite.Size = new Vector2(size.X, BarsGap * ThemeScale);
             Bar.GetSprites().Add(gapSprite);
           }
@@ -87,7 +87,7 @@ namespace Lima.Touch.UiKit.Elements
           var interval = size.X / count;
           for (int i = 0; i < count - 1; i++)
           {
-            gapSprite.Position = Position + new Vector2(interval + interval * i, size.Y / 2) + new Vector2(Padding.X, Padding.Y);
+            gapSprite.Position = Position + new Vector2(interval + interval * i, size.Y / 2) + new Vector2(Padding.X, Padding.Y) * ThemeScale;
             gapSprite.Size = new Vector2(BarsGap * ThemeScale, size.Y);
             Bar.GetSprites().Add(gapSprite);
           }
