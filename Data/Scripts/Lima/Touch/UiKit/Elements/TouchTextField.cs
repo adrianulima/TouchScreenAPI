@@ -38,6 +38,7 @@ namespace Lima.Touch.UiKit.Elements
       Alignment = ViewAlignment.Center;
 
       Label = new TouchLabel(text, 0.6f, TextAlignment.CENTER);
+      Label.AutoEllipsis = LabelEllipsis.Left;
       AddChild(Label);
     }
 
@@ -134,8 +135,9 @@ namespace Lima.Touch.UiKit.Elements
         ToggleEdit(true, false, Text == _saveText);
 
       Label.Text = Text;
+      Label.AutoEllipsis = IsEditing ? LabelEllipsis.Left : LabelEllipsis.Right;
 
-      if (IsEditing && _blinkCaret && !Label.IsShortened)
+      if (IsEditing && _blinkCaret && !Label.HasEllipsis)
       {
         Label.Text = Label.Text + "|";
         base.Update();

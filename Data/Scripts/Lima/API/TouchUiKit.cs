@@ -128,9 +128,9 @@ namespace Lima.API
       AssignMethod(delegates, "TouchLabel_New", ref apiDel.TouchLabel_New);
       AssignMethod(delegates, "TouchLabel_GetAutoBreakLine", ref apiDel.TouchLabel_GetAutoBreakLine);
       AssignMethod(delegates, "TouchLabel_SetAutoBreakLine", ref apiDel.TouchLabel_SetAutoBreakLine);
-      AssignMethod(delegates, "TouchLabel_GetOverflow", ref apiDel.TouchLabel_GetOverflow);
-      AssignMethod(delegates, "TouchLabel_SetOverflow", ref apiDel.TouchLabel_SetOverflow);
-      AssignMethod(delegates, "TouchLabel_GetIsShortened", ref apiDel.TouchLabel_GetIsShortened);
+      AssignMethod(delegates, "TouchLabel_GetAutoEllipsis", ref apiDel.TouchLabel_GetAutoEllipsis);
+      AssignMethod(delegates, "TouchLabel_SetAutoEllipsis", ref apiDel.TouchLabel_SetAutoEllipsis);
+      AssignMethod(delegates, "TouchLabel_GetHasEllipsis", ref apiDel.TouchLabel_GetHasEllipsis);
       AssignMethod(delegates, "TouchLabel_GetText", ref apiDel.TouchLabel_GetText);
       AssignMethod(delegates, "TouchLabel_SetText", ref apiDel.TouchLabel_SetText);
       AssignMethod(delegates, "TouchLabel_GetTextColor", ref apiDel.TouchLabel_GetTextColor);
@@ -262,11 +262,11 @@ namespace Lima.API
     public Action<object, int> TouchContainerBase_RemoveChildAt;
     public Action<object, object, int> TouchContainerBase_MoveChild;
 
-    public Func<int, Color?, object> TouchView_New;
+    public Func<byte, Color?, object> TouchView_New;
     public Func<object, bool> TouchView_GetOverflow;
     public Action<object, bool> TouchView_SetOverflow;
-    public Func<object, int> TouchView_GetDirection;
-    public Action<object, int> TouchView_SetDirection;
+    public Func<object, byte> TouchView_GetDirection;
+    public Action<object, byte> TouchView_SetDirection;
     public Func<object, byte> TouchView_GetAlignment;
     public Action<object, byte> TouchView_SetAlignment;
     public Func<object, byte> TouchView_GetAnchor;
@@ -316,9 +316,9 @@ namespace Lima.API
     public Func<string, float, TextAlignment, object> TouchLabel_New;
     public Func<object, bool> TouchLabel_GetAutoBreakLine;
     public Action<object, bool> TouchLabel_SetAutoBreakLine;
-    public Func<object, bool> TouchLabel_GetOverflow;
-    public Action<object, bool> TouchLabel_SetOverflow;
-    public Func<object, bool> TouchLabel_GetIsShortened;
+    public Func<object, byte> TouchLabel_GetAutoEllipsis;
+    public Action<object, byte> TouchLabel_SetAutoEllipsis;
+    public Func<object, bool> TouchLabel_GetHasEllipsis;
     public Func<object, string> TouchLabel_GetText;
     public Action<object, string> TouchLabel_SetText;
     public Func<object, Color?> TouchLabel_GetTextColor;
@@ -547,7 +547,7 @@ namespace Lima.API
   /// </summary>
   public class TouchView : TouchContainerBase
   {
-    public TouchView(ViewDirection direction = ViewDirection.Column, Color? bgColor = null) : base(Api.TouchView_New((int)direction, bgColor)) { }
+    public TouchView(ViewDirection direction = ViewDirection.Column, Color? bgColor = null) : base(Api.TouchView_New((byte)direction, bgColor)) { }
     /// <summary>
     /// Do not call this ctor directly, unless you have the reference of the original object from the API.
     /// </summary>
@@ -667,6 +667,7 @@ namespace Lima.API
     public Action<bool> OnChange { set { Api.TouchCheckbox_SetOnChange.Invoke(InternalObj, value); } }
     public TouchEmptyElement CheckMark { get { return _checkMark ?? (_checkMark = Wrap<TouchEmptyElement>(Api.TouchCheckbox_GetCheckMark.Invoke(InternalObj), (obj) => new TouchEmptyElement(obj))); } }
   }
+  public enum LabelEllipsis : byte { None = 0, Left = 1, Right = 2 }
   /// <summary>
   /// <see href="https://github.com/adrianulima/TouchScreenAPI/blob/main/Data/Scripts/Lima/Touch/UiKit/Elements/TouchLabel.cs"/>
   /// </summary>
@@ -681,11 +682,11 @@ namespace Lima.API
     /// <summary>
     /// If true, text will not be shortened if bigger than size.
     /// </summary>
-    public bool Overflow { get { return Api.TouchLabel_GetOverflow.Invoke(InternalObj); } set { Api.TouchLabel_SetOverflow.Invoke(InternalObj, value); } }
+    public LabelEllipsis AutoEllipsis { get { return (LabelEllipsis)Api.TouchLabel_GetAutoEllipsis.Invoke(InternalObj); } set { Api.TouchLabel_SetAutoEllipsis.Invoke(InternalObj, (byte)value); } }
     /// <summary>
-    /// If <see cref="Overflow" /> is false and the text was shortened to fit the size.
+    /// If <see cref="AutoEllipsis" /> is false and the text was limited to fit the size and added an ellipsis.
     /// </summary>
-    public bool IsShortened { get { return Api.TouchLabel_GetIsShortened.Invoke(InternalObj); } }
+    public bool HasEllipsis { get { return Api.TouchLabel_GetHasEllipsis.Invoke(InternalObj); } }
     public string Text { get { return Api.TouchLabel_GetText.Invoke(InternalObj); } set { Api.TouchLabel_SetText.Invoke(InternalObj, value); } }
     public Color? TextColor { get { return Api.TouchLabel_GetTextColor.Invoke(InternalObj); } set { Api.TouchLabel_SetTextColor.Invoke(InternalObj, (Color)value); } }
     public float FontSize { get { return Api.TouchLabel_GetFontSize.Invoke(InternalObj); } set { Api.TouchLabel_SetFontSize.Invoke(InternalObj, value); } }

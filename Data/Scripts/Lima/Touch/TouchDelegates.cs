@@ -121,11 +121,11 @@ namespace Lima.Touch
         { "TouchContainerBase_RemoveChildAt", new Action<object, int>(TouchContainerBase_RemoveChildAt) },
         { "TouchContainerBase_MoveChild", new Action<object, object, int>(TouchContainerBase_MoveChild) },
 
-        { "TouchView_New", new Func<int, Color?, TouchView>(TouchView_New) },
+        { "TouchView_New", new Func<byte, Color?, TouchView>(TouchView_New) },
         { "TouchView_GetOverflow", new Func<object, bool>(TouchView_GetOverflow) },
         { "TouchView_SetOverflow", new Action<object, bool>(TouchView_SetOverflow) },
-        { "TouchView_GetDirection", new Func<object, int>(TouchView_GetDirection) },
-        { "TouchView_SetDirection", new Action<object, int>(TouchView_SetDirection) },
+        { "TouchView_GetDirection", new Func<object, byte>(TouchView_GetDirection) },
+        { "TouchView_SetDirection", new Action<object, byte>(TouchView_SetDirection) },
         { "TouchView_GetAlignment", new Func<object, byte>(TouchView_GetAlignment) },
         { "TouchView_SetAlignment", new Action<object, byte>(TouchView_SetAlignment) },
         { "TouchView_GetAnchor", new Func<object, byte>(TouchView_GetAnchor) },
@@ -175,9 +175,9 @@ namespace Lima.Touch
         { "TouchLabel_New", new Func<string, float, TextAlignment, object>(TouchLabel_New) },
         { "TouchLabel_GetAutoBreakLine", new Func<object, bool>(TouchLabel_GetAutoBreakLine) },
         { "TouchLabel_SetAutoBreakLine", new Action<object, bool>(TouchLabel_SetAutoBreakLine) },
-        { "TouchLabel_GetOverflow", new Func<object, bool>(TouchLabel_GetOverflow) },
-        { "TouchLabel_SetOverflow", new Action<object, bool>(TouchLabel_SetOverflow) },
-        { "TouchLabel_GetIsShortened", new Func<object, bool>(TouchLabel_GetIsShortened) },
+        { "TouchLabel_GetAutoEllipsis", new Func<object, byte>(TouchLabel_GetAutoEllipsis) },
+        { "TouchLabel_SetAutoEllipsis", new Action<object, byte>(TouchLabel_SetAutoEllipsis) },
+        { "TouchLabel_GetHasEllipsis", new Func<object, bool>(TouchLabel_GetHasEllipsis) },
         { "TouchLabel_GetText", new Func<object, string>(TouchLabel_GetText) },
         { "TouchLabel_SetText", new Action<object, string>(TouchLabel_SetText) },
         { "TouchLabel_GetTextColor", new Func<object, Color?>(TouchLabel_GetTextColor) },
@@ -384,11 +384,11 @@ namespace Lima.Touch
     private void TouchContainerBase_RemoveChildAt(object obj, int index) => (obj as TouchContainerBase).RemoveChild(index);
     private void TouchContainerBase_MoveChild(object obj, object child, int index) => (obj as TouchContainerBase).MoveChild((TouchElementBase)child, index);
 
-    private TouchView TouchView_New(int direction, Color? bgColor = null) => new TouchView((ViewDirection)direction, bgColor);
+    private TouchView TouchView_New(byte direction, Color? bgColor = null) => new TouchView((ViewDirection)direction, bgColor);
     private bool TouchView_GetOverflow(object obj) => (obj as TouchView).Overflow;
     private void TouchView_SetOverflow(object obj, bool overflow) => (obj as TouchView).Overflow = overflow;
-    private int TouchView_GetDirection(object obj) => (int)(obj as TouchView).Direction;
-    private void TouchView_SetDirection(object obj, int direction) => (obj as TouchView).Direction = (ViewDirection)direction;
+    private byte TouchView_GetDirection(object obj) => (byte)(obj as TouchView).Direction;
+    private void TouchView_SetDirection(object obj, byte direction) => (obj as TouchView).Direction = (ViewDirection)direction;
     private byte TouchView_GetAlignment(object obj) => (byte)(obj as TouchView).Alignment;
     private void TouchView_SetAlignment(object obj, byte alignment) => (obj as TouchView).Alignment = (ViewAlignment)alignment;
     private byte TouchView_GetAnchor(object obj) => (byte)(obj as TouchView).Anchor;
@@ -480,9 +480,9 @@ namespace Lima.Touch
     private TouchLabel TouchLabel_New(string text, float fontSize = 0.5f, TextAlignment alignment = TextAlignment.CENTER) => new TouchLabel(text, fontSize, alignment);
     private bool TouchLabel_GetAutoBreakLine(object obj) => (obj as TouchLabel).AutoBreakLine;
     private void TouchLabel_SetAutoBreakLine(object obj, bool breakLine) => (obj as TouchLabel).AutoBreakLine = breakLine;
-    private bool TouchLabel_GetOverflow(object obj) => (obj as TouchLabel).Overflow;
-    private void TouchLabel_SetOverflow(object obj, bool overflow) => (obj as TouchLabel).Overflow = overflow;
-    private bool TouchLabel_GetIsShortened(object obj) => (obj as TouchLabel).IsShortened;
+    private byte TouchLabel_GetAutoEllipsis(object obj) => (byte)(obj as TouchLabel).AutoEllipsis;
+    private void TouchLabel_SetAutoEllipsis(object obj, byte overflow) => (obj as TouchLabel).AutoEllipsis = (LabelEllipsis)overflow;
+    private bool TouchLabel_GetHasEllipsis(object obj) => (obj as TouchLabel).HasEllipsis;
     private string TouchLabel_GetText(object obj) => (obj as TouchLabel).Text;
     private void TouchLabel_SetText(object obj, string text) => (obj as TouchLabel).Text = text;
     private Color? TouchLabel_GetTextColor(object obj) => (obj as TouchLabel).TextColor;

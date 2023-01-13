@@ -4,6 +4,10 @@ using VRageMath;
 
 namespace Lima.Touch.UiKit.Elements
 {
+  public enum LabelEllipsis : byte
+  {
+    None = 0, Left = 1, Right = 2
+  }
   public class TouchLabel : TouchElementBase
   {
     public string Text;
@@ -12,8 +16,8 @@ namespace Lima.Touch.UiKit.Elements
     public Color? TextColor;
 
     public bool AutoBreakLine = false;
-    public bool Overflow = false;
-    public bool IsShortened { get; private set; } = false;
+    public LabelEllipsis AutoEllipsis = LabelEllipsis.Right;
+    public bool HasEllipsis { get; private set; } = false;
 
     public float FontSize
     {
@@ -84,15 +88,18 @@ namespace Lima.Touch.UiKit.Elements
       {
         textSprite.Data = BreakLine(Text, size.X, textSprite);
       }
-      else if (!Overflow && Text.Length > 0)
+      else if (AutoEllipsis != LabelEllipsis.None && Text.Length > 0)
       {
         var text = Text;
+        var start = AutoEllipsis == LabelEllipsis.Left ? 1 : 0;
         while (text.Length > 0 && size.X < App.Theme.MeasureStringInPixels(text, textSprite.FontId, textSprite.RotationOrScale).X)
-          text = text.Substring(0, text.Length - 1).TrimEnd();
+          text = text.Substring(start, text.Length - 1).TrimEnd();
 
-        IsShortened = text != Text;
-        if (IsShortened)
-          textSprite.Data = $"{text.Substring(0, Math.Max(0, text.Length - 2)).TrimEnd()}...";
+        HasEllipsis = text != Text;
+        if (HasEllipsis)
+          textSprite.Data = AutoEllipsis == LabelEllipsis.Left
+          ? $"...{Text.Substring(Text.Length - (text.Length - 3), Math.Max(0, text.Length - 3)).TrimStart()}"
+          : $"{text.Substring(0, Math.Max(0, text.Length - 3)).TrimEnd()}...";
       }
 
       UpdateHeight(textSprite.Data);
