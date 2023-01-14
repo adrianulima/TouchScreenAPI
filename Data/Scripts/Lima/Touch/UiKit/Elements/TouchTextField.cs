@@ -137,7 +137,7 @@ namespace Lima.Touch.UiKit.Elements
       Label.Text = Text;
       Label.AutoEllipsis = IsEditing ? LabelEllipsis.Left : LabelEllipsis.Right;
 
-      if (IsEditing && _blinkCaret && !Label.HasEllipsis)
+      if (IsEditing && _blinkCaret)
       {
         Label.Text = Label.Text + "|";
         base.Update();

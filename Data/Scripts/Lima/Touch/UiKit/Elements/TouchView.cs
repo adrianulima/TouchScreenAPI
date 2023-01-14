@@ -1,3 +1,4 @@
+using System.Linq;
 using VRage.Game.GUI.TextPanel;
 using VRageMath;
 
@@ -141,13 +142,17 @@ namespace Lima.Touch.UiKit.Elements
             anchorStart = isRow ? new Vector2(remainingFlex.X * 0.5f, 0) : new Vector2(0, remainingFlex.Y * 0.5f);
           else if (Anchor == ViewAnchor.End)
             anchorStart = isRow ? new Vector2(remainingFlex.X, 0) : new Vector2(0, remainingFlex.Y);
-          else if (Anchor == ViewAnchor.SpaceAround)
+          else if (Anchor == ViewAnchor.SpaceAround || Anchor == ViewAnchor.SpaceBetween)
           {
-            anchorGap = new Vector2(remainingFlex.X / (childrenCount + 1), remainingFlex.Y / (childrenCount + 1));
-            anchorStart = isRow ? new Vector2(anchorGap.X, 0) : new Vector2(0, anchorGap.Y);
+            var childrenEnabledCount = Children.Count(c => c.Enabled);
+            if (Anchor == ViewAnchor.SpaceAround)
+            {
+              anchorGap = new Vector2(remainingFlex.X / (childrenEnabledCount + 1), remainingFlex.Y / (childrenEnabledCount + 1));
+              anchorStart = isRow ? new Vector2(anchorGap.X, 0) : new Vector2(0, anchorGap.Y);
+            }
+            else if (Anchor == ViewAnchor.SpaceBetween)
+              anchorGap = new Vector2(remainingFlex.X / (childrenEnabledCount - 1), remainingFlex.Y / (childrenEnabledCount - 1));
           }
-          else if (Anchor == ViewAnchor.SpaceBetween)
-            anchorGap = new Vector2(remainingFlex.X / (childrenCount - 1), remainingFlex.Y / (childrenCount - 1));
         }
 
         var isReverse = Direction == ViewDirection.RowReverse || Direction == ViewDirection.ColumnReverse;
