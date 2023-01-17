@@ -6,7 +6,7 @@ using VRage.Utils;
 
 namespace Lima.Touch
 {
-  [MySessionComponentDescriptor(MyUpdateOrder.AfterSimulation)]
+  [MySessionComponentDescriptor(MyUpdateOrder.Simulation)]
   public class TouchSession : MySessionComponentBase
   {
     public static TouchSession Instance;
@@ -46,8 +46,10 @@ namespace Lima.Touch
       ModEnabled = false;
     }
 
-    public override void UpdateAfterSimulation()
+    public override void Simulate()
     {
+      base.Simulate();
+
       if (!ModEnabled)
         return;
 
