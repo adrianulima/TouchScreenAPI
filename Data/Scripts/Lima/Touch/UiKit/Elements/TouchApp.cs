@@ -9,7 +9,7 @@ namespace Lima.Touch.UiKit.Elements
 {
   public class TouchApp : TouchView
   {
-    public event Action UpdateAfterSimulationEvent;
+    public event Action UpdateAtSimulationEvent;
 
     public TouchScreen Screen { get; private set; }
     public TouchCursor Cursor { get; private set; }
@@ -31,7 +31,7 @@ namespace Lima.Touch.UiKit.Elements
       Screen = new TouchScreen(block, surface as Sandbox.ModAPI.IMyTextSurface);
       TouchSession.Instance.TouchMan.RemoveScreen(block, surface as Sandbox.ModAPI.IMyTextSurface);
       TouchSession.Instance.TouchMan.Screens.Add(Screen);
-      Screen.UpdateAfterSimulationEvent += UpdateAfterSimulation;
+      Screen.UpdateAtSimulationEvent += UpdateAtSimulation;
 
       Cursor = new TouchCursor(Screen);
       Theme = new TouchTheme(surface);
@@ -47,9 +47,9 @@ namespace Lima.Touch.UiKit.Elements
       App = this;
     }
 
-    public virtual void UpdateAfterSimulation()
+    public virtual void UpdateAtSimulation()
     {
-      UpdateAfterSimulationEvent?.Invoke();
+      UpdateAtSimulationEvent?.Invoke();
     }
 
     public override void Update()
@@ -90,13 +90,13 @@ namespace Lima.Touch.UiKit.Elements
     {
       if (Screen != null)
       {
-        Screen.UpdateAfterSimulationEvent -= UpdateAfterSimulation;
+        Screen.UpdateAtSimulationEvent -= UpdateAtSimulation;
         Screen.Dispose();
       }
       Cursor?.Dispose();
 
       TouchSession.Instance.TouchMan.Screens.Remove(Screen);
-      UpdateAfterSimulationEvent = null;
+      UpdateAtSimulationEvent = null;
       InputUtils.SetPlayerKeyboardBlacklistState(false);
 
       base.Dispose();

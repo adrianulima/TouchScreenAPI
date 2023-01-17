@@ -18,7 +18,7 @@ namespace Lima.Touch
 
     public TouchScreen CurrentScreen;
 
-    public void UpdateAfterSimulation()
+    public void UpdateAtSimulation()
     {
       try
       {
@@ -41,28 +41,28 @@ namespace Lima.Touch
         {
           if (!screen.Active)
           {
-            screen.UpdateAfterSimulation();
+            screen.UpdateAtSimulation();
             continue;
           }
 
           var coords = screen.Coords;
           if (coords.IsEmpty())
           {
-            screen.UpdateAfterSimulation();
+            screen.UpdateAtSimulation();
             continue;
           }
 
           Vector3D intersection = screen.CalculateIntersection(cameraMatrix);
           if (intersection == Vector3D.Zero)
           {
-            screen.UpdateAfterSimulation();
+            screen.UpdateAtSimulation();
             continue;
           }
 
           var dist = Vector3.Distance(camPos, intersection);
           if (dist > screen.InteractiveDistance)
           {
-            screen.UpdateAfterSimulation();
+            screen.UpdateAtSimulation();
             continue;
           }
 
@@ -74,7 +74,7 @@ namespace Lima.Touch
             CurrentScreen = screen;
           }
 
-          screen.UpdateAfterSimulation();
+          screen.UpdateAtSimulation();
         }
       }
       catch (Exception e)

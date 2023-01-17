@@ -45,8 +45,8 @@ namespace Lima.Touch.UiKit.Elements
     public override void OnAddedToApp()
     {
       base.OnAddedToApp();
-      App.UpdateAfterSimulationEvent -= UpdateAfterSimulation;
-      App.UpdateAfterSimulationEvent += UpdateAfterSimulation;
+      App.UpdateAtSimulationEvent -= UpdateAtSimulation;
+      App.UpdateAtSimulationEvent += UpdateAtSimulation;
       MyAPIGateway.Gui.GuiControlCreated -= OnGuiControlCreated;
       MyAPIGateway.Gui.GuiControlCreated += OnGuiControlCreated;
     }
@@ -54,7 +54,7 @@ namespace Lima.Touch.UiKit.Elements
     public override void Dispose()
     {
       base.Dispose();
-      App.UpdateAfterSimulationEvent -= UpdateAfterSimulation;
+      App.UpdateAtSimulationEvent -= UpdateAtSimulation;
       MyAPIGateway.Gui.GuiControlCreated -= OnGuiControlCreated;
     }
 
@@ -110,7 +110,7 @@ namespace Lima.Touch.UiKit.Elements
       InputUtils.SetPlayerKeyboardBlacklistState(IsEditing);
     }
 
-    public void UpdateAfterSimulation()
+    public void UpdateAtSimulation()
     {
       if (IsEditing)
         _inputHandler.Update();

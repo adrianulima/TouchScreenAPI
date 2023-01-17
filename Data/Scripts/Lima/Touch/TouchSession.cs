@@ -55,7 +55,7 @@ namespace Lima.Touch
 
       try
       {
-        TouchMan.UpdateAfterSimulation();
+        TouchMan.UpdateAtSimulation();
       }
       catch (Exception e)
       {
