@@ -23,11 +23,11 @@ namespace Lima.Touch
     public bool IsOnScreen { get; private set; }
     public Vector2 CursorPosition { get; private set; }
     public Vector3D Intersection { get; private set; }
-    public float _interactiveDistance = TouchSession.Instance.TouchMan.DefaultInteractiveDistance;
+    public float _interactiveDistance = 10;
     public float InteractiveDistance
     {
       get { return _interactiveDistance; }
-      set { _interactiveDistance = MathHelper.Clamp(value, 0, TouchSession.Instance.TouchMan.MaxInteractiveDistance); }
+      set { _interactiveDistance = value > 0 ? value : 0; }
     }
 
     private int _rotation = -1;

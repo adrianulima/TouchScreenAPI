@@ -11,9 +11,6 @@ namespace Lima.Touch
 {
   public class TouchManager
   {
-    public float MaxInteractiveDistance = 50f;
-    public float DefaultInteractiveDistance = 10f;
-
     public readonly List<TouchScreen> Screens = new List<TouchScreen>();
 
     public TouchScreen CurrentScreen;

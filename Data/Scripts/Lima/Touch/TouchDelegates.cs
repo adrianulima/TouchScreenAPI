@@ -8,6 +8,7 @@ using System;
 using VRage.Game.GUI.TextPanel;
 using VRage.Game.ModAPI;
 using VRageMath;
+using VRage.Game.Entity;
 
 namespace Lima.Touch
 {
@@ -51,34 +52,6 @@ namespace Lima.Touch
     {
       var dict = new Dictionary<string, Delegate>
       {
-        { "CreateTouchScreen", new Func<IMyCubeBlock, IMyTextSurface, TouchScreen>(CreateTouchScreen) },
-        { "RemoveTouchScreen", new Action<IMyCubeBlock, IMyTextSurface>(RemoveTouchScreen) },
-        { "AddSurfaceCoords", new Action<string>(AddSurfaceCoords) },
-        { "RemoveSurfaceCoords", new Action<string>(RemoveSurfaceCoords) },
-        { "GetMaxInteractiveDistance", new Func<float>(GetMaxInteractiveDistance) },
-        { "SetMaxInteractiveDistance", new Action<float>(SetMaxInteractiveDistance) },
-
-        { "TouchScreen_GetBlock", new Func<object, IMyCubeBlock>(TouchScreen_GetBlock) },
-        { "TouchScreen_GetSurface", new Func<object, IMyTextSurface>(TouchScreen_GetSurface) },
-        { "TouchScreen_GetIndex", new Func<object, int>(TouchScreen_GetIndex) },
-        { "TouchScreen_IsOnScreen", new Func<object, bool>(TouchScreen_IsOnScreen) },
-        { "TouchScreen_GetCursorPosition", new Func<object, Vector2>(TouchScreen_GetCursorPosition) },
-        { "TouchScreen_GetInteractiveDistance", new Func<object, float>(TouchScreen_GetInteractiveDistance) },
-        { "TouchScreen_SetInteractiveDistance", new Action<object, float>(TouchScreen_SetInteractiveDistance) },
-        { "TouchScreen_GetRotation", new Func<object, int>(TouchScreen_GetRotation) },
-        { "TouchScreen_CompareWithBlockAndSurface", new Func<object, IMyCubeBlock, IMyTextSurface, bool>(TouchScreen_CompareWithBlockAndSurface) },
-        { "TouchScreen_ForceDispose", new Action<object>(TouchScreen_ForceDispose) },
-
-        { "TouchCursor_New", new Func<object, TouchCursor>(TouchCursor_New) },
-        { "TouchCursor_GetActive", new Func<object, bool>(TouchCursor_GetActive) },
-        { "TouchCursor_SetActive", new Action<object, bool>(TouchCursor_SetActive) },
-        { "TouchCursor_GetScale", new Func<object, float>(TouchCursor_GetScale) },
-        { "TouchCursor_SetScale", new Action<object, float>(TouchCursor_SetScale) },
-        { "TouchCursor_GetPosition", new Func<object, Vector2>(TouchCursor_GetPosition) },
-        { "TouchCursor_IsInsideArea", new Func<object, float, float, float, float, bool>(TouchCursor_IsInsideArea) },
-        { "TouchCursor_GetSprites", new Func<object, List<MySprite>>(TouchCursor_GetSprites) },
-        { "TouchCursor_ForceDispose", new Action<object>(TouchCursor_ForceDispose) },
-
         { "TouchTheme_GetBgColor", new Func<object, Color>(TouchTheme_GetBgColor) },
         { "TouchTheme_GetWhiteColor", new Func<object, Color>(TouchTheme_GetWhiteColor) },
         { "TouchTheme_GetMainColor", new Func<object, Color>(TouchTheme_GetMainColor) },
@@ -284,8 +257,6 @@ namespace Lima.Touch
         { "RemoveTouchScreen", new Action<IMyCubeBlock, IMyTextSurface>(RemoveTouchScreen) },
         { "AddSurfaceCoords", new Action<string>(AddSurfaceCoords) },
         { "RemoveSurfaceCoords", new Action<string>(RemoveSurfaceCoords) },
-        { "GetMaxInteractiveDistance", new Func<float>(GetMaxInteractiveDistance) },
-        { "SetMaxInteractiveDistance", new Action<float>(SetMaxInteractiveDistance) },
 
         { "TouchScreen_GetBlock", new Func<object, IMyCubeBlock>(TouchScreen_GetBlock) },
         { "TouchScreen_GetSurface", new Func<object, IMyTextSurface>(TouchScreen_GetSurface) },
@@ -331,8 +302,6 @@ namespace Lima.Touch
     private void RemoveTouchScreen(IMyCubeBlock block, IMyTextSurface surface) => TouchSession.Instance.TouchMan.RemoveScreen(block, surface);
     // private List<TouchScreen> GetTouchScreensList() => TouchSession.Instance.TouchMan.Screens;
     // private TouchScreen GetTargetTouchScreen() => TouchSession.Instance.TouchMan.CurrentScreen;
-    private float GetMaxInteractiveDistance() => TouchSession.Instance.TouchMan.MaxInteractiveDistance;
-    private void SetMaxInteractiveDistance(float distance) => TouchSession.Instance.TouchMan.MaxInteractiveDistance = distance;
     private void AddSurfaceCoords(string coords) => TouchSession.Instance.SurfaceCoordsMan.AddSurfaceCoords(coords);
     private void RemoveSurfaceCoords(string coords)
     {
