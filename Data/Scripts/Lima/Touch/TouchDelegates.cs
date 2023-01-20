@@ -3,12 +3,14 @@ using Lima.Touch.UiKit;
 using Sandbox.Game.Entities;
 using Sandbox.ModAPI;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using System;
+using VRage.Game.Entity;
 using VRage.Game.GUI.TextPanel;
 using VRage.Game.ModAPI;
+using VRage.Game;
 using VRageMath;
-using VRage.Game.Entity;
 
 namespace Lima.Touch
 {
@@ -24,6 +26,7 @@ namespace Lima.Touch
       {
         _isRegistered = true;
         MyAPIGateway.Utilities.RegisterMessageHandler(_channel, HandleMessage);
+        MyEntities.OnEntityCreate += EntityCreated;
       }
       IsReady = true;
       MyAPIGateway.Utilities.SendModMessage(_channel, GetTouchAndUiApiDictionary());
@@ -35,6 +38,7 @@ namespace Lima.Touch
       {
         _isRegistered = false;
         MyAPIGateway.Utilities.UnregisterMessageHandler(_channel, HandleMessage);
+        MyEntities.OnEntityCreate -= EntityCreated;
       }
       IsReady = false;
       MyAPIGateway.Utilities.SendModMessage(_channel, new Dictionary<string, Delegate>());
@@ -46,6 +50,26 @@ namespace Lima.Touch
         MyAPIGateway.Utilities.SendModMessage(_channel, GetTouchApiDictionary());
       else if ((msg as string) == "ApiRequestTouchAndUi")
         MyAPIGateway.Utilities.SendModMessage(_channel, GetTouchAndUiApiDictionary());
+    }
+
+    private void EntityCreated(MyEntity ent)
+    {
+      IMyProgrammableBlock pb = ent as IMyProgrammableBlock;
+      if (pb != null)
+      {
+        MyEntities.OnEntityCreate -= EntityCreated;
+
+        var dict = GetTouchApiDictionaryForPB();
+        var builder = ImmutableDictionary.CreateBuilder<string, Delegate>();
+        foreach (var del in dict)
+          builder.Add(del.Key, del.Value);
+
+        var immutableDict = builder.ToImmutable();
+        var p = Sandbox.ModAPI.MyAPIGateway.TerminalControls.CreateProperty<IReadOnlyDictionary<string, Delegate>, IMyProgrammableBlock>($"{_channel}");
+        p.Getter = b => immutableDict;
+        p.Setter = (b, v) => { };
+        Sandbox.ModAPI.MyAPIGateway.TerminalControls.AddControl<IMyProgrammableBlock>(p);
+      }
     }
 
     private Dictionary<string, Delegate> GetTouchAndUiApiDictionary()
@@ -253,10 +277,12 @@ namespace Lima.Touch
     {
       var dict = new Dictionary<string, Delegate>
       {
-        { "CreateTouchScreen", new Func<IMyCubeBlock, IMyTextSurface, TouchScreen>(CreateTouchScreen) },
+        { "CreateTouchScreen", new Func<IMyCubeBlock, IMyTextSurface, object>(CreateTouchScreen) },
         { "RemoveTouchScreen", new Action<IMyCubeBlock, IMyTextSurface>(RemoveTouchScreen) },
         { "AddSurfaceCoords", new Action<string>(AddSurfaceCoords) },
         { "RemoveSurfaceCoords", new Action<string>(RemoveSurfaceCoords) },
+        { "GetMaxInteractiveDistance", new Func<float>(GetMaxInteractiveDistance) },
+        { "SetMaxInteractiveDistance", new Action<float>(SetMaxInteractiveDistance) },
 
         { "TouchScreen_GetBlock", new Func<object, IMyCubeBlock>(TouchScreen_GetBlock) },
         { "TouchScreen_GetSurface", new Func<object, IMyTextSurface>(TouchScreen_GetSurface) },
@@ -293,15 +319,56 @@ namespace Lima.Touch
       return dict;
     }
 
-    private TouchScreen CreateTouchScreen(IMyCubeBlock block, IMyTextSurface surface)
+    private Dictionary<string, Delegate> GetTouchApiDictionaryForPB()
     {
+      var dict = GetTouchApiDictionary();
+
+      dict["CreateTouchScreen"] = new Func<VRage.Game.ModAPI.Ingame.IMyCubeBlock, Sandbox.ModAPI.Ingame.IMyTextSurface, object>(CreateTouchScreen);
+      dict["RemoveTouchScreen"] = new Action<VRage.Game.ModAPI.Ingame.IMyCubeBlock, Sandbox.ModAPI.Ingame.IMyTextSurface>(RemoveTouchScreen);
+      dict["TouchScreen_GetBlock"] = new Func<object, VRage.Game.ModAPI.Ingame.IMyCubeBlock>(TouchScreen_GetBlock);
+      dict["TouchScreen_GetSurface"] = new Func<object, Sandbox.ModAPI.Ingame.IMyTextSurface>(TouchScreen_GetSurface);
+      dict["TouchScreen_CompareWithBlockAndSurface"] = new Func<object, VRage.Game.ModAPI.Ingame.IMyCubeBlock, Sandbox.ModAPI.Ingame.IMyTextSurface, bool>(TouchScreen_CompareWithBlockAndSurface);
+
+      return dict;
+    }
+
+    private object CreateTouchScreen(VRage.Game.ModAPI.Ingame.IMyCubeBlock block, Sandbox.ModAPI.Ingame.IMyTextSurface surface)
+    {
+      // For PB
+      var castBlock = block as IMyCubeBlock;
+      var castSurface = surface as IMyTextSurface;
+      if (castBlock == null || castSurface == null)
+        return null;
+      return CreateTouchScreen(castBlock, castSurface);
+    }
+    private object CreateTouchScreen(IMyCubeBlock block, IMyTextSurface surface)
+    {
+      RemoveTouchScreen(block, surface);
       var screen = new TouchScreen(block, surface);
       TouchSession.Instance.TouchMan.Screens.Add(screen);
       return screen;
     }
+    private void RemoveTouchScreen(VRage.Game.ModAPI.Ingame.IMyCubeBlock block, Sandbox.ModAPI.Ingame.IMyTextSurface surface)
+    {
+      // For PB
+      var castBlock = block as IMyCubeBlock;
+      var castSurface = surface as IMyTextSurface;
+      if (castBlock == null || castSurface == null)
+        return;
+      RemoveTouchScreen(block, surface);
+    }
     private void RemoveTouchScreen(IMyCubeBlock block, IMyTextSurface surface) => TouchSession.Instance.TouchMan.RemoveScreen(block, surface);
     // private List<TouchScreen> GetTouchScreensList() => TouchSession.Instance.TouchMan.Screens;
     // private TouchScreen GetTargetTouchScreen() => TouchSession.Instance.TouchMan.CurrentScreen;
+    private float GetMaxInteractiveDistance()
+    {
+      MyAPIGateway.Utilities.ShowNotification($"[ GetMaxInteractiveDistance is Obsolete ]", 2000, MyFontEnum.Red);
+      return 0;
+    }
+    private void SetMaxInteractiveDistance(float distance)
+    {
+      MyAPIGateway.Utilities.ShowNotification($"[ SetMaxInteractiveDistance is Obsolete ]", 2000, MyFontEnum.Red);
+    }
     private void AddSurfaceCoords(string coords) => TouchSession.Instance.SurfaceCoordsMan.AddSurfaceCoords(coords);
     private void RemoveSurfaceCoords(string coords)
     {
@@ -318,6 +385,15 @@ namespace Lima.Touch
     private float TouchScreen_GetInteractiveDistance(object obj) => (obj as TouchScreen).InteractiveDistance;
     private void TouchScreen_SetInteractiveDistance(object obj, float distance) => (obj as TouchScreen).InteractiveDistance = distance;
     private int TouchScreen_GetRotation(object obj) => (obj as TouchScreen).Rotation;
+    private bool TouchScreen_CompareWithBlockAndSurface(object obj, VRage.Game.ModAPI.Ingame.IMyCubeBlock block, Sandbox.ModAPI.Ingame.IMyTextSurface surface)
+    {
+      // For PB
+      var castBlock = block as IMyCubeBlock;
+      var castSurface = surface as IMyTextSurface;
+      if (castBlock == null || castSurface == null)
+        return false;
+      return TouchScreen_CompareWithBlockAndSurface(obj, castBlock, castSurface);
+    }
     private bool TouchScreen_CompareWithBlockAndSurface(object obj, IMyCubeBlock block, IMyTextSurface surface) => (obj as TouchScreen).CompareWithBlockAndSurface(block, surface);
     private void TouchScreen_ForceDispose(object obj) => (obj as TouchScreen).Dispose();
 

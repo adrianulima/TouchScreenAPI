@@ -147,12 +147,14 @@ namespace Lima.Touch
 
     public bool CompareWithBlockAndSurface(IMyCubeBlock block, IMyTextSurface surface)
     {
+      if (Block != block)
+        return false;
+
       var provider = block as Sandbox.ModAPI.Ingame.IMyTextSurfaceProvider;
       if (provider == null)
-        throw new Exception($"Block is not a IMyTextSurfaceProvider {block}");
-      var i = SurfaceUtils.GetSurfaceIndex(provider, surface);
+        return false;
 
-      return Block == block && (Surface == surface || Index == i);
+      return (Block == block) && (Surface == surface || Index == SurfaceUtils.GetSurfaceIndex(provider, surface));
     }
 
     public void UpdateAtSimulation()

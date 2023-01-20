@@ -10,7 +10,7 @@ namespace Lima.Touch
   public class TouchSession : MySessionComponentBase
   {
     public static TouchSession Instance;
-    public bool ModEnabled = true;
+    public bool ModEnabled { get; private set; } = false;
 
     public SurfaceCoordsManager SurfaceCoordsMan = new SurfaceCoordsManager();
     public TouchManager TouchMan = new TouchManager();
@@ -34,14 +34,17 @@ namespace Lima.Touch
       if (!ModEnabled)
         return;
 
-      SurfaceCoordsMan.Init();
+      SurfaceCoordsMan?.Init();
     }
 
     protected override void UnloadData()
     {
-      TouchMan.Dispose();
-      SurfaceCoordsMan.Dispose();
-      _delegator.Unload();
+      if (!ModEnabled)
+        return;
+
+      TouchMan?.Dispose();
+      SurfaceCoordsMan?.Dispose();
+      _delegator?.Unload();
       Instance = null;
       ModEnabled = false;
     }
