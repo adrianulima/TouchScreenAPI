@@ -1,3 +1,4 @@
+using Sandbox.ModAPI.Interfaces;
 using System.Collections.Generic;
 using System;
 using VRage.Game.GUI.TextPanel;
@@ -5,222 +6,298 @@ using VRageMath;
 using IngameIMyTextSurface = Sandbox.ModAPI.Ingame.IMyTextSurface;
 using IngameIMyCubeBlock = VRage.Game.ModAPI.Ingame.IMyCubeBlock;
 
-namespace Lima.API
+namespace Lima.API.PB
 {
-  /// <summary>
-  /// The client API for Touch Screen and Touch Ui Kit feature.
-  /// This only handle communication with the MOD that have all the features.
-  /// Copy this file to your mod, and add TouchScreenAPI mod as dependency.
-  /// <see href="https://steamcommunity.com/sharedfiles/filedetails/?id=2668820525"/>
-  /// </summary>
-  public class TouchUiKit : TouchScreenAPI
+  // Copy these classes to inside your PB Program Class
+  // This has both the TouchScreen feature and the UI kit
+  public class TouchUiKit
   {
-    protected override string GetRequestString() { return "ApiRequestTouchAndUi"; }
-
+    public bool IsReady { get; protected set; }
+    private Func<IngameIMyCubeBlock, IngameIMyTextSurface, object> _createTouchScreen;
+    private Action<IngameIMyCubeBlock, IngameIMyTextSurface> _removeTouchScreen;
+    private Action<string> _addSurfaceCoords;
+    private Action<string> _removeSurfaceCoords;
     /// <summary>
-    /// If you want Ui Kit features, only instantiate this class, it calls TouchScreenAPI automatically.
+    /// Creates an instance of TouchScreen add adds it to the Touch Manager.
+    /// TouchScreen is responsible for checking player direction and distance to screen.
+    /// Use only one TouchScreen for each surface on the block that will need it.
+    /// Needs to be removed with <see cref="RemoveTouchScreen"/> when the App screen is not using the Api anymore.
     /// </summary>
-    public TouchUiKit()
+    /// <param name="block">The block the touch point will be calculated.</param>
+    /// <param name="surface">The surface the user will handle touch.</param>
+    /// <returns></returns>
+    public object CreateTouchScreen(IngameIMyCubeBlock block, IngameIMyTextSurface surface) => _createTouchScreen?.Invoke(block, surface);
+    /// <summary>
+    /// Dispose the instance of TouchScreen related to given block and surface. And also removes from Touch Manager.
+    /// </summary>
+    /// <param name="block">The related block.</param>
+    /// <param name="surface">The related surface.</param>
+    public void RemoveTouchScreen(IngameIMyCubeBlock block, IngameIMyTextSurface surface) => _removeTouchScreen?.Invoke(block, surface);
+    /// <summary>
+    /// This add surface coordinates to Touch Manager, it is a string similar to how GPS strings work.
+    /// This same feature is also available using chat message commands with prefix /touch [string].
+    /// </summary>
+    /// <example>
+    /// The string format is:
+    /// TOUCH:<block_name>:<surface_number>:topleftX:topleftY:topleftZ:bottomleftX:bottomleftY:bottomleftZ:bottomRightX:bottomRightY:bottomRightZ
+    /// Where the X, Y and Z are 3D model local positions, related to model origin.
+    /// <code>
+    /// AddSurfaceCoords("TOUCH:LargeLCDPanel:0:-1.23463:1.23463:-1.02366:-1.23463:-1.23463:-1.02366:1.23463:-1.23463:-1.02366");
+    /// </code>
+    /// </example>
+    /// <param name="coords">Formatted coords string.</param>
+    public void AddSurfaceCoords(string coords) => _addSurfaceCoords?.Invoke(coords);
+    /// <summary>
+    /// Removes surface coordinates from Touch Manager. Call it if you need to replace for a specific surface.
+    /// </summary>
+    /// <param name="coords"></param>
+    public void RemoveSurfaceCoords(string coords) => _removeSurfaceCoords?.Invoke(coords);
+    private TouchUiKitDelegator _apiDel;
+    public TouchUiKit(Sandbox.ModAPI.Ingame.IMyTerminalBlock pb)
     {
-      ApiDelegator = new TouchUiKitDelegator();
+      var delegates = pb.GetProperty("2668820525")?.As<IReadOnlyDictionary<string, Delegate>>().GetValue(pb);
+      if (delegates != null)
+      {
+        _apiDel = new TouchUiKitDelegator();
+        WrapperBase<TouchUiKitDelegator>.SetApi(_apiDel);
+        AssignMethod(out _createTouchScreen, delegates["CreateTouchScreen"]);
+        AssignMethod(out _removeTouchScreen, delegates["RemoveTouchScreen"]);
+        AssignMethod(out _addSurfaceCoords, delegates["AddSurfaceCoords"]);
+        AssignMethod(out _removeSurfaceCoords, delegates["RemoveSurfaceCoords"]);
+        AssignMethod(out _apiDel.TouchScreen_GetBlock, delegates["TouchScreen_GetBlock"]);
+        AssignMethod(out _apiDel.TouchScreen_GetSurface, delegates["TouchScreen_GetSurface"]);
+        AssignMethod(out _apiDel.TouchScreen_GetIndex, delegates["TouchScreen_GetIndex"]);
+        AssignMethod(out _apiDel.TouchScreen_IsOnScreen, delegates["TouchScreen_IsOnScreen"]);
+        AssignMethod(out _apiDel.TouchScreen_GetCursorPosition, delegates["TouchScreen_GetCursorPosition"]);
+        AssignMethod(out _apiDel.TouchScreen_GetInteractiveDistance, delegates["TouchScreen_GetInteractiveDistance"]);
+        AssignMethod(out _apiDel.TouchScreen_SetInteractiveDistance, delegates["TouchScreen_SetInteractiveDistance"]);
+        AssignMethod(out _apiDel.TouchScreen_GetRotation, delegates["TouchScreen_GetRotation"]);
+        AssignMethod(out _apiDel.TouchScreen_CompareWithBlockAndSurface, delegates["TouchScreen_CompareWithBlockAndSurface"]);
+        AssignMethod(out _apiDel.TouchScreen_ForceDispose, delegates["TouchScreen_ForceDispose"]);
+        AssignMethod(out _apiDel.TouchCursor_New, delegates["TouchCursor_New"]);
+        AssignMethod(out _apiDel.TouchCursor_GetActive, delegates["TouchCursor_GetActive"]);
+        AssignMethod(out _apiDel.TouchCursor_SetActive, delegates["TouchCursor_SetActive"]);
+        AssignMethod(out _apiDel.TouchCursor_GetScale, delegates["TouchCursor_GetScale"]);
+        AssignMethod(out _apiDel.TouchCursor_SetScale, delegates["TouchCursor_SetScale"]);
+        AssignMethod(out _apiDel.TouchCursor_GetPosition, delegates["TouchCursor_GetPosition"]);
+        AssignMethod(out _apiDel.TouchCursor_IsInsideArea, delegates["TouchCursor_IsInsideArea"]);
+        AssignMethod(out _apiDel.TouchCursor_GetSprites, delegates["TouchCursor_GetSprites"]);
+        AssignMethod(out _apiDel.TouchCursor_ForceDispose, delegates["TouchCursor_ForceDispose"]);
+        AssignMethod(out _apiDel.ClickHandler_New, delegates["ClickHandler_New"]);
+        AssignMethod(out _apiDel.ClickHandler_GetHitArea, delegates["ClickHandler_GetHitArea"]);
+        AssignMethod(out _apiDel.ClickHandler_SetHitArea, delegates["ClickHandler_SetHitArea"]);
+        AssignMethod(out _apiDel.ClickHandler_IsMouseReleased, delegates["ClickHandler_IsMouseReleased"]);
+        AssignMethod(out _apiDel.ClickHandler_IsMouseOver, delegates["ClickHandler_IsMouseOver"]);
+        AssignMethod(out _apiDel.ClickHandler_IsMousePressed, delegates["ClickHandler_IsMousePressed"]);
+        AssignMethod(out _apiDel.ClickHandler_JustReleased, delegates["ClickHandler_JustReleased"]);
+        AssignMethod(out _apiDel.ClickHandler_JustPressed, delegates["ClickHandler_JustPressed"]);
+        AssignMethod(out _apiDel.ClickHandler_UpdateStatus, delegates["ClickHandler_UpdateStatus"]);
+        AssignMethod(out _apiDel.TouchTheme_GetBgColor, delegates["TouchTheme_GetBgColor"]);
+        AssignMethod(out _apiDel.TouchTheme_GetWhiteColor, delegates["TouchTheme_GetWhiteColor"]);
+        AssignMethod(out _apiDel.TouchTheme_GetMainColor, delegates["TouchTheme_GetMainColor"]);
+        AssignMethod(out _apiDel.TouchTheme_GetMainColorDarker, delegates["TouchTheme_GetMainColorDarker"]);
+        AssignMethod(out _apiDel.TouchTheme_MeasureStringInPixels, delegates["TouchTheme_MeasureStringInPixels"]);
+        AssignMethod(out _apiDel.TouchTheme_GetScale, delegates["TouchTheme_GetScale"]);
+        AssignMethod(out _apiDel.TouchTheme_SetScale, delegates["TouchTheme_SetScale"]);
+        AssignMethod(out _apiDel.TouchTheme_GetFont, delegates["TouchTheme_GetFont"]);
+        AssignMethod(out _apiDel.TouchTheme_SetFont, delegates["TouchTheme_SetFont"]);
+        AssignMethod(out _apiDel.TouchElementBase_GetEnabled, delegates["TouchElementBase_GetEnabled"]);
+        AssignMethod(out _apiDel.TouchElementBase_SetEnabled, delegates["TouchElementBase_SetEnabled"]);
+        AssignMethod(out _apiDel.TouchElementBase_GetAbsolute, delegates["TouchElementBase_GetAbsolute"]);
+        AssignMethod(out _apiDel.TouchElementBase_SetAbsolute, delegates["TouchElementBase_SetAbsolute"]);
+        AssignMethod(out _apiDel.TouchElementBase_GetSelfAlignment, delegates["TouchElementBase_GetSelfAlignment"]);
+        AssignMethod(out _apiDel.TouchElementBase_SetSelfAlignment, delegates["TouchElementBase_SetSelfAlignment"]);
+        AssignMethod(out _apiDel.TouchElementBase_GetPosition, delegates["TouchElementBase_GetPosition"]);
+        AssignMethod(out _apiDel.TouchElementBase_SetPosition, delegates["TouchElementBase_SetPosition"]);
+        AssignMethod(out _apiDel.TouchElementBase_GetMargin, delegates["TouchElementBase_GetMargin"]);
+        AssignMethod(out _apiDel.TouchElementBase_SetMargin, delegates["TouchElementBase_SetMargin"]);
+        AssignMethod(out _apiDel.TouchElementBase_GetScale, delegates["TouchElementBase_GetScale"]);
+        AssignMethod(out _apiDel.TouchElementBase_SetScale, delegates["TouchElementBase_SetScale"]);
+        AssignMethod(out _apiDel.TouchElementBase_GetPixels, delegates["TouchElementBase_GetPixels"]);
+        AssignMethod(out _apiDel.TouchElementBase_SetPixels, delegates["TouchElementBase_SetPixels"]);
+        AssignMethod(out _apiDel.TouchElementBase_GetSize, delegates["TouchElementBase_GetSize"]);
+        AssignMethod(out _apiDel.TouchElementBase_GetBoundaries, delegates["TouchElementBase_GetBoundaries"]);
+        AssignMethod(out _apiDel.TouchElementBase_GetApp, delegates["TouchElementBase_GetApp"]);
+        AssignMethod(out _apiDel.TouchElementBase_GetParent, delegates["TouchElementBase_GetParent"]);
+        AssignMethod(out _apiDel.TouchElementBase_GetSprites, delegates["TouchElementBase_GetSprites"]);
+        AssignMethod(out _apiDel.TouchElementBase_ForceUpdate, delegates["TouchElementBase_ForceUpdate"]);
+        AssignMethod(out _apiDel.TouchElementBase_ForceDispose, delegates["TouchElementBase_ForceDispose"]);
+        AssignMethod(out _apiDel.TouchElementBase_RegisterUpdate, delegates["TouchElementBase_RegisterUpdate"]);
+        AssignMethod(out _apiDel.TouchElementBase_UnregisterUpdate, delegates["TouchElementBase_UnregisterUpdate"]);
+        AssignMethod(out _apiDel.TouchContainerBase_GetChildren, delegates["TouchContainerBase_GetChildren"]);
+        AssignMethod(out _apiDel.TouchContainerBase_GetFlexSize, delegates["TouchContainerBase_GetFlexSize"]);
+        AssignMethod(out _apiDel.TouchContainerBase_AddChild, delegates["TouchContainerBase_AddChild"]);
+        AssignMethod(out _apiDel.TouchContainerBase_AddChildAt, delegates["TouchContainerBase_AddChildAt"]);
+        AssignMethod(out _apiDel.TouchContainerBase_RemoveChild, delegates["TouchContainerBase_RemoveChild"]);
+        AssignMethod(out _apiDel.TouchContainerBase_RemoveChildAt, delegates["TouchContainerBase_RemoveChildAt"]);
+        AssignMethod(out _apiDel.TouchContainerBase_MoveChild, delegates["TouchContainerBase_MoveChild"]);
+        AssignMethod(out _apiDel.TouchView_New, delegates["TouchView_New"]);
+        AssignMethod(out _apiDel.TouchView_GetOverflow, delegates["TouchView_GetOverflow"]);
+        AssignMethod(out _apiDel.TouchView_SetOverflow, delegates["TouchView_SetOverflow"]);
+        AssignMethod(out _apiDel.TouchView_GetDirection, delegates["TouchView_GetDirection"]);
+        AssignMethod(out _apiDel.TouchView_SetDirection, delegates["TouchView_SetDirection"]);
+        AssignMethod(out _apiDel.TouchView_GetAlignment, delegates["TouchView_GetAlignment"]);
+        AssignMethod(out _apiDel.TouchView_SetAlignment, delegates["TouchView_SetAlignment"]);
+        AssignMethod(out _apiDel.TouchView_GetAnchor, delegates["TouchView_GetAnchor"]);
+        AssignMethod(out _apiDel.TouchView_SetAnchor, delegates["TouchView_SetAnchor"]);
+        AssignMethod(out _apiDel.TouchView_GetUseThemeColors, delegates["TouchView_GetUseThemeColors"]);
+        AssignMethod(out _apiDel.TouchView_SetUseThemeColors, delegates["TouchView_SetUseThemeColors"]);
+        AssignMethod(out _apiDel.TouchView_GetBgColor, delegates["TouchView_GetBgColor"]);
+        AssignMethod(out _apiDel.TouchView_SetBgColor, delegates["TouchView_SetBgColor"]);
+        AssignMethod(out _apiDel.TouchView_GetBorderColor, delegates["TouchView_GetBorderColor"]);
+        AssignMethod(out _apiDel.TouchView_SetBorderColor, delegates["TouchView_SetBorderColor"]);
+        AssignMethod(out _apiDel.TouchView_GetBorder, delegates["TouchView_GetBorder"]);
+        AssignMethod(out _apiDel.TouchView_SetBorder, delegates["TouchView_SetBorder"]);
+        AssignMethod(out _apiDel.TouchView_GetPadding, delegates["TouchView_GetPadding"]);
+        AssignMethod(out _apiDel.TouchView_SetPadding, delegates["TouchView_SetPadding"]);
+        AssignMethod(out _apiDel.TouchView_GetGap, delegates["TouchView_GetGap"]);
+        AssignMethod(out _apiDel.TouchView_SetGap, delegates["TouchView_SetGap"]);
+        AssignMethod(out _apiDel.TouchScrollView_New, delegates["TouchScrollView_New"]);
+        AssignMethod(out _apiDel.TouchScrollView_GetScroll, delegates["TouchScrollView_GetScroll"]);
+        AssignMethod(out _apiDel.TouchScrollView_SetScroll, delegates["TouchScrollView_SetScroll"]);
+        AssignMethod(out _apiDel.TouchScrollView_GetScrollAlwaysVisible, delegates["TouchScrollView_GetScrollAlwaysVisible"]);
+        AssignMethod(out _apiDel.TouchScrollView_SetScrollAlwaysVisible, delegates["TouchScrollView_SetScrollAlwaysVisible"]);
+        AssignMethod(out _apiDel.TouchScrollView_GetScrollBar, delegates["TouchScrollView_GetScrollBar"]);
+        AssignMethod(out _apiDel.TouchApp_New, delegates["TouchApp_New"]);
+        AssignMethod(out _apiDel.TouchApp_GetScreen, delegates["TouchApp_GetScreen"]);
+        AssignMethod(out _apiDel.TouchApp_GetViewport, delegates["TouchApp_GetViewport"]);
+        AssignMethod(out _apiDel.TouchApp_GetCursor, delegates["TouchApp_GetCursor"]);
+        AssignMethod(out _apiDel.TouchApp_GetTheme, delegates["TouchApp_GetTheme"]);
+        AssignMethod(out _apiDel.TouchApp_GetDefaultBg, delegates["TouchApp_GetDefaultBg"]);
+        AssignMethod(out _apiDel.TouchApp_SetDefaultBg, delegates["TouchApp_SetDefaultBg"]);
+        AssignMethod(out _apiDel.TouchApp_InitApp, delegates["TouchApp_InitApp"]);
+        AssignMethod(out _apiDel.TouchEmptyButton_New, delegates["TouchEmptyButton_New"]);
+        AssignMethod(out _apiDel.TouchEmptyButton_GetHandler, delegates["TouchEmptyButton_GetHandler"]);
+        AssignMethod(out _apiDel.TouchEmptyButton_SetOnChange, delegates["TouchEmptyButton_SetOnChange"]);
+        AssignMethod(out _apiDel.TouchButton_New, delegates["TouchButton_New"]);
+        AssignMethod(out _apiDel.TouchButton_GetLabel, delegates["TouchButton_GetLabel"]);
+        AssignMethod(out _apiDel.TouchCheckbox_New, delegates["TouchCheckbox_New"]);
+        AssignMethod(out _apiDel.TouchCheckbox_GetValue, delegates["TouchCheckbox_GetValue"]);
+        AssignMethod(out _apiDel.TouchCheckbox_SetValue, delegates["TouchCheckbox_SetValue"]);
+        AssignMethod(out _apiDel.TouchCheckbox_SetOnChange, delegates["TouchCheckbox_SetOnChange"]);
+        AssignMethod(out _apiDel.TouchCheckbox_GetCheckMark, delegates["TouchCheckbox_GetCheckMark"]);
+        AssignMethod(out _apiDel.TouchLabel_New, delegates["TouchLabel_New"]);
+        AssignMethod(out _apiDel.TouchLabel_GetAutoBreakLine, delegates["TouchLabel_GetAutoBreakLine"]);
+        AssignMethod(out _apiDel.TouchLabel_SetAutoBreakLine, delegates["TouchLabel_SetAutoBreakLine"]);
+        AssignMethod(out _apiDel.TouchLabel_GetAutoEllipsis, delegates["TouchLabel_GetAutoEllipsis"]);
+        AssignMethod(out _apiDel.TouchLabel_SetAutoEllipsis, delegates["TouchLabel_SetAutoEllipsis"]);
+        AssignMethod(out _apiDel.TouchLabel_GetHasEllipsis, delegates["TouchLabel_GetHasEllipsis"]);
+        AssignMethod(out _apiDel.TouchLabel_GetText, delegates["TouchLabel_GetText"]);
+        AssignMethod(out _apiDel.TouchLabel_SetText, delegates["TouchLabel_SetText"]);
+        AssignMethod(out _apiDel.TouchLabel_GetTextColor, delegates["TouchLabel_GetTextColor"]);
+        AssignMethod(out _apiDel.TouchLabel_SetTextColor, delegates["TouchLabel_SetTextColor"]);
+        AssignMethod(out _apiDel.TouchLabel_GetFontSize, delegates["TouchLabel_GetFontSize"]);
+        AssignMethod(out _apiDel.TouchLabel_SetFontSize, delegates["TouchLabel_SetFontSize"]);
+        AssignMethod(out _apiDel.TouchLabel_GetAlignment, delegates["TouchLabel_GetAlignment"]);
+        AssignMethod(out _apiDel.TouchLabel_SetAlignment, delegates["TouchLabel_SetAlignment"]);
+        AssignMethod(out _apiDel.TouchBarContainer_New, delegates["TouchBarContainer_New"]);
+        AssignMethod(out _apiDel.TouchBarContainer_GetIsVertical, delegates["TouchBarContainer_GetIsVertical"]);
+        AssignMethod(out _apiDel.TouchBarContainer_SetIsVertical, delegates["TouchBarContainer_SetIsVertical"]);
+        AssignMethod(out _apiDel.TouchBarContainer_GetRatio, delegates["TouchBarContainer_GetRatio"]);
+        AssignMethod(out _apiDel.TouchBarContainer_SetRatio, delegates["TouchBarContainer_SetRatio"]);
+        AssignMethod(out _apiDel.TouchBarContainer_GetOffset, delegates["TouchBarContainer_GetOffset"]);
+        AssignMethod(out _apiDel.TouchBarContainer_SetOffset, delegates["TouchBarContainer_SetOffset"]);
+        AssignMethod(out _apiDel.TouchBarContainer_GetBar, delegates["TouchBarContainer_GetBar"]);
+        AssignMethod(out _apiDel.TouchProgressBar_New, delegates["TouchProgressBar_New"]);
+        AssignMethod(out _apiDel.TouchProgressBar_GetValue, delegates["TouchProgressBar_GetValue"]);
+        AssignMethod(out _apiDel.TouchProgressBar_SetValue, delegates["TouchProgressBar_SetValue"]);
+        AssignMethod(out _apiDel.TouchProgressBar_GetMaxValue, delegates["TouchProgressBar_GetMaxValue"]);
+        AssignMethod(out _apiDel.TouchProgressBar_SetMaxValue, delegates["TouchProgressBar_SetMaxValue"]);
+        AssignMethod(out _apiDel.TouchProgressBar_GetMinValue, delegates["TouchProgressBar_GetMinValue"]);
+        AssignMethod(out _apiDel.TouchProgressBar_SetMinValue, delegates["TouchProgressBar_SetMinValue"]);
+        AssignMethod(out _apiDel.TouchProgressBar_GetBarsGap, delegates["TouchProgressBar_GetBarsGap"]);
+        AssignMethod(out _apiDel.TouchProgressBar_SetBarsGap, delegates["TouchProgressBar_SetBarsGap"]);
+        AssignMethod(out _apiDel.TouchProgressBar_GetLabel, delegates["TouchProgressBar_GetLabel"]);
+        AssignMethod(out _apiDel.TouchSelector_New, delegates["TouchSelector_New"]);
+        AssignMethod(out _apiDel.TouchSelector_GetLoop, delegates["TouchSelector_GetLoop"]);
+        AssignMethod(out _apiDel.TouchSelector_SetLoop, delegates["TouchSelector_SetLoop"]);
+        AssignMethod(out _apiDel.TouchSelector_GetSelected, delegates["TouchSelector_GetSelected"]);
+        AssignMethod(out _apiDel.TouchSelector_SetSelected, delegates["TouchSelector_SetSelected"]);
+        AssignMethod(out _apiDel.TouchSelector_SetOnChange, delegates["TouchSelector_SetOnChange"]);
+        AssignMethod(out _apiDel.TouchSlider_New, delegates["TouchSlider_New"]);
+        AssignMethod(out _apiDel.TouchSlider_GetMaxValue, delegates["TouchSlider_GetMaxValue"]);
+        AssignMethod(out _apiDel.TouchSlider_SetMaxValue, delegates["TouchSlider_SetMaxValue"]);
+        AssignMethod(out _apiDel.TouchSlider_GetValue, delegates["TouchSlider_GetValue"]);
+        AssignMethod(out _apiDel.TouchSlider_SetValue, delegates["TouchSlider_SetValue"]);
+        AssignMethod(out _apiDel.TouchSlider_SetOnChange, delegates["TouchSlider_SetOnChange"]);
+        AssignMethod(out _apiDel.TouchSlider_GetIsInteger, delegates["TouchSlider_GetIsInteger"]);
+        AssignMethod(out _apiDel.TouchSlider_SetIsInteger, delegates["TouchSlider_SetIsInteger"]);
+        AssignMethod(out _apiDel.TouchSlider_GetAllowInput, delegates["TouchSlider_GetAllowInput"]);
+        AssignMethod(out _apiDel.TouchSlider_SetAllowInput, delegates["TouchSlider_SetAllowInput"]);
+        AssignMethod(out _apiDel.TouchSlider_GetBar, delegates["TouchSlider_GetBar"]);
+        AssignMethod(out _apiDel.TouchSlider_GetThumb, delegates["TouchSlider_GetThumb"]);
+        AssignMethod(out _apiDel.TouchSlider_GetTextInput, delegates["TouchSlider_GetTextInput"]);
+        AssignMethod(out _apiDel.TouchSliderRange_NewR, delegates["TouchSliderRange_NewR"]);
+        AssignMethod(out _apiDel.TouchSliderRange_GetValueLower, delegates["TouchSliderRange_GetValueLower"]);
+        AssignMethod(out _apiDel.TouchSliderRange_SetValueLower, delegates["TouchSliderRange_SetValueLower"]);
+        AssignMethod(out _apiDel.TouchSliderRange_SetOnChangeR, delegates["TouchSliderRange_SetOnChangeR"]);
+        AssignMethod(out _apiDel.TouchSliderRange_GetThumbLower, delegates["TouchSliderRange_GetThumbLower"]);
+        AssignMethod(out _apiDel.TouchSwitch_New, delegates["TouchSwitch_New"]);
+        AssignMethod(out _apiDel.TouchSwitch_GetIndex, delegates["TouchSwitch_GetIndex"]);
+        AssignMethod(out _apiDel.TouchSwitch_SetIndex, delegates["TouchSwitch_SetIndex"]);
+        AssignMethod(out _apiDel.TouchSwitch_GetButtons, delegates["TouchSwitch_GetButtons"]);
+        AssignMethod(out _apiDel.TouchSwitch_SetOnChange, delegates["TouchSwitch_SetOnChange"]);
+        AssignMethod(out _apiDel.TouchTextField_New, delegates["TouchTextField_New"]);
+        AssignMethod(out _apiDel.TouchTextField_GetIsEditing, delegates["TouchTextField_GetIsEditing"]);
+        AssignMethod(out _apiDel.TouchTextField_GetText, delegates["TouchTextField_GetText"]);
+        AssignMethod(out _apiDel.TouchTextField_SetText, delegates["TouchTextField_SetText"]);
+        AssignMethod(out _apiDel.TouchTextField_SetOnChange, delegates["TouchTextField_SetOnChange"]);
+        AssignMethod(out _apiDel.TouchTextField_GetIsNumeric, delegates["TouchTextField_GetIsNumeric"]);
+        AssignMethod(out _apiDel.TouchTextField_SetIsNumeric, delegates["TouchTextField_SetIsNumeric"]);
+        AssignMethod(out _apiDel.TouchTextField_GetIsInteger, delegates["TouchTextField_GetIsInteger"]);
+        AssignMethod(out _apiDel.TouchTextField_SetIsInteger, delegates["TouchTextField_SetIsInteger"]);
+        AssignMethod(out _apiDel.TouchTextField_GetAllowNegative, delegates["TouchTextField_GetAllowNegative"]);
+        AssignMethod(out _apiDel.TouchTextField_SetAllowNegative, delegates["TouchTextField_SetAllowNegative"]);
+        AssignMethod(out _apiDel.TouchTextField_GetLabel, delegates["TouchTextField_GetLabel"]);
+        AssignMethod(out _apiDel.TouchWindowBar_New, delegates["TouchWindowBar_New"]);
+        AssignMethod(out _apiDel.TouchWindowBar_GetLabel, delegates["TouchWindowBar_GetLabel"]);
+        AssignMethod(out _apiDel.TouchChart_New, delegates["TouchChart_New"]);
+        AssignMethod(out _apiDel.TouchChart_GetDataSets, delegates["TouchChart_GetDataSets"]);
+        AssignMethod(out _apiDel.TouchChart_GetDataColors, delegates["TouchChart_GetDataColors"]);
+        AssignMethod(out _apiDel.TouchChart_GetGridHorizontalLines, delegates["TouchChart_GetGridHorizontalLines"]);
+        AssignMethod(out _apiDel.TouchChart_SetGridHorizontalLines, delegates["TouchChart_SetGridHorizontalLines"]);
+        AssignMethod(out _apiDel.TouchChart_GetGridVerticalLines, delegates["TouchChart_GetGridVerticalLines"]);
+        AssignMethod(out _apiDel.TouchChart_SetGridVerticalLines, delegates["TouchChart_SetGridVerticalLines"]);
+        AssignMethod(out _apiDel.TouchChart_GetMaxValue, delegates["TouchChart_GetMaxValue"]);
+        AssignMethod(out _apiDel.TouchChart_GetMinValue, delegates["TouchChart_GetMinValue"]);
+        AssignMethod(out _apiDel.TouchChart_GetGridColor, delegates["TouchChart_GetGridColor"]);
+        AssignMethod(out _apiDel.TouchChart_SetGridColor, delegates["TouchChart_SetGridColor"]);
+        AssignMethod(out _apiDel.TouchEmptyElement_New, delegates["TouchEmptyElement_New"]);
+        IsReady = true;
+      }
     }
-
-    public override bool Load()
-    {
-      WrapperBase<TouchUiKitDelegator>.SetApi(ApiDelegator as TouchUiKitDelegator);
-      return base.Load();
-    }
-
-    public override void Unload()
-    {
-      WrapperBase<TouchUiKitDelegator>.SetApi(null);
-      base.Unload();
-    }
-
-    protected override void ApiDelegates(IReadOnlyDictionary<string, Delegate> delegates)
-    {
-      base.ApiDelegates(delegates);
-      var apiDel = ApiDelegator as TouchUiKitDelegator;
-
-      AssignMethod(delegates, "TouchTheme_GetBgColor", ref apiDel.TouchTheme_GetBgColor);
-      AssignMethod(delegates, "TouchTheme_GetWhiteColor", ref apiDel.TouchTheme_GetWhiteColor);
-      AssignMethod(delegates, "TouchTheme_GetMainColor", ref apiDel.TouchTheme_GetMainColor);
-      AssignMethod(delegates, "TouchTheme_GetMainColorDarker", ref apiDel.TouchTheme_GetMainColorDarker);
-      AssignMethod(delegates, "TouchTheme_MeasureStringInPixels", ref apiDel.TouchTheme_MeasureStringInPixels);
-      AssignMethod(delegates, "TouchTheme_GetScale", ref apiDel.TouchTheme_GetScale);
-      AssignMethod(delegates, "TouchTheme_SetScale", ref apiDel.TouchTheme_SetScale);
-      AssignMethod(delegates, "TouchTheme_GetFont", ref apiDel.TouchTheme_GetFont);
-      AssignMethod(delegates, "TouchTheme_SetFont", ref apiDel.TouchTheme_SetFont);
-      AssignMethod(delegates, "TouchElementBase_GetEnabled", ref apiDel.TouchElementBase_GetEnabled);
-      AssignMethod(delegates, "TouchElementBase_SetEnabled", ref apiDel.TouchElementBase_SetEnabled);
-      AssignMethod(delegates, "TouchElementBase_GetAbsolute", ref apiDel.TouchElementBase_GetAbsolute);
-      AssignMethod(delegates, "TouchElementBase_SetAbsolute", ref apiDel.TouchElementBase_SetAbsolute);
-      AssignMethod(delegates, "TouchElementBase_GetSelfAlignment", ref apiDel.TouchElementBase_GetSelfAlignment);
-      AssignMethod(delegates, "TouchElementBase_SetSelfAlignment", ref apiDel.TouchElementBase_SetSelfAlignment);
-      AssignMethod(delegates, "TouchElementBase_GetPosition", ref apiDel.TouchElementBase_GetPosition);
-      AssignMethod(delegates, "TouchElementBase_SetPosition", ref apiDel.TouchElementBase_SetPosition);
-      AssignMethod(delegates, "TouchElementBase_GetMargin", ref apiDel.TouchElementBase_GetMargin);
-      AssignMethod(delegates, "TouchElementBase_SetMargin", ref apiDel.TouchElementBase_SetMargin);
-      AssignMethod(delegates, "TouchElementBase_GetScale", ref apiDel.TouchElementBase_GetScale);
-      AssignMethod(delegates, "TouchElementBase_SetScale", ref apiDel.TouchElementBase_SetScale);
-      AssignMethod(delegates, "TouchElementBase_GetPixels", ref apiDel.TouchElementBase_GetPixels);
-      AssignMethod(delegates, "TouchElementBase_SetPixels", ref apiDel.TouchElementBase_SetPixels);
-      AssignMethod(delegates, "TouchElementBase_GetSize", ref apiDel.TouchElementBase_GetSize);
-      AssignMethod(delegates, "TouchElementBase_GetBoundaries", ref apiDel.TouchElementBase_GetBoundaries);
-      AssignMethod(delegates, "TouchElementBase_GetApp", ref apiDel.TouchElementBase_GetApp);
-      AssignMethod(delegates, "TouchElementBase_GetParent", ref apiDel.TouchElementBase_GetParent);
-      AssignMethod(delegates, "TouchElementBase_GetSprites", ref apiDel.TouchElementBase_GetSprites);
-      AssignMethod(delegates, "TouchElementBase_ForceUpdate", ref apiDel.TouchElementBase_ForceUpdate);
-      AssignMethod(delegates, "TouchElementBase_ForceDispose", ref apiDel.TouchElementBase_ForceDispose);
-      AssignMethod(delegates, "TouchElementBase_RegisterUpdate", ref apiDel.TouchElementBase_RegisterUpdate);
-      AssignMethod(delegates, "TouchElementBase_UnregisterUpdate", ref apiDel.TouchElementBase_UnregisterUpdate);
-      AssignMethod(delegates, "TouchContainerBase_GetChildren", ref apiDel.TouchContainerBase_GetChildren);
-      AssignMethod(delegates, "TouchContainerBase_GetFlexSize", ref apiDel.TouchContainerBase_GetFlexSize);
-      AssignMethod(delegates, "TouchContainerBase_AddChild", ref apiDel.TouchContainerBase_AddChild);
-      AssignMethod(delegates, "TouchContainerBase_AddChildAt", ref apiDel.TouchContainerBase_AddChildAt);
-      AssignMethod(delegates, "TouchContainerBase_RemoveChild", ref apiDel.TouchContainerBase_RemoveChild);
-      AssignMethod(delegates, "TouchContainerBase_RemoveChildAt", ref apiDel.TouchContainerBase_RemoveChildAt);
-      AssignMethod(delegates, "TouchContainerBase_MoveChild", ref apiDel.TouchContainerBase_MoveChild);
-      AssignMethod(delegates, "TouchView_New", ref apiDel.TouchView_New);
-      AssignMethod(delegates, "TouchView_GetOverflow", ref apiDel.TouchView_GetOverflow);
-      AssignMethod(delegates, "TouchView_SetOverflow", ref apiDel.TouchView_SetOverflow);
-      AssignMethod(delegates, "TouchView_GetDirection", ref apiDel.TouchView_GetDirection);
-      AssignMethod(delegates, "TouchView_SetDirection", ref apiDel.TouchView_SetDirection);
-      AssignMethod(delegates, "TouchView_GetAlignment", ref apiDel.TouchView_GetAlignment);
-      AssignMethod(delegates, "TouchView_SetAlignment", ref apiDel.TouchView_SetAlignment);
-      AssignMethod(delegates, "TouchView_GetAnchor", ref apiDel.TouchView_GetAnchor);
-      AssignMethod(delegates, "TouchView_SetAnchor", ref apiDel.TouchView_SetAnchor);
-      AssignMethod(delegates, "TouchView_GetUseThemeColors", ref apiDel.TouchView_GetUseThemeColors);
-      AssignMethod(delegates, "TouchView_SetUseThemeColors", ref apiDel.TouchView_SetUseThemeColors);
-      AssignMethod(delegates, "TouchView_GetBgColor", ref apiDel.TouchView_GetBgColor);
-      AssignMethod(delegates, "TouchView_SetBgColor", ref apiDel.TouchView_SetBgColor);
-      AssignMethod(delegates, "TouchView_GetBorderColor", ref apiDel.TouchView_GetBorderColor);
-      AssignMethod(delegates, "TouchView_SetBorderColor", ref apiDel.TouchView_SetBorderColor);
-      AssignMethod(delegates, "TouchView_GetBorder", ref apiDel.TouchView_GetBorder);
-      AssignMethod(delegates, "TouchView_SetBorder", ref apiDel.TouchView_SetBorder);
-      AssignMethod(delegates, "TouchView_GetPadding", ref apiDel.TouchView_GetPadding);
-      AssignMethod(delegates, "TouchView_SetPadding", ref apiDel.TouchView_SetPadding);
-      AssignMethod(delegates, "TouchView_GetGap", ref apiDel.TouchView_GetGap);
-      AssignMethod(delegates, "TouchView_SetGap", ref apiDel.TouchView_SetGap);
-      AssignMethod(delegates, "TouchScrollView_New", ref apiDel.TouchScrollView_New);
-      AssignMethod(delegates, "TouchScrollView_GetScroll", ref apiDel.TouchScrollView_GetScroll);
-      AssignMethod(delegates, "TouchScrollView_SetScroll", ref apiDel.TouchScrollView_SetScroll);
-      AssignMethod(delegates, "TouchScrollView_GetScrollAlwaysVisible", ref apiDel.TouchScrollView_GetScrollAlwaysVisible);
-      AssignMethod(delegates, "TouchScrollView_SetScrollAlwaysVisible", ref apiDel.TouchScrollView_SetScrollAlwaysVisible);
-      AssignMethod(delegates, "TouchScrollView_GetScrollBar", ref apiDel.TouchScrollView_GetScrollBar);
-      AssignMethod(delegates, "TouchApp_New", ref apiDel.TouchApp_New);
-      AssignMethod(delegates, "TouchApp_GetScreen", ref apiDel.TouchApp_GetScreen);
-      AssignMethod(delegates, "TouchApp_GetViewport", ref apiDel.TouchApp_GetViewport);
-      AssignMethod(delegates, "TouchApp_GetCursor", ref apiDel.TouchApp_GetCursor);
-      AssignMethod(delegates, "TouchApp_GetTheme", ref apiDel.TouchApp_GetTheme);
-      AssignMethod(delegates, "TouchApp_GetDefaultBg", ref apiDel.TouchApp_GetDefaultBg);
-      AssignMethod(delegates, "TouchApp_SetDefaultBg", ref apiDel.TouchApp_SetDefaultBg);
-      AssignMethod(delegates, "TouchApp_InitApp", ref apiDel.TouchApp_InitApp);
-      AssignMethod(delegates, "TouchEmptyButton_New", ref apiDel.TouchEmptyButton_New);
-      AssignMethod(delegates, "TouchEmptyButton_GetHandler", ref apiDel.TouchEmptyButton_GetHandler);
-      AssignMethod(delegates, "TouchEmptyButton_SetOnChange", ref apiDel.TouchEmptyButton_SetOnChange);
-      AssignMethod(delegates, "TouchButton_New", ref apiDel.TouchButton_New);
-      AssignMethod(delegates, "TouchButton_GetLabel", ref apiDel.TouchButton_GetLabel);
-      AssignMethod(delegates, "TouchCheckbox_New", ref apiDel.TouchCheckbox_New);
-      AssignMethod(delegates, "TouchCheckbox_GetValue", ref apiDel.TouchCheckbox_GetValue);
-      AssignMethod(delegates, "TouchCheckbox_SetValue", ref apiDel.TouchCheckbox_SetValue);
-      AssignMethod(delegates, "TouchCheckbox_SetOnChange", ref apiDel.TouchCheckbox_SetOnChange);
-      AssignMethod(delegates, "TouchCheckbox_GetCheckMark", ref apiDel.TouchCheckbox_GetCheckMark);
-      AssignMethod(delegates, "TouchLabel_New", ref apiDel.TouchLabel_New);
-      AssignMethod(delegates, "TouchLabel_GetAutoBreakLine", ref apiDel.TouchLabel_GetAutoBreakLine);
-      AssignMethod(delegates, "TouchLabel_SetAutoBreakLine", ref apiDel.TouchLabel_SetAutoBreakLine);
-      AssignMethod(delegates, "TouchLabel_GetAutoEllipsis", ref apiDel.TouchLabel_GetAutoEllipsis);
-      AssignMethod(delegates, "TouchLabel_SetAutoEllipsis", ref apiDel.TouchLabel_SetAutoEllipsis);
-      AssignMethod(delegates, "TouchLabel_GetHasEllipsis", ref apiDel.TouchLabel_GetHasEllipsis);
-      AssignMethod(delegates, "TouchLabel_GetText", ref apiDel.TouchLabel_GetText);
-      AssignMethod(delegates, "TouchLabel_SetText", ref apiDel.TouchLabel_SetText);
-      AssignMethod(delegates, "TouchLabel_GetTextColor", ref apiDel.TouchLabel_GetTextColor);
-      AssignMethod(delegates, "TouchLabel_SetTextColor", ref apiDel.TouchLabel_SetTextColor);
-      AssignMethod(delegates, "TouchLabel_GetFontSize", ref apiDel.TouchLabel_GetFontSize);
-      AssignMethod(delegates, "TouchLabel_SetFontSize", ref apiDel.TouchLabel_SetFontSize);
-      AssignMethod(delegates, "TouchLabel_GetAlignment", ref apiDel.TouchLabel_GetAlignment);
-      AssignMethod(delegates, "TouchLabel_SetAlignment", ref apiDel.TouchLabel_SetAlignment);
-      AssignMethod(delegates, "TouchBarContainer_New", ref apiDel.TouchBarContainer_New);
-      AssignMethod(delegates, "TouchBarContainer_GetIsVertical", ref apiDel.TouchBarContainer_GetIsVertical);
-      AssignMethod(delegates, "TouchBarContainer_SetIsVertical", ref apiDel.TouchBarContainer_SetIsVertical);
-      AssignMethod(delegates, "TouchBarContainer_GetRatio", ref apiDel.TouchBarContainer_GetRatio);
-      AssignMethod(delegates, "TouchBarContainer_SetRatio", ref apiDel.TouchBarContainer_SetRatio);
-      AssignMethod(delegates, "TouchBarContainer_GetOffset", ref apiDel.TouchBarContainer_GetOffset);
-      AssignMethod(delegates, "TouchBarContainer_SetOffset", ref apiDel.TouchBarContainer_SetOffset);
-      AssignMethod(delegates, "TouchBarContainer_GetBar", ref apiDel.TouchBarContainer_GetBar);
-      AssignMethod(delegates, "TouchProgressBar_New", ref apiDel.TouchProgressBar_New);
-      AssignMethod(delegates, "TouchProgressBar_GetValue", ref apiDel.TouchProgressBar_GetValue);
-      AssignMethod(delegates, "TouchProgressBar_SetValue", ref apiDel.TouchProgressBar_SetValue);
-      AssignMethod(delegates, "TouchProgressBar_GetMaxValue", ref apiDel.TouchProgressBar_GetMaxValue);
-      AssignMethod(delegates, "TouchProgressBar_SetMaxValue", ref apiDel.TouchProgressBar_SetMaxValue);
-      AssignMethod(delegates, "TouchProgressBar_GetMinValue", ref apiDel.TouchProgressBar_GetMinValue);
-      AssignMethod(delegates, "TouchProgressBar_SetMinValue", ref apiDel.TouchProgressBar_SetMinValue);
-      AssignMethod(delegates, "TouchProgressBar_GetBarsGap", ref apiDel.TouchProgressBar_GetBarsGap);
-      AssignMethod(delegates, "TouchProgressBar_SetBarsGap", ref apiDel.TouchProgressBar_SetBarsGap);
-      AssignMethod(delegates, "TouchProgressBar_GetLabel", ref apiDel.TouchProgressBar_GetLabel);
-      AssignMethod(delegates, "TouchSelector_New", ref apiDel.TouchSelector_New);
-      AssignMethod(delegates, "TouchSelector_GetLoop", ref apiDel.TouchSelector_GetLoop);
-      AssignMethod(delegates, "TouchSelector_SetLoop", ref apiDel.TouchSelector_SetLoop);
-      AssignMethod(delegates, "TouchSelector_GetSelected", ref apiDel.TouchSelector_GetSelected);
-      AssignMethod(delegates, "TouchSelector_SetSelected", ref apiDel.TouchSelector_SetSelected);
-      AssignMethod(delegates, "TouchSelector_SetOnChange", ref apiDel.TouchSelector_SetOnChange);
-      AssignMethod(delegates, "TouchSlider_New", ref apiDel.TouchSlider_New);
-      AssignMethod(delegates, "TouchSlider_GetMaxValue", ref apiDel.TouchSlider_GetMaxValue);
-      AssignMethod(delegates, "TouchSlider_SetMaxValue", ref apiDel.TouchSlider_SetMaxValue);
-      AssignMethod(delegates, "TouchSlider_GetValue", ref apiDel.TouchSlider_GetValue);
-      AssignMethod(delegates, "TouchSlider_SetValue", ref apiDel.TouchSlider_SetValue);
-      AssignMethod(delegates, "TouchSlider_SetOnChange", ref apiDel.TouchSlider_SetOnChange);
-      AssignMethod(delegates, "TouchSlider_GetIsInteger", ref apiDel.TouchSlider_GetIsInteger);
-      AssignMethod(delegates, "TouchSlider_SetIsInteger", ref apiDel.TouchSlider_SetIsInteger);
-      AssignMethod(delegates, "TouchSlider_GetAllowInput", ref apiDel.TouchSlider_GetAllowInput);
-      AssignMethod(delegates, "TouchSlider_SetAllowInput", ref apiDel.TouchSlider_SetAllowInput);
-      AssignMethod(delegates, "TouchSlider_GetBar", ref apiDel.TouchSlider_GetBar);
-      AssignMethod(delegates, "TouchSlider_GetThumb", ref apiDel.TouchSlider_GetThumb);
-      AssignMethod(delegates, "TouchSlider_GetTextInput", ref apiDel.TouchSlider_GetTextInput);
-      AssignMethod(delegates, "TouchSliderRange_NewR", ref apiDel.TouchSliderRange_NewR);
-      AssignMethod(delegates, "TouchSliderRange_GetValueLower", ref apiDel.TouchSliderRange_GetValueLower);
-      AssignMethod(delegates, "TouchSliderRange_SetValueLower", ref apiDel.TouchSliderRange_SetValueLower);
-      AssignMethod(delegates, "TouchSliderRange_SetOnChangeR", ref apiDel.TouchSliderRange_SetOnChangeR);
-      AssignMethod(delegates, "TouchSliderRange_GetThumbLower", ref apiDel.TouchSliderRange_GetThumbLower);
-      AssignMethod(delegates, "TouchSwitch_New", ref apiDel.TouchSwitch_New);
-      AssignMethod(delegates, "TouchSwitch_GetIndex", ref apiDel.TouchSwitch_GetIndex);
-      AssignMethod(delegates, "TouchSwitch_SetIndex", ref apiDel.TouchSwitch_SetIndex);
-      AssignMethod(delegates, "TouchSwitch_GetButtons", ref apiDel.TouchSwitch_GetButtons);
-      AssignMethod(delegates, "TouchSwitch_SetOnChange", ref apiDel.TouchSwitch_SetOnChange);
-      AssignMethod(delegates, "TouchTextField_New", ref apiDel.TouchTextField_New);
-      AssignMethod(delegates, "TouchTextField_GetIsEditing", ref apiDel.TouchTextField_GetIsEditing);
-      AssignMethod(delegates, "TouchTextField_GetText", ref apiDel.TouchTextField_GetText);
-      AssignMethod(delegates, "TouchTextField_SetText", ref apiDel.TouchTextField_SetText);
-      AssignMethod(delegates, "TouchTextField_SetOnChange", ref apiDel.TouchTextField_SetOnChange);
-      AssignMethod(delegates, "TouchTextField_GetIsNumeric", ref apiDel.TouchTextField_GetIsNumeric);
-      AssignMethod(delegates, "TouchTextField_SetIsNumeric", ref apiDel.TouchTextField_SetIsNumeric);
-      AssignMethod(delegates, "TouchTextField_GetIsInteger", ref apiDel.TouchTextField_GetIsInteger);
-      AssignMethod(delegates, "TouchTextField_SetIsInteger", ref apiDel.TouchTextField_SetIsInteger);
-      AssignMethod(delegates, "TouchTextField_GetAllowNegative", ref apiDel.TouchTextField_GetAllowNegative);
-      AssignMethod(delegates, "TouchTextField_SetAllowNegative", ref apiDel.TouchTextField_SetAllowNegative);
-      AssignMethod(delegates, "TouchTextField_GetLabel", ref apiDel.TouchTextField_GetLabel);
-      AssignMethod(delegates, "TouchWindowBar_New", ref apiDel.TouchWindowBar_New);
-      AssignMethod(delegates, "TouchWindowBar_GetLabel", ref apiDel.TouchWindowBar_GetLabel);
-      AssignMethod(delegates, "TouchChart_New", ref apiDel.TouchChart_New);
-      AssignMethod(delegates, "TouchChart_GetDataSets", ref apiDel.TouchChart_GetDataSets);
-      AssignMethod(delegates, "TouchChart_GetDataColors", ref apiDel.TouchChart_GetDataColors);
-      AssignMethod(delegates, "TouchChart_GetGridHorizontalLines", ref apiDel.TouchChart_GetGridHorizontalLines);
-      AssignMethod(delegates, "TouchChart_SetGridHorizontalLines", ref apiDel.TouchChart_SetGridHorizontalLines);
-      AssignMethod(delegates, "TouchChart_GetGridVerticalLines", ref apiDel.TouchChart_GetGridVerticalLines);
-      AssignMethod(delegates, "TouchChart_SetGridVerticalLines", ref apiDel.TouchChart_SetGridVerticalLines);
-      AssignMethod(delegates, "TouchChart_GetMaxValue", ref apiDel.TouchChart_GetMaxValue);
-      AssignMethod(delegates, "TouchChart_GetMinValue", ref apiDel.TouchChart_GetMinValue);
-      AssignMethod(delegates, "TouchChart_GetGridColor", ref apiDel.TouchChart_GetGridColor);
-      AssignMethod(delegates, "TouchChart_SetGridColor", ref apiDel.TouchChart_SetGridColor);
-      AssignMethod(delegates, "TouchEmptyElement_New", ref apiDel.TouchEmptyElement_New);
-    }
+    private void AssignMethod<T>(out T field, object method) => field = (T)method;
   }
-
-  /// <summary>
-  /// Holds delegates for all Touch Ui Kit features. Populated by when <see cref="TouchUiKit.Load"/> is called.
-  /// </summary>
-  public class TouchUiKitDelegator : TouchApiDelegator
+  public class TouchUiKitDelegator
   {
+    public Func<object, IngameIMyCubeBlock> TouchScreen_GetBlock;
+    public Func<object, IngameIMyTextSurface> TouchScreen_GetSurface;
+    public Func<object, int> TouchScreen_GetIndex;
+    public Func<object, bool> TouchScreen_IsOnScreen;
+    public Func<object, Vector2> TouchScreen_GetCursorPosition;
+    public Func<object, float> TouchScreen_GetInteractiveDistance;
+    public Action<object, float> TouchScreen_SetInteractiveDistance;
+    public Func<object, int> TouchScreen_GetRotation;
+    public Func<object, IngameIMyCubeBlock, IngameIMyTextSurface, bool> TouchScreen_CompareWithBlockAndSurface;
+    public Action<object> TouchScreen_ForceDispose;
+    public Func<object, object> TouchCursor_New;
+    public Func<object, bool> TouchCursor_GetActive;
+    public Action<object, bool> TouchCursor_SetActive;
+    public Func<object, float> TouchCursor_GetScale;
+    public Action<object, float> TouchCursor_SetScale;
+    public Func<object, Vector2> TouchCursor_GetPosition;
+    public Func<object, float, float, float, float, bool> TouchCursor_IsInsideArea;
+    public Func<object, List<MySprite>> TouchCursor_GetSprites;
+    public Action<object> TouchCursor_ForceDispose;
+    public Func<object> ClickHandler_New;
+    public Func<object, Vector4> ClickHandler_GetHitArea;
+    public Action<object, Vector4> ClickHandler_SetHitArea;
+    public Func<object, bool> ClickHandler_IsMouseReleased;
+    public Func<object, bool> ClickHandler_IsMouseOver;
+    public Func<object, bool> ClickHandler_IsMousePressed;
+    public Func<object, bool> ClickHandler_JustReleased;
+    public Func<object, bool> ClickHandler_JustPressed;
+    public Action<object, object> ClickHandler_UpdateStatus;
     public Func<object, Color> TouchTheme_GetBgColor;
     public Func<object, Color> TouchTheme_GetWhiteColor;
     public Func<object, Color> TouchTheme_GetMainColor;
@@ -230,7 +307,6 @@ namespace Lima.API
     public Action<object, float> TouchTheme_SetScale;
     public Func<object, string> TouchTheme_GetFont;
     public Action<object, string> TouchTheme_SetFont;
-
     public Func<object, bool> TouchElementBase_GetEnabled;
     public Action<object, bool> TouchElementBase_SetEnabled;
     public Func<object, bool> TouchElementBase_GetAbsolute;
@@ -254,7 +330,6 @@ namespace Lima.API
     public Action<object> TouchElementBase_ForceDispose;
     public Action<object, Action> TouchElementBase_RegisterUpdate;
     public Action<object, Action> TouchElementBase_UnregisterUpdate;
-
     public Func<object, List<object>> TouchContainerBase_GetChildren;
     public Func<object, Vector2> TouchContainerBase_GetFlexSize;
     public Action<object, object> TouchContainerBase_AddChild;
@@ -262,7 +337,6 @@ namespace Lima.API
     public Action<object, object> TouchContainerBase_RemoveChild;
     public Action<object, int> TouchContainerBase_RemoveChildAt;
     public Action<object, object, int> TouchContainerBase_MoveChild;
-
     public Func<byte, Color?, object> TouchView_New;
     public Func<object, bool> TouchView_GetOverflow;
     public Action<object, bool> TouchView_SetOverflow;
@@ -284,14 +358,12 @@ namespace Lima.API
     public Action<object, Vector4> TouchView_SetPadding;
     public Func<object, int> TouchView_GetGap;
     public Action<object, int> TouchView_SetGap;
-
     public Func<int, Color?, object> TouchScrollView_New;
     public Func<object, float> TouchScrollView_GetScroll;
     public Action<object, float> TouchScrollView_SetScroll;
     public Func<object, bool> TouchScrollView_GetScrollAlwaysVisible;
     public Action<object, bool> TouchScrollView_SetScrollAlwaysVisible;
     public Func<object, object> TouchScrollView_GetScrollBar;
-
     public Func<object> TouchApp_New;
     public Func<object, object> TouchApp_GetScreen;
     public Func<object, RectangleF> TouchApp_GetViewport;
@@ -300,20 +372,16 @@ namespace Lima.API
     public Func<object, bool> TouchApp_GetDefaultBg;
     public Action<object, bool> TouchApp_SetDefaultBg;
     public Action<object, IngameIMyCubeBlock, IngameIMyTextSurface> TouchApp_InitApp;
-
     public Func<Action, object> TouchEmptyButton_New;
     public Func<object, object> TouchEmptyButton_GetHandler;
     public Action<object, Action> TouchEmptyButton_SetOnChange;
-
     public Func<string, Action, object> TouchButton_New;
     public Func<object, object> TouchButton_GetLabel;
-
     public Func<Action<bool>, bool, object> TouchCheckbox_New;
     public Func<object, bool> TouchCheckbox_GetValue;
     public Action<object, bool> TouchCheckbox_SetValue;
     public Action<object, Action<bool>> TouchCheckbox_SetOnChange;
     public Func<object, object> TouchCheckbox_GetCheckMark;
-
     public Func<string, float, TextAlignment, object> TouchLabel_New;
     public Func<object, bool> TouchLabel_GetAutoBreakLine;
     public Action<object, bool> TouchLabel_SetAutoBreakLine;
@@ -328,7 +396,6 @@ namespace Lima.API
     public Action<object, float> TouchLabel_SetFontSize;
     public Func<object, TextAlignment> TouchLabel_GetAlignment;
     public Action<object, TextAlignment> TouchLabel_SetAlignment;
-
     public Func<bool, object> TouchBarContainer_New;
     public Func<object, bool> TouchBarContainer_GetIsVertical;
     public Action<object, bool> TouchBarContainer_SetIsVertical;
@@ -337,7 +404,6 @@ namespace Lima.API
     public Func<object, float> TouchBarContainer_GetOffset;
     public Action<object, float> TouchBarContainer_SetOffset;
     public Func<object, object> TouchBarContainer_GetBar;
-
     public Func<float, float, bool, float, object> TouchProgressBar_New;
     public Func<object, float> TouchProgressBar_GetValue;
     public Action<object, float> TouchProgressBar_SetValue;
@@ -348,14 +414,12 @@ namespace Lima.API
     public Func<object, float> TouchProgressBar_GetBarsGap;
     public Action<object, float> TouchProgressBar_SetBarsGap;
     public Func<object, object> TouchProgressBar_GetLabel;
-
     public Func<List<string>, Action<int, string>, bool, object> TouchSelector_New;
     public Func<object, bool> TouchSelector_GetLoop;
     public Action<object, bool> TouchSelector_SetLoop;
     public Func<object, int> TouchSelector_GetSelected;
     public Action<object, int> TouchSelector_SetSelected;
     public Action<object, Action<int, string>> TouchSelector_SetOnChange;
-
     public Func<float, float, Action<float>, object> TouchSlider_New;
     public Func<object, float> TouchSlider_GetMaxValue;
     public Action<object, float> TouchSlider_SetMaxValue;
@@ -371,19 +435,16 @@ namespace Lima.API
     public Func<object, object> TouchSlider_GetBar;
     public Func<object, object> TouchSlider_GetThumb;
     public Func<object, object> TouchSlider_GetTextInput;
-
     public Func<float, float, Action<float, float>, object> TouchSliderRange_NewR;
     public Func<object, float> TouchSliderRange_GetValueLower;
     public Action<object, float> TouchSliderRange_SetValueLower;
     public Action<object, Action<float, float>> TouchSliderRange_SetOnChangeR;
     public Func<object, object> TouchSliderRange_GetThumbLower;
-
     public Func<string[], int, Action<int>, object> TouchSwitch_New;
     public Func<object, int> TouchSwitch_GetIndex;
     public Action<object, int> TouchSwitch_SetIndex;
     public Func<object, object[]> TouchSwitch_GetButtons;
     public Action<object, Action<int>> TouchSwitch_SetOnChange;
-
     public Func<string, Action<string, bool>, object> TouchTextField_New;
     public Func<object, bool> TouchTextField_GetIsEditing;
     public Func<object, string> TouchTextField_GetText;
@@ -396,10 +457,8 @@ namespace Lima.API
     public Func<object, bool> TouchTextField_GetAllowNegative;
     public Action<object, bool> TouchTextField_SetAllowNegative;
     public Func<object, object> TouchTextField_GetLabel;
-
     public Func<string, object> TouchWindowBar_New;
     public Func<object, object> TouchWindowBar_GetLabel;
-
     public Func<int, object> TouchChart_New;
     public Func<object, List<float[]>> TouchChart_GetDataSets;
     public Func<object, List<Color>> TouchChart_GetDataColors;
@@ -411,10 +470,78 @@ namespace Lima.API
     public Func<object, float> TouchChart_GetMinValue;
     public Func<object, Color?> TouchChart_GetGridColor;
     public Action<object, Color> TouchChart_SetGridColor;
-
     public Func<object> TouchEmptyElement_New;
   }
-
+  public abstract class WrapperBase<TT> where TT : TouchUiKitDelegator
+  {
+    static protected TT Api;
+    internal static void SetApi(TT api) => Api = api;
+    static protected T Wrap<T>(object obj, Func<object, T> ctor) { return (obj == null) ? default(T) : ctor(obj); }
+    static protected T[] WrapArray<T>(object[] objArray, Func<object, T> ctor)
+    {
+      var newArray = new T[objArray.Length];
+      for (int i = 0; i < objArray.Length; i++)
+        newArray[i] = Wrap<T>(objArray[i], ctor);
+      return newArray;
+    }
+    internal object InternalObj { get; private set; }
+    public WrapperBase(object internalObject) { InternalObj = internalObject; }
+  }
+  public class TouchScreen : WrapperBase<TouchUiKitDelegator>
+  {
+    /// <summary>
+    /// Do not call this ctor directly, unless you have the reference of the original object from the API.
+    /// </summary>
+    public TouchScreen(object internalObject) : base(internalObject) { }
+    public IngameIMyCubeBlock Block { get { return Api.TouchScreen_GetBlock.Invoke(InternalObj); } }
+    public IngameIMyTextSurface Surface { get { return Api.TouchScreen_GetSurface.Invoke(InternalObj); } }
+    public int Index { get { return Api.TouchScreen_GetIndex.Invoke(InternalObj); } }
+    public bool IsOnScreen { get { return Api.TouchScreen_IsOnScreen.Invoke(InternalObj); } }
+    public Vector2 CursorPosition { get { return Api.TouchScreen_GetCursorPosition.Invoke(InternalObj); } }
+    public float InteractiveDistance { get { return Api.TouchScreen_GetInteractiveDistance.Invoke(InternalObj); } }
+    public void SetInteractiveDistance(float distance) => Api.TouchScreen_SetInteractiveDistance.Invoke(InternalObj, distance);
+    public int Rotation { get { return Api.TouchScreen_GetRotation.Invoke(InternalObj); } }
+    public bool CompareWithBlockAndSurface(IngameIMyCubeBlock block, IngameIMyTextSurface surface) => Api.TouchScreen_CompareWithBlockAndSurface.Invoke(InternalObj, block, surface);
+    /// <summary>
+    /// Force a call to Cursor Dispose, that clears sprites.
+    /// </summary>
+    public void ForceDispose() => Api.TouchScreen_ForceDispose.Invoke(InternalObj);
+  }
+  public class TouchCursor : WrapperBase<TouchUiKitDelegator>
+  {
+    public TouchCursor(TouchScreen screen) : base(Api.TouchCursor_New(screen.InternalObj)) { }
+    /// <summary>
+    /// Do not call this ctor directly, unless you have the reference of the original object from the API.
+    /// </summary>
+    public TouchCursor(object internalObject) : base(internalObject) { }
+    public bool Active { get { return Api.TouchCursor_GetActive.Invoke(InternalObj); } set { Api.TouchCursor_SetActive.Invoke(InternalObj, value); } }
+    public float Scale { get { return Api.TouchCursor_GetScale.Invoke(InternalObj); } set { Api.TouchCursor_SetScale.Invoke(InternalObj, value); } }
+    public Vector2 Position { get { return Api.TouchCursor_GetPosition.Invoke(InternalObj); } }
+    public bool IsInsideArea(float x, float y, float z, float w) => Api.TouchCursor_IsInsideArea.Invoke(InternalObj, x, y, z, w);
+    public List<MySprite> GetSprites() => Api.TouchCursor_GetSprites.Invoke(InternalObj);
+    public void ForceDispose() => Api.TouchCursor_ForceDispose.Invoke(InternalObj);
+  }
+  public class ClickHandler : WrapperBase<TouchUiKitDelegator>
+  {
+    public ClickHandler() : base(Api.ClickHandler_New()) { }
+    /// <summary>
+    /// Do not call this ctor directly, unless you have the reference of the original object from the API.
+    /// </summary>
+    public ClickHandler(object internalObject) : base(internalObject) { }
+    /// <summary>
+    /// A Vector4 representing the area on screen that should check for cursor position.
+    /// </summary>
+    public Vector4 HitArea { get { return Api.ClickHandler_GetHitArea.Invoke(InternalObj); } set { Api.ClickHandler_SetHitArea.Invoke(InternalObj, value); } }
+    public bool IsMouseReleased { get { return Api.ClickHandler_IsMouseReleased.Invoke(InternalObj); } }
+    public bool IsMouseOver { get { return Api.ClickHandler_IsMouseOver.Invoke(InternalObj); } }
+    public bool IsMousePressed { get { return Api.ClickHandler_IsMousePressed.Invoke(InternalObj); } }
+    public bool JustReleased { get { return Api.ClickHandler_JustReleased.Invoke(InternalObj); } }
+    public bool JustPressed { get { return Api.ClickHandler_JustPressed.Invoke(InternalObj); } }
+    /// <summary>
+    /// This is already called internally by the Touch Manager, only call this if you wanna override the handler status.
+    /// </summary>
+    public void UpdateStatus(TouchScreen screen) => Api.ClickHandler_UpdateStatus.Invoke(InternalObj, screen.InternalObj);
+  }
   /// <summary>
   /// <see href="https://github.com/adrianulima/TouchScreenAPI/blob/main/Data/Scripts/Lima/Touch/UiKit/TouchTheme.cs"/>
   /// </summary>

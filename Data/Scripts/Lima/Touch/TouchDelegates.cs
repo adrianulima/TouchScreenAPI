@@ -11,6 +11,9 @@ using VRage.Game.GUI.TextPanel;
 using VRage.Game.ModAPI;
 using VRage.Game;
 using VRageMath;
+using IngameIMyTextSurface = Sandbox.ModAPI.Ingame.IMyTextSurface;
+using IngameIMyCubeBlock = VRage.Game.ModAPI.Ingame.IMyCubeBlock;
+
 
 namespace Lima.Touch
 {
@@ -59,7 +62,7 @@ namespace Lima.Touch
       {
         MyEntities.OnEntityCreate -= EntityCreated;
 
-        var dict = GetTouchApiDictionaryForPB();
+        var dict = GetTouchAndUiApiDictionary();
         var builder = ImmutableDictionary.CreateBuilder<string, Delegate>();
         foreach (var del in dict)
           builder.Add(del.Key, del.Value);
@@ -154,7 +157,7 @@ namespace Lima.Touch
         { "TouchApp_GetTheme", new Func<object, TouchTheme>(TouchApp_GetTheme) },
         { "TouchApp_GetDefaultBg", new Func<object, bool>(TouchApp_GetDefaultBg) },
         { "TouchApp_SetDefaultBg", new Action<object, bool>(TouchApp_SetDefaultBg) },
-        { "TouchApp_InitApp", new Action<object, MyCubeBlock, Sandbox.ModAPI.Ingame.IMyTextSurface>(TouchApp_InitApp) },
+        { "TouchApp_InitApp", new Action<object, IngameIMyCubeBlock, IngameIMyTextSurface>(TouchApp_InitApp) },
 
         { "TouchEmptyButton_New", new Func<Action, object>(TouchEmptyButton_New) },
         { "TouchEmptyButton_GetHandler", new Func<object, object>(TouchEmptyButton_GetHandler) },
@@ -277,22 +280,20 @@ namespace Lima.Touch
     {
       var dict = new Dictionary<string, Delegate>
       {
-        { "CreateTouchScreen", new Func<IMyCubeBlock, IMyTextSurface, object>(CreateTouchScreen) },
-        { "RemoveTouchScreen", new Action<IMyCubeBlock, IMyTextSurface>(RemoveTouchScreen) },
+        { "CreateTouchScreen", new Func<IngameIMyCubeBlock, IngameIMyTextSurface, object>(CreateTouchScreen) },
+        { "RemoveTouchScreen", new Action<IngameIMyCubeBlock, IngameIMyTextSurface>(RemoveTouchScreen) },
         { "AddSurfaceCoords", new Action<string>(AddSurfaceCoords) },
         { "RemoveSurfaceCoords", new Action<string>(RemoveSurfaceCoords) },
-        { "GetMaxInteractiveDistance", new Func<float>(GetMaxInteractiveDistance) },
-        { "SetMaxInteractiveDistance", new Action<float>(SetMaxInteractiveDistance) },
 
-        { "TouchScreen_GetBlock", new Func<object, IMyCubeBlock>(TouchScreen_GetBlock) },
-        { "TouchScreen_GetSurface", new Func<object, IMyTextSurface>(TouchScreen_GetSurface) },
+        { "TouchScreen_GetBlock", new Func<object, IngameIMyCubeBlock>(TouchScreen_GetBlock) },
+        { "TouchScreen_GetSurface", new Func<object, IngameIMyTextSurface>(TouchScreen_GetSurface) },
         { "TouchScreen_GetIndex", new Func<object, int>(TouchScreen_GetIndex) },
         { "TouchScreen_IsOnScreen", new Func<object, bool>(TouchScreen_IsOnScreen) },
         { "TouchScreen_GetCursorPosition", new Func<object, Vector2>(TouchScreen_GetCursorPosition) },
         { "TouchScreen_GetInteractiveDistance", new Func<object, float>(TouchScreen_GetInteractiveDistance) },
         { "TouchScreen_SetInteractiveDistance", new Action<object, float>(TouchScreen_SetInteractiveDistance) },
         { "TouchScreen_GetRotation", new Func<object, int>(TouchScreen_GetRotation) },
-        { "TouchScreen_CompareWithBlockAndSurface", new Func<object, IMyCubeBlock, IMyTextSurface, bool>(TouchScreen_CompareWithBlockAndSurface) },
+        { "TouchScreen_CompareWithBlockAndSurface", new Func<object, IngameIMyCubeBlock, IngameIMyTextSurface, bool>(TouchScreen_CompareWithBlockAndSurface) },
         { "TouchScreen_ForceDispose", new Action<object>(TouchScreen_ForceDispose) },
 
         { "TouchCursor_New", new Func<object, TouchCursor>(TouchCursor_New) },
@@ -319,56 +320,28 @@ namespace Lima.Touch
       return dict;
     }
 
-    private Dictionary<string, Delegate> GetTouchApiDictionaryForPB()
+    private object CreateTouchScreen(IngameIMyCubeBlock block, IngameIMyTextSurface surface)
     {
-      var dict = GetTouchApiDictionary();
-
-      dict["CreateTouchScreen"] = new Func<VRage.Game.ModAPI.Ingame.IMyCubeBlock, Sandbox.ModAPI.Ingame.IMyTextSurface, object>(CreateTouchScreen);
-      dict["RemoveTouchScreen"] = new Action<VRage.Game.ModAPI.Ingame.IMyCubeBlock, Sandbox.ModAPI.Ingame.IMyTextSurface>(RemoveTouchScreen);
-      dict["TouchScreen_GetBlock"] = new Func<object, VRage.Game.ModAPI.Ingame.IMyCubeBlock>(TouchScreen_GetBlock);
-      dict["TouchScreen_GetSurface"] = new Func<object, Sandbox.ModAPI.Ingame.IMyTextSurface>(TouchScreen_GetSurface);
-      dict["TouchScreen_CompareWithBlockAndSurface"] = new Func<object, VRage.Game.ModAPI.Ingame.IMyCubeBlock, Sandbox.ModAPI.Ingame.IMyTextSurface, bool>(TouchScreen_CompareWithBlockAndSurface);
-
-      return dict;
-    }
-
-    private object CreateTouchScreen(VRage.Game.ModAPI.Ingame.IMyCubeBlock block, Sandbox.ModAPI.Ingame.IMyTextSurface surface)
-    {
-      // For PB
       var castBlock = block as IMyCubeBlock;
       var castSurface = surface as IMyTextSurface;
       if (castBlock == null || castSurface == null)
         return null;
-      return CreateTouchScreen(castBlock, castSurface);
-    }
-    private object CreateTouchScreen(IMyCubeBlock block, IMyTextSurface surface)
-    {
-      RemoveTouchScreen(block, surface);
-      var screen = new TouchScreen(block, surface);
+
+      RemoveTouchScreen(castBlock, castSurface);
+      var screen = new TouchScreen(castBlock, castSurface);
       TouchSession.Instance.TouchMan.Screens.Add(screen);
       return screen;
     }
-    private void RemoveTouchScreen(VRage.Game.ModAPI.Ingame.IMyCubeBlock block, Sandbox.ModAPI.Ingame.IMyTextSurface surface)
+    private void RemoveTouchScreen(IngameIMyCubeBlock block, IngameIMyTextSurface surface)
     {
-      // For PB
       var castBlock = block as IMyCubeBlock;
       var castSurface = surface as IMyTextSurface;
       if (castBlock == null || castSurface == null)
         return;
-      RemoveTouchScreen(block, surface);
+      TouchSession.Instance.TouchMan.RemoveScreen(castBlock, castSurface);
     }
-    private void RemoveTouchScreen(IMyCubeBlock block, IMyTextSurface surface) => TouchSession.Instance.TouchMan.RemoveScreen(block, surface);
     // private List<TouchScreen> GetTouchScreensList() => TouchSession.Instance.TouchMan.Screens;
     // private TouchScreen GetTargetTouchScreen() => TouchSession.Instance.TouchMan.CurrentScreen;
-    private float GetMaxInteractiveDistance()
-    {
-      MyAPIGateway.Utilities.ShowNotification($"[ GetMaxInteractiveDistance is Obsolete ]", 2000, MyFontEnum.Red);
-      return 0;
-    }
-    private void SetMaxInteractiveDistance(float distance)
-    {
-      MyAPIGateway.Utilities.ShowNotification($"[ SetMaxInteractiveDistance is Obsolete ]", 2000, MyFontEnum.Red);
-    }
     private void AddSurfaceCoords(string coords) => TouchSession.Instance.SurfaceCoordsMan.AddSurfaceCoords(coords);
     private void RemoveSurfaceCoords(string coords)
     {
@@ -377,24 +350,22 @@ namespace Lima.Touch
         TouchSession.Instance.SurfaceCoordsMan.CoordsList.RemoveAt(index);
     }
 
-    private IMyCubeBlock TouchScreen_GetBlock(object obj) => (obj as TouchScreen).Block;
-    private IMyTextSurface TouchScreen_GetSurface(object obj) => (obj as TouchScreen).Surface;
+    private IngameIMyCubeBlock TouchScreen_GetBlock(object obj) => (obj as TouchScreen).Block;
+    private IngameIMyTextSurface TouchScreen_GetSurface(object obj) => (obj as TouchScreen).Surface;
     private int TouchScreen_GetIndex(object obj) => (obj as TouchScreen).Index;
     private bool TouchScreen_IsOnScreen(object obj) => (obj as TouchScreen).IsOnScreen;
     private Vector2 TouchScreen_GetCursorPosition(object obj) => (obj as TouchScreen).CursorPosition;
     private float TouchScreen_GetInteractiveDistance(object obj) => (obj as TouchScreen).InteractiveDistance;
     private void TouchScreen_SetInteractiveDistance(object obj, float distance) => (obj as TouchScreen).InteractiveDistance = distance;
     private int TouchScreen_GetRotation(object obj) => (obj as TouchScreen).Rotation;
-    private bool TouchScreen_CompareWithBlockAndSurface(object obj, VRage.Game.ModAPI.Ingame.IMyCubeBlock block, Sandbox.ModAPI.Ingame.IMyTextSurface surface)
+    private bool TouchScreen_CompareWithBlockAndSurface(object obj, IngameIMyCubeBlock block, IngameIMyTextSurface surface)
     {
-      // For PB
       var castBlock = block as IMyCubeBlock;
       var castSurface = surface as IMyTextSurface;
       if (castBlock == null || castSurface == null)
         return false;
-      return TouchScreen_CompareWithBlockAndSurface(obj, castBlock, castSurface);
+      return (obj as TouchScreen).CompareWithBlockAndSurface(castBlock, castSurface);
     }
-    private bool TouchScreen_CompareWithBlockAndSurface(object obj, IMyCubeBlock block, IMyTextSurface surface) => (obj as TouchScreen).CompareWithBlockAndSurface(block, surface);
     private void TouchScreen_ForceDispose(object obj) => (obj as TouchScreen).Dispose();
 
     private bool TouchElementBase_GetEnabled(object obj) => (obj as TouchElementBase).Enabled;
@@ -465,7 +436,14 @@ namespace Lima.Touch
     private TouchTheme TouchApp_GetTheme(object obj) => (obj as TouchApp).Theme;
     private bool TouchApp_GetDefaultBg(object obj) => (obj as TouchApp).DefaultBg;
     private void TouchApp_SetDefaultBg(object obj, bool defaultBg) => (obj as TouchApp).DefaultBg = defaultBg;
-    private void TouchApp_InitApp(object obj, MyCubeBlock block, Sandbox.ModAPI.Ingame.IMyTextSurface surface) => (obj as TouchApp).InitApp(block, surface);
+    private void TouchApp_InitApp(object obj, IngameIMyCubeBlock block, IngameIMyTextSurface surface)
+    {
+      var castBlock = block as IMyCubeBlock;
+      var castSurface = surface as IMyTextSurface;
+      if (castBlock == null || castSurface == null)
+        return;
+      (obj as TouchApp).InitApp(castBlock, castSurface);
+    }
 
     private TouchCursor TouchCursor_New(object screen) => new TouchCursor(screen as TouchScreen);
     private bool TouchCursor_GetActive(object obj) => (obj as TouchCursor).Active;

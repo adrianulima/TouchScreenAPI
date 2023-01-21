@@ -1,8 +1,9 @@
 using Lima.Utils;
-using Sandbox.Game.Entities;
+using Sandbox.ModAPI;
 using System.Collections.Generic;
 using System;
 using VRage.Game.GUI.TextPanel;
+using VRage.Game.ModAPI;
 using VRageMath;
 
 namespace Lima.Touch.UiKit.Elements
@@ -14,6 +15,7 @@ namespace Lima.Touch.UiKit.Elements
     public TouchScreen Screen { get; private set; }
     public TouchCursor Cursor { get; private set; }
     public TouchTheme Theme { get; private set; }
+    public bool DefaultBg = false;
 
     private RectangleF _viewport;
     public RectangleF Viewport
@@ -22,14 +24,12 @@ namespace Lima.Touch.UiKit.Elements
       protected set { _viewport = value; }
     }
 
-    public bool DefaultBg = false;
-
     public TouchApp() { }
 
-    public virtual void InitApp(MyCubeBlock block, Sandbox.ModAPI.Ingame.IMyTextSurface surface)
+    public virtual void InitApp(IMyCubeBlock block, IMyTextSurface surface)
     {
-      Screen = new TouchScreen(block, surface as Sandbox.ModAPI.IMyTextSurface);
-      TouchSession.Instance.TouchMan.RemoveScreen(block, surface as Sandbox.ModAPI.IMyTextSurface);
+      Screen = new TouchScreen(block, surface);
+      TouchSession.Instance.TouchMan.RemoveScreen(block, surface);
       TouchSession.Instance.TouchMan.Screens.Add(Screen);
       Screen.UpdateAtSimulationEvent += UpdateAtSimulation;
 
