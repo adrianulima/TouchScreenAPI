@@ -108,11 +108,11 @@ namespace Lima.Apps.ScreenCalibration
           text = $"{text}\n:{Format(_vertex0)}\n:{Format(_vertex1)}";
       }
       else if (_step == 3)
-        text = $"Calibration Success, added to Storage.\n\n{Screen.SubtypeId}:{Screen.Index}\n:{Format(_vertex0)}\n:{Format(_vertex1)}\n:{Format(_vertex2)}";
+        text = $"Calibration success, added to Storage.\n\n{Screen.SubtypeId}:{Screen.Index}\n:{Format(_vertex0)}\n:{Format(_vertex1)}\n:{Format(_vertex2)}";
 
       if (_step == 0 && Cursor.Position != Vector2.Zero)
       {
-        text = $"Screen already calibrated. Overriding!\n\n{text}";
+        text = $"Only use this App for modded LCDs.\nThis screen is already calibrated!\n Changes will override current.\n\n{text}";
       }
 
       _button.Enabled = _calibrating || _step == 3;
