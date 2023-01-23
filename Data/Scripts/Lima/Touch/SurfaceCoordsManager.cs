@@ -3,9 +3,19 @@ using System.Collections.Generic;
 
 namespace Lima.Touch
 {
+  public class SurfaceCoordsFile
+  {
+    public List<string> Coords = new List<string>();
+    public SurfaceCoordsFile(List<string> coords) { Coords.AddRange(coords); }
+    public SurfaceCoordsFile() { }
+  }
+
   public class SurfaceCoordsManager
   {
-    public readonly List<string> CoordsList = new List<string>();
+    private readonly List<string> _coordsList = new List<string>();
+    private readonly List<string> _customCoordsList = new List<string>();
+
+    private FileStorage<SurfaceCoordsFile> _fileHandler = new FileStorage<SurfaceCoordsFile>("SurfaceCoords.xml");
 
     public void Init()
     {
@@ -15,7 +25,7 @@ namespace Lima.Touch
     public void LoadData()
     {
       // TODO: Consider loading this list from SBC or config file
-      var coords = new List<string>(){
+      var coords = new List<string>() {
         "TOUCH:LargeLCDPanel:0:-1.23463:1.23463:-1.02366:-1.23463:-1.23463:-1.02366:1.23463:-1.23463:-1.02366",
         "TOUCH:LargeTextPanel:0:-1.19463:0.694398:-1.02366:-1.19463:-0.694398:-1.02366:1.19463:-0.694398:-1.02366",
         "TOUCH:LargeLCDPanelWide:0:-2.48463:1.23463:-1.02366:-2.48463:-1.23463:-1.02366:2.48463:-1.23463:-1.02366",
@@ -94,8 +104,19 @@ namespace Lima.Touch
         "TOUCH:LargeBlockStandingCockpit:0:-0.372228:-0.08327:-1.12346:-0.372228:-0.156863:-1.06368:-0.111456:-0.156863:-1.06368",
         "TOUCH:LargeBlockStandingCockpit:1:-0.434899:-0.205596:-0.989841:-0.434899:-0.251315:-0.819213:-0.014451:-0.251315:-0.819213"
       };
+      _coordsList.AddRange(coords);
 
-      CoordsList.AddRange(coords);
+      var current = _fileHandler.Load();
+      if (current != null)
+      {
+        foreach (var coord in current.Coords)
+          AddSurfaceCoords(coord);
+      }
+    }
+
+    public void SaveSurfaceCoordsFile()
+    {
+      _fileHandler.Save(new SurfaceCoordsFile(_customCoordsList));
     }
 
     public void Dispose()
@@ -106,20 +127,52 @@ namespace Lima.Touch
     private void MessageHandler(string message, ref bool sendToOthers)
     {
       message = message.ToLower();
-
       if (message.StartsWith(SurfaceCoords.Prefix.ToLower()))
       {
         AddSurfaceCoords(message);
-
         sendToOthers = false;
       }
     }
 
-    public void AddSurfaceCoords(string coords)
+    public void AddSurfaceCoords(string coordsString)
     {
-      var parsedCoord = SurfaceCoords.Parse(coords);
+      var parsedCoord = SurfaceCoords.Parse(coordsString);
       if (!parsedCoord.IsEmpty())
-        CoordsList.Add(parsedCoord.ToString());
+      {
+        RemoveSurfaceCoords(coordsString, true);
+        _coordsList.Add(parsedCoord.ToString());
+        _customCoordsList.Add(parsedCoord.ToString());
+      }
+    }
+
+    public string GetSurfaceCoords(string subtypeId, int surfaceIndex)
+    {
+      return _coordsList.Find(x => x.StartsWith($"{SurfaceCoords.Prefix}:{subtypeId}:{surfaceIndex}")) ?? "";
+    }
+
+    public void RemoveSurfaceCoordsByTypeAndIndex(string subtypeId, int surfaceIndex)
+    {
+      RemoveSurfaceCoords(GetSurfaceCoords(subtypeId, surfaceIndex), false);
+    }
+
+    public void RemoveSurfaceCoords(string coordsString, bool ignoreVertices)
+    {
+      if (ignoreVertices)
+      {
+        var parsedCoord = SurfaceCoords.Parse(coordsString);
+        if (!parsedCoord.IsEmpty())
+          RemoveSurfaceCoordsByTypeAndIndex(parsedCoord.BuilderTypeString, parsedCoord.Index);
+      }
+      else
+      {
+        var index = _coordsList.IndexOf(coordsString);
+        if (index >= 0)
+          _coordsList.RemoveAt(index);
+
+        var indexCustom = _customCoordsList.IndexOf(coordsString);
+        if (indexCustom >= 0)
+          _customCoordsList.RemoveAt(indexCustom);
+      }
     }
 
   }

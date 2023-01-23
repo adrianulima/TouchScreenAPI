@@ -9,7 +9,6 @@ using System;
 using VRage.Game.Entity;
 using VRage.Game.GUI.TextPanel;
 using VRage.Game.ModAPI;
-using VRage.Game;
 using VRageMath;
 using IngameIMyTextSurface = Sandbox.ModAPI.Ingame.IMyTextSurface;
 using IngameIMyCubeBlock = VRage.Game.ModAPI.Ingame.IMyCubeBlock;
@@ -345,9 +344,7 @@ namespace Lima.Touch
     private void AddSurfaceCoords(string coords) => TouchSession.Instance.SurfaceCoordsMan.AddSurfaceCoords(coords);
     private void RemoveSurfaceCoords(string coords)
     {
-      var index = TouchSession.Instance.SurfaceCoordsMan.CoordsList.IndexOf(coords);
-      if (index >= 0)
-        TouchSession.Instance.SurfaceCoordsMan.CoordsList.RemoveAt(index);
+      TouchSession.Instance.SurfaceCoordsMan.RemoveSurfaceCoords(coords, true);
     }
 
     private IngameIMyCubeBlock TouchScreen_GetBlock(object obj) => (obj as TouchScreen).Block;

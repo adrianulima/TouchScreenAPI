@@ -1,6 +1,5 @@
 using Lima.Utils;
 using Sandbox.ModAPI;
-using System.Linq;
 using System;
 using VRage.Game.ModAPI;
 using VRageMath;
@@ -62,20 +61,26 @@ namespace Lima.Touch
         throw new Exception($"Block is not a IMyTextSurfaceProvider {block}");
       Index = SurfaceUtils.GetSurfaceIndex(provider, surface);
 
-      var coordString = TouchSession.Instance.SurfaceCoordsMan.CoordsList.SingleOrDefault(c => c.StartsWith($"{SurfaceCoords.Prefix}:{SubtypeId}:{Index}"));
-      if (coordString == null)
-        throw new Exception($"Can't find coords for {SubtypeId}:{Index}");
-
-      SurfaceCoords coords = SurfaceCoords.Parse(coordString);
-      if (coords.IsEmpty())
-        throw new Exception($"Failed to parse coords for {SubtypeId}:{Index}");
-
+      RefreshCoords();
       Active = true;
-      Coords = coords;
       Viewport = new RectangleF(
         (surface.TextureSize - surface.SurfaceSize) * 0.5f,
         surface.SurfaceSize
       );
+    }
+
+    public void RefreshCoords()
+    {
+      SurfaceCoords coords = SurfaceCoords.Zero;
+      var coordString = TouchSession.Instance.SurfaceCoordsMan.GetSurfaceCoords(SubtypeId, Index);
+      if (coordString != "")
+      {
+        coords = SurfaceCoords.Parse(coordString);
+        if (coords.IsEmpty())
+          throw new Exception($"Failed to parse coords for {SubtypeId}:{Index}");
+      }
+
+      Coords = coords;
     }
 
     public void ForceRotationUpdate()
@@ -84,9 +89,8 @@ namespace Lima.Touch
     }
 
     // private MyStringId Material = MyStringId.GetOrCompute("Square");
-    // void DrawPoint(Vector3D position)
+    // void DrawPoint(Vector3D position, Color color)
     // {
-    //   Color color = Color.Red;
     //   MyTransparentGeometry.AddPointBillboard(Material, color, position, 0.05f, 0f);
     // }
 
@@ -111,10 +115,10 @@ namespace Lima.Touch
 
       // var screenPosBL = MathUtils.LocalToGlobal(Coords.BottomLeft, Block.WorldMatrix);
       // var screenPosBR = MathUtils.LocalToGlobal(Coords.BottomRight, Block.WorldMatrix);
-      // // DrawPoint(Intersection);
-      // DrawPoint(screenPosTL);
-      // DrawPoint(screenPosBL);
-      // DrawPoint(screenPosBR);
+      // DrawPoint(Intersection, Color.Yellow);
+      // DrawPoint(screenPosTL, Color.Red);
+      // DrawPoint(screenPosBL, Color.Green);
+      // DrawPoint(screenPosBR, Color.Blue);
 
       return Intersection;
     }

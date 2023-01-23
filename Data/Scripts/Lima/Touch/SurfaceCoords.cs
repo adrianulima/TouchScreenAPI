@@ -1,5 +1,8 @@
 using Lima.Utils;
+using Sandbox.ModAPI;
 using System;
+using VRage.Game;
+using VRage.Utils;
 using VRageMath;
 
 namespace Lima.Touch
@@ -43,7 +46,12 @@ namespace Lima.Touch
       return Vector3.Normalize(Vector3.Cross(B - A, C - A));
     }
 
-    public override string ToString() => $"{Prefix}:{BuilderTypeString}:{Index}:{TopLeft.X}:{TopLeft.Y}:{TopLeft.Z}:{BottomLeft.X}:{BottomLeft.Y}:{BottomLeft.Z}:{BottomRight.X}:{BottomRight.Y}:{BottomRight.Z}";
+    private string Format(Vector3 vertex)
+    {
+      return $"{vertex.X.ToString("0.#####")}:{vertex.Y.ToString("0.#####")}:{vertex.Z.ToString("0.#####")}";
+    }
+
+    public override string ToString() => $"{Prefix}:{BuilderTypeString}:{Index}:{Format(TopLeft)}:{Format(BottomLeft)}:{Format(BottomRight)}";
 
     public override bool Equals(object obj)
     {
@@ -79,17 +87,27 @@ namespace Lima.Touch
 
     public static SurfaceCoords Parse(string strigifiedCoords)
     {
-      var args = strigifiedCoords.Split(':');
-      if (args.Length < 12)
-        return Zero;
+      try
+      {
+        var args = strigifiedCoords.Split(':');
+        if (args.Length < 12)
+          return Zero;
 
-      return new SurfaceCoords(
-        args[1],
-        int.Parse(args[2]),
-        new Vector3(float.Parse(args[3]), float.Parse(args[4]), float.Parse(args[5])),
-        new Vector3(float.Parse(args[6]), float.Parse(args[7]), float.Parse(args[8])),
-        new Vector3(float.Parse(args[9]), float.Parse(args[10]), float.Parse(args[11]))
-      );
+        return new SurfaceCoords(
+          args[1],
+          int.Parse(args[2]),
+          new Vector3(float.Parse(args[3]), float.Parse(args[4]), float.Parse(args[5])),
+          new Vector3(float.Parse(args[6]), float.Parse(args[7]), float.Parse(args[8])),
+          new Vector3(float.Parse(args[9]), float.Parse(args[10]), float.Parse(args[11]))
+        );
+      }
+      catch (Exception e)
+      {
+        MyLog.Default.WriteLineAndConsole($"{e.Message}\n{e.StackTrace}");
+        if (MyAPIGateway.Session?.Player != null)
+          MyAPIGateway.Utilities.ShowNotification($"[ ERROR: Failed to parse surface coords. ]", 2000, MyFontEnum.Red);
+        return Zero;
+      }
     }
   }
 }
