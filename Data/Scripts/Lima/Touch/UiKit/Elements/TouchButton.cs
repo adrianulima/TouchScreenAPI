@@ -24,6 +24,12 @@ namespace Lima.Touch.UiKit.Elements
     {
       base.ApplyThemeStyle();
 
+      if (Disabled)
+      {
+        Label.TextColor = App.Theme.MainColor_4;
+        return;
+      }
+
       if (Handler.IsMousePressed)
         Label.TextColor = App.Theme.MainColor_4;
       else if (Handler.IsMouseOver)

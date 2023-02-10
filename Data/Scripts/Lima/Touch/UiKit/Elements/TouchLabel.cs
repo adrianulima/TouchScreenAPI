@@ -1,4 +1,6 @@
 using System;
+using System.Text;
+using Sandbox.ModAPI;
 using VRage.Game.GUI.TextPanel;
 using VRageMath;
 
@@ -18,6 +20,15 @@ namespace Lima.Touch.UiKit.Elements
     public bool AutoBreakLine = false;
     public LabelEllipsis AutoEllipsis = LabelEllipsis.Right;
     public bool HasEllipsis { get; private set; } = false;
+
+    public int Lines { get; private set; } = 0;
+    public int MaxLines = 9999;
+
+    private string _data;
+    private string _prevText;
+    private float _prevWidth;
+    private float _prevScale;
+    private float _prevfontSize;
 
     public float FontSize
     {
@@ -42,7 +53,7 @@ namespace Lima.Touch.UiKit.Elements
       UpdateHeight(Text);
     }
 
-    private void UpdateHeight(string text)
+    private int UpdateHeight(string text)
     {
       var lines = 1;
       for (int i = 0; i < text.Length; i++)
@@ -50,24 +61,56 @@ namespace Lima.Touch.UiKit.Elements
         if (text[i] == '\n')
           lines++;
       }
-      Pixels.Y = 32 * FontSize * lines;
+      Pixels.Y = 32 * FontSize * MathHelper.Min(lines, MaxLines);
+      Lines = lines;
+      return lines;
     }
 
     private string BreakLine(string text, float width, MySprite textSprite)
     {
-      var saveText = text;
-      var lastSpaceIndex = text.LastIndexOf(" ");
-      while (lastSpaceIndex > 0 && text.Length > 0 && width < App.Theme.MeasureStringInPixels(text, textSprite.FontId, textSprite.RotationOrScale).X)
+      if (text.Length > 0 && width < App.Theme.MeasureStringInPixels(text, textSprite.FontId, textSprite.RotationOrScale).X)
       {
-        text = text.Substring(0, lastSpaceIndex - 1);
-        lastSpaceIndex = text.LastIndexOf(" ");
+        float curLineLength = 0;
+        var strBuilder = new StringBuilder();
+        var words = text.Split(' ');
+
+        var spaceWid = App.Theme.MeasureStringInPixels(" ", textSprite.FontId, textSprite.RotationOrScale).X;
+
+        for (int i = 0; i < words.Length; i += 1)
+        {
+          var word = words[i];
+          var wordWid = App.Theme.MeasureStringInPixels(word, textSprite.FontId, textSprite.RotationOrScale).X;
+
+          if (curLineLength + wordWid > width)
+          {
+            if (curLineLength > 0)
+            {
+              strBuilder.Append("\n");
+              curLineLength = 0;
+            }
+
+            if (wordWid > width)
+            {
+              while (word.Length > 0 && width < App.Theme.MeasureStringInPixels(word, textSprite.FontId, textSprite.RotationOrScale).X)
+                word = word.Substring(Math.Min(0, word.Length), word.Length - 1).TrimEnd();
+
+              word = $"{word.Substring(0, Math.Max(0, word.Length - 3)).TrimEnd()}...";
+            }
+          }
+
+          strBuilder.Append(word);
+          curLineLength += wordWid;
+          if (i < words.Length - 1)
+          {
+            strBuilder.Append(" ");
+            curLineLength += spaceWid;
+          }
+
+        }
+        return strBuilder.ToString();
       }
 
-      if (saveText == text)
-        return text;
-
-      saveText = saveText.Remove(text.Length + 1, 1).Insert(text.Length + 1, "\n");
-      return BreakLine(saveText, width, textSprite);
+      return text;
     }
 
     public override void Update()
@@ -86,23 +129,51 @@ namespace Lima.Touch.UiKit.Elements
 
       if (AutoBreakLine && Text.Length > 0)
       {
-        textSprite.Data = BreakLine(Text, size.X, textSprite);
+        if (_prevText == Text && _prevWidth == size.X && _prevScale == ThemeScale && _prevfontSize == _fontSize)
+          textSprite.Data = _data;
+        else
+          textSprite.Data = BreakLine(Text, size.X, textSprite);
       }
       else if (AutoEllipsis != LabelEllipsis.None && Text.Length > 0)
       {
         var text = Text;
         var start = AutoEllipsis == LabelEllipsis.Left ? 1 : 0;
-        while (text.Length > 0 && size.X < App.Theme.MeasureStringInPixels(text, textSprite.FontId, textSprite.RotationOrScale).X)
-          text = text.Substring(start, text.Length - 1).TrimEnd();
 
-        HasEllipsis = text != Text;
-        if (HasEllipsis)
-          textSprite.Data = AutoEllipsis == LabelEllipsis.Left
-          ? $"...{Text.Substring(Text.Length - (text.Length - 3), Math.Max(0, text.Length - 3)).TrimStart()}"
-          : $"{text.Substring(0, Math.Max(0, text.Length - 3)).TrimEnd()}...";
+        if (_prevText == Text && _prevWidth == size.X && _prevScale == ThemeScale && _prevfontSize == _fontSize)
+        {
+          textSprite.Data = _data;
+        }
+        else
+        {
+          while (text.Length > 0 && size.X < App.Theme.MeasureStringInPixels(text, textSprite.FontId, textSprite.RotationOrScale).X)
+            text = text.Substring(Math.Min(start, text.Length), text.Length - 1).TrimEnd();
+
+          HasEllipsis = text != Text;
+          if (HasEllipsis)
+            textSprite.Data = AutoEllipsis == LabelEllipsis.Left
+            ? $"...{Text.Substring(Math.Min(Text.Length - (text.Length - 3), Text.Length), Math.Max(0, text.Length - 3)).TrimStart()}"
+            : $"{text.Substring(0, Math.Max(0, text.Length - 3)).TrimEnd()}...";
+        }
       }
 
-      UpdateHeight(textSprite.Data);
+      if (UpdateHeight(textSprite.Data) > MaxLines)
+      {
+        var lines = textSprite.Data.Split('\n');
+        var text = "";
+        for (int i = 0; i < MaxLines; i++)
+        {
+          text = $"{text}{lines[i]}";
+          if (i < MaxLines - 1)
+            text = $"{text}\n";
+        }
+        textSprite.Data = text;
+      }
+
+      _data = textSprite.Data;
+      _prevText = Text;
+      _prevWidth = size.X;
+      _prevScale = ThemeScale;
+      _prevfontSize = _fontSize;
 
       if (Alignment == TextAlignment.LEFT)
         textSprite.Position = Position;

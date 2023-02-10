@@ -23,7 +23,7 @@ namespace Lima.Touch
 
         if (!TouchSession.Instance.ModEnabled
         || MyAPIGateway.Session == null
-        || !MyAPIGateway.Session.CameraController.IsInFirstPersonView
+        // || !MyAPIGateway.Session.CameraController.IsInFirstPersonView
         || MyAPIGateway.Gui.IsCursorVisible)
         {
           return;

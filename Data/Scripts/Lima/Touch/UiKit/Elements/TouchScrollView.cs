@@ -1,3 +1,5 @@
+using System;
+using Sandbox.ModAPI;
 using VRageMath;
 
 namespace Lima.Touch.UiKit.Elements
@@ -5,8 +7,11 @@ namespace Lima.Touch.UiKit.Elements
   public class TouchScrollView : TouchView
   {
     public ClickHandler Handler = new ClickHandler();
+    public ClickHandler HandlerContent = new ClickHandler();
 
     public bool ScrollAlwaysVisible = false;
+    public bool ScrollWheelEnabled = true;
+    public float ScrollWheelStep = 12;
 
     public TouchBarContainer ScrollBar;
 
@@ -18,6 +23,9 @@ namespace Lima.Touch.UiKit.Elements
     }
     private Vector2 _flexSize;
 
+    bool _mouseOver = false;
+    int _delta = 0;
+
     public TouchScrollView(ViewDirection direction = ViewDirection.Column, Color? bgColor = null) : base(direction, bgColor)
     {
       Overflow = false;
@@ -28,6 +36,27 @@ namespace Lima.Touch.UiKit.Elements
       ScrollBar.Absolute = true;
       ScrollBar.UseThemeColors = false;
       AddChild(ScrollBar);
+    }
+
+    public override void OnAddedToApp()
+    {
+      base.OnAddedToApp();
+      App.UpdateAtSimulationEvent -= UpdateAtSimulation;
+      App.UpdateAtSimulationEvent += UpdateAtSimulation;
+    }
+
+    public override void Dispose()
+    {
+      base.Dispose();
+      App.UpdateAtSimulationEvent -= UpdateAtSimulation;
+    }
+
+    public void UpdateAtSimulation()
+    {
+      if (_mouseOver)
+        _delta += Math.Sign(MyAPIGateway.Input.DeltaMouseScrollWheelValue());
+      else
+        _delta = 0;
     }
 
     protected override void UpdateChildrenPositions()
@@ -77,6 +106,20 @@ namespace Lima.Touch.UiKit.Elements
           var cursorRatio = (App.Cursor.Position.Y - Handler.HitArea.Y) / (Handler.HitArea.W - Handler.HitArea.Y);
           Scroll = cursorRatio * (1 + ScrollBar.Ratio) - (ScrollBar.Ratio * 0.5f);
         }
+        else
+        {
+          HandlerContent.HitArea = new Vector4(Position.X, Position.Y, bgPos.X, bgPos.Y + ScrollBar.Pixels.Y * ThemeScale);
+          HandlerContent.UpdateStatus(App.Screen);
+
+          _mouseOver = HandlerContent.IsMouseOver;
+          if (_mouseOver && _delta != 0)
+          {
+            var wheel = (ScrollWheelStep / -_flexSize.Y) * ((float)_delta);
+            Scroll -= wheel;
+            _delta = 0;
+          }
+        }
+
       }
       else
         ScrollBar.Ratio = 0;

@@ -70,7 +70,10 @@ namespace Lima.Touch.UiKit.Elements
         Selected = Loop ? 0 : count - 1;
 
       if (prev != Selected)
+      {
         OnChange(Selected, Labels[Selected]);
+        Label.Text = Labels[Selected];
+      }
     }
 
     public override void Update()

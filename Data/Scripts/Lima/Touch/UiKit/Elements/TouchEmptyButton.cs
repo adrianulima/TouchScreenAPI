@@ -6,8 +6,8 @@ namespace Lima.Touch.UiKit.Elements
   public class TouchEmptyButton : TouchView
   {
     public ClickHandler Handler = new ClickHandler();
-
     public Action OnChange;
+    public bool Disabled = false;
 
     public TouchEmptyButton(Action onChange)
     {
@@ -22,13 +22,15 @@ namespace Lima.Touch.UiKit.Elements
 
     public override void Update()
     {
-      var size = GetBoundaries();
+      if (!Disabled)
+      {
+        var size = GetBoundaries();
+        Handler.HitArea = new Vector4(Position.X, Position.Y, Position.X + size.X, Position.Y + size.Y);
+        Handler.UpdateStatus(App.Screen);
 
-      Handler.HitArea = new Vector4(Position.X, Position.Y, Position.X + size.X, Position.Y + size.Y);
-      Handler.UpdateStatus(App.Screen);
-
-      if (Handler.JustReleased)
-        OnChange();
+        if (Handler.JustReleased)
+          OnChange();
+      }
 
       if (UseThemeColors)
         ApplyThemeStyle();
@@ -38,6 +40,12 @@ namespace Lima.Touch.UiKit.Elements
 
     protected virtual void ApplyThemeStyle()
     {
+      if (Disabled)
+      {
+        BgColor = App.Theme.MainColor_3;
+        return;
+      }
+
       if (Handler.IsMousePressed)
         BgColor = App.Theme.MainColor_8;
       else if (Handler.IsMouseOver)

@@ -157,6 +157,10 @@ namespace Lima.API.PB
         AssignMethod(out _apiDel.TouchScrollView_SetScroll, delegates["TouchScrollView_SetScroll"]);
         AssignMethod(out _apiDel.TouchScrollView_GetScrollAlwaysVisible, delegates["TouchScrollView_GetScrollAlwaysVisible"]);
         AssignMethod(out _apiDel.TouchScrollView_SetScrollAlwaysVisible, delegates["TouchScrollView_SetScrollAlwaysVisible"]);
+        AssignMethod(out _apiDel.TouchScrollView_GetScrollWheelEnabled, delegates["TouchScrollView_GetScrollWheelEnabled"]);
+        AssignMethod(out _apiDel.TouchScrollView_SetScrollWheelEnabled, delegates["TouchScrollView_SetScrollWheelEnabled"]);
+        AssignMethod(out _apiDel.TouchScrollView_GetScrollWheelStep, delegates["TouchScrollView_GetScrollWheelStep"]);
+        AssignMethod(out _apiDel.TouchScrollView_SetScrollWheelStep, delegates["TouchScrollView_SetScrollWheelStep"]);
         AssignMethod(out _apiDel.TouchScrollView_GetScrollBar, delegates["TouchScrollView_GetScrollBar"]);
         AssignMethod(out _apiDel.TouchApp_New, delegates["TouchApp_New"]);
         AssignMethod(out _apiDel.TouchApp_GetScreen, delegates["TouchApp_GetScreen"]);
@@ -169,6 +173,8 @@ namespace Lima.API.PB
         AssignMethod(out _apiDel.TouchEmptyButton_New, delegates["TouchEmptyButton_New"]);
         AssignMethod(out _apiDel.TouchEmptyButton_GetHandler, delegates["TouchEmptyButton_GetHandler"]);
         AssignMethod(out _apiDel.TouchEmptyButton_SetOnChange, delegates["TouchEmptyButton_SetOnChange"]);
+        AssignMethod(out _apiDel.TouchEmptyButton_GetDisabled, delegates["TouchEmptyButton_GetDisabled"]);
+        AssignMethod(out _apiDel.TouchEmptyButton_SetDisabled, delegates["TouchEmptyButton_SetDisabled"]);
         AssignMethod(out _apiDel.TouchButton_New, delegates["TouchButton_New"]);
         AssignMethod(out _apiDel.TouchButton_GetLabel, delegates["TouchButton_GetLabel"]);
         AssignMethod(out _apiDel.TouchCheckbox_New, delegates["TouchCheckbox_New"]);
@@ -190,6 +196,9 @@ namespace Lima.API.PB
         AssignMethod(out _apiDel.TouchLabel_SetFontSize, delegates["TouchLabel_SetFontSize"]);
         AssignMethod(out _apiDel.TouchLabel_GetAlignment, delegates["TouchLabel_GetAlignment"]);
         AssignMethod(out _apiDel.TouchLabel_SetAlignment, delegates["TouchLabel_SetAlignment"]);
+        AssignMethod(out _apiDel.TouchLabel_GetLines, delegates["TouchLabel_GetLines"]);
+        AssignMethod(out _apiDel.TouchLabel_GetMaxLines, delegates["TouchLabel_GetMaxLines"]);
+        AssignMethod(out _apiDel.TouchLabel_SetMaxLines, delegates["TouchLabel_SetMaxLines"]);
         AssignMethod(out _apiDel.TouchBarContainer_New, delegates["TouchBarContainer_New"]);
         AssignMethod(out _apiDel.TouchBarContainer_GetIsVertical, delegates["TouchBarContainer_GetIsVertical"]);
         AssignMethod(out _apiDel.TouchBarContainer_SetIsVertical, delegates["TouchBarContainer_SetIsVertical"]);
@@ -363,6 +372,10 @@ namespace Lima.API.PB
     public Action<object, float> TouchScrollView_SetScroll;
     public Func<object, bool> TouchScrollView_GetScrollAlwaysVisible;
     public Action<object, bool> TouchScrollView_SetScrollAlwaysVisible;
+    public Func<object, bool> TouchScrollView_GetScrollWheelEnabled;
+    public Action<object, bool> TouchScrollView_SetScrollWheelEnabled;
+    public Func<object, float> TouchScrollView_GetScrollWheelStep;
+    public Action<object, float> TouchScrollView_SetScrollWheelStep;
     public Func<object, object> TouchScrollView_GetScrollBar;
     public Func<object> TouchApp_New;
     public Func<object, object> TouchApp_GetScreen;
@@ -375,6 +388,8 @@ namespace Lima.API.PB
     public Func<Action, object> TouchEmptyButton_New;
     public Func<object, object> TouchEmptyButton_GetHandler;
     public Action<object, Action> TouchEmptyButton_SetOnChange;
+    public Func<object, bool> TouchEmptyButton_GetDisabled;
+    public Action<object, bool> TouchEmptyButton_SetDisabled;
     public Func<string, Action, object> TouchButton_New;
     public Func<object, object> TouchButton_GetLabel;
     public Func<Action<bool>, bool, object> TouchCheckbox_New;
@@ -396,6 +411,9 @@ namespace Lima.API.PB
     public Action<object, float> TouchLabel_SetFontSize;
     public Func<object, TextAlignment> TouchLabel_GetAlignment;
     public Action<object, TextAlignment> TouchLabel_SetAlignment;
+    public Func<object, int> TouchLabel_GetLines;
+    public Func<object, int> TouchLabel_GetMaxLines;
+    public Action<object, int> TouchLabel_SetMaxLines;
     public Func<bool, object> TouchBarContainer_New;
     public Func<object, bool> TouchBarContainer_GetIsVertical;
     public Action<object, bool> TouchBarContainer_SetIsVertical;
@@ -724,6 +742,8 @@ namespace Lima.API.PB
     /// </summary>
     public float Scroll { get { return Api.TouchScrollView_GetScroll.Invoke(InternalObj); } set { Api.TouchScrollView_SetScroll.Invoke(InternalObj, value); } }
     public bool ScrollAlwaysVisible { get { return Api.TouchScrollView_GetScrollAlwaysVisible.Invoke(InternalObj); } set { Api.TouchScrollView_SetScrollAlwaysVisible.Invoke(InternalObj, value); } }
+    public bool ScrollWheelEnabled { get { return Api.TouchScrollView_GetScrollWheelEnabled.Invoke(InternalObj); } set { Api.TouchScrollView_SetScrollWheelEnabled.Invoke(InternalObj, value); } }
+    public float ScrollWheelStep { get { return Api.TouchScrollView_GetScrollWheelStep.Invoke(InternalObj); } set { Api.TouchScrollView_SetScrollWheelStep.Invoke(InternalObj, value); } }
     public TouchBarContainer ScrollBar { get { return _scrollBar ?? (_scrollBar = Wrap<TouchBarContainer>(Api.TouchScrollView_GetScrollBar.Invoke(InternalObj), (obj) => new TouchBarContainer(obj))); } }
   }
   /// <summary>
@@ -766,6 +786,10 @@ namespace Lima.API.PB
     public TouchEmptyButton(object internalObject) : base(internalObject) { }
     public ClickHandler Handler { get { return _handler ?? (_handler = Wrap<ClickHandler>(Api.TouchEmptyButton_GetHandler.Invoke(InternalObj), (obj) => new ClickHandler(obj))); } }
     public Action OnChange { set { Api.TouchEmptyButton_SetOnChange.Invoke(InternalObj, value); } }
+    /// <summary>
+    /// If true, the button will not be clickable and will not fire the onChange event.
+    /// </summary>
+    public bool Disabled { get { return Api.TouchEmptyButton_GetDisabled.Invoke(InternalObj); } set { Api.TouchEmptyButton_SetDisabled.Invoke(InternalObj, value); } }
   }
   /// <summary>
   /// <see href="https://github.com/adrianulima/TouchScreenAPI/blob/main/Data/Scripts/Lima/Touch/UiKit/Elements/TouchButton.cs"/>
@@ -819,6 +843,8 @@ namespace Lima.API.PB
     public Color? TextColor { get { return Api.TouchLabel_GetTextColor.Invoke(InternalObj); } set { Api.TouchLabel_SetTextColor.Invoke(InternalObj, (Color)value); } }
     public float FontSize { get { return Api.TouchLabel_GetFontSize.Invoke(InternalObj); } set { Api.TouchLabel_SetFontSize.Invoke(InternalObj, value); } }
     public TextAlignment Alignment { get { return Api.TouchLabel_GetAlignment.Invoke(InternalObj); } set { Api.TouchLabel_SetAlignment.Invoke(InternalObj, value); } }
+    public int Lines { get { return Api.TouchLabel_GetLines.Invoke(InternalObj); } }
+    public int MaxLines { get { return Api.TouchLabel_GetMaxLines.Invoke(InternalObj); } set { Api.TouchLabel_SetMaxLines.Invoke(InternalObj, value); } }
   }
   /// <summary>
   /// <see href="https://github.com/adrianulima/TouchScreenAPI/blob/main/Data/Scripts/Lima/Touch/UiKit/Elements/TouchBarContainer.cs"/>

@@ -147,6 +147,10 @@ namespace Lima.Touch
         { "TouchScrollView_SetScroll", new Action<object, float>(TouchScrollView_SetScroll) },
         { "TouchScrollView_GetScrollAlwaysVisible", new Func<object, bool>(TouchScrollView_GetScrollAlwaysVisible) },
         { "TouchScrollView_SetScrollAlwaysVisible", new Action<object, bool>(TouchScrollView_SetScrollAlwaysVisible) },
+        { "TouchScrollView_GetScrollWheelEnabled", new Func<object, bool>(TouchScrollView_GetScrollWheelEnabled) },
+        { "TouchScrollView_SetScrollWheelEnabled", new Action<object, bool>(TouchScrollView_SetScrollWheelEnabled) },
+        { "TouchScrollView_GetScrollWheelStep", new Func<object, float>(TouchScrollView_GetScrollWheelStep) },
+        { "TouchScrollView_SetScrollWheelStep", new Action<object, float>(TouchScrollView_SetScrollWheelStep) },
         { "TouchScrollView_GetScrollBar", new Func<object, object>(TouchScrollView_GetScrollBar) },
 
         { "TouchApp_New", new Func<TouchApp>(TouchApp_New) },
@@ -161,6 +165,8 @@ namespace Lima.Touch
         { "TouchEmptyButton_New", new Func<Action, object>(TouchEmptyButton_New) },
         { "TouchEmptyButton_GetHandler", new Func<object, object>(TouchEmptyButton_GetHandler) },
         { "TouchEmptyButton_SetOnChange", new Action<object, Action>(TouchEmptyButton_SetOnChange) },
+        { "TouchEmptyButton_GetDisabled", new Func<object, bool>(TouchEmptyButton_GetDisabled) },
+        { "TouchEmptyButton_SetDisabled", new Action<object, bool>(TouchEmptyButton_SetDisabled) },
 
         { "TouchButton_New", new Func<string, Action, object>(TouchButton_New) },
         { "TouchButton_GetLabel", new Func<object, object>(TouchButton_GetLabel) },
@@ -185,6 +191,9 @@ namespace Lima.Touch
         { "TouchLabel_SetFontSize", new Action<object, float>(TouchLabel_SetFontSize) },
         { "TouchLabel_GetAlignment", new Func<object, TextAlignment>(TouchLabel_GetAlignment) },
         { "TouchLabel_SetAlignment", new Action<object, TextAlignment>(TouchLabel_SetAlignment) },
+        { "TouchLabel_GetLines", new Func<object, int>(TouchLabel_GetLines) },
+        { "TouchLabel_GetMaxLines", new Func<object, int>(TouchLabel_GetMaxLines) },
+        { "TouchLabel_SetMaxLines", new Action<object, int>(TouchLabel_SetMaxLines) },
 
         { "TouchBarContainer_New", new Func<bool, object>(TouchBarContainer_New) },
         { "TouchBarContainer_GetIsVertical", new Func<object, bool>(TouchBarContainer_GetIsVertical) },
@@ -424,6 +433,10 @@ namespace Lima.Touch
     private void TouchScrollView_SetScroll(object obj, float scroll) => (obj as TouchScrollView).Scroll = scroll;
     private bool TouchScrollView_GetScrollAlwaysVisible(object obj) => (obj as TouchScrollView).ScrollAlwaysVisible;
     private void TouchScrollView_SetScrollAlwaysVisible(object obj, bool visible) => (obj as TouchScrollView).ScrollAlwaysVisible = visible;
+    private bool TouchScrollView_GetScrollWheelEnabled(object obj) => (obj as TouchScrollView).ScrollWheelEnabled;
+    private void TouchScrollView_SetScrollWheelEnabled(object obj, bool wheel) => (obj as TouchScrollView).ScrollWheelEnabled = wheel;
+    private float TouchScrollView_GetScrollWheelStep(object obj) => (obj as TouchScrollView).ScrollWheelStep;
+    private void TouchScrollView_SetScrollWheelStep(object obj, float step) => (obj as TouchScrollView).ScrollWheelStep = step;
     private TouchBarContainer TouchScrollView_GetScrollBar(object obj) => (obj as TouchScrollView).ScrollBar;
 
     private TouchApp TouchApp_New() => new TouchApp();
@@ -487,6 +500,8 @@ namespace Lima.Touch
     private TouchEmptyButton TouchEmptyButton_New(Action onChange) => new TouchEmptyButton(onChange);
     private ClickHandler TouchEmptyButton_GetHandler(object obj) => (obj as TouchEmptyButton).Handler;
     private void TouchEmptyButton_SetOnChange(object obj, Action onChange) => (obj as TouchEmptyButton).OnChange = onChange;
+    private bool TouchEmptyButton_GetDisabled(object obj) => (obj as TouchEmptyButton).Disabled;
+    private void TouchEmptyButton_SetDisabled(object obj, bool disabled) => (obj as TouchEmptyButton).Disabled = disabled;
 
     private TouchButton TouchButton_New(string text, Action onChange) => new TouchButton(text, onChange);
     private TouchLabel TouchButton_GetLabel(object obj) => (obj as TouchButton).Label;
@@ -511,6 +526,9 @@ namespace Lima.Touch
     private void TouchLabel_SetFontSize(object obj, float fontSize) => (obj as TouchLabel).FontSize = fontSize;
     private TextAlignment TouchLabel_GetAlignment(object obj) => (obj as TouchLabel).Alignment;
     private void TouchLabel_SetAlignment(object obj, TextAlignment alignment) => (obj as TouchLabel).Alignment = alignment;
+    private int TouchLabel_GetLines(object obj) => (obj as TouchLabel).Lines;
+    private int TouchLabel_GetMaxLines(object obj) => (obj as TouchLabel).MaxLines;
+    private void TouchLabel_SetMaxLines(object obj, int max) => (obj as TouchLabel).MaxLines = max;
 
     private TouchBarContainer TouchBarContainer_New(bool vertical = false) => new TouchBarContainer(vertical);
     private bool TouchBarContainer_GetIsVertical(object obj) => (obj as TouchBarContainer).IsVertical;
