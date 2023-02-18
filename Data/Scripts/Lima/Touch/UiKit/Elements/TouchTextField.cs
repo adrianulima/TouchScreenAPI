@@ -131,7 +131,7 @@ namespace Lima.Touch.UiKit.Elements
 
       if (Handler.JustPressed)
         ToggleEdit(false, false, Text == _saveText);
-      else if (IsEditing && !Handler.IsMouseOver)
+      else if (IsEditing && ((!Handler.IsMouseOver && Handler.WasPressedOutside) || !App.Screen.IsOnScreen))
         ToggleEdit(true, false, Text == _saveText);
 
       Label.Text = Text;

@@ -12,6 +12,7 @@ namespace Lima.Touch
     public bool IsMouseReleased { get { return _status == 0; } }
     public bool IsMouseOver { get { return _status == 1 || _status == 2; } }
     public bool IsMousePressed { get { return _status == 2; } }
+    public bool WasPressedOutside { get { return _wasPresseOutside; } }
 
     public bool JustReleased { get; private set; }
     public bool JustPressed { get; private set; }

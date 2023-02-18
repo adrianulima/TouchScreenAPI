@@ -30,6 +30,8 @@ namespace Lima.Utils
           _controlIDs = new List<string>(Keys.Length);
           foreach (MyKeys key in Keys)
           {
+            if (key == MyKeys.Alt)
+              continue;
             MyStringId? id = MyAPIGateway.Input.GetControl(key)?.GetGameControlEnum();
             string stringID = id?.ToString();
             if (stringID != null && stringID.Length > 0)
