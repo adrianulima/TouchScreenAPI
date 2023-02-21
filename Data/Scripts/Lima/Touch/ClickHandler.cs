@@ -33,7 +33,7 @@ namespace Lima.Touch
       if (HitArea != Vector4.Zero)
       {
         // var mousePressed = MyAPIGateway.Input.IsMousePressed(MyMouseButtonsEnum.Left)
-        var mousePressed = MyAPIGateway.Input.IsAnyMouseOrJoystickPressed() && !MyAPIGateway.Gui.IsCursorVisible;
+        var mousePressed = !MyAPIGateway.Gui.IsCursorVisible && (MyAPIGateway.Input.IsLeftMousePressed() || MyAPIGateway.Input.IsMiddleMousePressed());
         if (screen.IsInsideArea(
             HitArea.X,
             HitArea.Y,
