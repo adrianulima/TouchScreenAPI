@@ -5,6 +5,7 @@ using VRage.Game.GUI.TextPanel;
 using VRageMath;
 using IngameIMyTextSurface = Sandbox.ModAPI.Ingame.IMyTextSurface;
 using IngameIMyCubeBlock = VRage.Game.ModAPI.Ingame.IMyCubeBlock;
+using IngameIMyBlockGroup = Sandbox.ModAPI.Ingame.IMyBlockGroup;
 
 namespace Lima.API.PB.UI
 {
@@ -17,6 +18,8 @@ namespace Lima.API.PB.UI
     private Action<IngameIMyCubeBlock, IngameIMyTextSurface> _removeTouchScreen;
     private Action<string> _addSurfaceCoords;
     private Action<string> _removeSurfaceCoords;
+    private Func<IngameIMyCubeBlock, string> _getBlockIconSprite;
+    private Func<IngameIMyBlockGroup, string> _getBlockGroupIconSprite;
     /// <summary>
     /// Creates an instance of TouchScreen add adds it to the Touch Manager.
     /// TouchScreen is responsible for checking player direction and distance to screen.
@@ -52,6 +55,12 @@ namespace Lima.API.PB.UI
     /// </summary>
     /// <param name="coords"></param>
     public void RemoveSurfaceCoords(string coords) => _removeSurfaceCoords?.Invoke(coords);
+    /// <summary>
+    /// Gets the icon from block definition and set as LCD sprite definition.
+    /// </summary>
+    /// <param name="block"></param>
+    public string GetBlockIconSprite(IngameIMyCubeBlock block) => _getBlockIconSprite?.Invoke(block);
+    public string GetBlockGroupIconSprite(IngameIMyBlockGroup blockGroup) => _getBlockGroupIconSprite?.Invoke(blockGroup);
     protected TouchApiDelegator ApiDelegator;
     public TouchScreenAPI(Sandbox.ModAPI.Ingame.IMyTerminalBlock pb)
     {
@@ -64,6 +73,8 @@ namespace Lima.API.PB.UI
         AssignMethod(out _removeTouchScreen, delegates["RemoveTouchScreen"]);
         AssignMethod(out _addSurfaceCoords, delegates["AddSurfaceCoords"]);
         AssignMethod(out _removeSurfaceCoords, delegates["RemoveSurfaceCoords"]);
+        AssignMethod(out _getBlockIconSprite, delegates["GetBlockIconSprite"]);
+        AssignMethod(out _getBlockGroupIconSprite, delegates["GetBlockGroupIconSprite"]);
         AssignMethod(out ApiDelegator.TouchScreen_GetBlock, delegates["TouchScreen_GetBlock"]);
         AssignMethod(out ApiDelegator.TouchScreen_GetSurface, delegates["TouchScreen_GetSurface"]);
         AssignMethod(out ApiDelegator.TouchScreen_GetIndex, delegates["TouchScreen_GetIndex"]);

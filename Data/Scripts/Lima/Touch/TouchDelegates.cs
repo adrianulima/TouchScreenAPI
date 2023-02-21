@@ -12,6 +12,7 @@ using VRage.Game.ModAPI;
 using VRageMath;
 using IngameIMyTextSurface = Sandbox.ModAPI.Ingame.IMyTextSurface;
 using IngameIMyCubeBlock = VRage.Game.ModAPI.Ingame.IMyCubeBlock;
+using IngameIMyBlockGroup = Sandbox.ModAPI.Ingame.IMyBlockGroup;
 
 
 namespace Lima.Touch
@@ -292,6 +293,8 @@ namespace Lima.Touch
         { "RemoveTouchScreen", new Action<IngameIMyCubeBlock, IngameIMyTextSurface>(RemoveTouchScreen) },
         { "AddSurfaceCoords", new Action<string>(AddSurfaceCoords) },
         { "RemoveSurfaceCoords", new Action<string>(RemoveSurfaceCoords) },
+        { "GetBlockIconSprite", new Func<IngameIMyCubeBlock, string>(GetBlockIconSprite) },
+        { "GetBlockGroupIconSprite", new Func<IngameIMyBlockGroup, string>(GetBlockGroupIconSprite) },
 
         { "TouchScreen_GetBlock", new Func<object, IngameIMyCubeBlock>(TouchScreen_GetBlock) },
         { "TouchScreen_GetSurface", new Func<object, IngameIMyTextSurface>(TouchScreen_GetSurface) },
@@ -354,6 +357,14 @@ namespace Lima.Touch
     private void RemoveSurfaceCoords(string coords)
     {
       TouchSession.Instance.SurfaceCoordsMan.RemoveSurfaceCoords(coords, true);
+    }
+    private string GetBlockIconSprite(IngameIMyCubeBlock block)
+    {
+      return TouchSession.Instance.IconHandler.GetBlockTexture(block);
+    }
+    private string GetBlockGroupIconSprite(IngameIMyBlockGroup blockGroup)
+    {
+      return TouchSession.Instance.IconHandler.GetBlockGroupTexture(blockGroup);
     }
 
     private IngameIMyCubeBlock TouchScreen_GetBlock(object obj) => (obj as TouchScreen).Block;

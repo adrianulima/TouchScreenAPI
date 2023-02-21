@@ -14,8 +14,17 @@ namespace Lima.Touch
 
     public SurfaceCoordsManager SurfaceCoordsMan = new SurfaceCoordsManager();
     public TouchManager TouchMan = new TouchManager();
+    public IconTexturesHandler IconHandler;
 
     private TouchDelegates _delegator;
+
+    public override void BeforeStart()
+    {
+      if (MyAPIGateway.Utilities.IsDedicated)
+        return;
+
+      IconHandler = new IconTexturesHandler();
+    }
 
     public override void LoadData()
     {
@@ -44,8 +53,10 @@ namespace Lima.Touch
 
       TouchMan?.Dispose();
       SurfaceCoordsMan?.Dispose();
+      IconHandler?.Dispose();
       _delegator?.Unload();
       Instance = null;
+      IconHandler = null;
       ModEnabled = false;
     }
 
