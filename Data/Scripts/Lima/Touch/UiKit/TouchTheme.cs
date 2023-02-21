@@ -62,10 +62,10 @@ namespace Lima.Touch.UiKit
 
       if (IsBgDark)
       {
-        float r = _surface.ScriptForegroundColor.R + ((1 - _surface.ScriptForegroundColor.R) * 0.6f);
-        float g = _surface.ScriptForegroundColor.G + ((1 - _surface.ScriptForegroundColor.G) * 0.6f);
-        float b = _surface.ScriptForegroundColor.B + ((1 - _surface.ScriptForegroundColor.B) * 0.6f);
-        _whiteColor = new Color(r, g, b);
+        float r = _surface.ScriptForegroundColor.R + ((255 - _surface.ScriptForegroundColor.R) * 0.6f);
+        float g = _surface.ScriptForegroundColor.G + ((255 - _surface.ScriptForegroundColor.G) * 0.6f);
+        float b = _surface.ScriptForegroundColor.B + ((255 - _surface.ScriptForegroundColor.B) * 0.6f);
+        _whiteColor = new Color(r / 255, g / 255, b / 255);
       }
       else
       {
