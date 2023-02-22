@@ -43,7 +43,7 @@ namespace Lima.Touch
       var A = MathUtils.LocalToGlobal(TopLeft, blockWorldMatrix);
       var B = MathUtils.LocalToGlobal(BottomLeft, blockWorldMatrix);
       var C = MathUtils.LocalToGlobal(BottomRight, blockWorldMatrix);
-      return Vector3.Normalize(Vector3.Cross(B - A, C - A));
+      return Vector3D.Normalize(Vector3D.Cross(B - A, C - A));
     }
 
     private string Format(Vector3 vertex)

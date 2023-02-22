@@ -27,10 +27,10 @@ namespace Lima.Apps.ScreenCalibration
     private string _newCoords = "";
     private bool _crossHair = false;
 
-    private Vector3 _vertex0;
-    private Vector3 _vertex1;
-    private Vector3 _vertex2;
-    // private Vector3 _normal;
+    private Vector3D _vertex0;
+    private Vector3D _vertex1;
+    private Vector3D _vertex2;
+    // private Vector3D _normal;
 
     public ScreenCalibrationApp()
     {
@@ -138,7 +138,7 @@ namespace Lima.Apps.ScreenCalibration
         {
           if (!_wasPressed && MyAPIGateway.Input.IsAnyMouseOrJoystickPressed())
           {
-            var localPos = triangleEx?.IntersectionPointInObjectSpace ?? default(Vector3);
+            var localPos = triangleEx?.IntersectionPointInObjectSpace ?? default(Vector3D);
             var triangle = triangleEx?.Triangle.InputTriangle ?? default(MyTriangle_Vertices);
             var closestVertex = GetClosestVertex(localPos, triangle);
 
@@ -180,7 +180,7 @@ namespace Lima.Apps.ScreenCalibration
       _overlayView.AddChild(_button);
     }
 
-    private void UpdateStep(Vector3 pos)
+    private void UpdateStep(Vector3D pos)
     {
       if (_step == 1)
       {
@@ -203,11 +203,11 @@ namespace Lima.Apps.ScreenCalibration
       }
     }
 
-    private Vector3 GetClosestVertex(Vector3 pos, MyTriangle_Vertices triangle)
+    private Vector3D GetClosestVertex(Vector3D pos, MyTriangle_Vertices triangle)
     {
-      var dist0 = Vector3.Distance(pos, triangle.Vertex0);
-      var dist1 = Vector3.Distance(pos, triangle.Vertex1);
-      var dist2 = Vector3.Distance(pos, triangle.Vertex2);
+      var dist0 = Vector3D.Distance(pos, triangle.Vertex0);
+      var dist1 = Vector3D.Distance(pos, triangle.Vertex1);
+      var dist2 = Vector3D.Distance(pos, triangle.Vertex2);
       var vert = triangle.Vertex0;
       if (dist1 < dist0 && dist1 < dist2)
         vert = triangle.Vertex1;
@@ -216,14 +216,14 @@ namespace Lima.Apps.ScreenCalibration
       return vert;
     }
 
-    private string Format(Vector3 vertex)
+    private string Format(Vector3D vertex)
     {
       return $"{vertex.X.ToString("0.#####")}:{vertex.Y.ToString("0.#####")}:{vertex.Z.ToString("0.#####")}";
     }
 
-    // private Vector3 CalculateNormal()
+    // private Vector3D CalculateNormal()
     // {
-    //   return Vector3.Normalize(Vector3.Cross(_vertex1 - _vertex0, _vertex2 - _vertex0));
+    //   return Vector3D.Normalize(Vector3D.Cross(_vertex1 - _vertex0, _vertex2 - _vertex0));
     // }
   }
 }

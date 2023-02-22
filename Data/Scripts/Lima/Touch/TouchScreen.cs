@@ -2,6 +2,8 @@ using Lima.Utils;
 using Sandbox.ModAPI;
 using System;
 using VRage.Game.ModAPI;
+// using VRage.Game;
+// using VRage.Utils;
 using VRageMath;
 
 namespace Lima.Touch
@@ -128,12 +130,12 @@ namespace Lima.Touch
       var screenPosTL = MathUtils.LocalToGlobal(Coords.TopLeft, Block.WorldMatrix);
       var screenPosBL = MathUtils.LocalToGlobal(Coords.BottomLeft, Block.WorldMatrix);
       var screenPosBR = MathUtils.LocalToGlobal(Coords.BottomRight, Block.WorldMatrix);
-      var screenUp = Vector3.Normalize(screenPosTL - screenPosBL);
-      var screenRight = Vector3.Normalize(screenPosBL - screenPosBR);
+      var screenUp = Vector3D.Normalize(screenPosTL - screenPosBL);
+      var screenRight = Vector3D.Normalize(screenPosBL - screenPosBR);
 
       Vector2 screenCoord = MathUtils.GetPointOnPlane(Intersection, screenPosTL, screenUp, screenRight);
-      var width = Vector3.Distance(screenPosBL, screenPosBR);
-      var height = Vector3.Distance(screenPosBL, screenPosTL);
+      var width = (float)Vector3D.Distance(screenPosBL, screenPosBR);
+      var height = (float)Vector3D.Distance(screenPosBL, screenPosTL);
 
       if (screenCoord.X >= 0 && screenCoord.X <= width && screenCoord.Y >= 0 && screenCoord.Y <= height)
       {

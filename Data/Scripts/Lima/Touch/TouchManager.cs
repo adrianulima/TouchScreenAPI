@@ -33,7 +33,7 @@ namespace Lima.Touch
         var cameraMatrix = camera.WorldMatrix;
         var camPos = cameraMatrix.Translation;
 
-        float closestDist = -1;
+        double closestDist = -1;
         foreach (var screen in Screens)
         {
           if (!screen.Active)
@@ -56,7 +56,7 @@ namespace Lima.Touch
             continue;
           }
 
-          var dist = Vector3.Distance(camPos, intersection);
+          var dist = Vector3D.Distance(camPos, intersection);
           if (dist > screen.InteractiveDistance)
           {
             screen.UpdateAtSimulation();
