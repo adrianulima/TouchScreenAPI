@@ -140,7 +140,7 @@ namespace Lima.Touch.UiKit.Elements
     {
       ScrollBar.BgColor = App.Theme.MainColor_2;
       if (Handler.IsMousePressed)
-        ScrollBar.Bar.BgColor = App.Theme.MainColor_6;
+        ScrollBar.Bar.BgColor = App.Theme.MainColor_5;
       else if (Handler.IsMouseOver)
         ScrollBar.Bar.BgColor = App.Theme.MainColor_5;
       else

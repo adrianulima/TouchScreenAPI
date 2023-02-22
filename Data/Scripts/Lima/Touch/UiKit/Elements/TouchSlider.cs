@@ -123,7 +123,7 @@ namespace Lima.Touch.UiKit.Elements
 
     private void ApplyThemeStyle()
     {
-      Bar.Bar.BgColor = App.Theme.MainColor_7;
+      Bar.Bar.BgColor = App.Theme.MainColor_5;
 
       if (Handler.IsMousePressed)
         Bar.BgColor = App.Theme.MainColor_3;

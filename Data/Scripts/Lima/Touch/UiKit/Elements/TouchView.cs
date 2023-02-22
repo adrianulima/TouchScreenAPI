@@ -218,7 +218,7 @@ namespace Lima.Touch.UiKit.Elements
             Type = SpriteType.TEXTURE,
             Data = "SquareSimple",
             RotationOrScale = 0,
-            Color = BorderColor ?? App.Theme.MainColor_7
+            Color = BorderColor ?? App.Theme.MainColor_6
           };
         }
       }

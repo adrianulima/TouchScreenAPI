@@ -98,7 +98,7 @@ namespace Lima.Touch.UiKit.Elements
     private void ApplyThemeStyle()
     {
       Label.TextColor = App.Theme.WhiteColor;
-      Bar.BgColor = App.Theme.MainColor_7;
+      Bar.BgColor = App.Theme.MainColor_5;
       BgColor = App.Theme.MainColor_2;
     }
 

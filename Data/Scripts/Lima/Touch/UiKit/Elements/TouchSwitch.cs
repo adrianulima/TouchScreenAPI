@@ -64,7 +64,7 @@ namespace Lima.Touch.UiKit.Elements
         if (Index == i)
         {
           Buttons[i].Label.TextColor = App.Theme.WhiteColor;
-          Buttons[i].BgColor = App.Theme.MainColor_7;
+          Buttons[i].BgColor = App.Theme.MainColor_5;
         }
         else
         {
