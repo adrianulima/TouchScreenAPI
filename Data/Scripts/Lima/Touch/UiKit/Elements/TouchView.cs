@@ -61,7 +61,7 @@ namespace Lima.Touch.UiKit.Elements
 
     protected override bool ValidateChild(TouchElementBase child)
     {
-      if (Overflow || child.Absolute)
+      if (Overflow || child.Absolute || !child.Enabled)
         return base.ValidateChild(child);
 
       if (Direction != ViewDirection.None && !child.Absolute)

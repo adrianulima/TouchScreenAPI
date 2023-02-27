@@ -69,7 +69,7 @@ namespace Lima.Touch.UiKit.Elements
       }
 
       var prevPos = Position;
-      Position.Y += Scroll * _flexSize.Y;
+      Position += Vector2.UnitY * Scroll * _flexSize.Y;
       base.UpdateChildrenPositions();
       Position = prevPos;
     }

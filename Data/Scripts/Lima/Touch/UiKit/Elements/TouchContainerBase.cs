@@ -26,7 +26,7 @@ namespace Lima.Touch.UiKit.Elements
     {
       foreach (var child in Children)
       {
-        if (child.Enabled)
+        if (child.IsValidated = ValidateChild((child)))
           child.Update();
       }
       base.Update();
@@ -48,7 +48,7 @@ namespace Lima.Touch.UiKit.Elements
 
       foreach (var child in Children)
       {
-        if (ValidateChild((child)))
+        if (child.IsValidated)
           Sprites.AddRange(child.GetSprites());
       }
 

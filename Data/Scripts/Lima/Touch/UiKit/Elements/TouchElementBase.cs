@@ -12,6 +12,7 @@ namespace Lima.Touch.UiKit.Elements
 
     protected readonly List<MySprite> Sprites = new List<MySprite>();
 
+    public bool IsValidated = true;
     public bool Enabled = true;
     public bool Absolute = false;
 
@@ -25,7 +26,11 @@ namespace Lima.Touch.UiKit.Elements
     private TouchApp _app;
     public TouchApp App
     {
-      get { return _app ?? Parent?.App; }
+      get
+      {
+        if (_app != null) return _app;
+        return _app = Parent?.App;
+      }
       protected set { _app = value; }
     }
 
