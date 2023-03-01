@@ -15,6 +15,7 @@ namespace Lima.Touch
     public SurfaceCoordsManager SurfaceCoordsMan = new SurfaceCoordsManager();
     public TouchManager TouchMan = new TouchManager();
     public IconTexturesHandler IconHandler;
+    public NetworkBlacklistState BlacklistStateHandler;
 
     private TouchDelegates _delegator;
 
@@ -28,6 +29,8 @@ namespace Lima.Touch
 
     public override void LoadData()
     {
+      BlacklistStateHandler = new NetworkBlacklistState(026688);
+      BlacklistStateHandler.Init();
       ModEnabled = !MyAPIGateway.Utilities.IsDedicated;
       if (!ModEnabled)
         return;
@@ -53,9 +56,11 @@ namespace Lima.Touch
 
       TouchMan?.Dispose();
       SurfaceCoordsMan?.Dispose();
+      BlacklistStateHandler?.Dispose();
       IconHandler?.Dispose();
       _delegator?.Unload();
       Instance = null;
+      BlacklistStateHandler = null;
       IconHandler = null;
       ModEnabled = false;
     }

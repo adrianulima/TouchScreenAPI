@@ -1,3 +1,4 @@
+using Lima.Touch;
 using Sandbox.Game;
 using Sandbox.ModAPI;
 using System.Collections.Generic;
@@ -20,6 +21,7 @@ namespace Lima.Utils
       }
     }
 
+    private static List<string> _controlUseIDs;
     private static List<string> _controlIDs;
     public static List<string> ControlIDs
     {
@@ -49,15 +51,20 @@ namespace Lima.Utils
     {
       // TODO: Consider setting the value back to what it was before instead of `blocked`
       if (MyAPIGateway.Session?.Player != null)
-        foreach (string control in ControlIDs)
-          MyVisualScriptLogicProvider.SetPlayerInputBlacklistState(control, MyAPIGateway.Session.Player.IdentityId, !blocked);
+        TouchSession.Instance?.BlacklistStateHandler?.SetPlayerInputBlacklistState(ControlIDs, MyAPIGateway.Session.Player.IdentityId, !blocked);
     }
     internal static void SetPlayerUseBlacklistState(bool blocked)
     {
       if (MyAPIGateway.Session?.Player != null)
       {
-        MyVisualScriptLogicProvider.SetPlayerInputBlacklistState(MyControlsSpace.USE.String, MyAPIGateway.Session.Player.IdentityId, !blocked);
-        MyVisualScriptLogicProvider.SetPlayerInputBlacklistState(MyControlsSpace.PRIMARY_TOOL_ACTION.String, MyAPIGateway.Session.Player.IdentityId, !blocked);
+        if (_controlUseIDs == null)
+        {
+          _controlUseIDs = new List<string>(2);
+          _controlUseIDs.Add(MyControlsSpace.USE.String);
+          _controlUseIDs.Add(MyControlsSpace.PRIMARY_TOOL_ACTION.String);
+        }
+
+        TouchSession.Instance?.BlacklistStateHandler?.SetPlayerInputBlacklistState(_controlUseIDs, MyAPIGateway.Session.Player.IdentityId, !blocked);
       }
     }
 

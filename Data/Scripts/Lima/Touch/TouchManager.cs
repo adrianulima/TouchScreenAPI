@@ -1,3 +1,4 @@
+using Lima.Utils;
 using Sandbox.ModAPI;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,7 +7,6 @@ using VRage.Game.ModAPI;
 using VRage.Game;
 using VRage.Utils;
 using VRageMath;
-using Lima.Utils;
 
 namespace Lima.Touch
 {
