@@ -263,6 +263,7 @@ namespace Lima.Touch
         { "TouchTextField_GetAllowNegative", new Func<object, bool>(TouchTextField_GetAllowNegative) },
         { "TouchTextField_SetAllowNegative", new Action<object, bool>(TouchTextField_SetAllowNegative) },
         { "TouchTextField_GetLabel", new Func<object, object>(TouchTextField_GetLabel) },
+        { "TouchTextField_CancelEdit", new Action<object>(TouchTextField_CancelEdit) },
 
         { "TouchWindowBar_New", new Func<string, object>(TouchWindowBar_New) },
         { "TouchWindowBar_GetLabel", new Func<object, object>(TouchWindowBar_GetLabel) },
@@ -608,6 +609,7 @@ namespace Lima.Touch
     private bool TouchTextField_GetAllowNegative(object obj) => (obj as TouchTextField).AllowNegative;
     private void TouchTextField_SetAllowNegative(object obj, bool allowNegative) => (obj as TouchTextField).AllowNegative = allowNegative;
     private TouchLabel TouchTextField_GetLabel(object obj) => (obj as TouchTextField).Label;
+    private void TouchTextField_CancelEdit(object obj) => (obj as TouchTextField).CancelEdit();
 
     private TouchWindowBar TouchWindowBar_New(string text) => new TouchWindowBar(text);
     private TouchLabel TouchWindowBar_GetLabel(object obj) => (obj as TouchWindowBar).Label;

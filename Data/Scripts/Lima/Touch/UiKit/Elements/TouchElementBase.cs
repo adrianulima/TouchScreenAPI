@@ -48,7 +48,10 @@ namespace Lima.Touch.UiKit.Elements
         if (_parent == null || value == null)
         {
           _parent = value;
-          if (_parent?.App != null) OnAddedToApp();
+          if (_parent?.App != null)
+            OnAddedToApp();
+          else
+            _app = null;
         }
       }
     }

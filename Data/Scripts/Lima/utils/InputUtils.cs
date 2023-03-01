@@ -37,8 +37,10 @@ namespace Lima.Utils
             if (stringID != null && stringID.Length > 0)
               _controlIDs.Add(stringID);
           }
-          _controlIDs.Add(MyControlsSpace.TOGGLE_HUD.ToString());
-          _controlIDs.Add(MyControlsSpace.COLOR_PICKER.ToString());
+          _controlIDs.Add(MyControlsSpace.TOGGLE_HUD.String);
+          _controlIDs.Add(MyControlsSpace.COLOR_PICKER.String);
+          _controlIDs.Add(MyControlsSpace.USE.String);
+          _controlIDs.Add(MyControlsSpace.CROUCH.String);
         }
         return _controlIDs;
       }
@@ -49,6 +51,14 @@ namespace Lima.Utils
       if (MyAPIGateway.Session?.Player != null)
         foreach (string control in ControlIDs)
           MyVisualScriptLogicProvider.SetPlayerInputBlacklistState(control, MyAPIGateway.Session.Player.IdentityId, !blocked);
+    }
+    internal static void SetPlayerUseBlacklistState(bool blocked)
+    {
+      if (MyAPIGateway.Session?.Player != null)
+      {
+        MyVisualScriptLogicProvider.SetPlayerInputBlacklistState(MyControlsSpace.USE.String, MyAPIGateway.Session.Player.IdentityId, !blocked);
+        MyVisualScriptLogicProvider.SetPlayerInputBlacklistState(MyControlsSpace.PRIMARY_TOOL_ACTION.String, MyAPIGateway.Session.Player.IdentityId, !blocked);
+      }
     }
 
     internal static bool CheckNumericInput(string text, char ch, bool allowNegative = true, bool isInt = false)

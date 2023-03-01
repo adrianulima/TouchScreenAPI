@@ -6,6 +6,7 @@ using VRage.Game.ModAPI;
 using VRage.Game;
 using VRage.Utils;
 using VRageMath;
+using Lima.Utils;
 
 namespace Lima.Touch
 {
@@ -14,9 +15,11 @@ namespace Lima.Touch
     public readonly List<TouchScreen> Screens = new List<TouchScreen>();
 
     public TouchScreen CurrentScreen;
+    private bool _blockClick = false;
 
     public void UpdateAtSimulation()
     {
+      var blockClick = false;
       try
       {
         CurrentScreen = null;
@@ -26,6 +29,11 @@ namespace Lima.Touch
         // || !MyAPIGateway.Session.CameraController.IsInFirstPersonView
         || MyAPIGateway.Gui.IsCursorVisible)
         {
+          if (_blockClick != blockClick)
+          {
+            InputUtils.SetPlayerUseBlacklistState(blockClick);
+            _blockClick = blockClick;
+          }
           return;
         }
 
@@ -69,6 +77,7 @@ namespace Lima.Touch
           {
             closestDist = dist;
             CurrentScreen = screen;
+            blockClick = true;
           }
 
           screen.UpdateAtSimulation();
@@ -80,6 +89,12 @@ namespace Lima.Touch
 
         if (MyAPIGateway.Session?.Player != null)
           MyAPIGateway.Utilities.ShowNotification($"[ ERROR: {GetType().FullName}: {e.Message} ]", 5000, MyFontEnum.Red);
+      }
+
+      if (_blockClick != blockClick)
+      {
+        InputUtils.SetPlayerUseBlacklistState(blockClick);
+        _blockClick = blockClick;
       }
     }
 

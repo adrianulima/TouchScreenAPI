@@ -86,6 +86,11 @@ namespace Lima.Touch.UiKit.Elements
 
     private void OnGuiControlCreated(object _)
     {
+      CancelEdit();
+    }
+
+    public void CancelEdit()
+    {
       if (IsEditing)
         ToggleEdit(true, false, true);
     }

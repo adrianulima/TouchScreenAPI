@@ -208,6 +208,7 @@ namespace Lima.API
       AssignMethod(delegates, "TouchTextField_GetAllowNegative", ref apiDel.TouchTextField_GetAllowNegative);
       AssignMethod(delegates, "TouchTextField_SetAllowNegative", ref apiDel.TouchTextField_SetAllowNegative);
       AssignMethod(delegates, "TouchTextField_GetLabel", ref apiDel.TouchTextField_GetLabel);
+      AssignMethod(delegates, "TouchTextField_CancelEdit", ref apiDel.TouchTextField_CancelEdit);
       AssignMethod(delegates, "TouchWindowBar_New", ref apiDel.TouchWindowBar_New);
       AssignMethod(delegates, "TouchWindowBar_GetLabel", ref apiDel.TouchWindowBar_GetLabel);
       AssignMethod(delegates, "TouchChart_New", ref apiDel.TouchChart_New);
@@ -414,6 +415,7 @@ namespace Lima.API
     public Func<object, bool> TouchTextField_GetAllowNegative;
     public Action<object, bool> TouchTextField_SetAllowNegative;
     public Func<object, object> TouchTextField_GetLabel;
+    public Action<object> TouchTextField_CancelEdit;
 
     public Func<string, object> TouchWindowBar_New;
     public Func<object, object> TouchWindowBar_GetLabel;
@@ -846,6 +848,7 @@ namespace Lima.API
     public bool AllowNegative { get { return Api.TouchTextField_GetAllowNegative.Invoke(InternalObj); } set { Api.TouchTextField_SetAllowNegative.Invoke(InternalObj, value); } }
     public TouchLabel Label { get { return _label ?? (_label = Wrap<TouchLabel>(Api.TouchTextField_GetLabel.Invoke(InternalObj), (obj) => new TouchLabel(obj))); } }
     public Action<string, bool> OnChange { set { Api.TouchTextField_SetOnChange.Invoke(InternalObj, value); } }
+    public void CancelEdit() => Api.TouchTextField_CancelEdit.Invoke(InternalObj);
   }
   /// <summary>
   /// <see href="https://github.com/adrianulima/TouchScreenAPI/blob/main/Data/Scripts/Lima/Touch/UiKit/Elements/TouchWindowBar.cs"/>
