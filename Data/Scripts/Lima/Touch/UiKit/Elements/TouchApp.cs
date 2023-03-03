@@ -24,6 +24,8 @@ namespace Lima.Touch.UiKit.Elements
       protected set { _viewport = value; }
     }
 
+    private TouchView _alertView;
+
     public TouchApp() { }
 
     public virtual void InitApp(IMyCubeBlock block, IMyTextSurface surface)
@@ -45,6 +47,24 @@ namespace Lima.Touch.UiKit.Elements
       Pixels = new Vector2(Viewport.Width, Viewport.Height);
 
       App = this;
+
+      if (Screen.Coords == SurfaceCoords.Zero)
+      {
+        _alertView = new TouchView();
+        _alertView.Absolute = true;
+        _alertView.Alignment = ViewAlignment.Center;
+        _alertView.Anchor = ViewAnchor.Center;
+        _alertView.Border = new Vector4(2);
+        _alertView.BorderColor = Color.DarkRed;
+        _alertView.BgColor = Color.Black;
+        _alertView.Pixels = new Vector2(200, 50);
+        _alertView.Scale = Vector2.Zero;
+        _alertView.Position = Position + new Vector2(Pixels.X * 0.5f - 100, Pixels.Y * 0.5f - 25);
+
+        var label = new TouchLabel("Use 'Screen Calibration' app\nto calibrate this screen");
+        _alertView.AddChild(label);
+        AddChild(_alertView);
+      }
     }
 
     public virtual void UpdateAtSimulation()
@@ -55,6 +75,9 @@ namespace Lima.Touch.UiKit.Elements
     public override void Update()
     {
       base.Update();
+
+      if (_alertView != null)
+        MoveChild(_alertView, Children.Count - 1);
 
       if (DefaultBg)
       {
