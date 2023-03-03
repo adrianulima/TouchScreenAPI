@@ -16,6 +16,7 @@ namespace Lima.Touch
 
     public TouchScreen CurrentScreen;
     private bool _blockClick = false;
+    private int _doubleCheckBlockStateTick = 0;
 
     public void UpdateAtSimulation()
     {
@@ -78,6 +79,7 @@ namespace Lima.Touch
             closestDist = dist;
             CurrentScreen = screen;
             blockClick = true;
+            _doubleCheckBlockStateTick = 60;
           }
 
           screen.UpdateAtSimulation();
@@ -95,6 +97,10 @@ namespace Lima.Touch
       {
         InputUtils.SetPlayerUseBlacklistState(blockClick);
         _blockClick = blockClick;
+      }
+      else if (!blockClick && _doubleCheckBlockStateTick-- == 0)
+      {
+        InputUtils.SetPlayerUseBlacklistState(false);
       }
     }
 
