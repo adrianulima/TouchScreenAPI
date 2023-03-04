@@ -6,6 +6,7 @@ using VRage.Game;
 using VRage.ModAPI;
 using VRage.Utils;
 using VRageMath;
+using VRage.Game.GUI.TextPanel;
 
 namespace Lima.Apps.ScreenCalibration
 {
@@ -62,14 +63,62 @@ namespace Lima.Apps.ScreenCalibration
       Dispose();
     }
 
+    private MySprite[] GetProgressSprite(float ratio)
+    {
+      var viewport = (_surface.TextureSize - _surface.SurfaceSize) / 2f;
+      var angle = MathHelper.TwoPi * ratio;
+      var size = new Vector2(MathHelper.Min(_surface.SurfaceSize.X, _surface.SurfaceSize.Y)) * 0.5f;
+      var pos = new Vector2(viewport.X + (_surface.SurfaceSize.X - size.X) * 0.5f, viewport.Y + _surface.SurfaceSize.Y * 0.5f);
+
+      var circ1 = new MySprite()
+      {
+        Type = SpriteType.TEXTURE,
+        Data = "Screen_LoadingBar",
+        RotationOrScale = angle,
+        Color = _surface.ScriptForegroundColor,
+        Position = pos,
+        Size = size
+      };
+
+      var circ2 = new MySprite()
+      {
+        Type = SpriteType.TEXTURE,
+        Data = "Screen_LoadingBar",
+        RotationOrScale = MathHelper.Pi * -angle,
+        Color = _surface.ScriptForegroundColor,
+        Position = new Vector2(viewport.X + (_surface.SurfaceSize.X - size.X * 0.5f) * 0.5f, pos.Y),
+        Size = size * 0.5f
+      };
+
+      return new MySprite[] { circ2, circ1 };
+    }
+
     public override void Run()
     {
+      if (ticks == 0)
+      {
+        ticks++;
+        base.Run();
+        return;
+      }
+
       try
       {
-        if (!_init && ticks++ < (6 * 2)) // 2 secs
-          return;
+        var loading = !_init && ticks++ < (2 + 6); // 1 second
 
-        Init();
+        if (loading)
+        {
+          base.Run();
+          using (var frame = m_surface.DrawFrame())
+          {
+            frame.AddRange(GetProgressSprite((float)(ticks - 2) / 6f));
+            frame.Dispose();
+          }
+          return;
+        }
+
+        if (!_init)
+          Init();
 
         if (_app == null)
           return;

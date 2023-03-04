@@ -101,7 +101,7 @@ namespace Lima.Apps.ScreenCalibration
       var text = "Calibration failed, reset the App.\n";
       if (_calibrating)
       {
-        text = $"Use middle click on the button\n{_tryAgain}\n{Screen.SubtypeId}:{Screen.Index}";
+        text = $"{_tryAgain}\n{Screen.SubtypeId}:{Screen.Index}";
         if (_step == 1)
           text = $"{text}\n:{Format(_vertex0)}";
         if (_step == 2)
@@ -138,7 +138,7 @@ namespace Lima.Apps.ScreenCalibration
         {
           if (!_wasPressed && MyAPIGateway.Input.IsAnyMouseOrJoystickPressed())
           {
-            var localPos = triangleEx?.IntersectionPointInObjectSpace ?? default(Vector3D);
+            var localPos = triangleEx?.IntersectionPointInObjectSpace ?? default(Vector3);
             var triangle = triangleEx?.Triangle.InputTriangle ?? default(MyTriangle_Vertices);
             var closestVertex = GetClosestVertex(localPos, triangle);
 
