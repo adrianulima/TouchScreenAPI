@@ -268,8 +268,7 @@ namespace Lima.API
     public int Index { get { return Api.TouchScreen_GetIndex.Invoke(InternalObj); } }
     public bool IsOnScreen { get { return Api.TouchScreen_IsOnScreen.Invoke(InternalObj); } }
     public Vector2 CursorPosition { get { return Api.TouchScreen_GetCursorPosition.Invoke(InternalObj); } }
-    public float InteractiveDistance { get { return Api.TouchScreen_GetInteractiveDistance.Invoke(InternalObj); } }
-    public void SetInteractiveDistance(float distance) => Api.TouchScreen_SetInteractiveDistance.Invoke(InternalObj, distance);
+    public float InteractiveDistance { get { return Api.TouchScreen_GetInteractiveDistance.Invoke(InternalObj); } set { Api.TouchScreen_SetInteractiveDistance.Invoke(InternalObj, value); } }
     public int Rotation { get { return Api.TouchScreen_GetRotation.Invoke(InternalObj); } }
     public bool CompareWithBlockAndSurface(IngameIMyCubeBlock block, IngameIMyTextSurface surface) => Api.TouchScreen_CompareWithBlockAndSurface.Invoke(InternalObj, block, surface);
     public void ForceDispose() => Api.TouchScreen_ForceDispose.Invoke(InternalObj);
