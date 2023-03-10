@@ -101,10 +101,14 @@ namespace Lima.Touch.UiKit.Elements
         var barSize = 1 - (-_flexSize.Y / (ScrollBar.Pixels.Y * ThemeScale));
         ScrollBar.Ratio = MathHelper.Clamp(barSize, 0.1f, 0.9f);
 
+        var step = ((ScrollWheelStep / -_flexSize.Y));
         if (Handler.IsMousePressed)
         {
           var cursorRatio = (App.Cursor.Position.Y - Handler.HitArea.Y) / (Handler.HitArea.W - Handler.HitArea.Y);
           Scroll = cursorRatio * (1 + ScrollBar.Ratio) - (ScrollBar.Ratio * 0.5f);
+          if (Scroll + step <= 1)
+            Scroll = (float)Math.Round(Scroll / step) * step;
+          else Scroll = 1;
         }
         else
         {
@@ -114,8 +118,11 @@ namespace Lima.Touch.UiKit.Elements
           _mouseOver = HandlerContent.IsMouseOver;
           if (_mouseOver && _delta != 0)
           {
-            var wheel = (ScrollWheelStep / -_flexSize.Y) * ((float)_delta);
+            var wheel = step * ((float)_delta);
             Scroll -= wheel;
+            if (Scroll + step <= 1)
+              Scroll = (float)Math.Round(Scroll / step) * step;
+            else Scroll = 1;
             _delta = 0;
           }
         }
