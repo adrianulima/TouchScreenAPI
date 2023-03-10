@@ -45,7 +45,7 @@ namespace Lima.Touch
         double closestDist = -1;
         foreach (var screen in Screens)
         {
-          if (!screen.Active)
+          if (!screen.Enabled)
           {
             screen.UpdateAtSimulation();
             continue;

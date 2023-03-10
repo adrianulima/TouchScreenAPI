@@ -308,8 +308,8 @@ namespace Lima.Touch
         { "TouchScreen_ForceDispose", new Action<object>(TouchScreen_ForceDispose) },
 
         { "TouchCursor_New", new Func<object, TouchCursor>(TouchCursor_New) },
-        { "TouchCursor_GetActive", new Func<object, bool>(TouchCursor_GetActive) },
-        { "TouchCursor_SetActive", new Action<object, bool>(TouchCursor_SetActive) },
+        { "TouchCursor_GetEnabled", new Func<object, bool>(TouchCursor_GetEnabled) },
+        { "TouchCursor_SetEnabled", new Action<object, bool>(TouchCursor_SetEnabled) },
         { "TouchCursor_GetScale", new Func<object, float>(TouchCursor_GetScale) },
         { "TouchCursor_SetScale", new Action<object, float>(TouchCursor_SetScale) },
         { "TouchCursor_GetPosition", new Func<object, Vector2>(TouchCursor_GetPosition) },
@@ -466,8 +466,8 @@ namespace Lima.Touch
     private void TouchApp_SetDefaultBg(object obj, bool defaultBg) => (obj as TouchApp).DefaultBg = defaultBg;
 
     private TouchCursor TouchCursor_New(object screen) => new TouchCursor(screen as TouchScreen);
-    private bool TouchCursor_GetActive(object obj) => (obj as TouchCursor).Active;
-    private void TouchCursor_SetActive(object obj, bool active) => (obj as TouchCursor).Active = active;
+    private bool TouchCursor_GetEnabled(object obj) => (obj as TouchCursor).Enabled;
+    private void TouchCursor_SetEnabled(object obj, bool enabled) => (obj as TouchCursor).Enabled = enabled;
     private float TouchCursor_GetScale(object obj) => (obj as TouchCursor).Scale;
     private void TouchCursor_SetScale(object obj, float scale) => (obj as TouchCursor).Scale = scale;
     private Vector2 TouchCursor_GetPosition(object obj) => (obj as TouchCursor).Position;

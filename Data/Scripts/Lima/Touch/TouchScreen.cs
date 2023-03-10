@@ -10,7 +10,7 @@ namespace Lima.Touch
 {
   public class TouchScreen
   {
-    public bool Active { get; set; }
+    public bool Enabled { get; set; }
 
     public event Action UpdateAtSimulationEvent;
 
@@ -64,7 +64,7 @@ namespace Lima.Touch
       Index = SurfaceUtils.GetSurfaceIndex(provider, surface);
 
       RefreshCoords();
-      Active = true;
+      Enabled = true;
       Viewport = new RectangleF(
         (surface.TextureSize - surface.SurfaceSize) * 0.5f,
         surface.SurfaceSize
@@ -175,7 +175,7 @@ namespace Lima.Touch
 
     public bool IsInsideArea(float x, float y, float z, float w)
     {
-      if (!IsOnScreen || !Active)
+      if (!IsOnScreen || !Enabled)
         return false;
 
       return CursorPosition.X >= x && CursorPosition.Y >= y && CursorPosition.X <= z && CursorPosition.Y <= w;

@@ -14,7 +14,7 @@ namespace Lima.Touch
     public Vector2 Position { get { return _screen.CursorPosition; } }
     public bool IsOnScreen { get { return _screen.IsOnScreen; } }
 
-    public bool Active = true;
+    public bool Enabled = true;
     public float Scale = 1f;
 
     public TouchCursor(TouchScreen screen)
@@ -41,7 +41,7 @@ namespace Lima.Touch
     {
       Sprites.Clear();
 
-      if (!Active)
+      if (!Enabled)
         return Sprites;
 
       if (TouchSession.Instance.TouchMan.CurrentScreen != _screen)
@@ -56,7 +56,7 @@ namespace Lima.Touch
 
     public bool IsInsideArea(float x, float y, float z, float w)
     {
-      if (!IsOnScreen || !Active)
+      if (!IsOnScreen || !Enabled)
         return false;
 
       return _screen.IsInsideArea(x, y, z, w);

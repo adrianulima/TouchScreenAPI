@@ -162,8 +162,8 @@ namespace Lima.API
       AssignMethod(delegates, "TouchScreen_CompareWithBlockAndSurface", ref ApiDelegator.TouchScreen_CompareWithBlockAndSurface);
       AssignMethod(delegates, "TouchScreen_ForceDispose", ref ApiDelegator.TouchScreen_ForceDispose);
       AssignMethod(delegates, "TouchCursor_New", ref ApiDelegator.TouchCursor_New);
-      AssignMethod(delegates, "TouchCursor_GetActive", ref ApiDelegator.TouchCursor_GetActive);
-      AssignMethod(delegates, "TouchCursor_SetActive", ref ApiDelegator.TouchCursor_SetActive);
+      AssignMethod(delegates, "TouchCursor_GetEnabled", ref ApiDelegator.TouchCursor_GetEnabled);
+      AssignMethod(delegates, "TouchCursor_SetEnabled", ref ApiDelegator.TouchCursor_SetEnabled);
       AssignMethod(delegates, "TouchCursor_GetScale", ref ApiDelegator.TouchCursor_GetScale);
       AssignMethod(delegates, "TouchCursor_SetScale", ref ApiDelegator.TouchCursor_SetScale);
       AssignMethod(delegates, "TouchCursor_GetPosition", ref ApiDelegator.TouchCursor_GetPosition);
@@ -213,8 +213,8 @@ namespace Lima.API
     public Action<object> TouchScreen_ForceDispose;
 
     public Func<object, object> TouchCursor_New;
-    public Func<object, bool> TouchCursor_GetActive;
-    public Action<object, bool> TouchCursor_SetActive;
+    public Func<object, bool> TouchCursor_GetEnabled;
+    public Action<object, bool> TouchCursor_SetEnabled;
     public Func<object, float> TouchCursor_GetScale;
     public Action<object, float> TouchCursor_SetScale;
     public Func<object, Vector2> TouchCursor_GetPosition;
@@ -283,7 +283,7 @@ namespace Lima.API
     /// Do not call this ctor directly, unless you have the reference of the original object from the API.
     /// </summary>
     public TouchCursor(object internalObject) : base(internalObject) { }
-    public bool Active { get { return Api.TouchCursor_GetActive.Invoke(InternalObj); } set { Api.TouchCursor_SetActive.Invoke(InternalObj, value); } }
+    public bool Enabled { get { return Api.TouchCursor_GetEnabled.Invoke(InternalObj); } set { Api.TouchCursor_SetEnabled.Invoke(InternalObj, value); } }
     public float Scale { get { return Api.TouchCursor_GetScale.Invoke(InternalObj); } set { Api.TouchCursor_SetScale.Invoke(InternalObj, value); } }
     public Vector2 Position { get { return Api.TouchCursor_GetPosition.Invoke(InternalObj); } }
     public bool IsInsideArea(float x, float y, float z, float w) => Api.TouchCursor_IsInsideArea.Invoke(InternalObj, x, y, z, w);

@@ -36,7 +36,7 @@ namespace Lima.Apps.ScreenCalibration
     {
       DefaultBg = true;
 
-      Cursor.Active = false;
+      Cursor.Enabled = false;
 
       _overlayView = new TouchView();
       _overlayView.Absolute = true;
@@ -173,7 +173,7 @@ namespace Lima.Apps.ScreenCalibration
       _view.RemoveChild(_button);
       _button.Label.Text = "Copy to clipboard";
       _button.Pixels = new Vector2(200, 24);
-      Cursor.Active = true;
+      Cursor.Enabled = true;
       _overlayView.AddChild(_button);
     }
 
