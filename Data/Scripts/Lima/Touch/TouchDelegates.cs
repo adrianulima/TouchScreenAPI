@@ -250,11 +250,16 @@ namespace Lima.Touch
         { "TouchSwitch_GetButtons", new Func<object, TouchButton[]>(TouchSwitch_GetButtons) },
         { "TouchSwitch_SetOnChange", new Action<object, Action<int>>(TouchSwitch_SetOnChange) },
 
-        { "TouchTextField_New", new Func<string, Action<string, bool>, object>(TouchTextField_New) },
+        { "TouchTextField_New", new Func<object>(TouchTextField_New) },
         { "TouchTextField_GetIsEditing", new Func<object, bool>(TouchTextField_GetIsEditing) },
         { "TouchTextField_GetText", new Func<object, string>(TouchTextField_GetText) },
         { "TouchTextField_SetText", new Action<object, string>(TouchTextField_SetText) },
-        { "TouchTextField_SetOnChange", new Action<object, Action<string, bool>>(TouchTextField_SetOnChange) },
+        { "TouchTextField_SetOnSubmit", new Action<object, Action<string>>(TouchTextField_SetOnSubmit) },
+        { "TouchTextField_SetOnBlur", new Action<object, Action<string>>(TouchTextField_SetOnBlur) },
+        { "TouchTextField_GetRevertOnBlur", new Func<object, bool>(TouchTextField_GetRevertOnBlur) },
+        { "TouchTextField_SetRevertOnBlur", new Action<object, bool>(TouchTextField_SetRevertOnBlur) },
+        { "TouchTextField_GetSubmitOnBlur", new Func<object, bool>(TouchTextField_GetSubmitOnBlur) },
+        { "TouchTextField_SetSubmitOnBlur", new Action<object, bool>(TouchTextField_SetSubmitOnBlur) },
         { "TouchTextField_GetIsNumeric", new Func<object, bool>(TouchTextField_GetIsNumeric) },
         { "TouchTextField_SetIsNumeric", new Action<object, bool>(TouchTextField_SetIsNumeric) },
         { "TouchTextField_GetIsInteger", new Func<object, bool>(TouchTextField_GetIsInteger) },
@@ -262,7 +267,8 @@ namespace Lima.Touch
         { "TouchTextField_GetAllowNegative", new Func<object, bool>(TouchTextField_GetAllowNegative) },
         { "TouchTextField_SetAllowNegative", new Action<object, bool>(TouchTextField_SetAllowNegative) },
         { "TouchTextField_GetLabel", new Func<object, object>(TouchTextField_GetLabel) },
-        { "TouchTextField_CancelEdit", new Action<object>(TouchTextField_CancelEdit) },
+        { "TouchTextField_Blur", new Action<object>(TouchTextField_Blur) },
+        { "TouchTextField_Focus", new Action<object>(TouchTextField_Focus) },
 
         { "TouchWindowBar_New", new Func<string, object>(TouchWindowBar_New) },
         { "TouchWindowBar_GetLabel", new Func<object, object>(TouchWindowBar_GetLabel) },
@@ -595,11 +601,16 @@ namespace Lima.Touch
     private TouchButton[] TouchSwitch_GetButtons(object obj) => (obj as TouchSwitch).Buttons;
     private void TouchSwitch_SetOnChange(object obj, Action<int> onChange) => (obj as TouchSwitch).OnChange = onChange;
 
-    private TouchTextField TouchTextField_New(string text, Action<string, bool> onChange) => new TouchTextField(text, onChange);
+    private TouchTextField TouchTextField_New() => new TouchTextField();
     private bool TouchTextField_GetIsEditing(object obj) => (obj as TouchTextField).IsEditing;
     private string TouchTextField_GetText(object obj) => (obj as TouchTextField).Text;
     private void TouchTextField_SetText(object obj, string text) => (obj as TouchTextField).Text = text;
-    private void TouchTextField_SetOnChange(object obj, Action<string, bool> onChange) => (obj as TouchTextField).OnChange = onChange;
+    private void TouchTextField_SetOnSubmit(object obj, Action<string> onSubmit) => (obj as TouchTextField).OnSubmit = onSubmit;
+    private void TouchTextField_SetOnBlur(object obj, Action<string> onBlur) => (obj as TouchTextField).OnBlur = onBlur;
+    private bool TouchTextField_GetRevertOnBlur(object obj) => (obj as TouchTextField).RevertOnBlur;
+    private void TouchTextField_SetRevertOnBlur(object obj, bool revert) => (obj as TouchTextField).RevertOnBlur = revert;
+    private bool TouchTextField_GetSubmitOnBlur(object obj) => (obj as TouchTextField).SubmitOnBlur;
+    private void TouchTextField_SetSubmitOnBlur(object obj, bool submit) => (obj as TouchTextField).SubmitOnBlur = submit;
     private bool TouchTextField_GetIsNumeric(object obj) => (obj as TouchTextField).IsNumeric;
     private void TouchTextField_SetIsNumeric(object obj, bool isNumeric) => (obj as TouchTextField).IsNumeric = isNumeric;
     private bool TouchTextField_GetIsInteger(object obj) => (obj as TouchTextField).IsInteger;
@@ -607,7 +618,8 @@ namespace Lima.Touch
     private bool TouchTextField_GetAllowNegative(object obj) => (obj as TouchTextField).AllowNegative;
     private void TouchTextField_SetAllowNegative(object obj, bool allowNegative) => (obj as TouchTextField).AllowNegative = allowNegative;
     private TouchLabel TouchTextField_GetLabel(object obj) => (obj as TouchTextField).Label;
-    private void TouchTextField_CancelEdit(object obj) => (obj as TouchTextField).CancelEdit();
+    private void TouchTextField_Blur(object obj) => (obj as TouchTextField).Blur();
+    private void TouchTextField_Focus(object obj) => (obj as TouchTextField).Focus();
 
     private TouchWindowBar TouchWindowBar_New(string text) => new TouchWindowBar(text);
     private TouchLabel TouchWindowBar_GetLabel(object obj) => (obj as TouchWindowBar).Label;

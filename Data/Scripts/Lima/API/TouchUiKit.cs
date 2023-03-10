@@ -199,7 +199,12 @@ namespace Lima.API
       AssignMethod(delegates, "TouchTextField_GetIsEditing", ref apiDel.TouchTextField_GetIsEditing);
       AssignMethod(delegates, "TouchTextField_GetText", ref apiDel.TouchTextField_GetText);
       AssignMethod(delegates, "TouchTextField_SetText", ref apiDel.TouchTextField_SetText);
-      AssignMethod(delegates, "TouchTextField_SetOnChange", ref apiDel.TouchTextField_SetOnChange);
+      AssignMethod(delegates, "TouchTextField_SetOnSubmit", ref apiDel.TouchTextField_SetOnSubmit);
+      AssignMethod(delegates, "TouchTextField_SetOnBlur", ref apiDel.TouchTextField_SetOnBlur);
+      AssignMethod(delegates, "TouchTextField_GetRevertOnBlur", ref apiDel.TouchTextField_GetRevertOnBlur);
+      AssignMethod(delegates, "TouchTextField_SetRevertOnBlur", ref apiDel.TouchTextField_SetRevertOnBlur);
+      AssignMethod(delegates, "TouchTextField_GetSubmitOnBlur", ref apiDel.TouchTextField_GetSubmitOnBlur);
+      AssignMethod(delegates, "TouchTextField_SetSubmitOnBlur", ref apiDel.TouchTextField_SetSubmitOnBlur);
       AssignMethod(delegates, "TouchTextField_GetIsNumeric", ref apiDel.TouchTextField_GetIsNumeric);
       AssignMethod(delegates, "TouchTextField_SetIsNumeric", ref apiDel.TouchTextField_SetIsNumeric);
       AssignMethod(delegates, "TouchTextField_GetIsInteger", ref apiDel.TouchTextField_GetIsInteger);
@@ -207,7 +212,8 @@ namespace Lima.API
       AssignMethod(delegates, "TouchTextField_GetAllowNegative", ref apiDel.TouchTextField_GetAllowNegative);
       AssignMethod(delegates, "TouchTextField_SetAllowNegative", ref apiDel.TouchTextField_SetAllowNegative);
       AssignMethod(delegates, "TouchTextField_GetLabel", ref apiDel.TouchTextField_GetLabel);
-      AssignMethod(delegates, "TouchTextField_CancelEdit", ref apiDel.TouchTextField_CancelEdit);
+      AssignMethod(delegates, "TouchTextField_Blur", ref apiDel.TouchTextField_Blur);
+      AssignMethod(delegates, "TouchTextField_Focus", ref apiDel.TouchTextField_Focus);
       AssignMethod(delegates, "TouchWindowBar_New", ref apiDel.TouchWindowBar_New);
       AssignMethod(delegates, "TouchWindowBar_GetLabel", ref apiDel.TouchWindowBar_GetLabel);
       AssignMethod(delegates, "TouchChart_New", ref apiDel.TouchChart_New);
@@ -401,11 +407,16 @@ namespace Lima.API
     public Func<object, object[]> TouchSwitch_GetButtons;
     public Action<object, Action<int>> TouchSwitch_SetOnChange;
 
-    public Func<string, Action<string, bool>, object> TouchTextField_New;
+    public Func<object> TouchTextField_New;
     public Func<object, bool> TouchTextField_GetIsEditing;
     public Func<object, string> TouchTextField_GetText;
     public Action<object, string> TouchTextField_SetText;
-    public Action<object, Action<string, bool>> TouchTextField_SetOnChange;
+    public Action<object, Action<string>> TouchTextField_SetOnSubmit;
+    public Action<object, Action<string>> TouchTextField_SetOnBlur;
+    public Func<object, bool> TouchTextField_GetRevertOnBlur;
+    public Action<object, bool> TouchTextField_SetRevertOnBlur;
+    public Func<object, bool> TouchTextField_GetSubmitOnBlur;
+    public Action<object, bool> TouchTextField_SetSubmitOnBlur;
     public Func<object, bool> TouchTextField_GetIsNumeric;
     public Action<object, bool> TouchTextField_SetIsNumeric;
     public Func<object, bool> TouchTextField_GetIsInteger;
@@ -413,7 +424,8 @@ namespace Lima.API
     public Func<object, bool> TouchTextField_GetAllowNegative;
     public Action<object, bool> TouchTextField_SetAllowNegative;
     public Func<object, object> TouchTextField_GetLabel;
-    public Action<object> TouchTextField_CancelEdit;
+    public Action<object> TouchTextField_Blur;
+    public Action<object> TouchTextField_Focus;
 
     public Func<string, object> TouchWindowBar_New;
     public Func<object, object> TouchWindowBar_GetLabel;
@@ -833,7 +845,7 @@ namespace Lima.API
   public class TouchTextField : TouchView
   {
     private TouchLabel _label;
-    public TouchTextField(string text, Action<string, bool> onChange) : base(Api.TouchTextField_New(text, onChange)) { }
+    public TouchTextField() : base(Api.TouchTextField_New()) { }
     /// <summary>
     /// Do not call this ctor directly, unless you have the reference of the original object from the API.
     /// </summary>
@@ -844,8 +856,12 @@ namespace Lima.API
     public bool IsInteger { get { return Api.TouchTextField_GetIsInteger.Invoke(InternalObj); } set { Api.TouchTextField_SetIsInteger.Invoke(InternalObj, value); } }
     public bool AllowNegative { get { return Api.TouchTextField_GetAllowNegative.Invoke(InternalObj); } set { Api.TouchTextField_SetAllowNegative.Invoke(InternalObj, value); } }
     public TouchLabel Label { get { return _label ?? (_label = Wrap<TouchLabel>(Api.TouchTextField_GetLabel.Invoke(InternalObj), (obj) => new TouchLabel(obj))); } }
-    public Action<string, bool> OnChange { set { Api.TouchTextField_SetOnChange.Invoke(InternalObj, value); } }
-    public void CancelEdit() => Api.TouchTextField_CancelEdit.Invoke(InternalObj);
+    public Action<string> OnSubmit { set { Api.TouchTextField_SetOnSubmit.Invoke(InternalObj, value); } }
+    public Action<string> OnBlur { set { Api.TouchTextField_SetOnBlur.Invoke(InternalObj, value); } }
+    public bool RevertOnBlur { get { return Api.TouchTextField_GetRevertOnBlur.Invoke(InternalObj); } set { Api.TouchTextField_SetRevertOnBlur.Invoke(InternalObj, value); } }
+    public bool SubmitOnBlur { get { return Api.TouchTextField_GetSubmitOnBlur.Invoke(InternalObj); } set { Api.TouchTextField_SetSubmitOnBlur.Invoke(InternalObj, value); } }
+    public void Blur() => Api.TouchTextField_Blur.Invoke(InternalObj);
+    public void Focus() => Api.TouchTextField_Focus.Invoke(InternalObj);
   }
   /// <summary>
   /// <see href="https://github.com/adrianulima/TouchScreenAPI/blob/main/Data/Scripts/Lima/Touch/UiKit/Elements/TouchWindowBar.cs"/>

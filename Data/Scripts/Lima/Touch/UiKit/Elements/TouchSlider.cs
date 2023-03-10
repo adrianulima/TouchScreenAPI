@@ -32,7 +32,9 @@ namespace Lima.Touch.UiKit.Elements
       Scale = new Vector2(1, 0);
       Pixels = new Vector2(0, 24);
 
-      InnerTextField = new TouchTextField($"{Value}", OnTextSubmit);
+      InnerTextField = new TouchTextField();
+      InnerTextField.Text = $"{Value}";
+      InnerTextField.OnSubmit = OnTextSubmit;
       InnerTextField.Enabled = false;
       AddChild(InnerTextField);
 
@@ -171,13 +173,9 @@ namespace Lima.Touch.UiKit.Elements
       InnerTextField.Text = $"{v}";
     }
 
-    protected void OnTextSubmit(string textValue, bool wasCanceled = false)
+    protected void OnTextSubmit(string textValue)
     {
-      if (!wasCanceled)
-      {
-        var v = MathHelper.Clamp(float.Parse(textValue), MinValue, MaxValue);
-        UpdateValue(v);
-      }
+      UpdateValue(MathHelper.Clamp(float.Parse(textValue), MinValue, MaxValue));
       InputOpen = false;
       InnerTextField.Enabled = false;
       Bar.Enabled = true;

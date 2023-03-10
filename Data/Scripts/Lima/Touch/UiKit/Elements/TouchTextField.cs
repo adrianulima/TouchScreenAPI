@@ -12,8 +12,9 @@ namespace Lima.Touch.UiKit.Elements
 
     public TouchLabel Label;
 
-    public string Text;
-    public Action<string, bool> OnChange;
+    public string Text = "";
+    public Action<string> OnSubmit;
+    public Action<string> OnBlur;
 
     private TextInputHandler _inputHandler;
     private string _saveText = "";
@@ -25,10 +26,11 @@ namespace Lima.Touch.UiKit.Elements
     public bool IsInteger = false;
     public bool AllowNegative = true;
 
-    public TouchTextField(string text, Action<string, bool> onChange)
+    public bool RevertOnBlur = false;
+    public bool SubmitOnBlur = true;
+
+    public TouchTextField()
     {
-      Text = text;
-      OnChange = onChange;
       _inputHandler = new TextInputHandler(AddChar, RemoveLastChar, OnInput);
 
       Scale = new Vector2(1, 0);
@@ -37,7 +39,7 @@ namespace Lima.Touch.UiKit.Elements
       Anchor = ViewAnchor.Center;
       Alignment = ViewAlignment.Center;
 
-      Label = new TouchLabel(text, 0.6f, TextAlignment.CENTER);
+      Label = new TouchLabel(Text, 0.6f, TextAlignment.CENTER);
       Label.AutoEllipsis = LabelEllipsis.Left;
       AddChild(Label);
     }
@@ -74,7 +76,7 @@ namespace Lima.Touch.UiKit.Elements
     {
       if (ch == '\n' || ch == '\r' || ch == '\t')
       {
-        ToggleEdit(true, false);
+        ToggleEdit(true, false, false);
         return false;
       }
 
@@ -86,16 +88,22 @@ namespace Lima.Touch.UiKit.Elements
 
     private void OnGuiControlCreated(object _)
     {
-      CancelEdit();
+      Blur();
     }
 
-    public void CancelEdit()
+    public void Blur()
     {
       if (IsEditing)
         ToggleEdit(true, false, true);
     }
 
-    public void ToggleEdit(bool force = false, bool value = false, bool revert = false)
+    public void Focus()
+    {
+      if (!IsEditing)
+        ToggleEdit(true, true, false);
+    }
+
+    public void ToggleEdit(bool force = false, bool value = false, bool blur = false)
     {
       if (force)
         IsEditing = value;
@@ -104,10 +112,19 @@ namespace Lima.Touch.UiKit.Elements
 
       if (!IsEditing)
       {
-        if (revert)
-          Text = _saveText;
+        if (blur)
+        {
+          if (RevertOnBlur)
+            Text = _saveText;
 
-        OnChange(Text, revert);
+          if (SubmitOnBlur && OnSubmit != null)
+            OnSubmit(Text);
+
+          if (OnBlur != null)
+            OnBlur(Text);
+        }
+        else if (OnSubmit != null)
+          OnSubmit(Text);
       }
       else
         _saveText = Text;
@@ -135,9 +152,9 @@ namespace Lima.Touch.UiKit.Elements
         ApplyThemeStyle();
 
       if (Handler.JustPressed)
-        ToggleEdit(false, false, Text == _saveText);
+        ToggleEdit(false, false, false);
       else if (IsEditing && ((!Handler.IsMouseOver && Handler.WasPressedOutside) || !App.Screen.IsOnScreen))
-        ToggleEdit(true, false, Text == _saveText);
+        ToggleEdit(true, false, true);
 
       Label.Text = Text;
       Label.AutoEllipsis = IsEditing ? LabelEllipsis.Left : LabelEllipsis.Right;
@@ -167,9 +184,9 @@ namespace Lima.Touch.UiKit.Elements
     private void ApplyThemeStyle()
     {
       if (IsEditing)
-        BgColor = _blink ? App.Theme.MainColor_3 : App.Theme.MainColor_2;
+        BgColor = App.Theme.MainColor_3;//_blink ? App.Theme.MainColor_3 : App.Theme.MainColor_2;
       else if (Handler.IsMousePressed || Handler.IsMouseOver)
-        BgColor = App.Theme.MainColor_3;
+        BgColor = App.Theme.MainColor_4;
       else
         BgColor = App.Theme.MainColor_2;
     }
