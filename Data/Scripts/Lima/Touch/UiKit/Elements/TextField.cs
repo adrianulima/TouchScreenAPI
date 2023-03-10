@@ -88,13 +88,19 @@ namespace Lima.Touch.UiKit.Elements
 
     private void OnGuiControlCreated(object _)
     {
-      Blur();
+      if (IsEditing)
+        ToggleEdit(true, false, true);
     }
 
     public void Blur()
     {
       if (IsEditing)
-        ToggleEdit(true, false, true);
+      {
+        if (RevertOnBlur)
+          Text = _saveText;
+        IsEditing = false;
+        InputUtils.SetPlayerKeyboardBlacklistState(IsEditing);
+      }
     }
 
     public void Focus()
@@ -185,8 +191,8 @@ namespace Lima.Touch.UiKit.Elements
     {
       if (IsEditing)
         BgColor = App.Theme.MainColor_3;//_blink ? App.Theme.MainColor_3 : App.Theme.MainColor_2;
-      else if (Handler.IsMousePressed || Handler.IsMouseOver)
-        BgColor = App.Theme.MainColor_4;
+      else if (Handler.IsMouseOver)
+        BgColor = App.Theme.MainColor_3;
       else
         BgColor = App.Theme.MainColor_2;
     }
