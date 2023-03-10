@@ -61,7 +61,8 @@ namespace Lima.Touch.UiKit.Elements
         if (text[i] == '\n')
           lines++;
       }
-      Pixels.Y = 32 * FontSize * MathHelper.Min(lines, MaxLines);
+
+      Pixels.Y = MathHelper.CeilToInt(28.8f * FontSize * MathHelper.Min(lines, MaxLines));
       Lines = lines;
       return lines;
     }
