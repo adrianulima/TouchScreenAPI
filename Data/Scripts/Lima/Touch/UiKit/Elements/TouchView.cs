@@ -28,7 +28,7 @@ namespace Lima.Touch.UiKit.Elements
     protected MySprite BgSprite;
     protected MySprite[] BorderSprites = new MySprite[4];
     protected Vector2 ChildrenPixels = Vector2.Zero;
-    protected Vector2 ChildrenScales = Vector2.One;
+    protected Vector2 ChildrenFlex = Vector2.One;
 
     public Color? BgColor;
     public Color? BorderColor;
@@ -50,8 +50,8 @@ namespace Lima.Touch.UiKit.Elements
 
     public override Vector2 GetFlexSize()
     {
-      var scales = new Vector2(ChildrenScales.X < 1 ? 1 : ChildrenScales.X, ChildrenScales.Y < 1 ? 1 : ChildrenScales.Y);
-      return (base.GetFlexSize() - ChildrenPixels * ThemeScale) * (1 / scales);
+      var flex = new Vector2(ChildrenFlex.X < 1 ? 1 : ChildrenFlex.X, ChildrenFlex.Y < 1 ? 1 : ChildrenFlex.Y);
+      return (base.GetFlexSize() - ChildrenPixels * ThemeScale) * (1 / flex);
     }
 
     public override Vector2 GetBoundaries()
@@ -88,13 +88,13 @@ namespace Lima.Touch.UiKit.Elements
       return base.ValidateChild(child);
     }
 
-    private void UpdateChildrenPixelsAndScales()
+    private void UpdateChildrenPixelsAndFlex()
     {
       int childrenCount = Children.Count;
       if (Direction != ViewDirection.None && childrenCount > 0)
       {
         ChildrenPixels = Vector2.Zero;
-        ChildrenScales = Vector2.Zero;
+        ChildrenFlex = Vector2.Zero;
 
         var disableCount = 0;
         foreach (var child in Children)
@@ -108,13 +108,13 @@ namespace Lima.Touch.UiKit.Elements
           if (Direction == ViewDirection.Row || Direction == ViewDirection.RowReverse)
           {
             ChildrenPixels.X += child.Pixels.X;
-            ChildrenScales.X += child.Scale.X;
+            ChildrenFlex.X += child.Flex.X;
             ChildrenPixels += new Vector2(child.Margin.X + child.Margin.Z, 0);
           }
           else if (Direction == ViewDirection.Column || Direction == ViewDirection.ColumnReverse)
           {
             ChildrenPixels.Y += child.Pixels.Y;
-            ChildrenScales.Y += child.Scale.Y;
+            ChildrenFlex.Y += child.Flex.Y;
             ChildrenPixels += new Vector2(0, child.Margin.Y + child.Margin.W);
           }
         }
@@ -135,7 +135,7 @@ namespace Lima.Touch.UiKit.Elements
 
         var anchorGap = Vector2.Zero;
         var anchorStart = Vector2.Zero;
-        var remainingFlex = GetFlexSize() * new Vector2(1 - ChildrenScales.X, 1 - ChildrenScales.Y);
+        var remainingFlex = GetFlexSize() * new Vector2(1 - ChildrenFlex.X, 1 - ChildrenFlex.Y);
         if ((isRow && remainingFlex.X > 0) || (!isRow && remainingFlex.Y > 0))
         {
           if (Anchor == ViewAnchor.Center)
@@ -191,7 +191,7 @@ namespace Lima.Touch.UiKit.Elements
 
     public override void Update()
     {
-      UpdateChildrenPixelsAndScales();
+      UpdateChildrenPixelsAndFlex();
       UpdateChildrenPositions();
 
       Sprites.Clear();

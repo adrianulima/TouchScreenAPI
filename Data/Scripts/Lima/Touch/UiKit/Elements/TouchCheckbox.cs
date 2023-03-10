@@ -18,7 +18,7 @@ namespace Lima.Touch.UiKit.Elements
       OnChange = onChange;
       Value = value;
 
-      Scale = new Vector2(0, 0);
+      Flex = new Vector2(0, 0);
       Pixels = new Vector2(20, 20);
       Border = new Vector4(2);
 

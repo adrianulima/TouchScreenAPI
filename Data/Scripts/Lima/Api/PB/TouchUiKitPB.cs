@@ -111,8 +111,8 @@ namespace Lima.API.PB
         AssignMethod(out _apiDel.TouchElementBase_SetPosition, delegates["TouchElementBase_SetPosition"]);
         AssignMethod(out _apiDel.TouchElementBase_GetMargin, delegates["TouchElementBase_GetMargin"]);
         AssignMethod(out _apiDel.TouchElementBase_SetMargin, delegates["TouchElementBase_SetMargin"]);
-        AssignMethod(out _apiDel.TouchElementBase_GetScale, delegates["TouchElementBase_GetScale"]);
-        AssignMethod(out _apiDel.TouchElementBase_SetScale, delegates["TouchElementBase_SetScale"]);
+        AssignMethod(out _apiDel.TouchElementBase_GetFlex, delegates["TouchElementBase_GetFlex"]);
+        AssignMethod(out _apiDel.TouchElementBase_SetFlex, delegates["TouchElementBase_SetFlex"]);
         AssignMethod(out _apiDel.TouchElementBase_GetPixels, delegates["TouchElementBase_GetPixels"]);
         AssignMethod(out _apiDel.TouchElementBase_SetPixels, delegates["TouchElementBase_SetPixels"]);
         AssignMethod(out _apiDel.TouchElementBase_GetSize, delegates["TouchElementBase_GetSize"]);
@@ -332,8 +332,8 @@ namespace Lima.API.PB
     public Action<object, Vector2> TouchElementBase_SetPosition;
     public Func<object, Vector4> TouchElementBase_GetMargin;
     public Action<object, Vector4> TouchElementBase_SetMargin;
-    public Func<object, Vector2> TouchElementBase_GetScale;
-    public Action<object, Vector2> TouchElementBase_SetScale;
+    public Func<object, Vector2> TouchElementBase_GetFlex;
+    public Action<object, Vector2> TouchElementBase_SetFlex;
     public Func<object, Vector2> TouchElementBase_GetPixels;
     public Action<object, Vector2> TouchElementBase_SetPixels;
     public Func<object, Vector2> TouchElementBase_GetSize;
@@ -595,7 +595,7 @@ namespace Lima.API.PB
     /// <returns>The calculated color</returns>
     public Color GetMainColorDarker(int value) => Api.TouchTheme_GetMainColorDarker.Invoke(InternalObj, value);
     /// <summary>
-    /// Scales the entiner App and all its elements, useful for small screens. Can be called at any time.
+    /// Scales the entire App and all its elements, useful for small screens. Can be called at any time.
     /// </summary>
     public float Scale { get { return Api.TouchTheme_GetScale.Invoke(InternalObj); } set { Api.TouchTheme_SetScale.Invoke(InternalObj, value); } }
     public string Font { get { return Api.TouchTheme_GetFont.Invoke(InternalObj); } set { Api.TouchTheme_SetFont.Invoke(InternalObj, value); } }
@@ -640,10 +640,10 @@ namespace Lima.API.PB
     /// The ratio of the parent that this element should fill. 1 means 100%. If the parent has more children, the proportional % will be applied.
     /// This is stackable with <see cref="Pixels" />. So set as 0 the axis if you just want a fixed pixels size.
     /// </summary>
-    public Vector2 Scale { get { return Api.TouchElementBase_GetScale.Invoke(InternalObj); } set { Api.TouchElementBase_SetScale.Invoke(InternalObj, value); } }
+    public Vector2 Flex { get { return Api.TouchElementBase_GetFlex.Invoke(InternalObj); } set { Api.TouchElementBase_SetFlex.Invoke(InternalObj, value); } }
     /// <summary>
     /// Fixed size in pixels, not related to parent.
-    /// This is stackable with <see cref="Scale" />. So set as 0 the axis if you just want the size only related to parent.
+    /// This is stackable with <see cref="Flex" />. So set as 0 the axis if you just want the size only related to parent.
     /// </summary>
     public Vector2 Pixels { get { return Api.TouchElementBase_GetPixels.Invoke(InternalObj); } set { Api.TouchElementBase_SetPixels.Invoke(InternalObj, value); } }
     /// <summary>

@@ -37,7 +37,7 @@ namespace Lima.Touch.UiKit.Elements
       Value = max;
       BarsGap = barsGap;
 
-      Scale = new Vector2(1, 0);
+      Flex = new Vector2(1, 0);
       Pixels = new Vector2(0, 24);
       Padding = new Vector4(2);
 

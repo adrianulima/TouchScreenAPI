@@ -29,7 +29,7 @@ namespace Lima.Touch.UiKit.Elements
       Value = max;
       OnChange = onChange;
 
-      Scale = new Vector2(1, 0);
+      Flex = new Vector2(1, 0);
       Pixels = new Vector2(0, 24);
 
       InnerTextField = new TouchTextField();
@@ -40,12 +40,12 @@ namespace Lima.Touch.UiKit.Elements
 
       Bar = new TouchBarContainer();
       Bar.Pixels = new Vector2(0, 12);
-      Bar.Scale = Vector2.UnitX;
+      Bar.Flex = Vector2.UnitX;
       Bar.Margin = new Vector4(0, 6, 0, 6);
       AddChild(Bar);
 
       Thumb = new TouchEmptyElement();
-      Thumb.Scale = Vector2.Zero;
+      Thumb.Flex = Vector2.Zero;
       Thumb.Absolute = true;
       Bar.AddChild(Thumb);
     }
@@ -166,7 +166,7 @@ namespace Lima.Touch.UiKit.Elements
       InnerTextField.IsNumeric = true;
       InnerTextField.IsInteger = IsInteger;
       InnerTextField.AllowNegative = MinValue < 0;
-      InnerTextField.Scale = Scale;
+      InnerTextField.Flex = Flex;
       InnerTextField.Position = Position;
       InnerTextField.Pixels = Pixels;
       InnerTextField.Margin = Margin;

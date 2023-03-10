@@ -13,7 +13,7 @@ namespace Lima.Touch.UiKit.Elements
     {
       OnChange = onChange;
 
-      Scale = new Vector2(1, 0);
+      Flex = new Vector2(1, 0);
       Pixels = new Vector2(0, 24);
 
       Anchor = ViewAnchor.Center;

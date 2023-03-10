@@ -32,7 +32,7 @@ namespace Lima.Touch.UiKit.Elements
 
       ScrollBar = new TouchBarContainer(true);
       ScrollBar.Pixels = new Vector2(12, 0);
-      ScrollBar.Scale = Vector2.Zero;
+      ScrollBar.Flex = Vector2.Zero;
       ScrollBar.Absolute = true;
       ScrollBar.UseThemeColors = false;
       AddChild(ScrollBar);
@@ -90,7 +90,7 @@ namespace Lima.Touch.UiKit.Elements
       ScrollBar.Enabled = true;
       ScrollBar.Position = Position + new Vector2(size.X + (Border.X + Padding.X + Padding.Z - ScrollBar.Pixels.X) * ThemeScale, Border.Y * ThemeScale);
       ScrollBar.Pixels.Y = (size.Y / ThemeScale) + Padding.Y + Padding.W;
-      ScrollBar.Scale = Vector2.Zero;
+      ScrollBar.Flex = Vector2.Zero;
 
       if (needsScroll)
       {

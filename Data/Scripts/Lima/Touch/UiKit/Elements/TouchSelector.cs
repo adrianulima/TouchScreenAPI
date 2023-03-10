@@ -28,12 +28,12 @@ namespace Lima.Touch.UiKit.Elements
       Anchor = ViewAnchor.Center;
       Alignment = ViewAlignment.Center;
 
-      Scale = new Vector2(1, 0);
+      Flex = new Vector2(1, 0);
       Pixels = new Vector2(0, 24);
 
       LeftButton = new TouchEmptyButton(Prev);
       LeftButton.Pixels = new Vector2(24, 0);
-      LeftButton.Scale = new Vector2(0, 1);
+      LeftButton.Flex = new Vector2(0, 1);
       AddChild(LeftButton);
       LeftArrow = new TouchEmptyElement();
       LeftButton.AddChild(LeftArrow);
@@ -41,7 +41,7 @@ namespace Lima.Touch.UiKit.Elements
       AddChild(Label);
       RightButton = new TouchEmptyButton(Next);
       RightButton.Pixels = new Vector2(24, 0);
-      RightButton.Scale = new Vector2(0, 1);
+      RightButton.Flex = new Vector2(0, 1);
       AddChild(RightButton);
       RightArrow = new TouchEmptyElement();
       RightButton.AddChild(RightArrow);

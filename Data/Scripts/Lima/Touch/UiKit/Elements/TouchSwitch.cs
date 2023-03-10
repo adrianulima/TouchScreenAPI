@@ -14,7 +14,7 @@ namespace Lima.Touch.UiKit.Elements
       Index = index;
       OnChange = onChange;
 
-      Scale = new Vector2(1, 0);
+      Flex = new Vector2(1, 0);
       Pixels = new Vector2(0, 20);
 
       Direction = ViewDirection.Row;
@@ -24,7 +24,7 @@ namespace Lima.Touch.UiKit.Elements
       {
         Buttons[i] = new TouchButton(labels[i], OnClickAction(i));
         Buttons[i].Pixels = Vector2.Zero;
-        Buttons[i].Scale = Vector2.One;
+        Buttons[i].Flex = Vector2.One;
         Buttons[i].Label.FontSize = 0.5f;
         Buttons[i].UseThemeColors = false;
         AddChild(Buttons[i]);

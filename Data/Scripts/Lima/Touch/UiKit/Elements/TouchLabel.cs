@@ -49,7 +49,7 @@ namespace Lima.Touch.UiKit.Elements
       FontSize = fontSize;
       Alignment = alignment;
 
-      Scale = new Vector2(1, 0);
+      Flex = new Vector2(1, 0);
       UpdateHeight(Text);
     }
 

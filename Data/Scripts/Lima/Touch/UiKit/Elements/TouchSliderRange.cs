@@ -16,11 +16,11 @@ namespace Lima.Touch.UiKit.Elements
     {
       OnChangeR = onChange;
 
-      Scale = new Vector2(1, 0);
+      Flex = new Vector2(1, 0);
       Pixels = new Vector2(0, 24);
 
       ThumbLower = new TouchEmptyElement();
-      ThumbLower.Scale = Vector2.Zero;
+      ThumbLower.Flex = Vector2.Zero;
       ThumbLower.Absolute = true;
       Bar.AddChild(ThumbLower);
     }

@@ -21,7 +21,7 @@ namespace Lima.Touch.UiKit.Elements
     public Vector2 Position = Vector2.Zero;
     public Vector2 Pixels = Vector2.Zero;
     public Vector4 Margin = Vector4.Zero;
-    public Vector2 Scale = Vector2.One;
+    public Vector2 Flex = Vector2.One;
 
     private TouchApp _app;
     public TouchApp App
@@ -60,7 +60,7 @@ namespace Lima.Touch.UiKit.Elements
 
     public virtual Vector2 GetSize()
     {
-      return this.Parent != null ? Pixels * ThemeScale + Parent.GetFlexSize() * Scale : Pixels;
+      return this.Parent != null ? Pixels * ThemeScale + Parent.GetFlexSize() * Flex : Pixels;
     }
 
     public virtual Vector2 GetBoundaries()

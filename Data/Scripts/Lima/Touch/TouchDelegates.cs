@@ -99,8 +99,8 @@ namespace Lima.Touch
         { "TouchElementBase_SetPosition", new Action<object, Vector2>(TouchElementBase_SetPosition) },
         { "TouchElementBase_GetMargin", new Func<object, Vector4>(TouchElementBase_GetMargin) },
         { "TouchElementBase_SetMargin", new Action<object, Vector4>(TouchElementBase_SetMargin) },
-        { "TouchElementBase_GetScale", new Func<object, Vector2>(TouchElementBase_GetScale) },
-        { "TouchElementBase_SetScale", new Action<object, Vector2>(TouchElementBase_SetScale) },
+        { "TouchElementBase_GetFlex", new Func<object, Vector2>(TouchElementBase_GetFlex) },
+        { "TouchElementBase_SetFlex", new Action<object, Vector2>(TouchElementBase_SetFlex) },
         { "TouchElementBase_GetPixels", new Func<object, Vector2>(TouchElementBase_GetPixels) },
         { "TouchElementBase_SetPixels", new Action<object, Vector2>(TouchElementBase_SetPixels) },
         { "TouchElementBase_GetSize", new Func<object, Vector2>(TouchElementBase_GetSize) },
@@ -401,8 +401,8 @@ namespace Lima.Touch
     private void TouchElementBase_SetPosition(object obj, Vector2 position) => (obj as TouchElementBase).Position = position;
     private Vector4 TouchElementBase_GetMargin(object obj) => (obj as TouchElementBase).Margin;
     private void TouchElementBase_SetMargin(object obj, Vector4 margin) => (obj as TouchElementBase).Margin = margin;
-    private Vector2 TouchElementBase_GetScale(object obj) => (obj as TouchElementBase).Scale;
-    private void TouchElementBase_SetScale(object obj, Vector2 scale) => (obj as TouchElementBase).Scale = scale;
+    private Vector2 TouchElementBase_GetFlex(object obj) => (obj as TouchElementBase).Flex;
+    private void TouchElementBase_SetFlex(object obj, Vector2 flex) => (obj as TouchElementBase).Flex = flex;
     private Vector2 TouchElementBase_GetPixels(object obj) => (obj as TouchElementBase).Pixels;
     private void TouchElementBase_SetPixels(object obj, Vector2 pixels) => (obj as TouchElementBase).Pixels = pixels;
     private Vector2 TouchElementBase_GetSize(object obj) => (obj as TouchElementBase).GetSize();

@@ -15,7 +15,7 @@ namespace Lima.Touch.UiKit.Elements
       Border = new Vector4(2);
       BorderColor = Color.DarkRed;
       BgColor = Color.Black;
-      Scale = Vector2.Zero;
+      Flex = Vector2.Zero;
 
       Label = new TouchLabel(text);
       Label.AutoBreakLine = true;

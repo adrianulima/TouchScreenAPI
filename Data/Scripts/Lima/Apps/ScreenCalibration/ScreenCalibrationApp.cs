@@ -58,7 +58,7 @@ namespace Lima.Apps.ScreenCalibration
       {
         MyClipboardHelper.SetClipboard(_newCoords);
       });
-      _button.Scale = Vector2.Zero;
+      _button.Flex = Vector2.Zero;
       _button.Pixels = new Vector2(60, 24);
       _view.AddChild(_button);
 

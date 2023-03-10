@@ -22,7 +22,7 @@ namespace Lima.Touch.UiKit.Elements
 
     public TouchBarContainer(bool vertical = false)
     {
-      Scale = new Vector2(1, 0);
+      Flex = new Vector2(1, 0);
       Pixels = new Vector2(0, 24);
 
       Direction = vertical ? ViewDirection.Column : ViewDirection.Row;
@@ -44,7 +44,7 @@ namespace Lima.Touch.UiKit.Elements
       else
         Bar.Pixels = Vector2.Zero;
 
-      Bar.Scale = IsVertical ? Vector2.UnitX : Vector2.UnitY;
+      Bar.Flex = IsVertical ? Vector2.UnitX : Vector2.UnitY;
 
       var anchor = Vector2.Zero;
       if (IsVertical)
