@@ -4,16 +4,16 @@ using VRageMath;
 
 namespace Lima.Touch.UiKit.Elements
 {
-  public class TouchCheckbox : TouchView
+  public class Checkbox : View
   {
     public ClickHandler Handler = new ClickHandler();
 
     public bool Value;
     public Action<bool> OnChange;
 
-    public TouchEmptyElement CheckMark;
+    public EmptyElement CheckMark;
 
-    public TouchCheckbox(Action<bool> onChange, bool value = false)
+    public Checkbox(Action<bool> onChange, bool value = false)
     {
       OnChange = onChange;
       Value = value;
@@ -25,7 +25,7 @@ namespace Lima.Touch.UiKit.Elements
       Anchor = ViewAnchor.Center;
       Alignment = ViewAlignment.Center;
 
-      CheckMark = new TouchEmptyElement();
+      CheckMark = new EmptyElement();
       AddChild(CheckMark);
     }
 

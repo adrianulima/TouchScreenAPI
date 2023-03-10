@@ -3,13 +3,13 @@ using VRageMath;
 
 namespace Lima.Touch.UiKit.Elements
 {
-  public class TouchSwitch : TouchView
+  public class Switch : View
   {
     public int Index;
-    public TouchButton[] Buttons { get; private set; }
+    public Button[] Buttons { get; private set; }
     public Action<int> OnChange;
 
-    public TouchSwitch(string[] labels, int index = 0, Action<int> onChange = null)
+    public Switch(string[] labels, int index = 0, Action<int> onChange = null)
     {
       Index = index;
       OnChange = onChange;
@@ -19,10 +19,10 @@ namespace Lima.Touch.UiKit.Elements
 
       Direction = ViewDirection.Row;
 
-      Buttons = new TouchButton[labels.Length];
+      Buttons = new Button[labels.Length];
       for (int i = 0; i < Buttons.Length; i++)
       {
-        Buttons[i] = new TouchButton(labels[i], OnClickAction(i));
+        Buttons[i] = new Button(labels[i], OnClickAction(i));
         Buttons[i].Pixels = Vector2.Zero;
         Buttons[i].Flex = Vector2.One;
         Buttons[i].Label.FontSize = 0.5f;

@@ -161,15 +161,15 @@ namespace Lima.API
       AssignMethod(delegates, "TouchScreen_GetRotation", ref ApiDelegator.TouchScreen_GetRotation);
       AssignMethod(delegates, "TouchScreen_CompareWithBlockAndSurface", ref ApiDelegator.TouchScreen_CompareWithBlockAndSurface);
       AssignMethod(delegates, "TouchScreen_ForceDispose", ref ApiDelegator.TouchScreen_ForceDispose);
-      AssignMethod(delegates, "TouchCursor_New", ref ApiDelegator.TouchCursor_New);
-      AssignMethod(delegates, "TouchCursor_GetEnabled", ref ApiDelegator.TouchCursor_GetEnabled);
-      AssignMethod(delegates, "TouchCursor_SetEnabled", ref ApiDelegator.TouchCursor_SetEnabled);
-      AssignMethod(delegates, "TouchCursor_GetScale", ref ApiDelegator.TouchCursor_GetScale);
-      AssignMethod(delegates, "TouchCursor_SetScale", ref ApiDelegator.TouchCursor_SetScale);
-      AssignMethod(delegates, "TouchCursor_GetPosition", ref ApiDelegator.TouchCursor_GetPosition);
-      AssignMethod(delegates, "TouchCursor_IsInsideArea", ref ApiDelegator.TouchCursor_IsInsideArea);
-      AssignMethod(delegates, "TouchCursor_GetSprites", ref ApiDelegator.TouchCursor_GetSprites);
-      AssignMethod(delegates, "TouchCursor_ForceDispose", ref ApiDelegator.TouchCursor_ForceDispose);
+      AssignMethod(delegates, "Cursor_New", ref ApiDelegator.Cursor_New);
+      AssignMethod(delegates, "Cursor_GetEnabled", ref ApiDelegator.Cursor_GetEnabled);
+      AssignMethod(delegates, "Cursor_SetEnabled", ref ApiDelegator.Cursor_SetEnabled);
+      AssignMethod(delegates, "Cursor_GetScale", ref ApiDelegator.Cursor_GetScale);
+      AssignMethod(delegates, "Cursor_SetScale", ref ApiDelegator.Cursor_SetScale);
+      AssignMethod(delegates, "Cursor_GetPosition", ref ApiDelegator.Cursor_GetPosition);
+      AssignMethod(delegates, "Cursor_IsInsideArea", ref ApiDelegator.Cursor_IsInsideArea);
+      AssignMethod(delegates, "Cursor_GetSprites", ref ApiDelegator.Cursor_GetSprites);
+      AssignMethod(delegates, "Cursor_ForceDispose", ref ApiDelegator.Cursor_ForceDispose);
       AssignMethod(delegates, "ClickHandler_New", ref ApiDelegator.ClickHandler_New);
       AssignMethod(delegates, "ClickHandler_GetHitArea", ref ApiDelegator.ClickHandler_GetHitArea);
       AssignMethod(delegates, "ClickHandler_SetHitArea", ref ApiDelegator.ClickHandler_SetHitArea);
@@ -212,15 +212,15 @@ namespace Lima.API
     public Func<object, IngameIMyCubeBlock, IngameIMyTextSurface, bool> TouchScreen_CompareWithBlockAndSurface;
     public Action<object> TouchScreen_ForceDispose;
 
-    public Func<object, object> TouchCursor_New;
-    public Func<object, bool> TouchCursor_GetEnabled;
-    public Action<object, bool> TouchCursor_SetEnabled;
-    public Func<object, float> TouchCursor_GetScale;
-    public Action<object, float> TouchCursor_SetScale;
-    public Func<object, Vector2> TouchCursor_GetPosition;
-    public Func<object, float, float, float, float, bool> TouchCursor_IsInsideArea;
-    public Func<object, List<MySprite>> TouchCursor_GetSprites;
-    public Action<object> TouchCursor_ForceDispose;
+    public Func<object, object> Cursor_New;
+    public Func<object, bool> Cursor_GetEnabled;
+    public Action<object, bool> Cursor_SetEnabled;
+    public Func<object, float> Cursor_GetScale;
+    public Action<object, float> Cursor_SetScale;
+    public Func<object, Vector2> Cursor_GetPosition;
+    public Func<object, float, float, float, float, bool> Cursor_IsInsideArea;
+    public Func<object, List<MySprite>> Cursor_GetSprites;
+    public Action<object> Cursor_ForceDispose;
 
     public Func<object> ClickHandler_New;
     public Func<object, Vector4> ClickHandler_GetHitArea;
@@ -274,24 +274,24 @@ namespace Lima.API
     public void ForceDispose() => Api.TouchScreen_ForceDispose.Invoke(InternalObj);
   }
   /// <summary>
-  /// <see href="https://github.com/adrianulima/TouchScreenAPI/blob/main/Data/Scripts/Lima/Touch/TouchCursor.cs"/>
+  /// <see href="https://github.com/adrianulima/TouchScreenAPI/blob/main/Data/Scripts/Lima/Touch/Cursor.cs"/>
   /// </summary>
-  public class TouchCursor : WrapperBase<TouchApiDelegator>
+  public class Cursor : WrapperBase<TouchApiDelegator>
   {
-    public TouchCursor(TouchScreen screen) : base(Api.TouchCursor_New(screen.InternalObj)) { }
+    public Cursor(TouchScreen screen) : base(Api.Cursor_New(screen.InternalObj)) { }
     /// <summary>
     /// Do not call this ctor directly, unless you have the reference of the original object from the API.
     /// </summary>
-    public TouchCursor(object internalObject) : base(internalObject) { }
-    public bool Enabled { get { return Api.TouchCursor_GetEnabled.Invoke(InternalObj); } set { Api.TouchCursor_SetEnabled.Invoke(InternalObj, value); } }
-    public float Scale { get { return Api.TouchCursor_GetScale.Invoke(InternalObj); } set { Api.TouchCursor_SetScale.Invoke(InternalObj, value); } }
-    public Vector2 Position { get { return Api.TouchCursor_GetPosition.Invoke(InternalObj); } }
-    public bool IsInsideArea(float x, float y, float z, float w) => Api.TouchCursor_IsInsideArea.Invoke(InternalObj, x, y, z, w);
-    public List<MySprite> GetSprites() => Api.TouchCursor_GetSprites.Invoke(InternalObj);
+    public Cursor(object internalObject) : base(internalObject) { }
+    public bool Enabled { get { return Api.Cursor_GetEnabled.Invoke(InternalObj); } set { Api.Cursor_SetEnabled.Invoke(InternalObj, value); } }
+    public float Scale { get { return Api.Cursor_GetScale.Invoke(InternalObj); } set { Api.Cursor_SetScale.Invoke(InternalObj, value); } }
+    public Vector2 Position { get { return Api.Cursor_GetPosition.Invoke(InternalObj); } }
+    public bool IsInsideArea(float x, float y, float z, float w) => Api.Cursor_IsInsideArea.Invoke(InternalObj, x, y, z, w);
+    public List<MySprite> GetSprites() => Api.Cursor_GetSprites.Invoke(InternalObj);
     /// <summary>
     /// Force a call to Cursor Dispose, that clears sprites.
     /// </summary>
-    public void ForceDispose() => Api.TouchCursor_ForceDispose.Invoke(InternalObj);
+    public void ForceDispose() => Api.Cursor_ForceDispose.Invoke(InternalObj);
   }
   /// <summary>
   /// Responsible for handling and updating cursor states related to a area on a screen.

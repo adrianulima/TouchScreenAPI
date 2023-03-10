@@ -6,11 +6,11 @@ using VRageMath;
 
 namespace Lima.Touch.UiKit.Elements
 {
-  public class TouchTextField : TouchView
+  public class TextField : View
   {
     public ClickHandler Handler = new ClickHandler();
 
-    public TouchLabel Label;
+    public Label Label;
 
     public string Text = "";
     public Action<string> OnSubmit;
@@ -29,7 +29,7 @@ namespace Lima.Touch.UiKit.Elements
     public bool RevertOnBlur = false;
     public bool SubmitOnBlur = true;
 
-    public TouchTextField()
+    public TextField()
     {
       _inputHandler = new TextInputHandler(AddChar, RemoveLastChar, OnInput);
 
@@ -39,7 +39,7 @@ namespace Lima.Touch.UiKit.Elements
       Anchor = ViewAnchor.Center;
       Alignment = ViewAlignment.Center;
 
-      Label = new TouchLabel(Text, 0.6f, TextAlignment.CENTER);
+      Label = new Label(Text, 0.6f, TextAlignment.CENTER);
       Label.AutoEllipsis = LabelEllipsis.Left;
       AddChild(Label);
     }

@@ -4,7 +4,7 @@ using VRageMath;
 
 namespace Lima.Touch.UiKit.Elements
 {
-  public class TouchScrollView : TouchView
+  public class ScrollView : View
   {
     public ClickHandler Handler = new ClickHandler();
     public ClickHandler HandlerContent = new ClickHandler();
@@ -13,7 +13,7 @@ namespace Lima.Touch.UiKit.Elements
     public bool ScrollWheelEnabled = true;
     public float ScrollWheelStep = 12;
 
-    public TouchBarContainer ScrollBar;
+    public BarContainer ScrollBar;
 
     private float _scroll = 0;
     public float Scroll
@@ -26,11 +26,11 @@ namespace Lima.Touch.UiKit.Elements
     bool _mouseOver = false;
     int _delta = 0;
 
-    public TouchScrollView(ViewDirection direction = ViewDirection.Column, Color? bgColor = null) : base(direction, bgColor)
+    public ScrollView(ViewDirection direction = ViewDirection.Column, Color? bgColor = null) : base(direction, bgColor)
     {
       Overflow = false;
 
-      ScrollBar = new TouchBarContainer(true);
+      ScrollBar = new BarContainer(true);
       ScrollBar.Pixels = new Vector2(12, 0);
       ScrollBar.Flex = Vector2.Zero;
       ScrollBar.Absolute = true;

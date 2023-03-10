@@ -3,11 +3,11 @@ using VRageMath;
 
 namespace Lima.Touch.UiKit.Elements
 {
-  public class TouchWindowBar : TouchView
+  public class WindowBar : View
   {
-    public TouchLabel Label;
+    public Label Label;
 
-    public TouchWindowBar(string text)
+    public WindowBar(string text)
     {
       Flex = new Vector2(1, 0);
       Pixels = new Vector2(0, 24);
@@ -15,7 +15,7 @@ namespace Lima.Touch.UiKit.Elements
       Direction = ViewDirection.Row;
       Alignment = ViewAlignment.Center;
 
-      Label = new TouchLabel(text, 0.5f, TextAlignment.LEFT);
+      Label = new Label(text, 0.5f, TextAlignment.LEFT);
       Label.Margin = new Vector4(4, 0, 4, 0);
       AddChild(Label);
     }

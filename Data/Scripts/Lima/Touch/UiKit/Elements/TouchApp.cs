@@ -8,13 +8,13 @@ using VRageMath;
 
 namespace Lima.Touch.UiKit.Elements
 {
-  public class TouchApp : TouchView
+  public class TouchApp : View
   {
     public event Action UpdateAtSimulationEvent;
 
     public TouchScreen Screen { get; private set; }
-    public TouchCursor Cursor { get; private set; }
-    public TouchTheme Theme { get; private set; }
+    public Cursor Cursor { get; private set; }
+    public Theme Theme { get; private set; }
     public bool DefaultBg = false;
 
     private RectangleF _viewport;
@@ -33,8 +33,8 @@ namespace Lima.Touch.UiKit.Elements
       TouchSession.Instance.TouchMan.Screens.Add(Screen);
       Screen.UpdateAtSimulationEvent += UpdateAtSimulation;
 
-      Cursor = new TouchCursor(Screen);
-      Theme = new TouchTheme(surface);
+      Cursor = new Cursor(Screen);
+      Theme = new Theme(surface);
 
       Viewport = new RectangleF(
         (surface.TextureSize - surface.SurfaceSize) / 2f,

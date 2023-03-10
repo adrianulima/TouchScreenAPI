@@ -4,11 +4,11 @@ using VRageMath;
 
 namespace Lima.Touch.UiKit.Elements
 {
-  public class TouchButton : TouchEmptyButton
+  public class Button : EmptyButton
   {
-    public TouchLabel Label;
+    public Label Label;
 
-    public TouchButton(string text, Action onChange) : base(onChange)
+    public Button(string text, Action onChange) : base(onChange)
     {
       Flex = new Vector2(1, 0);
       Pixels = new Vector2(0, 24);
@@ -16,7 +16,7 @@ namespace Lima.Touch.UiKit.Elements
       Anchor = ViewAnchor.Center;
       Alignment = ViewAlignment.Center;
 
-      Label = new TouchLabel(text, 0.6f, TextAlignment.CENTER);
+      Label = new Label(text, 0.6f, TextAlignment.CENTER);
       AddChild(Label);
     }
 

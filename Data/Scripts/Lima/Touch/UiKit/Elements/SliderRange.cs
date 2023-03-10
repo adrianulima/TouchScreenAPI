@@ -4,22 +4,22 @@ using VRageMath;
 
 namespace Lima.Touch.UiKit.Elements
 {
-  public class TouchSliderRange : TouchSlider
+  public class SliderRange : Slider
   {
     public Action<float, float> OnChangeR;
 
     public float ValueLower = 0;
 
-    public TouchEmptyElement ThumbLower;
+    public EmptyElement ThumbLower;
 
-    public TouchSliderRange(float min, float max, Action<float, float> onChange = null) : base(min, max)
+    public SliderRange(float min, float max, Action<float, float> onChange = null) : base(min, max)
     {
       OnChangeR = onChange;
 
       Flex = new Vector2(1, 0);
       Pixels = new Vector2(0, 24);
 
-      ThumbLower = new TouchEmptyElement();
+      ThumbLower = new EmptyElement();
       ThumbLower.Flex = Vector2.Zero;
       ThumbLower.Absolute = true;
       Bar.AddChild(ThumbLower);

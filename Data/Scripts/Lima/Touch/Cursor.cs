@@ -4,7 +4,7 @@ using VRageMath;
 
 namespace Lima.Touch
 {
-  public class TouchCursor
+  public class Cursor
   {
     protected readonly List<MySprite> Sprites = new List<MySprite>();
     private TouchScreen _screen;
@@ -17,7 +17,7 @@ namespace Lima.Touch
     public bool Enabled = true;
     public float Scale = 1f;
 
-    public TouchCursor(TouchScreen screen)
+    public Cursor(TouchScreen screen)
     {
       _screen = screen;
 

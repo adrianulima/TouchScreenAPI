@@ -4,7 +4,7 @@ using VRageMath;
 
 namespace Lima.Touch.UiKit
 {
-  public class TouchTheme
+  public class Theme
   {
     private Sandbox.ModAPI.Ingame.IMyTextSurface _surface;
     private Color _lastBg;
@@ -50,7 +50,7 @@ namespace Lima.Touch.UiKit
 
     public bool IsMainDark { get { return IsColorDark(_surface.ScriptForegroundColor); } }
 
-    public TouchTheme(Sandbox.ModAPI.Ingame.IMyTextSurface surface)
+    public Theme(Sandbox.ModAPI.Ingame.IMyTextSurface surface)
     {
       _surface = surface;
     }

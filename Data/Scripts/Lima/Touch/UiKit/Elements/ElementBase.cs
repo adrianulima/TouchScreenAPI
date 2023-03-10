@@ -6,7 +6,7 @@ using VRageMath;
 
 namespace Lima.Touch.UiKit.Elements
 {
-  public abstract class TouchElementBase
+  public abstract class ElementBase
   {
     public event Action UpdateEvent;
 
@@ -39,8 +39,8 @@ namespace Lima.Touch.UiKit.Elements
       get { return App != null ? App.Theme.Scale : 1f; }
     }
 
-    private TouchContainerBase _parent;
-    public TouchContainerBase Parent
+    private ContainerBase _parent;
+    public ContainerBase Parent
     {
       get { return _parent; }
       set
@@ -56,7 +56,7 @@ namespace Lima.Touch.UiKit.Elements
       }
     }
 
-    public TouchElementBase() { }
+    public ElementBase() { }
 
     public virtual Vector2 GetSize()
     {

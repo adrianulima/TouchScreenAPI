@@ -3,13 +3,13 @@ using VRageMath;
 
 namespace Lima.Touch.UiKit.Elements
 {
-  public class TouchEmptyButton : TouchView
+  public class EmptyButton : View
   {
     public ClickHandler Handler = new ClickHandler();
     public Action OnChange;
     public bool Disabled = false;
 
-    public TouchEmptyButton(Action onChange)
+    public EmptyButton(Action onChange)
     {
       OnChange = onChange;
 

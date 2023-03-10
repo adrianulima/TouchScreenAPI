@@ -2,9 +2,9 @@ using VRageMath;
 
 namespace Lima.Touch.UiKit.Elements
 {
-  public class AlertPanel : TouchView
+  public class AlertPanel : View
   {
-    public TouchLabel Label;
+    public Label Label;
 
     public AlertPanel(string text)
     {
@@ -17,7 +17,7 @@ namespace Lima.Touch.UiKit.Elements
       BgColor = Color.Black;
       Flex = Vector2.Zero;
 
-      Label = new TouchLabel(text);
+      Label = new Label(text);
       Label.AutoBreakLine = true;
       AddChild(Label);
     }

@@ -4,11 +4,11 @@ using VRageMath;
 
 namespace Lima.Touch.UiKit.Elements
 {
-  public abstract class TouchContainerBase : TouchElementBase
+  public abstract class ContainerBase : ElementBase
   {
-    public readonly List<TouchElementBase> Children = new List<TouchElementBase>();
+    public readonly List<ElementBase> Children = new List<ElementBase>();
 
-    public TouchContainerBase() { }
+    public ContainerBase() { }
 
     public virtual Vector2 GetFlexSize()
     {
@@ -55,17 +55,17 @@ namespace Lima.Touch.UiKit.Elements
       return Sprites;
     }
 
-    protected virtual bool ValidateChild(TouchElementBase child)
+    protected virtual bool ValidateChild(ElementBase child)
     {
       return child.Enabled;
     }
 
-    public virtual TouchElementBase AddChild(TouchElementBase child)
+    public virtual ElementBase AddChild(ElementBase child)
     {
       return AddChild(child, -1);
     }
 
-    public virtual TouchElementBase AddChild(TouchElementBase child, int index)
+    public virtual ElementBase AddChild(ElementBase child, int index)
     {
       if (child.Parent == null && !Children.Contains(child))
       {
@@ -80,7 +80,7 @@ namespace Lima.Touch.UiKit.Elements
       return null;
     }
 
-    public virtual TouchElementBase RemoveChild(TouchElementBase child)
+    public virtual ElementBase RemoveChild(ElementBase child)
     {
       if (Children.Contains(child))
       {
@@ -91,7 +91,7 @@ namespace Lima.Touch.UiKit.Elements
       return null;
     }
 
-    public virtual TouchElementBase RemoveChild(int index)
+    public virtual ElementBase RemoveChild(int index)
     {
       if (Children.Count > index)
       {
@@ -103,7 +103,7 @@ namespace Lima.Touch.UiKit.Elements
       return null;
     }
 
-    public virtual TouchElementBase MoveChild(TouchElementBase child, int index)
+    public virtual ElementBase MoveChild(ElementBase child, int index)
     {
       if (child.Parent == this && Children.Contains(child))
       {

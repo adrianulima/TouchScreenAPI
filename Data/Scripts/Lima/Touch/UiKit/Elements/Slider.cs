@@ -5,7 +5,7 @@ using VRageMath;
 
 namespace Lima.Touch.UiKit.Elements
 {
-  public class TouchSlider : TouchView
+  public class Slider : View
   {
     public ClickHandler Handler = new ClickHandler();
 
@@ -18,11 +18,11 @@ namespace Lima.Touch.UiKit.Elements
     public bool AllowInput = true;
     protected bool InputOpen = false;
 
-    public TouchBarContainer Bar;
-    public TouchEmptyElement Thumb;
-    public TouchTextField InnerTextField;
+    public BarContainer Bar;
+    public EmptyElement Thumb;
+    public TextField InnerTextField;
 
-    public TouchSlider(float min, float max, Action<float> onChange = null)
+    public Slider(float min, float max, Action<float> onChange = null)
     {
       MinValue = min;
       MaxValue = max;
@@ -32,19 +32,19 @@ namespace Lima.Touch.UiKit.Elements
       Flex = new Vector2(1, 0);
       Pixels = new Vector2(0, 24);
 
-      InnerTextField = new TouchTextField();
+      InnerTextField = new TextField();
       InnerTextField.Text = $"{Value}";
       InnerTextField.OnSubmit = OnTextSubmit;
       InnerTextField.Enabled = false;
       AddChild(InnerTextField);
 
-      Bar = new TouchBarContainer();
+      Bar = new BarContainer();
       Bar.Pixels = new Vector2(0, 12);
       Bar.Flex = Vector2.UnitX;
       Bar.Margin = new Vector4(0, 6, 0, 6);
       AddChild(Bar);
 
-      Thumb = new TouchEmptyElement();
+      Thumb = new EmptyElement();
       Thumb.Flex = Vector2.Zero;
       Thumb.Absolute = true;
       Bar.AddChild(Thumb);

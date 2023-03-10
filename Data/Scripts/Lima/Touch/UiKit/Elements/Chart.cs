@@ -6,7 +6,7 @@ using VRageMath;
 
 namespace Lima.Touch.UiKit.Elements
 {
-  public class TouchChart : TouchElementBase
+  public class Chart : ElementBase
   {
     public readonly List<float[]> DataSets = new List<float[]>();
     public readonly List<Color> DataColors = new List<Color>();
@@ -25,7 +25,7 @@ namespace Lima.Touch.UiKit.Elements
 
     public Color? GridColor;
 
-    public TouchChart(int intervals)
+    public Chart(int intervals)
     {
       _intervals = intervals;
     }

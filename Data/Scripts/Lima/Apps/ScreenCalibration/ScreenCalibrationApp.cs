@@ -15,10 +15,10 @@ namespace Lima.Apps.ScreenCalibration
 {
   public class ScreenCalibrationApp : TouchApp
   {
-    private TouchLabel _label;
-    private TouchView _view;
-    private TouchView _overlayView;
-    private TouchButton _button;
+    private Label _label;
+    private View _view;
+    private View _overlayView;
+    private Button _button;
 
     private bool _calibrating = true;
     private int _step = 0;
@@ -38,23 +38,23 @@ namespace Lima.Apps.ScreenCalibration
 
       Cursor.Enabled = false;
 
-      _overlayView = new TouchView();
+      _overlayView = new View();
       _overlayView.Absolute = true;
       _overlayView.Anchor = ViewAnchor.Center;
       _overlayView.Alignment = ViewAlignment.Center;
       _overlayView.Position = Position;
       AddChild(_overlayView);
 
-      _label = new TouchLabel("", 0.7f);
+      _label = new Label("", 0.7f);
       _overlayView.AddChild(_label);
 
-      _view = new TouchView();
+      _view = new View();
       _view.Alignment = ViewAlignment.Start;
       _view.Anchor = ViewAnchor.Start;
       _view.Padding = new Vector4(20);
       AddChild(_view);
 
-      _button = new TouchButton("Click", () =>
+      _button = new Button("Click", () =>
       {
         MyClipboardHelper.SetClipboard(_newCoords);
       });

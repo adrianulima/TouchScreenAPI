@@ -4,7 +4,7 @@ using VRageMath;
 
 namespace Lima.Touch.UiKit.Elements
 {
-  public class TouchProgressBar : TouchBarContainer
+  public class ProgressBar : BarContainer
   {
     protected MySprite textSprite;
 
@@ -28,9 +28,9 @@ namespace Lima.Touch.UiKit.Elements
     public float MinValue;
     public float MaxValue;
     public float BarsGap = 2;
-    public TouchLabel Label;
+    public Label Label;
 
-    public TouchProgressBar(float min, float max, bool vertical = false, float barsGap = 0) : base(vertical)
+    public ProgressBar(float min, float max, bool vertical = false, float barsGap = 0) : base(vertical)
     {
       MinValue = min;
       MaxValue = max;
@@ -43,7 +43,7 @@ namespace Lima.Touch.UiKit.Elements
 
       IsVertical = vertical;
 
-      Label = new TouchLabel("", 0.6f, TextAlignment.CENTER);
+      Label = new Label("", 0.6f, TextAlignment.CENTER);
       Label.Margin = new Vector4(2, 0, 2, 0);
       AddChild(Label);
     }

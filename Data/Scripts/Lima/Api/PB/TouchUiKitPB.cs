@@ -52,14 +52,14 @@ namespace Lima.API.PB
     /// </summary>
     /// <param name="coords"></param>
     public void RemoveSurfaceCoords(string coords) => _removeSurfaceCoords?.Invoke(coords);
-    private TouchUiKitDelegator _apiDel;
+    private UiKitDelegator _apiDel;
     public TouchUiKit(Sandbox.ModAPI.Ingame.IMyTerminalBlock pb)
     {
       var delegates = pb.GetProperty("2668820525")?.As<IReadOnlyDictionary<string, Delegate>>().GetValue(pb);
       if (delegates != null)
       {
-        _apiDel = new TouchUiKitDelegator();
-        WrapperBase<TouchUiKitDelegator>.SetApi(_apiDel);
+        _apiDel = new UiKitDelegator();
+        WrapperBase<UiKitDelegator>.SetApi(_apiDel);
         AssignMethod(out _createTouchScreen, delegates["CreateTouchScreen"]);
         AssignMethod(out _removeTouchScreen, delegates["RemoveTouchScreen"]);
         AssignMethod(out _addSurfaceCoords, delegates["AddSurfaceCoords"]);
@@ -74,15 +74,15 @@ namespace Lima.API.PB
         AssignMethod(out _apiDel.TouchScreen_GetRotation, delegates["TouchScreen_GetRotation"]);
         AssignMethod(out _apiDel.TouchScreen_CompareWithBlockAndSurface, delegates["TouchScreen_CompareWithBlockAndSurface"]);
         AssignMethod(out _apiDel.TouchScreen_ForceDispose, delegates["TouchScreen_ForceDispose"]);
-        AssignMethod(out _apiDel.TouchCursor_New, delegates["TouchCursor_New"]);
-        AssignMethod(out _apiDel.TouchCursor_GetEnabled, delegates["TouchCursor_GetEnabled"]);
-        AssignMethod(out _apiDel.TouchCursor_SetEnabled, delegates["TouchCursor_SetEnabled"]);
-        AssignMethod(out _apiDel.TouchCursor_GetScale, delegates["TouchCursor_GetScale"]);
-        AssignMethod(out _apiDel.TouchCursor_SetScale, delegates["TouchCursor_SetScale"]);
-        AssignMethod(out _apiDel.TouchCursor_GetPosition, delegates["TouchCursor_GetPosition"]);
-        AssignMethod(out _apiDel.TouchCursor_IsInsideArea, delegates["TouchCursor_IsInsideArea"]);
-        AssignMethod(out _apiDel.TouchCursor_GetSprites, delegates["TouchCursor_GetSprites"]);
-        AssignMethod(out _apiDel.TouchCursor_ForceDispose, delegates["TouchCursor_ForceDispose"]);
+        AssignMethod(out _apiDel.Cursor_New, delegates["Cursor_New"]);
+        AssignMethod(out _apiDel.Cursor_GetEnabled, delegates["Cursor_GetEnabled"]);
+        AssignMethod(out _apiDel.Cursor_SetEnabled, delegates["Cursor_SetEnabled"]);
+        AssignMethod(out _apiDel.Cursor_GetScale, delegates["Cursor_GetScale"]);
+        AssignMethod(out _apiDel.Cursor_SetScale, delegates["Cursor_SetScale"]);
+        AssignMethod(out _apiDel.Cursor_GetPosition, delegates["Cursor_GetPosition"]);
+        AssignMethod(out _apiDel.Cursor_IsInsideArea, delegates["Cursor_IsInsideArea"]);
+        AssignMethod(out _apiDel.Cursor_GetSprites, delegates["Cursor_GetSprites"]);
+        AssignMethod(out _apiDel.Cursor_ForceDispose, delegates["Cursor_ForceDispose"]);
         AssignMethod(out _apiDel.ClickHandler_New, delegates["ClickHandler_New"]);
         AssignMethod(out _apiDel.ClickHandler_GetHitArea, delegates["ClickHandler_GetHitArea"]);
         AssignMethod(out _apiDel.ClickHandler_SetHitArea, delegates["ClickHandler_SetHitArea"]);
@@ -92,76 +92,76 @@ namespace Lima.API.PB
         AssignMethod(out _apiDel.ClickHandler_JustReleased, delegates["ClickHandler_JustReleased"]);
         AssignMethod(out _apiDel.ClickHandler_JustPressed, delegates["ClickHandler_JustPressed"]);
         AssignMethod(out _apiDel.ClickHandler_UpdateStatus, delegates["ClickHandler_UpdateStatus"]);
-        AssignMethod(out _apiDel.TouchTheme_GetBgColor, delegates["TouchTheme_GetBgColor"]);
-        AssignMethod(out _apiDel.TouchTheme_GetWhiteColor, delegates["TouchTheme_GetWhiteColor"]);
-        AssignMethod(out _apiDel.TouchTheme_GetMainColor, delegates["TouchTheme_GetMainColor"]);
-        AssignMethod(out _apiDel.TouchTheme_GetMainColorDarker, delegates["TouchTheme_GetMainColorDarker"]);
-        AssignMethod(out _apiDel.TouchTheme_MeasureStringInPixels, delegates["TouchTheme_MeasureStringInPixels"]);
-        AssignMethod(out _apiDel.TouchTheme_GetScale, delegates["TouchTheme_GetScale"]);
-        AssignMethod(out _apiDel.TouchTheme_SetScale, delegates["TouchTheme_SetScale"]);
-        AssignMethod(out _apiDel.TouchTheme_GetFont, delegates["TouchTheme_GetFont"]);
-        AssignMethod(out _apiDel.TouchTheme_SetFont, delegates["TouchTheme_SetFont"]);
-        AssignMethod(out _apiDel.TouchElementBase_GetEnabled, delegates["TouchElementBase_GetEnabled"]);
-        AssignMethod(out _apiDel.TouchElementBase_SetEnabled, delegates["TouchElementBase_SetEnabled"]);
-        AssignMethod(out _apiDel.TouchElementBase_GetAbsolute, delegates["TouchElementBase_GetAbsolute"]);
-        AssignMethod(out _apiDel.TouchElementBase_SetAbsolute, delegates["TouchElementBase_SetAbsolute"]);
-        AssignMethod(out _apiDel.TouchElementBase_GetSelfAlignment, delegates["TouchElementBase_GetSelfAlignment"]);
-        AssignMethod(out _apiDel.TouchElementBase_SetSelfAlignment, delegates["TouchElementBase_SetSelfAlignment"]);
-        AssignMethod(out _apiDel.TouchElementBase_GetPosition, delegates["TouchElementBase_GetPosition"]);
-        AssignMethod(out _apiDel.TouchElementBase_SetPosition, delegates["TouchElementBase_SetPosition"]);
-        AssignMethod(out _apiDel.TouchElementBase_GetMargin, delegates["TouchElementBase_GetMargin"]);
-        AssignMethod(out _apiDel.TouchElementBase_SetMargin, delegates["TouchElementBase_SetMargin"]);
-        AssignMethod(out _apiDel.TouchElementBase_GetFlex, delegates["TouchElementBase_GetFlex"]);
-        AssignMethod(out _apiDel.TouchElementBase_SetFlex, delegates["TouchElementBase_SetFlex"]);
-        AssignMethod(out _apiDel.TouchElementBase_GetPixels, delegates["TouchElementBase_GetPixels"]);
-        AssignMethod(out _apiDel.TouchElementBase_SetPixels, delegates["TouchElementBase_SetPixels"]);
-        AssignMethod(out _apiDel.TouchElementBase_GetSize, delegates["TouchElementBase_GetSize"]);
-        AssignMethod(out _apiDel.TouchElementBase_GetBoundaries, delegates["TouchElementBase_GetBoundaries"]);
-        AssignMethod(out _apiDel.TouchElementBase_GetApp, delegates["TouchElementBase_GetApp"]);
-        AssignMethod(out _apiDel.TouchElementBase_GetParent, delegates["TouchElementBase_GetParent"]);
-        AssignMethod(out _apiDel.TouchElementBase_GetSprites, delegates["TouchElementBase_GetSprites"]);
-        AssignMethod(out _apiDel.TouchElementBase_ForceUpdate, delegates["TouchElementBase_ForceUpdate"]);
-        AssignMethod(out _apiDel.TouchElementBase_ForceDispose, delegates["TouchElementBase_ForceDispose"]);
-        AssignMethod(out _apiDel.TouchElementBase_RegisterUpdate, delegates["TouchElementBase_RegisterUpdate"]);
-        AssignMethod(out _apiDel.TouchElementBase_UnregisterUpdate, delegates["TouchElementBase_UnregisterUpdate"]);
-        AssignMethod(out _apiDel.TouchContainerBase_GetChildren, delegates["TouchContainerBase_GetChildren"]);
-        AssignMethod(out _apiDel.TouchContainerBase_GetFlexSize, delegates["TouchContainerBase_GetFlexSize"]);
-        AssignMethod(out _apiDel.TouchContainerBase_AddChild, delegates["TouchContainerBase_AddChild"]);
-        AssignMethod(out _apiDel.TouchContainerBase_AddChildAt, delegates["TouchContainerBase_AddChildAt"]);
-        AssignMethod(out _apiDel.TouchContainerBase_RemoveChild, delegates["TouchContainerBase_RemoveChild"]);
-        AssignMethod(out _apiDel.TouchContainerBase_RemoveChildAt, delegates["TouchContainerBase_RemoveChildAt"]);
-        AssignMethod(out _apiDel.TouchContainerBase_MoveChild, delegates["TouchContainerBase_MoveChild"]);
-        AssignMethod(out _apiDel.TouchView_New, delegates["TouchView_New"]);
-        AssignMethod(out _apiDel.TouchView_GetOverflow, delegates["TouchView_GetOverflow"]);
-        AssignMethod(out _apiDel.TouchView_SetOverflow, delegates["TouchView_SetOverflow"]);
-        AssignMethod(out _apiDel.TouchView_GetDirection, delegates["TouchView_GetDirection"]);
-        AssignMethod(out _apiDel.TouchView_SetDirection, delegates["TouchView_SetDirection"]);
-        AssignMethod(out _apiDel.TouchView_GetAlignment, delegates["TouchView_GetAlignment"]);
-        AssignMethod(out _apiDel.TouchView_SetAlignment, delegates["TouchView_SetAlignment"]);
-        AssignMethod(out _apiDel.TouchView_GetAnchor, delegates["TouchView_GetAnchor"]);
-        AssignMethod(out _apiDel.TouchView_SetAnchor, delegates["TouchView_SetAnchor"]);
-        AssignMethod(out _apiDel.TouchView_GetUseThemeColors, delegates["TouchView_GetUseThemeColors"]);
-        AssignMethod(out _apiDel.TouchView_SetUseThemeColors, delegates["TouchView_SetUseThemeColors"]);
-        AssignMethod(out _apiDel.TouchView_GetBgColor, delegates["TouchView_GetBgColor"]);
-        AssignMethod(out _apiDel.TouchView_SetBgColor, delegates["TouchView_SetBgColor"]);
-        AssignMethod(out _apiDel.TouchView_GetBorderColor, delegates["TouchView_GetBorderColor"]);
-        AssignMethod(out _apiDel.TouchView_SetBorderColor, delegates["TouchView_SetBorderColor"]);
-        AssignMethod(out _apiDel.TouchView_GetBorder, delegates["TouchView_GetBorder"]);
-        AssignMethod(out _apiDel.TouchView_SetBorder, delegates["TouchView_SetBorder"]);
-        AssignMethod(out _apiDel.TouchView_GetPadding, delegates["TouchView_GetPadding"]);
-        AssignMethod(out _apiDel.TouchView_SetPadding, delegates["TouchView_SetPadding"]);
-        AssignMethod(out _apiDel.TouchView_GetGap, delegates["TouchView_GetGap"]);
-        AssignMethod(out _apiDel.TouchView_SetGap, delegates["TouchView_SetGap"]);
-        AssignMethod(out _apiDel.TouchScrollView_New, delegates["TouchScrollView_New"]);
-        AssignMethod(out _apiDel.TouchScrollView_GetScroll, delegates["TouchScrollView_GetScroll"]);
-        AssignMethod(out _apiDel.TouchScrollView_SetScroll, delegates["TouchScrollView_SetScroll"]);
-        AssignMethod(out _apiDel.TouchScrollView_GetScrollAlwaysVisible, delegates["TouchScrollView_GetScrollAlwaysVisible"]);
-        AssignMethod(out _apiDel.TouchScrollView_SetScrollAlwaysVisible, delegates["TouchScrollView_SetScrollAlwaysVisible"]);
-        AssignMethod(out _apiDel.TouchScrollView_GetScrollWheelEnabled, delegates["TouchScrollView_GetScrollWheelEnabled"]);
-        AssignMethod(out _apiDel.TouchScrollView_SetScrollWheelEnabled, delegates["TouchScrollView_SetScrollWheelEnabled"]);
-        AssignMethod(out _apiDel.TouchScrollView_GetScrollWheelStep, delegates["TouchScrollView_GetScrollWheelStep"]);
-        AssignMethod(out _apiDel.TouchScrollView_SetScrollWheelStep, delegates["TouchScrollView_SetScrollWheelStep"]);
-        AssignMethod(out _apiDel.TouchScrollView_GetScrollBar, delegates["TouchScrollView_GetScrollBar"]);
+        AssignMethod(out _apiDel.Theme_GetBgColor, delegates["Theme_GetBgColor"]);
+        AssignMethod(out _apiDel.Theme_GetWhiteColor, delegates["Theme_GetWhiteColor"]);
+        AssignMethod(out _apiDel.Theme_GetMainColor, delegates["Theme_GetMainColor"]);
+        AssignMethod(out _apiDel.Theme_GetMainColorDarker, delegates["Theme_GetMainColorDarker"]);
+        AssignMethod(out _apiDel.Theme_MeasureStringInPixels, delegates["Theme_MeasureStringInPixels"]);
+        AssignMethod(out _apiDel.Theme_GetScale, delegates["Theme_GetScale"]);
+        AssignMethod(out _apiDel.Theme_SetScale, delegates["Theme_SetScale"]);
+        AssignMethod(out _apiDel.Theme_GetFont, delegates["Theme_GetFont"]);
+        AssignMethod(out _apiDel.Theme_SetFont, delegates["Theme_SetFont"]);
+        AssignMethod(out _apiDel.ElementBase_GetEnabled, delegates["ElementBase_GetEnabled"]);
+        AssignMethod(out _apiDel.ElementBase_SetEnabled, delegates["ElementBase_SetEnabled"]);
+        AssignMethod(out _apiDel.ElementBase_GetAbsolute, delegates["ElementBase_GetAbsolute"]);
+        AssignMethod(out _apiDel.ElementBase_SetAbsolute, delegates["ElementBase_SetAbsolute"]);
+        AssignMethod(out _apiDel.ElementBase_GetSelfAlignment, delegates["ElementBase_GetSelfAlignment"]);
+        AssignMethod(out _apiDel.ElementBase_SetSelfAlignment, delegates["ElementBase_SetSelfAlignment"]);
+        AssignMethod(out _apiDel.ElementBase_GetPosition, delegates["ElementBase_GetPosition"]);
+        AssignMethod(out _apiDel.ElementBase_SetPosition, delegates["ElementBase_SetPosition"]);
+        AssignMethod(out _apiDel.ElementBase_GetMargin, delegates["ElementBase_GetMargin"]);
+        AssignMethod(out _apiDel.ElementBase_SetMargin, delegates["ElementBase_SetMargin"]);
+        AssignMethod(out _apiDel.ElementBase_GetFlex, delegates["ElementBase_GetFlex"]);
+        AssignMethod(out _apiDel.ElementBase_SetFlex, delegates["ElementBase_SetFlex"]);
+        AssignMethod(out _apiDel.ElementBase_GetPixels, delegates["ElementBase_GetPixels"]);
+        AssignMethod(out _apiDel.ElementBase_SetPixels, delegates["ElementBase_SetPixels"]);
+        AssignMethod(out _apiDel.ElementBase_GetSize, delegates["ElementBase_GetSize"]);
+        AssignMethod(out _apiDel.ElementBase_GetBoundaries, delegates["ElementBase_GetBoundaries"]);
+        AssignMethod(out _apiDel.ElementBase_GetApp, delegates["ElementBase_GetApp"]);
+        AssignMethod(out _apiDel.ElementBase_GetParent, delegates["ElementBase_GetParent"]);
+        AssignMethod(out _apiDel.ElementBase_GetSprites, delegates["ElementBase_GetSprites"]);
+        AssignMethod(out _apiDel.ElementBase_ForceUpdate, delegates["ElementBase_ForceUpdate"]);
+        AssignMethod(out _apiDel.ElementBase_ForceDispose, delegates["ElementBase_ForceDispose"]);
+        AssignMethod(out _apiDel.ElementBase_RegisterUpdate, delegates["ElementBase_RegisterUpdate"]);
+        AssignMethod(out _apiDel.ElementBase_UnregisterUpdate, delegates["ElementBase_UnregisterUpdate"]);
+        AssignMethod(out _apiDel.ContainerBase_GetChildren, delegates["ContainerBase_GetChildren"]);
+        AssignMethod(out _apiDel.ContainerBase_GetFlexSize, delegates["ContainerBase_GetFlexSize"]);
+        AssignMethod(out _apiDel.ContainerBase_AddChild, delegates["ContainerBase_AddChild"]);
+        AssignMethod(out _apiDel.ContainerBase_AddChildAt, delegates["ContainerBase_AddChildAt"]);
+        AssignMethod(out _apiDel.ContainerBase_RemoveChild, delegates["ContainerBase_RemoveChild"]);
+        AssignMethod(out _apiDel.ContainerBase_RemoveChildAt, delegates["ContainerBase_RemoveChildAt"]);
+        AssignMethod(out _apiDel.ContainerBase_MoveChild, delegates["ContainerBase_MoveChild"]);
+        AssignMethod(out _apiDel.View_New, delegates["View_New"]);
+        AssignMethod(out _apiDel.View_GetOverflow, delegates["View_GetOverflow"]);
+        AssignMethod(out _apiDel.View_SetOverflow, delegates["View_SetOverflow"]);
+        AssignMethod(out _apiDel.View_GetDirection, delegates["View_GetDirection"]);
+        AssignMethod(out _apiDel.View_SetDirection, delegates["View_SetDirection"]);
+        AssignMethod(out _apiDel.View_GetAlignment, delegates["View_GetAlignment"]);
+        AssignMethod(out _apiDel.View_SetAlignment, delegates["View_SetAlignment"]);
+        AssignMethod(out _apiDel.View_GetAnchor, delegates["View_GetAnchor"]);
+        AssignMethod(out _apiDel.View_SetAnchor, delegates["View_SetAnchor"]);
+        AssignMethod(out _apiDel.View_GetUseThemeColors, delegates["View_GetUseThemeColors"]);
+        AssignMethod(out _apiDel.View_SetUseThemeColors, delegates["View_SetUseThemeColors"]);
+        AssignMethod(out _apiDel.View_GetBgColor, delegates["View_GetBgColor"]);
+        AssignMethod(out _apiDel.View_SetBgColor, delegates["View_SetBgColor"]);
+        AssignMethod(out _apiDel.View_GetBorderColor, delegates["View_GetBorderColor"]);
+        AssignMethod(out _apiDel.View_SetBorderColor, delegates["View_SetBorderColor"]);
+        AssignMethod(out _apiDel.View_GetBorder, delegates["View_GetBorder"]);
+        AssignMethod(out _apiDel.View_SetBorder, delegates["View_SetBorder"]);
+        AssignMethod(out _apiDel.View_GetPadding, delegates["View_GetPadding"]);
+        AssignMethod(out _apiDel.View_SetPadding, delegates["View_SetPadding"]);
+        AssignMethod(out _apiDel.View_GetGap, delegates["View_GetGap"]);
+        AssignMethod(out _apiDel.View_SetGap, delegates["View_SetGap"]);
+        AssignMethod(out _apiDel.ScrollView_New, delegates["ScrollView_New"]);
+        AssignMethod(out _apiDel.ScrollView_GetScroll, delegates["ScrollView_GetScroll"]);
+        AssignMethod(out _apiDel.ScrollView_SetScroll, delegates["ScrollView_SetScroll"]);
+        AssignMethod(out _apiDel.ScrollView_GetScrollAlwaysVisible, delegates["ScrollView_GetScrollAlwaysVisible"]);
+        AssignMethod(out _apiDel.ScrollView_SetScrollAlwaysVisible, delegates["ScrollView_SetScrollAlwaysVisible"]);
+        AssignMethod(out _apiDel.ScrollView_GetScrollWheelEnabled, delegates["ScrollView_GetScrollWheelEnabled"]);
+        AssignMethod(out _apiDel.ScrollView_SetScrollWheelEnabled, delegates["ScrollView_SetScrollWheelEnabled"]);
+        AssignMethod(out _apiDel.ScrollView_GetScrollWheelStep, delegates["ScrollView_GetScrollWheelStep"]);
+        AssignMethod(out _apiDel.ScrollView_SetScrollWheelStep, delegates["ScrollView_SetScrollWheelStep"]);
+        AssignMethod(out _apiDel.ScrollView_GetScrollBar, delegates["ScrollView_GetScrollBar"]);
         AssignMethod(out _apiDel.TouchApp_New, delegates["TouchApp_New"]);
         AssignMethod(out _apiDel.TouchApp_GetScreen, delegates["TouchApp_GetScreen"]);
         AssignMethod(out _apiDel.TouchApp_GetViewport, delegates["TouchApp_GetViewport"]);
@@ -169,121 +169,121 @@ namespace Lima.API.PB
         AssignMethod(out _apiDel.TouchApp_GetTheme, delegates["TouchApp_GetTheme"]);
         AssignMethod(out _apiDel.TouchApp_GetDefaultBg, delegates["TouchApp_GetDefaultBg"]);
         AssignMethod(out _apiDel.TouchApp_SetDefaultBg, delegates["TouchApp_SetDefaultBg"]);
-        AssignMethod(out _apiDel.TouchEmptyButton_New, delegates["TouchEmptyButton_New"]);
-        AssignMethod(out _apiDel.TouchEmptyButton_GetHandler, delegates["TouchEmptyButton_GetHandler"]);
-        AssignMethod(out _apiDel.TouchEmptyButton_SetOnChange, delegates["TouchEmptyButton_SetOnChange"]);
-        AssignMethod(out _apiDel.TouchEmptyButton_GetDisabled, delegates["TouchEmptyButton_GetDisabled"]);
-        AssignMethod(out _apiDel.TouchEmptyButton_SetDisabled, delegates["TouchEmptyButton_SetDisabled"]);
-        AssignMethod(out _apiDel.TouchButton_New, delegates["TouchButton_New"]);
-        AssignMethod(out _apiDel.TouchButton_GetLabel, delegates["TouchButton_GetLabel"]);
-        AssignMethod(out _apiDel.TouchCheckbox_New, delegates["TouchCheckbox_New"]);
-        AssignMethod(out _apiDel.TouchCheckbox_GetValue, delegates["TouchCheckbox_GetValue"]);
-        AssignMethod(out _apiDel.TouchCheckbox_SetValue, delegates["TouchCheckbox_SetValue"]);
-        AssignMethod(out _apiDel.TouchCheckbox_SetOnChange, delegates["TouchCheckbox_SetOnChange"]);
-        AssignMethod(out _apiDel.TouchCheckbox_GetCheckMark, delegates["TouchCheckbox_GetCheckMark"]);
-        AssignMethod(out _apiDel.TouchLabel_New, delegates["TouchLabel_New"]);
-        AssignMethod(out _apiDel.TouchLabel_GetAutoBreakLine, delegates["TouchLabel_GetAutoBreakLine"]);
-        AssignMethod(out _apiDel.TouchLabel_SetAutoBreakLine, delegates["TouchLabel_SetAutoBreakLine"]);
-        AssignMethod(out _apiDel.TouchLabel_GetAutoEllipsis, delegates["TouchLabel_GetAutoEllipsis"]);
-        AssignMethod(out _apiDel.TouchLabel_SetAutoEllipsis, delegates["TouchLabel_SetAutoEllipsis"]);
-        AssignMethod(out _apiDel.TouchLabel_GetHasEllipsis, delegates["TouchLabel_GetHasEllipsis"]);
-        AssignMethod(out _apiDel.TouchLabel_GetText, delegates["TouchLabel_GetText"]);
-        AssignMethod(out _apiDel.TouchLabel_SetText, delegates["TouchLabel_SetText"]);
-        AssignMethod(out _apiDel.TouchLabel_GetTextColor, delegates["TouchLabel_GetTextColor"]);
-        AssignMethod(out _apiDel.TouchLabel_SetTextColor, delegates["TouchLabel_SetTextColor"]);
-        AssignMethod(out _apiDel.TouchLabel_GetFontSize, delegates["TouchLabel_GetFontSize"]);
-        AssignMethod(out _apiDel.TouchLabel_SetFontSize, delegates["TouchLabel_SetFontSize"]);
-        AssignMethod(out _apiDel.TouchLabel_GetAlignment, delegates["TouchLabel_GetAlignment"]);
-        AssignMethod(out _apiDel.TouchLabel_SetAlignment, delegates["TouchLabel_SetAlignment"]);
-        AssignMethod(out _apiDel.TouchLabel_GetLines, delegates["TouchLabel_GetLines"]);
-        AssignMethod(out _apiDel.TouchLabel_GetMaxLines, delegates["TouchLabel_GetMaxLines"]);
-        AssignMethod(out _apiDel.TouchLabel_SetMaxLines, delegates["TouchLabel_SetMaxLines"]);
-        AssignMethod(out _apiDel.TouchBarContainer_New, delegates["TouchBarContainer_New"]);
-        AssignMethod(out _apiDel.TouchBarContainer_GetIsVertical, delegates["TouchBarContainer_GetIsVertical"]);
-        AssignMethod(out _apiDel.TouchBarContainer_SetIsVertical, delegates["TouchBarContainer_SetIsVertical"]);
-        AssignMethod(out _apiDel.TouchBarContainer_GetRatio, delegates["TouchBarContainer_GetRatio"]);
-        AssignMethod(out _apiDel.TouchBarContainer_SetRatio, delegates["TouchBarContainer_SetRatio"]);
-        AssignMethod(out _apiDel.TouchBarContainer_GetOffset, delegates["TouchBarContainer_GetOffset"]);
-        AssignMethod(out _apiDel.TouchBarContainer_SetOffset, delegates["TouchBarContainer_SetOffset"]);
-        AssignMethod(out _apiDel.TouchBarContainer_GetBar, delegates["TouchBarContainer_GetBar"]);
-        AssignMethod(out _apiDel.TouchProgressBar_New, delegates["TouchProgressBar_New"]);
-        AssignMethod(out _apiDel.TouchProgressBar_GetValue, delegates["TouchProgressBar_GetValue"]);
-        AssignMethod(out _apiDel.TouchProgressBar_SetValue, delegates["TouchProgressBar_SetValue"]);
-        AssignMethod(out _apiDel.TouchProgressBar_GetMaxValue, delegates["TouchProgressBar_GetMaxValue"]);
-        AssignMethod(out _apiDel.TouchProgressBar_SetMaxValue, delegates["TouchProgressBar_SetMaxValue"]);
-        AssignMethod(out _apiDel.TouchProgressBar_GetMinValue, delegates["TouchProgressBar_GetMinValue"]);
-        AssignMethod(out _apiDel.TouchProgressBar_SetMinValue, delegates["TouchProgressBar_SetMinValue"]);
-        AssignMethod(out _apiDel.TouchProgressBar_GetBarsGap, delegates["TouchProgressBar_GetBarsGap"]);
-        AssignMethod(out _apiDel.TouchProgressBar_SetBarsGap, delegates["TouchProgressBar_SetBarsGap"]);
-        AssignMethod(out _apiDel.TouchProgressBar_GetLabel, delegates["TouchProgressBar_GetLabel"]);
-        AssignMethod(out _apiDel.TouchSelector_New, delegates["TouchSelector_New"]);
-        AssignMethod(out _apiDel.TouchSelector_GetLoop, delegates["TouchSelector_GetLoop"]);
-        AssignMethod(out _apiDel.TouchSelector_SetLoop, delegates["TouchSelector_SetLoop"]);
-        AssignMethod(out _apiDel.TouchSelector_GetSelected, delegates["TouchSelector_GetSelected"]);
-        AssignMethod(out _apiDel.TouchSelector_SetSelected, delegates["TouchSelector_SetSelected"]);
-        AssignMethod(out _apiDel.TouchSelector_SetOnChange, delegates["TouchSelector_SetOnChange"]);
-        AssignMethod(out _apiDel.TouchSlider_New, delegates["TouchSlider_New"]);
-        AssignMethod(out _apiDel.TouchSlider_GetMaxValue, delegates["TouchSlider_GetMaxValue"]);
-        AssignMethod(out _apiDel.TouchSlider_SetMaxValue, delegates["TouchSlider_SetMaxValue"]);
-        AssignMethod(out _apiDel.TouchSlider_GetValue, delegates["TouchSlider_GetValue"]);
-        AssignMethod(out _apiDel.TouchSlider_SetValue, delegates["TouchSlider_SetValue"]);
-        AssignMethod(out _apiDel.TouchSlider_SetOnChange, delegates["TouchSlider_SetOnChange"]);
-        AssignMethod(out _apiDel.TouchSlider_GetIsInteger, delegates["TouchSlider_GetIsInteger"]);
-        AssignMethod(out _apiDel.TouchSlider_SetIsInteger, delegates["TouchSlider_SetIsInteger"]);
-        AssignMethod(out _apiDel.TouchSlider_GetAllowInput, delegates["TouchSlider_GetAllowInput"]);
-        AssignMethod(out _apiDel.TouchSlider_SetAllowInput, delegates["TouchSlider_SetAllowInput"]);
-        AssignMethod(out _apiDel.TouchSlider_GetBar, delegates["TouchSlider_GetBar"]);
-        AssignMethod(out _apiDel.TouchSlider_GetThumb, delegates["TouchSlider_GetThumb"]);
-        AssignMethod(out _apiDel.TouchSlider_GetTextInput, delegates["TouchSlider_GetTextInput"]);
-        AssignMethod(out _apiDel.TouchSliderRange_NewR, delegates["TouchSliderRange_NewR"]);
-        AssignMethod(out _apiDel.TouchSliderRange_GetValueLower, delegates["TouchSliderRange_GetValueLower"]);
-        AssignMethod(out _apiDel.TouchSliderRange_SetValueLower, delegates["TouchSliderRange_SetValueLower"]);
-        AssignMethod(out _apiDel.TouchSliderRange_SetOnChangeR, delegates["TouchSliderRange_SetOnChangeR"]);
-        AssignMethod(out _apiDel.TouchSliderRange_GetThumbLower, delegates["TouchSliderRange_GetThumbLower"]);
-        AssignMethod(out _apiDel.TouchSwitch_New, delegates["TouchSwitch_New"]);
-        AssignMethod(out _apiDel.TouchSwitch_GetIndex, delegates["TouchSwitch_GetIndex"]);
-        AssignMethod(out _apiDel.TouchSwitch_SetIndex, delegates["TouchSwitch_SetIndex"]);
-        AssignMethod(out _apiDel.TouchSwitch_GetButtons, delegates["TouchSwitch_GetButtons"]);
-        AssignMethod(out _apiDel.TouchSwitch_SetOnChange, delegates["TouchSwitch_SetOnChange"]);
-        AssignMethod(out _apiDel.TouchTextField_New, delegates["TouchTextField_New"]);
-        AssignMethod(out _apiDel.TouchTextField_GetIsEditing, delegates["TouchTextField_GetIsEditing"]);
-        AssignMethod(out _apiDel.TouchTextField_GetText, delegates["TouchTextField_GetText"]);
-        AssignMethod(out _apiDel.TouchTextField_SetText, delegates["TouchTextField_SetText"]);
-        AssignMethod(out _apiDel.TouchTextField_SetOnSubmit, delegates["TouchTextField_SetOnSubmit"]);
-        AssignMethod(out _apiDel.TouchTextField_SetOnBlur, delegates["TouchTextField_SetOnBlur"]);
-        AssignMethod(out _apiDel.TouchTextField_GetRevertOnBlur, delegates["TouchTextField_GetRevertOnBlur"]);
-        AssignMethod(out _apiDel.TouchTextField_SetRevertOnBlur, delegates["TouchTextField_SetRevertOnBlur"]);
-        AssignMethod(out _apiDel.TouchTextField_GetSubmitOnBlur, delegates["TouchTextField_GetSubmitOnBlur"]);
-        AssignMethod(out _apiDel.TouchTextField_SetSubmitOnBlur, delegates["TouchTextField_SetSubmitOnBlur"]);
-        AssignMethod(out _apiDel.TouchTextField_GetIsNumeric, delegates["TouchTextField_GetIsNumeric"]);
-        AssignMethod(out _apiDel.TouchTextField_SetIsNumeric, delegates["TouchTextField_SetIsNumeric"]);
-        AssignMethod(out _apiDel.TouchTextField_GetIsInteger, delegates["TouchTextField_GetIsInteger"]);
-        AssignMethod(out _apiDel.TouchTextField_SetIsInteger, delegates["TouchTextField_SetIsInteger"]);
-        AssignMethod(out _apiDel.TouchTextField_GetAllowNegative, delegates["TouchTextField_GetAllowNegative"]);
-        AssignMethod(out _apiDel.TouchTextField_SetAllowNegative, delegates["TouchTextField_SetAllowNegative"]);
-        AssignMethod(out _apiDel.TouchTextField_GetLabel, delegates["TouchTextField_GetLabel"]);
-        AssignMethod(out _apiDel.TouchTextField_Blur, delegates["TouchTextField_Blur"]);
-        AssignMethod(out _apiDel.TouchTextField_Focus, delegates["TouchTextField_Focus"]);
-        AssignMethod(out _apiDel.TouchWindowBar_New, delegates["TouchWindowBar_New"]);
-        AssignMethod(out _apiDel.TouchWindowBar_GetLabel, delegates["TouchWindowBar_GetLabel"]);
-        AssignMethod(out _apiDel.TouchChart_New, delegates["TouchChart_New"]);
-        AssignMethod(out _apiDel.TouchChart_GetDataSets, delegates["TouchChart_GetDataSets"]);
-        AssignMethod(out _apiDel.TouchChart_GetDataColors, delegates["TouchChart_GetDataColors"]);
-        AssignMethod(out _apiDel.TouchChart_GetGridHorizontalLines, delegates["TouchChart_GetGridHorizontalLines"]);
-        AssignMethod(out _apiDel.TouchChart_SetGridHorizontalLines, delegates["TouchChart_SetGridHorizontalLines"]);
-        AssignMethod(out _apiDel.TouchChart_GetGridVerticalLines, delegates["TouchChart_GetGridVerticalLines"]);
-        AssignMethod(out _apiDel.TouchChart_SetGridVerticalLines, delegates["TouchChart_SetGridVerticalLines"]);
-        AssignMethod(out _apiDel.TouchChart_GetMaxValue, delegates["TouchChart_GetMaxValue"]);
-        AssignMethod(out _apiDel.TouchChart_GetMinValue, delegates["TouchChart_GetMinValue"]);
-        AssignMethod(out _apiDel.TouchChart_GetGridColor, delegates["TouchChart_GetGridColor"]);
-        AssignMethod(out _apiDel.TouchChart_SetGridColor, delegates["TouchChart_SetGridColor"]);
-        AssignMethod(out _apiDel.TouchEmptyElement_New, delegates["TouchEmptyElement_New"]);
+        AssignMethod(out _apiDel.EmptyButton_New, delegates["EmptyButton_New"]);
+        AssignMethod(out _apiDel.EmptyButton_GetHandler, delegates["EmptyButton_GetHandler"]);
+        AssignMethod(out _apiDel.EmptyButton_SetOnChange, delegates["EmptyButton_SetOnChange"]);
+        AssignMethod(out _apiDel.EmptyButton_GetDisabled, delegates["EmptyButton_GetDisabled"]);
+        AssignMethod(out _apiDel.EmptyButton_SetDisabled, delegates["EmptyButton_SetDisabled"]);
+        AssignMethod(out _apiDel.Button_New, delegates["Button_New"]);
+        AssignMethod(out _apiDel.Button_GetLabel, delegates["Button_GetLabel"]);
+        AssignMethod(out _apiDel.Checkbox_New, delegates["Checkbox_New"]);
+        AssignMethod(out _apiDel.Checkbox_GetValue, delegates["Checkbox_GetValue"]);
+        AssignMethod(out _apiDel.Checkbox_SetValue, delegates["Checkbox_SetValue"]);
+        AssignMethod(out _apiDel.Checkbox_SetOnChange, delegates["Checkbox_SetOnChange"]);
+        AssignMethod(out _apiDel.Checkbox_GetCheckMark, delegates["Checkbox_GetCheckMark"]);
+        AssignMethod(out _apiDel.Label_New, delegates["Label_New"]);
+        AssignMethod(out _apiDel.Label_GetAutoBreakLine, delegates["Label_GetAutoBreakLine"]);
+        AssignMethod(out _apiDel.Label_SetAutoBreakLine, delegates["Label_SetAutoBreakLine"]);
+        AssignMethod(out _apiDel.Label_GetAutoEllipsis, delegates["Label_GetAutoEllipsis"]);
+        AssignMethod(out _apiDel.Label_SetAutoEllipsis, delegates["Label_SetAutoEllipsis"]);
+        AssignMethod(out _apiDel.Label_GetHasEllipsis, delegates["Label_GetHasEllipsis"]);
+        AssignMethod(out _apiDel.Label_GetText, delegates["Label_GetText"]);
+        AssignMethod(out _apiDel.Label_SetText, delegates["Label_SetText"]);
+        AssignMethod(out _apiDel.Label_GetTextColor, delegates["Label_GetTextColor"]);
+        AssignMethod(out _apiDel.Label_SetTextColor, delegates["Label_SetTextColor"]);
+        AssignMethod(out _apiDel.Label_GetFontSize, delegates["Label_GetFontSize"]);
+        AssignMethod(out _apiDel.Label_SetFontSize, delegates["Label_SetFontSize"]);
+        AssignMethod(out _apiDel.Label_GetAlignment, delegates["Label_GetAlignment"]);
+        AssignMethod(out _apiDel.Label_SetAlignment, delegates["Label_SetAlignment"]);
+        AssignMethod(out _apiDel.Label_GetLines, delegates["Label_GetLines"]);
+        AssignMethod(out _apiDel.Label_GetMaxLines, delegates["Label_GetMaxLines"]);
+        AssignMethod(out _apiDel.Label_SetMaxLines, delegates["Label_SetMaxLines"]);
+        AssignMethod(out _apiDel.BarContainer_New, delegates["BarContainer_New"]);
+        AssignMethod(out _apiDel.BarContainer_GetIsVertical, delegates["BarContainer_GetIsVertical"]);
+        AssignMethod(out _apiDel.BarContainer_SetIsVertical, delegates["BarContainer_SetIsVertical"]);
+        AssignMethod(out _apiDel.BarContainer_GetRatio, delegates["BarContainer_GetRatio"]);
+        AssignMethod(out _apiDel.BarContainer_SetRatio, delegates["BarContainer_SetRatio"]);
+        AssignMethod(out _apiDel.BarContainer_GetOffset, delegates["BarContainer_GetOffset"]);
+        AssignMethod(out _apiDel.BarContainer_SetOffset, delegates["BarContainer_SetOffset"]);
+        AssignMethod(out _apiDel.BarContainer_GetBar, delegates["BarContainer_GetBar"]);
+        AssignMethod(out _apiDel.ProgressBar_New, delegates["ProgressBar_New"]);
+        AssignMethod(out _apiDel.ProgressBar_GetValue, delegates["ProgressBar_GetValue"]);
+        AssignMethod(out _apiDel.ProgressBar_SetValue, delegates["ProgressBar_SetValue"]);
+        AssignMethod(out _apiDel.ProgressBar_GetMaxValue, delegates["ProgressBar_GetMaxValue"]);
+        AssignMethod(out _apiDel.ProgressBar_SetMaxValue, delegates["ProgressBar_SetMaxValue"]);
+        AssignMethod(out _apiDel.ProgressBar_GetMinValue, delegates["ProgressBar_GetMinValue"]);
+        AssignMethod(out _apiDel.ProgressBar_SetMinValue, delegates["ProgressBar_SetMinValue"]);
+        AssignMethod(out _apiDel.ProgressBar_GetBarsGap, delegates["ProgressBar_GetBarsGap"]);
+        AssignMethod(out _apiDel.ProgressBar_SetBarsGap, delegates["ProgressBar_SetBarsGap"]);
+        AssignMethod(out _apiDel.ProgressBar_GetLabel, delegates["ProgressBar_GetLabel"]);
+        AssignMethod(out _apiDel.Selector_New, delegates["Selector_New"]);
+        AssignMethod(out _apiDel.Selector_GetLoop, delegates["Selector_GetLoop"]);
+        AssignMethod(out _apiDel.Selector_SetLoop, delegates["Selector_SetLoop"]);
+        AssignMethod(out _apiDel.Selector_GetSelected, delegates["Selector_GetSelected"]);
+        AssignMethod(out _apiDel.Selector_SetSelected, delegates["Selector_SetSelected"]);
+        AssignMethod(out _apiDel.Selector_SetOnChange, delegates["Selector_SetOnChange"]);
+        AssignMethod(out _apiDel.Slider_New, delegates["Slider_New"]);
+        AssignMethod(out _apiDel.Slider_GetMaxValue, delegates["Slider_GetMaxValue"]);
+        AssignMethod(out _apiDel.Slider_SetMaxValue, delegates["Slider_SetMaxValue"]);
+        AssignMethod(out _apiDel.Slider_GetValue, delegates["Slider_GetValue"]);
+        AssignMethod(out _apiDel.Slider_SetValue, delegates["Slider_SetValue"]);
+        AssignMethod(out _apiDel.Slider_SetOnChange, delegates["Slider_SetOnChange"]);
+        AssignMethod(out _apiDel.Slider_GetIsInteger, delegates["Slider_GetIsInteger"]);
+        AssignMethod(out _apiDel.Slider_SetIsInteger, delegates["Slider_SetIsInteger"]);
+        AssignMethod(out _apiDel.Slider_GetAllowInput, delegates["Slider_GetAllowInput"]);
+        AssignMethod(out _apiDel.Slider_SetAllowInput, delegates["Slider_SetAllowInput"]);
+        AssignMethod(out _apiDel.Slider_GetBar, delegates["Slider_GetBar"]);
+        AssignMethod(out _apiDel.Slider_GetThumb, delegates["Slider_GetThumb"]);
+        AssignMethod(out _apiDel.Slider_GetTextInput, delegates["Slider_GetTextInput"]);
+        AssignMethod(out _apiDel.SliderRange_NewR, delegates["SliderRange_NewR"]);
+        AssignMethod(out _apiDel.SliderRange_GetValueLower, delegates["SliderRange_GetValueLower"]);
+        AssignMethod(out _apiDel.SliderRange_SetValueLower, delegates["SliderRange_SetValueLower"]);
+        AssignMethod(out _apiDel.SliderRange_SetOnChangeR, delegates["SliderRange_SetOnChangeR"]);
+        AssignMethod(out _apiDel.SliderRange_GetThumbLower, delegates["SliderRange_GetThumbLower"]);
+        AssignMethod(out _apiDel.Switch_New, delegates["Switch_New"]);
+        AssignMethod(out _apiDel.Switch_GetIndex, delegates["Switch_GetIndex"]);
+        AssignMethod(out _apiDel.Switch_SetIndex, delegates["Switch_SetIndex"]);
+        AssignMethod(out _apiDel.Switch_GetButtons, delegates["Switch_GetButtons"]);
+        AssignMethod(out _apiDel.Switch_SetOnChange, delegates["Switch_SetOnChange"]);
+        AssignMethod(out _apiDel.TextField_New, delegates["TextField_New"]);
+        AssignMethod(out _apiDel.TextField_GetIsEditing, delegates["TextField_GetIsEditing"]);
+        AssignMethod(out _apiDel.TextField_GetText, delegates["TextField_GetText"]);
+        AssignMethod(out _apiDel.TextField_SetText, delegates["TextField_SetText"]);
+        AssignMethod(out _apiDel.TextField_SetOnSubmit, delegates["TextField_SetOnSubmit"]);
+        AssignMethod(out _apiDel.TextField_SetOnBlur, delegates["TextField_SetOnBlur"]);
+        AssignMethod(out _apiDel.TextField_GetRevertOnBlur, delegates["TextField_GetRevertOnBlur"]);
+        AssignMethod(out _apiDel.TextField_SetRevertOnBlur, delegates["TextField_SetRevertOnBlur"]);
+        AssignMethod(out _apiDel.TextField_GetSubmitOnBlur, delegates["TextField_GetSubmitOnBlur"]);
+        AssignMethod(out _apiDel.TextField_SetSubmitOnBlur, delegates["TextField_SetSubmitOnBlur"]);
+        AssignMethod(out _apiDel.TextField_GetIsNumeric, delegates["TextField_GetIsNumeric"]);
+        AssignMethod(out _apiDel.TextField_SetIsNumeric, delegates["TextField_SetIsNumeric"]);
+        AssignMethod(out _apiDel.TextField_GetIsInteger, delegates["TextField_GetIsInteger"]);
+        AssignMethod(out _apiDel.TextField_SetIsInteger, delegates["TextField_SetIsInteger"]);
+        AssignMethod(out _apiDel.TextField_GetAllowNegative, delegates["TextField_GetAllowNegative"]);
+        AssignMethod(out _apiDel.TextField_SetAllowNegative, delegates["TextField_SetAllowNegative"]);
+        AssignMethod(out _apiDel.TextField_GetLabel, delegates["TextField_GetLabel"]);
+        AssignMethod(out _apiDel.TextField_Blur, delegates["TextField_Blur"]);
+        AssignMethod(out _apiDel.TextField_Focus, delegates["TextField_Focus"]);
+        AssignMethod(out _apiDel.WindowBar_New, delegates["WindowBar_New"]);
+        AssignMethod(out _apiDel.WindowBar_GetLabel, delegates["WindowBar_GetLabel"]);
+        AssignMethod(out _apiDel.Chart_New, delegates["Chart_New"]);
+        AssignMethod(out _apiDel.Chart_GetDataSets, delegates["Chart_GetDataSets"]);
+        AssignMethod(out _apiDel.Chart_GetDataColors, delegates["Chart_GetDataColors"]);
+        AssignMethod(out _apiDel.Chart_GetGridHorizontalLines, delegates["Chart_GetGridHorizontalLines"]);
+        AssignMethod(out _apiDel.Chart_SetGridHorizontalLines, delegates["Chart_SetGridHorizontalLines"]);
+        AssignMethod(out _apiDel.Chart_GetGridVerticalLines, delegates["Chart_GetGridVerticalLines"]);
+        AssignMethod(out _apiDel.Chart_SetGridVerticalLines, delegates["Chart_SetGridVerticalLines"]);
+        AssignMethod(out _apiDel.Chart_GetMaxValue, delegates["Chart_GetMaxValue"]);
+        AssignMethod(out _apiDel.Chart_GetMinValue, delegates["Chart_GetMinValue"]);
+        AssignMethod(out _apiDel.Chart_GetGridColor, delegates["Chart_GetGridColor"]);
+        AssignMethod(out _apiDel.Chart_SetGridColor, delegates["Chart_SetGridColor"]);
+        AssignMethod(out _apiDel.EmptyElement_New, delegates["EmptyElement_New"]);
         IsReady = true;
       }
     }
     private void AssignMethod<T>(out T field, object method) => field = (T)method;
   }
-  public class TouchUiKitDelegator
+  public class UiKitDelegator
   {
     public Func<object, IngameIMyCubeBlock> TouchScreen_GetBlock;
     public Func<object, IngameIMyTextSurface> TouchScreen_GetSurface;
@@ -295,15 +295,15 @@ namespace Lima.API.PB
     public Func<object, int> TouchScreen_GetRotation;
     public Func<object, IngameIMyCubeBlock, IngameIMyTextSurface, bool> TouchScreen_CompareWithBlockAndSurface;
     public Action<object> TouchScreen_ForceDispose;
-    public Func<object, object> TouchCursor_New;
-    public Func<object, bool> TouchCursor_GetEnabled;
-    public Action<object, bool> TouchCursor_SetEnabled;
-    public Func<object, float> TouchCursor_GetScale;
-    public Action<object, float> TouchCursor_SetScale;
-    public Func<object, Vector2> TouchCursor_GetPosition;
-    public Func<object, float, float, float, float, bool> TouchCursor_IsInsideArea;
-    public Func<object, List<MySprite>> TouchCursor_GetSprites;
-    public Action<object> TouchCursor_ForceDispose;
+    public Func<object, object> Cursor_New;
+    public Func<object, bool> Cursor_GetEnabled;
+    public Action<object, bool> Cursor_SetEnabled;
+    public Func<object, float> Cursor_GetScale;
+    public Action<object, float> Cursor_SetScale;
+    public Func<object, Vector2> Cursor_GetPosition;
+    public Func<object, float, float, float, float, bool> Cursor_IsInsideArea;
+    public Func<object, List<MySprite>> Cursor_GetSprites;
+    public Action<object> Cursor_ForceDispose;
     public Func<object> ClickHandler_New;
     public Func<object, Vector4> ClickHandler_GetHitArea;
     public Action<object, Vector4> ClickHandler_SetHitArea;
@@ -313,76 +313,76 @@ namespace Lima.API.PB
     public Func<object, bool> ClickHandler_JustReleased;
     public Func<object, bool> ClickHandler_JustPressed;
     public Action<object, object> ClickHandler_UpdateStatus;
-    public Func<object, Color> TouchTheme_GetBgColor;
-    public Func<object, Color> TouchTheme_GetWhiteColor;
-    public Func<object, Color> TouchTheme_GetMainColor;
-    public Func<object, int, Color> TouchTheme_GetMainColorDarker;
-    public Func<object, string, string, float, Vector2> TouchTheme_MeasureStringInPixels;
-    public Func<object, float> TouchTheme_GetScale;
-    public Action<object, float> TouchTheme_SetScale;
-    public Func<object, string> TouchTheme_GetFont;
-    public Action<object, string> TouchTheme_SetFont;
-    public Func<object, bool> TouchElementBase_GetEnabled;
-    public Action<object, bool> TouchElementBase_SetEnabled;
-    public Func<object, bool> TouchElementBase_GetAbsolute;
-    public Action<object, bool> TouchElementBase_SetAbsolute;
-    public Func<object, byte> TouchElementBase_GetSelfAlignment;
-    public Action<object, byte> TouchElementBase_SetSelfAlignment;
-    public Func<object, Vector2> TouchElementBase_GetPosition;
-    public Action<object, Vector2> TouchElementBase_SetPosition;
-    public Func<object, Vector4> TouchElementBase_GetMargin;
-    public Action<object, Vector4> TouchElementBase_SetMargin;
-    public Func<object, Vector2> TouchElementBase_GetFlex;
-    public Action<object, Vector2> TouchElementBase_SetFlex;
-    public Func<object, Vector2> TouchElementBase_GetPixels;
-    public Action<object, Vector2> TouchElementBase_SetPixels;
-    public Func<object, Vector2> TouchElementBase_GetSize;
-    public Func<object, Vector2> TouchElementBase_GetBoundaries;
-    public Func<object, object> TouchElementBase_GetApp;
-    public Func<object, object> TouchElementBase_GetParent;
-    public Func<object, List<MySprite>> TouchElementBase_GetSprites;
-    public Action<object> TouchElementBase_ForceUpdate;
-    public Action<object> TouchElementBase_ForceDispose;
-    public Action<object, Action> TouchElementBase_RegisterUpdate;
-    public Action<object, Action> TouchElementBase_UnregisterUpdate;
-    public Func<object, List<object>> TouchContainerBase_GetChildren;
-    public Func<object, Vector2> TouchContainerBase_GetFlexSize;
-    public Action<object, object> TouchContainerBase_AddChild;
-    public Action<object, object, int> TouchContainerBase_AddChildAt;
-    public Action<object, object> TouchContainerBase_RemoveChild;
-    public Action<object, int> TouchContainerBase_RemoveChildAt;
-    public Action<object, object, int> TouchContainerBase_MoveChild;
-    public Func<byte, Color?, object> TouchView_New;
-    public Func<object, bool> TouchView_GetOverflow;
-    public Action<object, bool> TouchView_SetOverflow;
-    public Func<object, byte> TouchView_GetDirection;
-    public Action<object, byte> TouchView_SetDirection;
-    public Func<object, byte> TouchView_GetAlignment;
-    public Action<object, byte> TouchView_SetAlignment;
-    public Func<object, byte> TouchView_GetAnchor;
-    public Action<object, byte> TouchView_SetAnchor;
-    public Func<object, bool> TouchView_GetUseThemeColors;
-    public Action<object, bool> TouchView_SetUseThemeColors;
-    public Func<object, Color> TouchView_GetBgColor;
-    public Action<object, Color> TouchView_SetBgColor;
-    public Func<object, Color> TouchView_GetBorderColor;
-    public Action<object, Color> TouchView_SetBorderColor;
-    public Func<object, Vector4> TouchView_GetBorder;
-    public Action<object, Vector4> TouchView_SetBorder;
-    public Func<object, Vector4> TouchView_GetPadding;
-    public Action<object, Vector4> TouchView_SetPadding;
-    public Func<object, int> TouchView_GetGap;
-    public Action<object, int> TouchView_SetGap;
-    public Func<int, Color?, object> TouchScrollView_New;
-    public Func<object, float> TouchScrollView_GetScroll;
-    public Action<object, float> TouchScrollView_SetScroll;
-    public Func<object, bool> TouchScrollView_GetScrollAlwaysVisible;
-    public Action<object, bool> TouchScrollView_SetScrollAlwaysVisible;
-    public Func<object, bool> TouchScrollView_GetScrollWheelEnabled;
-    public Action<object, bool> TouchScrollView_SetScrollWheelEnabled;
-    public Func<object, float> TouchScrollView_GetScrollWheelStep;
-    public Action<object, float> TouchScrollView_SetScrollWheelStep;
-    public Func<object, object> TouchScrollView_GetScrollBar;
+    public Func<object, Color> Theme_GetBgColor;
+    public Func<object, Color> Theme_GetWhiteColor;
+    public Func<object, Color> Theme_GetMainColor;
+    public Func<object, int, Color> Theme_GetMainColorDarker;
+    public Func<object, string, string, float, Vector2> Theme_MeasureStringInPixels;
+    public Func<object, float> Theme_GetScale;
+    public Action<object, float> Theme_SetScale;
+    public Func<object, string> Theme_GetFont;
+    public Action<object, string> Theme_SetFont;
+    public Func<object, bool> ElementBase_GetEnabled;
+    public Action<object, bool> ElementBase_SetEnabled;
+    public Func<object, bool> ElementBase_GetAbsolute;
+    public Action<object, bool> ElementBase_SetAbsolute;
+    public Func<object, byte> ElementBase_GetSelfAlignment;
+    public Action<object, byte> ElementBase_SetSelfAlignment;
+    public Func<object, Vector2> ElementBase_GetPosition;
+    public Action<object, Vector2> ElementBase_SetPosition;
+    public Func<object, Vector4> ElementBase_GetMargin;
+    public Action<object, Vector4> ElementBase_SetMargin;
+    public Func<object, Vector2> ElementBase_GetFlex;
+    public Action<object, Vector2> ElementBase_SetFlex;
+    public Func<object, Vector2> ElementBase_GetPixels;
+    public Action<object, Vector2> ElementBase_SetPixels;
+    public Func<object, Vector2> ElementBase_GetSize;
+    public Func<object, Vector2> ElementBase_GetBoundaries;
+    public Func<object, object> ElementBase_GetApp;
+    public Func<object, object> ElementBase_GetParent;
+    public Func<object, List<MySprite>> ElementBase_GetSprites;
+    public Action<object> ElementBase_ForceUpdate;
+    public Action<object> ElementBase_ForceDispose;
+    public Action<object, Action> ElementBase_RegisterUpdate;
+    public Action<object, Action> ElementBase_UnregisterUpdate;
+    public Func<object, List<object>> ContainerBase_GetChildren;
+    public Func<object, Vector2> ContainerBase_GetFlexSize;
+    public Action<object, object> ContainerBase_AddChild;
+    public Action<object, object, int> ContainerBase_AddChildAt;
+    public Action<object, object> ContainerBase_RemoveChild;
+    public Action<object, int> ContainerBase_RemoveChildAt;
+    public Action<object, object, int> ContainerBase_MoveChild;
+    public Func<byte, Color?, object> View_New;
+    public Func<object, bool> View_GetOverflow;
+    public Action<object, bool> View_SetOverflow;
+    public Func<object, byte> View_GetDirection;
+    public Action<object, byte> View_SetDirection;
+    public Func<object, byte> View_GetAlignment;
+    public Action<object, byte> View_SetAlignment;
+    public Func<object, byte> View_GetAnchor;
+    public Action<object, byte> View_SetAnchor;
+    public Func<object, bool> View_GetUseThemeColors;
+    public Action<object, bool> View_SetUseThemeColors;
+    public Func<object, Color> View_GetBgColor;
+    public Action<object, Color> View_SetBgColor;
+    public Func<object, Color> View_GetBorderColor;
+    public Action<object, Color> View_SetBorderColor;
+    public Func<object, Vector4> View_GetBorder;
+    public Action<object, Vector4> View_SetBorder;
+    public Func<object, Vector4> View_GetPadding;
+    public Action<object, Vector4> View_SetPadding;
+    public Func<object, int> View_GetGap;
+    public Action<object, int> View_SetGap;
+    public Func<int, Color?, object> ScrollView_New;
+    public Func<object, float> ScrollView_GetScroll;
+    public Action<object, float> ScrollView_SetScroll;
+    public Func<object, bool> ScrollView_GetScrollAlwaysVisible;
+    public Action<object, bool> ScrollView_SetScrollAlwaysVisible;
+    public Func<object, bool> ScrollView_GetScrollWheelEnabled;
+    public Action<object, bool> ScrollView_SetScrollWheelEnabled;
+    public Func<object, float> ScrollView_GetScrollWheelStep;
+    public Action<object, float> ScrollView_SetScrollWheelStep;
+    public Func<object, object> ScrollView_GetScrollBar;
     public Func<IngameIMyCubeBlock, IngameIMyTextSurface, object> TouchApp_New;
     public Func<object, object> TouchApp_GetScreen;
     public Func<object, RectangleF> TouchApp_GetViewport;
@@ -390,119 +390,119 @@ namespace Lima.API.PB
     public Func<object, object> TouchApp_GetTheme;
     public Func<object, bool> TouchApp_GetDefaultBg;
     public Action<object, bool> TouchApp_SetDefaultBg;
-    public Func<Action, object> TouchEmptyButton_New;
-    public Func<object, object> TouchEmptyButton_GetHandler;
-    public Action<object, Action> TouchEmptyButton_SetOnChange;
-    public Func<object, bool> TouchEmptyButton_GetDisabled;
-    public Action<object, bool> TouchEmptyButton_SetDisabled;
-    public Func<string, Action, object> TouchButton_New;
-    public Func<object, object> TouchButton_GetLabel;
-    public Func<Action<bool>, bool, object> TouchCheckbox_New;
-    public Func<object, bool> TouchCheckbox_GetValue;
-    public Action<object, bool> TouchCheckbox_SetValue;
-    public Action<object, Action<bool>> TouchCheckbox_SetOnChange;
-    public Func<object, object> TouchCheckbox_GetCheckMark;
-    public Func<string, float, TextAlignment, object> TouchLabel_New;
-    public Func<object, bool> TouchLabel_GetAutoBreakLine;
-    public Action<object, bool> TouchLabel_SetAutoBreakLine;
-    public Func<object, byte> TouchLabel_GetAutoEllipsis;
-    public Action<object, byte> TouchLabel_SetAutoEllipsis;
-    public Func<object, bool> TouchLabel_GetHasEllipsis;
-    public Func<object, string> TouchLabel_GetText;
-    public Action<object, string> TouchLabel_SetText;
-    public Func<object, Color?> TouchLabel_GetTextColor;
-    public Action<object, Color> TouchLabel_SetTextColor;
-    public Func<object, float> TouchLabel_GetFontSize;
-    public Action<object, float> TouchLabel_SetFontSize;
-    public Func<object, TextAlignment> TouchLabel_GetAlignment;
-    public Action<object, TextAlignment> TouchLabel_SetAlignment;
-    public Func<object, int> TouchLabel_GetLines;
-    public Func<object, int> TouchLabel_GetMaxLines;
-    public Action<object, int> TouchLabel_SetMaxLines;
-    public Func<bool, object> TouchBarContainer_New;
-    public Func<object, bool> TouchBarContainer_GetIsVertical;
-    public Action<object, bool> TouchBarContainer_SetIsVertical;
-    public Func<object, float> TouchBarContainer_GetRatio;
-    public Action<object, float> TouchBarContainer_SetRatio;
-    public Func<object, float> TouchBarContainer_GetOffset;
-    public Action<object, float> TouchBarContainer_SetOffset;
-    public Func<object, object> TouchBarContainer_GetBar;
-    public Func<float, float, bool, float, object> TouchProgressBar_New;
-    public Func<object, float> TouchProgressBar_GetValue;
-    public Action<object, float> TouchProgressBar_SetValue;
-    public Func<object, float> TouchProgressBar_GetMaxValue;
-    public Action<object, float> TouchProgressBar_SetMaxValue;
-    public Func<object, float> TouchProgressBar_GetMinValue;
-    public Action<object, float> TouchProgressBar_SetMinValue;
-    public Func<object, float> TouchProgressBar_GetBarsGap;
-    public Action<object, float> TouchProgressBar_SetBarsGap;
-    public Func<object, object> TouchProgressBar_GetLabel;
-    public Func<List<string>, Action<int, string>, bool, object> TouchSelector_New;
-    public Func<object, bool> TouchSelector_GetLoop;
-    public Action<object, bool> TouchSelector_SetLoop;
-    public Func<object, int> TouchSelector_GetSelected;
-    public Action<object, int> TouchSelector_SetSelected;
-    public Action<object, Action<int, string>> TouchSelector_SetOnChange;
-    public Func<float, float, Action<float>, object> TouchSlider_New;
-    public Func<object, float> TouchSlider_GetMaxValue;
-    public Action<object, float> TouchSlider_SetMaxValue;
-    public Func<object, float> TouchSlider_GetMinValue;
-    public Action<object, float> TouchSlider_SetMinValue;
-    public Func<object, float> TouchSlider_GetValue;
-    public Action<object, float> TouchSlider_SetValue;
-    public Action<object, Action<float>> TouchSlider_SetOnChange;
-    public Func<object, bool> TouchSlider_GetIsInteger;
-    public Action<object, bool> TouchSlider_SetIsInteger;
-    public Func<object, bool> TouchSlider_GetAllowInput;
-    public Action<object, bool> TouchSlider_SetAllowInput;
-    public Func<object, object> TouchSlider_GetBar;
-    public Func<object, object> TouchSlider_GetThumb;
-    public Func<object, object> TouchSlider_GetTextInput;
-    public Func<float, float, Action<float, float>, object> TouchSliderRange_NewR;
-    public Func<object, float> TouchSliderRange_GetValueLower;
-    public Action<object, float> TouchSliderRange_SetValueLower;
-    public Action<object, Action<float, float>> TouchSliderRange_SetOnChangeR;
-    public Func<object, object> TouchSliderRange_GetThumbLower;
-    public Func<string[], int, Action<int>, object> TouchSwitch_New;
-    public Func<object, int> TouchSwitch_GetIndex;
-    public Action<object, int> TouchSwitch_SetIndex;
-    public Func<object, object[]> TouchSwitch_GetButtons;
-    public Action<object, Action<int>> TouchSwitch_SetOnChange;
-    public Func<object> TouchTextField_New;
-    public Func<object, bool> TouchTextField_GetIsEditing;
-    public Func<object, string> TouchTextField_GetText;
-    public Action<object, string> TouchTextField_SetText;
-    public Action<object, Action<string>> TouchTextField_SetOnSubmit;
-    public Action<object, Action<string>> TouchTextField_SetOnBlur;
-    public Func<object, bool> TouchTextField_GetRevertOnBlur;
-    public Action<object, bool> TouchTextField_SetRevertOnBlur;
-    public Func<object, bool> TouchTextField_GetSubmitOnBlur;
-    public Action<object, bool> TouchTextField_SetSubmitOnBlur;
-    public Func<object, bool> TouchTextField_GetIsNumeric;
-    public Action<object, bool> TouchTextField_SetIsNumeric;
-    public Func<object, bool> TouchTextField_GetIsInteger;
-    public Action<object, bool> TouchTextField_SetIsInteger;
-    public Func<object, bool> TouchTextField_GetAllowNegative;
-    public Action<object, bool> TouchTextField_SetAllowNegative;
-    public Func<object, object> TouchTextField_GetLabel;
-    public Action<object> TouchTextField_Blur;
-    public Action<object> TouchTextField_Focus;
-    public Func<string, object> TouchWindowBar_New;
-    public Func<object, object> TouchWindowBar_GetLabel;
-    public Func<int, object> TouchChart_New;
-    public Func<object, List<float[]>> TouchChart_GetDataSets;
-    public Func<object, List<Color>> TouchChart_GetDataColors;
-    public Func<object, int> TouchChart_GetGridHorizontalLines;
-    public Action<object, int> TouchChart_SetGridHorizontalLines;
-    public Func<object, int> TouchChart_GetGridVerticalLines;
-    public Action<object, int> TouchChart_SetGridVerticalLines;
-    public Func<object, float> TouchChart_GetMaxValue;
-    public Func<object, float> TouchChart_GetMinValue;
-    public Func<object, Color?> TouchChart_GetGridColor;
-    public Action<object, Color> TouchChart_SetGridColor;
-    public Func<object> TouchEmptyElement_New;
+    public Func<Action, object> EmptyButton_New;
+    public Func<object, object> EmptyButton_GetHandler;
+    public Action<object, Action> EmptyButton_SetOnChange;
+    public Func<object, bool> EmptyButton_GetDisabled;
+    public Action<object, bool> EmptyButton_SetDisabled;
+    public Func<string, Action, object> Button_New;
+    public Func<object, object> Button_GetLabel;
+    public Func<Action<bool>, bool, object> Checkbox_New;
+    public Func<object, bool> Checkbox_GetValue;
+    public Action<object, bool> Checkbox_SetValue;
+    public Action<object, Action<bool>> Checkbox_SetOnChange;
+    public Func<object, object> Checkbox_GetCheckMark;
+    public Func<string, float, TextAlignment, object> Label_New;
+    public Func<object, bool> Label_GetAutoBreakLine;
+    public Action<object, bool> Label_SetAutoBreakLine;
+    public Func<object, byte> Label_GetAutoEllipsis;
+    public Action<object, byte> Label_SetAutoEllipsis;
+    public Func<object, bool> Label_GetHasEllipsis;
+    public Func<object, string> Label_GetText;
+    public Action<object, string> Label_SetText;
+    public Func<object, Color?> Label_GetTextColor;
+    public Action<object, Color> Label_SetTextColor;
+    public Func<object, float> Label_GetFontSize;
+    public Action<object, float> Label_SetFontSize;
+    public Func<object, TextAlignment> Label_GetAlignment;
+    public Action<object, TextAlignment> Label_SetAlignment;
+    public Func<object, int> Label_GetLines;
+    public Func<object, int> Label_GetMaxLines;
+    public Action<object, int> Label_SetMaxLines;
+    public Func<bool, object> BarContainer_New;
+    public Func<object, bool> BarContainer_GetIsVertical;
+    public Action<object, bool> BarContainer_SetIsVertical;
+    public Func<object, float> BarContainer_GetRatio;
+    public Action<object, float> BarContainer_SetRatio;
+    public Func<object, float> BarContainer_GetOffset;
+    public Action<object, float> BarContainer_SetOffset;
+    public Func<object, object> BarContainer_GetBar;
+    public Func<float, float, bool, float, object> ProgressBar_New;
+    public Func<object, float> ProgressBar_GetValue;
+    public Action<object, float> ProgressBar_SetValue;
+    public Func<object, float> ProgressBar_GetMaxValue;
+    public Action<object, float> ProgressBar_SetMaxValue;
+    public Func<object, float> ProgressBar_GetMinValue;
+    public Action<object, float> ProgressBar_SetMinValue;
+    public Func<object, float> ProgressBar_GetBarsGap;
+    public Action<object, float> ProgressBar_SetBarsGap;
+    public Func<object, object> ProgressBar_GetLabel;
+    public Func<List<string>, Action<int, string>, bool, object> Selector_New;
+    public Func<object, bool> Selector_GetLoop;
+    public Action<object, bool> Selector_SetLoop;
+    public Func<object, int> Selector_GetSelected;
+    public Action<object, int> Selector_SetSelected;
+    public Action<object, Action<int, string>> Selector_SetOnChange;
+    public Func<float, float, Action<float>, object> Slider_New;
+    public Func<object, float> Slider_GetMaxValue;
+    public Action<object, float> Slider_SetMaxValue;
+    public Func<object, float> Slider_GetMinValue;
+    public Action<object, float> Slider_SetMinValue;
+    public Func<object, float> Slider_GetValue;
+    public Action<object, float> Slider_SetValue;
+    public Action<object, Action<float>> Slider_SetOnChange;
+    public Func<object, bool> Slider_GetIsInteger;
+    public Action<object, bool> Slider_SetIsInteger;
+    public Func<object, bool> Slider_GetAllowInput;
+    public Action<object, bool> Slider_SetAllowInput;
+    public Func<object, object> Slider_GetBar;
+    public Func<object, object> Slider_GetThumb;
+    public Func<object, object> Slider_GetTextInput;
+    public Func<float, float, Action<float, float>, object> SliderRange_NewR;
+    public Func<object, float> SliderRange_GetValueLower;
+    public Action<object, float> SliderRange_SetValueLower;
+    public Action<object, Action<float, float>> SliderRange_SetOnChangeR;
+    public Func<object, object> SliderRange_GetThumbLower;
+    public Func<string[], int, Action<int>, object> Switch_New;
+    public Func<object, int> Switch_GetIndex;
+    public Action<object, int> Switch_SetIndex;
+    public Func<object, object[]> Switch_GetButtons;
+    public Action<object, Action<int>> Switch_SetOnChange;
+    public Func<object> TextField_New;
+    public Func<object, bool> TextField_GetIsEditing;
+    public Func<object, string> TextField_GetText;
+    public Action<object, string> TextField_SetText;
+    public Action<object, Action<string>> TextField_SetOnSubmit;
+    public Action<object, Action<string>> TextField_SetOnBlur;
+    public Func<object, bool> TextField_GetRevertOnBlur;
+    public Action<object, bool> TextField_SetRevertOnBlur;
+    public Func<object, bool> TextField_GetSubmitOnBlur;
+    public Action<object, bool> TextField_SetSubmitOnBlur;
+    public Func<object, bool> TextField_GetIsNumeric;
+    public Action<object, bool> TextField_SetIsNumeric;
+    public Func<object, bool> TextField_GetIsInteger;
+    public Action<object, bool> TextField_SetIsInteger;
+    public Func<object, bool> TextField_GetAllowNegative;
+    public Action<object, bool> TextField_SetAllowNegative;
+    public Func<object, object> TextField_GetLabel;
+    public Action<object> TextField_Blur;
+    public Action<object> TextField_Focus;
+    public Func<string, object> WindowBar_New;
+    public Func<object, object> WindowBar_GetLabel;
+    public Func<int, object> Chart_New;
+    public Func<object, List<float[]>> Chart_GetDataSets;
+    public Func<object, List<Color>> Chart_GetDataColors;
+    public Func<object, int> Chart_GetGridHorizontalLines;
+    public Action<object, int> Chart_SetGridHorizontalLines;
+    public Func<object, int> Chart_GetGridVerticalLines;
+    public Action<object, int> Chart_SetGridVerticalLines;
+    public Func<object, float> Chart_GetMaxValue;
+    public Func<object, float> Chart_GetMinValue;
+    public Func<object, Color?> Chart_GetGridColor;
+    public Action<object, Color> Chart_SetGridColor;
+    public Func<object> EmptyElement_New;
   }
-  public abstract class WrapperBase<TT> where TT : TouchUiKitDelegator
+  public abstract class WrapperBase<TT> where TT : UiKitDelegator
   {
     static protected TT Api;
     internal static void SetApi(TT api) => Api = api;
@@ -517,7 +517,7 @@ namespace Lima.API.PB
     internal object InternalObj { get; private set; }
     public WrapperBase(object internalObject) { InternalObj = internalObject; }
   }
-  public class TouchScreen : WrapperBase<TouchUiKitDelegator>
+  public class TouchScreen : WrapperBase<UiKitDelegator>
   {
     /// <summary>
     /// Do not call this ctor directly, unless you have the reference of the original object from the API.
@@ -537,21 +537,21 @@ namespace Lima.API.PB
     /// </summary>
     public void ForceDispose() => Api.TouchScreen_ForceDispose.Invoke(InternalObj);
   }
-  public class TouchCursor : WrapperBase<TouchUiKitDelegator>
+  public class Cursor : WrapperBase<UiKitDelegator>
   {
-    public TouchCursor(TouchScreen screen) : base(Api.TouchCursor_New(screen.InternalObj)) { }
+    public Cursor(TouchScreen screen) : base(Api.Cursor_New(screen.InternalObj)) { }
     /// <summary>
     /// Do not call this ctor directly, unless you have the reference of the original object from the API.
     /// </summary>
-    public TouchCursor(object internalObject) : base(internalObject) { }
-    public bool Enabled { get { return Api.TouchCursor_GetEnabled.Invoke(InternalObj); } set { Api.TouchCursor_SetEnabled.Invoke(InternalObj, value); } }
-    public float Scale { get { return Api.TouchCursor_GetScale.Invoke(InternalObj); } set { Api.TouchCursor_SetScale.Invoke(InternalObj, value); } }
-    public Vector2 Position { get { return Api.TouchCursor_GetPosition.Invoke(InternalObj); } }
-    public bool IsInsideArea(float x, float y, float z, float w) => Api.TouchCursor_IsInsideArea.Invoke(InternalObj, x, y, z, w);
-    public List<MySprite> GetSprites() => Api.TouchCursor_GetSprites.Invoke(InternalObj);
-    public void ForceDispose() => Api.TouchCursor_ForceDispose.Invoke(InternalObj);
+    public Cursor(object internalObject) : base(internalObject) { }
+    public bool Enabled { get { return Api.Cursor_GetEnabled.Invoke(InternalObj); } set { Api.Cursor_SetEnabled.Invoke(InternalObj, value); } }
+    public float Scale { get { return Api.Cursor_GetScale.Invoke(InternalObj); } set { Api.Cursor_SetScale.Invoke(InternalObj, value); } }
+    public Vector2 Position { get { return Api.Cursor_GetPosition.Invoke(InternalObj); } }
+    public bool IsInsideArea(float x, float y, float z, float w) => Api.Cursor_IsInsideArea.Invoke(InternalObj, x, y, z, w);
+    public List<MySprite> GetSprites() => Api.Cursor_GetSprites.Invoke(InternalObj);
+    public void ForceDispose() => Api.Cursor_ForceDispose.Invoke(InternalObj);
   }
-  public class ClickHandler : WrapperBase<TouchUiKitDelegator>
+  public class ClickHandler : WrapperBase<UiKitDelegator>
   {
     public ClickHandler() : base(Api.ClickHandler_New()) { }
     /// <summary>
@@ -573,199 +573,199 @@ namespace Lima.API.PB
     public void UpdateStatus(TouchScreen screen) => Api.ClickHandler_UpdateStatus.Invoke(InternalObj, screen.InternalObj);
   }
   /// <summary>
-  /// <see href="https://github.com/adrianulima/TouchScreenAPI/blob/main/Data/Scripts/Lima/Touch/UiKit/TouchTheme.cs"/>
+  /// <see href="https://github.com/adrianulima/TouchScreenAPI/blob/main/Data/Scripts/Lima/Touch/UiKit/Theme.cs"/>
   /// </summary>
-  public class TouchTheme : WrapperBase<TouchUiKitDelegator>
+  public class Theme : WrapperBase<UiKitDelegator>
   {
     /// <summary>
     /// Do not call this ctor directly, unless you have the reference of the original object from the API.
     /// </summary>
-    public TouchTheme(object internalObject) : base(internalObject) { }
-    public Color BgColor { get { return Api.TouchTheme_GetBgColor.Invoke(InternalObj); } }
+    public Theme(object internalObject) : base(internalObject) { }
+    public Color BgColor { get { return Api.Theme_GetBgColor.Invoke(InternalObj); } }
     /// <summary>
     /// This is a high contras color related to main color, it is not exactly a white.
     /// Also can be blacksh if the background color is too light.
     /// </summary>
-    public Color WhiteColor { get { return Api.TouchTheme_GetWhiteColor.Invoke(InternalObj); } }
-    public Color MainColor { get { return Api.TouchTheme_GetMainColor.Invoke(InternalObj); } }
+    public Color WhiteColor { get { return Api.Theme_GetWhiteColor.Invoke(InternalObj); } }
+    public Color MainColor { get { return Api.Theme_GetMainColor.Invoke(InternalObj); } }
     /// <summary>
     /// This gets a darker version of the main color pre calculated on the Theme. Lower numbers are darker.
     /// </summary>
     /// <param name="value">One of the options: 1, 2, 3 , 4, 5, 6, 7, 8, 9</param>
     /// <returns>The calculated color</returns>
-    public Color GetMainColorDarker(int value) => Api.TouchTheme_GetMainColorDarker.Invoke(InternalObj, value);
+    public Color GetMainColorDarker(int value) => Api.Theme_GetMainColorDarker.Invoke(InternalObj, value);
     /// <summary>
     /// Scales the entire App and all its elements, useful for small screens. Can be called at any time.
     /// </summary>
-    public float Scale { get { return Api.TouchTheme_GetScale.Invoke(InternalObj); } set { Api.TouchTheme_SetScale.Invoke(InternalObj, value); } }
-    public string Font { get { return Api.TouchTheme_GetFont.Invoke(InternalObj); } set { Api.TouchTheme_SetFont.Invoke(InternalObj, value); } }
+    public float Scale { get { return Api.Theme_GetScale.Invoke(InternalObj); } set { Api.Theme_SetScale.Invoke(InternalObj, value); } }
+    public string Font { get { return Api.Theme_GetFont.Invoke(InternalObj); } set { Api.Theme_SetFont.Invoke(InternalObj, value); } }
     /// <summary>
     /// Helper to calculate the width of a text on screen.
     /// </summary>
     /// <returns>A Vector2 with width and height.</returns>
-    public Vector2 MeasureStringInPixels(string text, string font, float scale) => Api.TouchTheme_MeasureStringInPixels.Invoke(InternalObj, text, font, scale);
+    public Vector2 MeasureStringInPixels(string text, string font, float scale) => Api.Theme_MeasureStringInPixels.Invoke(InternalObj, text, font, scale);
   }
   /// <summary>
-  /// <see href="https://github.com/adrianulima/TouchScreenAPI/blob/main/Data/Scripts/Lima/Touch/UiKit/Elements/TouchElementBase.cs"/>
+  /// <see href="https://github.com/adrianulima/TouchScreenAPI/blob/main/Data/Scripts/Lima/Touch/UiKit/Elements/ElementBase.cs"/>
   /// </summary>
-  public abstract class TouchElementBase : WrapperBase<TouchUiKitDelegator>
+  public abstract class ElementBase : WrapperBase<UiKitDelegator>
   {
     private TouchApp _app;
-    private TouchView _parent;
+    private View _parent;
     /// <summary>
     /// Do not call this ctor directly, unless you have the reference of the original object from the API.
     /// </summary>
-    public TouchElementBase(object internalObject) : base(internalObject) { }
+    public ElementBase(object internalObject) : base(internalObject) { }
     /// <summary>
     /// If false, the element will not be drawn, useful if you want to hide and show but not destroy. Better than removing it.
     /// </summary>
-    public bool Enabled { get { return Api.TouchElementBase_GetEnabled.Invoke(InternalObj); } set { Api.TouchElementBase_SetEnabled.Invoke(InternalObj, value); } }
+    public bool Enabled { get { return Api.ElementBase_GetEnabled.Invoke(InternalObj); } set { Api.ElementBase_SetEnabled.Invoke(InternalObj, value); } }
     /// <summary>
     /// If true, the element will not align and anchor with the parent. Its position will be related to the screen and size not counted for parent inner size.
     /// </summary>
-    public bool Absolute { get { return Api.TouchElementBase_GetAbsolute.Invoke(InternalObj); } set { Api.TouchElementBase_SetAbsolute.Invoke(InternalObj, value); } }
+    public bool Absolute { get { return Api.ElementBase_GetAbsolute.Invoke(InternalObj); } set { Api.ElementBase_SetAbsolute.Invoke(InternalObj, value); } }
     /// <summary>
-    /// Controls the aligment of the element on the crossed axis of parent <see cref="TouchView.Direction" />. Useful for overriding parent's Aligment.
+    /// Controls the aligment of the element on the crossed axis of parent <see cref="View.Direction" />. Useful for overriding parent's Aligment.
     /// </summary>
-    public ViewAlignment SelfAlignment { get { return (ViewAlignment)Api.TouchElementBase_GetSelfAlignment.Invoke(InternalObj); } set { Api.TouchElementBase_SetSelfAlignment.Invoke(InternalObj, (byte)value); } }
+    public ViewAlignment SelfAlignment { get { return (ViewAlignment)Api.ElementBase_GetSelfAlignment.Invoke(InternalObj); } set { Api.ElementBase_SetSelfAlignment.Invoke(InternalObj, (byte)value); } }
     /// <summary>
     /// Position of the element related to screen. This is overriden by the parent if the element's <see cref="Absolute" /> is not true.
     /// </summary>
-    public Vector2 Position { get { return Api.TouchElementBase_GetPosition.Invoke(InternalObj); } set { Api.TouchElementBase_SetPosition.Invoke(InternalObj, value); } }
+    public Vector2 Position { get { return Api.ElementBase_GetPosition.Invoke(InternalObj); } set { Api.ElementBase_SetPosition.Invoke(InternalObj, value); } }
     /// <summary>
     /// Margin values for four sides. Starting from Left, Top, Right and Bottom.
     /// </summary>
-    public Vector4 Margin { get { return Api.TouchElementBase_GetMargin.Invoke(InternalObj); } set { Api.TouchElementBase_SetMargin.Invoke(InternalObj, value); } }
+    public Vector4 Margin { get { return Api.ElementBase_GetMargin.Invoke(InternalObj); } set { Api.ElementBase_SetMargin.Invoke(InternalObj, value); } }
     /// <summary>
     /// The ratio of the parent that this element should fill. 1 means 100%. If the parent has more children, the proportional % will be applied.
     /// This is stackable with <see cref="Pixels" />. So set as 0 the axis if you just want a fixed pixels size.
     /// </summary>
-    public Vector2 Flex { get { return Api.TouchElementBase_GetFlex.Invoke(InternalObj); } set { Api.TouchElementBase_SetFlex.Invoke(InternalObj, value); } }
+    public Vector2 Flex { get { return Api.ElementBase_GetFlex.Invoke(InternalObj); } set { Api.ElementBase_SetFlex.Invoke(InternalObj, value); } }
     /// <summary>
     /// Fixed size in pixels, not related to parent.
     /// This is stackable with <see cref="Flex" />. So set as 0 the axis if you just want the size only related to parent.
     /// </summary>
-    public Vector2 Pixels { get { return Api.TouchElementBase_GetPixels.Invoke(InternalObj); } set { Api.TouchElementBase_SetPixels.Invoke(InternalObj, value); } }
+    public Vector2 Pixels { get { return Api.ElementBase_GetPixels.Invoke(InternalObj); } set { Api.ElementBase_SetPixels.Invoke(InternalObj, value); } }
     /// <summary>
     /// The <see cref="App" /> that this element was added. Be careful, this is null until the element is properly added.
     /// </summary>
-    public TouchApp App { get { return _app ?? (_app = Wrap<TouchApp>(Api.TouchElementBase_GetApp.Invoke(InternalObj), (obj) => new TouchApp(obj))); } }
+    public TouchApp App { get { return _app ?? (_app = Wrap<TouchApp>(Api.ElementBase_GetApp.Invoke(InternalObj), (obj) => new TouchApp(obj))); } }
     /// <summary>
     /// The immediate parent of this element.
     /// </summary>
-    public TouchView Parent { get { return _parent ?? (_parent = Wrap<TouchView>(Api.TouchElementBase_GetParent.Invoke(InternalObj), (obj) => new TouchView(obj))); } }
+    public View Parent { get { return _parent ?? (_parent = Wrap<View>(Api.ElementBase_GetParent.Invoke(InternalObj), (obj) => new View(obj))); } }
     /// <returns>Reference to thes Sprites of this element, if it is a container it also has the children Sprites</returns>
-    public List<MySprite> GetSprites() => Api.TouchElementBase_GetSprites.Invoke(InternalObj);
+    public List<MySprite> GetSprites() => Api.ElementBase_GetSprites.Invoke(InternalObj);
     /// <returns>The calculated final size of the element in pixels. Usefull to position Absolute children.</returns>
-    public Vector2 GetSize() => Api.TouchElementBase_GetSize.Invoke(InternalObj);
+    public Vector2 GetSize() => Api.ElementBase_GetSize.Invoke(InternalObj);
     /// <returns>The calculated final size and if it is a container also the border and padding.</returns>
-    public Vector2 GetBoundaries() => Api.TouchElementBase_GetBoundaries.Invoke(InternalObj);
+    public Vector2 GetBoundaries() => Api.ElementBase_GetBoundaries.Invoke(InternalObj);
     /// <summary>
     /// Forces a call to Update method for the internal object. The method is already called from Touch Manager. Only call this if you want to force another call.
     /// </summary>
-    public void ForceUpdate() => Api.TouchElementBase_ForceUpdate.Invoke(InternalObj);
+    public void ForceUpdate() => Api.ElementBase_ForceUpdate.Invoke(InternalObj);
     /// <summary>
     /// Forces a call to Dispose method for the internal object. The method is already called from Touch Manager when the App is Disposed.
     /// Only call this for the App instance, or if you want to force another call.
     /// </summary>
-    public void ForceDispose() => Api.TouchElementBase_ForceDispose.Invoke(InternalObj);
+    public void ForceDispose() => Api.ElementBase_ForceDispose.Invoke(InternalObj);
     /// <summary>
     /// Register a delegate to be called when the internal object Update event is called.
     /// </summary>
-    public void RegisterUpdate(Action update) => Api.TouchElementBase_RegisterUpdate.Invoke(InternalObj, update);
+    public void RegisterUpdate(Action update) => Api.ElementBase_RegisterUpdate.Invoke(InternalObj, update);
     /// <summary>
     /// Unregister a delegate. Recommended to be called on object dispose.
     /// </summary>
-    public void UnregisterUpdate(Action update) => Api.TouchElementBase_UnregisterUpdate.Invoke(InternalObj, update);
+    public void UnregisterUpdate(Action update) => Api.ElementBase_UnregisterUpdate.Invoke(InternalObj, update);
   }
   /// <summary>
-  /// <see href="https://github.com/adrianulima/TouchScreenAPI/blob/main/Data/Scripts/Lima/Touch/UiKit/Elements/TouchContainerBase.cs"/>
+  /// <see href="https://github.com/adrianulima/TouchScreenAPI/blob/main/Data/Scripts/Lima/Touch/UiKit/Elements/ContainerBase.cs"/>
   /// </summary>
-  public abstract class TouchContainerBase : TouchElementBase
+  public abstract class ContainerBase : ElementBase
   {
     /// <summary>
     /// Do not call this ctor directly, unless you have the reference of the original object from the API.
     /// </summary>
-    public TouchContainerBase(object internalObject) : base(internalObject) { }
-    public List<object> Children { get { return Api.TouchContainerBase_GetChildren.Invoke(InternalObj); } }
+    public ContainerBase(object internalObject) : base(internalObject) { }
+    public List<object> Children { get { return Api.ContainerBase_GetChildren.Invoke(InternalObj); } }
     /// <returns>The calculated remaining size inside the container. Negative when the children sizes are bigger.</returns>
-    public Vector2 GetFlexSize() => Api.TouchContainerBase_GetFlexSize.Invoke(InternalObj);
-    public void AddChild(TouchElementBase child) => Api.TouchContainerBase_AddChild.Invoke(InternalObj, child.InternalObj);
-    public void AddChild(TouchElementBase child, int index) => Api.TouchContainerBase_AddChildAt.Invoke(InternalObj, child.InternalObj, index);
-    public void RemoveChild(TouchElementBase child) => Api.TouchContainerBase_RemoveChild.Invoke(InternalObj, child.InternalObj);
-    public void RemoveChild(object child) => Api.TouchContainerBase_RemoveChild.Invoke(InternalObj, child);
-    public void RemoveChild(int index) => Api.TouchContainerBase_RemoveChildAt.Invoke(InternalObj, index);
-    public void MoveChild(TouchElementBase child, int index) => Api.TouchContainerBase_MoveChild.Invoke(InternalObj, child.InternalObj, index);
+    public Vector2 GetFlexSize() => Api.ContainerBase_GetFlexSize.Invoke(InternalObj);
+    public void AddChild(ElementBase child) => Api.ContainerBase_AddChild.Invoke(InternalObj, child.InternalObj);
+    public void AddChild(ElementBase child, int index) => Api.ContainerBase_AddChildAt.Invoke(InternalObj, child.InternalObj, index);
+    public void RemoveChild(ElementBase child) => Api.ContainerBase_RemoveChild.Invoke(InternalObj, child.InternalObj);
+    public void RemoveChild(object child) => Api.ContainerBase_RemoveChild.Invoke(InternalObj, child);
+    public void RemoveChild(int index) => Api.ContainerBase_RemoveChildAt.Invoke(InternalObj, index);
+    public void MoveChild(ElementBase child, int index) => Api.ContainerBase_MoveChild.Invoke(InternalObj, child.InternalObj, index);
   }
   public enum ViewDirection : byte { None = 0, Row = 1, Column = 2, RowReverse = 3, ColumnReverse = 4 }
   public enum ViewAlignment : byte { Start = 0, Center = 1, End = 2 }
   public enum ViewAnchor : byte { Start = 0, Center = 1, End = 2, SpaceBetween = 3, SpaceAround = 4 }
   /// <summary>
-  /// <see href="https://github.com/adrianulima/TouchScreenAPI/blob/main/Data/Scripts/Lima/Touch/UiKit/Elements/TouchView.cs"/>
+  /// <see href="https://github.com/adrianulima/TouchScreenAPI/blob/main/Data/Scripts/Lima/Touch/UiKit/Elements/View.cs"/>
   /// </summary>
-  public class TouchView : TouchContainerBase
+  public class View : ContainerBase
   {
-    public TouchView(ViewDirection direction = ViewDirection.Column, Color? bgColor = null) : base(Api.TouchView_New((byte)direction, bgColor)) { }
+    public View(ViewDirection direction = ViewDirection.Column, Color? bgColor = null) : base(Api.View_New((byte)direction, bgColor)) { }
     /// <summary>
     /// Do not call this ctor directly, unless you have the reference of the original object from the API.
     /// </summary>
-    public TouchView(object internalObject) : base(internalObject) { }
+    public View(object internalObject) : base(internalObject) { }
     /// <summary>
     /// If false, children outside inner size will be hidden.
     /// </summary>
-    public bool Overflow { get { return Api.TouchView_GetOverflow.Invoke(InternalObj); } set { Api.TouchView_SetOverflow.Invoke(InternalObj, value); } }
-    public ViewDirection Direction { get { return (ViewDirection)Api.TouchView_GetDirection.Invoke(InternalObj); } set { Api.TouchView_SetDirection.Invoke(InternalObj, (byte)value); } }
+    public bool Overflow { get { return Api.View_GetOverflow.Invoke(InternalObj); } set { Api.View_SetOverflow.Invoke(InternalObj, value); } }
+    public ViewDirection Direction { get { return (ViewDirection)Api.View_GetDirection.Invoke(InternalObj); } set { Api.View_SetDirection.Invoke(InternalObj, (byte)value); } }
     /// <summary>
     /// The aligment of children on the crossed axis of the <see cref="Direction" />.
     /// </summary>
-    public ViewAlignment Alignment { get { return (ViewAlignment)Api.TouchView_GetAlignment.Invoke(InternalObj); } set { Api.TouchView_SetAlignment.Invoke(InternalObj, (byte)value); } }
+    public ViewAlignment Alignment { get { return (ViewAlignment)Api.View_GetAlignment.Invoke(InternalObj); } set { Api.View_SetAlignment.Invoke(InternalObj, (byte)value); } }
     /// <summary>
     /// The anchor position of the children on the same axis of the <see cref="Direction" />.
     /// </summary>
-    public ViewAnchor Anchor { get { return (ViewAnchor)Api.TouchView_GetAnchor.Invoke(InternalObj); } set { Api.TouchView_SetAnchor.Invoke(InternalObj, (byte)value); } }
+    public ViewAnchor Anchor { get { return (ViewAnchor)Api.View_GetAnchor.Invoke(InternalObj); } set { Api.View_SetAnchor.Invoke(InternalObj, (byte)value); } }
     /// <summary>
     /// If false, the element will not update colors with the App.Theme. Useful for overriding element themes.
     /// </summary>
-    public bool UseThemeColors { get { return Api.TouchView_GetUseThemeColors.Invoke(InternalObj); } set { Api.TouchView_SetUseThemeColors.Invoke(InternalObj, value); } }
-    public Color BgColor { get { return Api.TouchView_GetBgColor.Invoke(InternalObj); } set { Api.TouchView_SetBgColor.Invoke(InternalObj, value); } }
-    public Color BorderColor { get { return Api.TouchView_GetBorderColor.Invoke(InternalObj); } set { Api.TouchView_SetBorderColor.Invoke(InternalObj, value); } }
+    public bool UseThemeColors { get { return Api.View_GetUseThemeColors.Invoke(InternalObj); } set { Api.View_SetUseThemeColors.Invoke(InternalObj, value); } }
+    public Color BgColor { get { return Api.View_GetBgColor.Invoke(InternalObj); } set { Api.View_SetBgColor.Invoke(InternalObj, value); } }
+    public Color BorderColor { get { return Api.View_GetBorderColor.Invoke(InternalObj); } set { Api.View_SetBorderColor.Invoke(InternalObj, value); } }
     /// <summary>
     /// Border values for four sides. Starting from Left, Top, Right and Bottom.
     /// </summary>
-    public Vector4 Border { get { return Api.TouchView_GetBorder.Invoke(InternalObj); } set { Api.TouchView_SetBorder.Invoke(InternalObj, value); } }
+    public Vector4 Border { get { return Api.View_GetBorder.Invoke(InternalObj); } set { Api.View_SetBorder.Invoke(InternalObj, value); } }
     /// <summary>
     /// Padding values for four sides. Starting from Left, Top, Right and Bottom.
     /// </summary>
-    public Vector4 Padding { get { return Api.TouchView_GetPadding.Invoke(InternalObj); } set { Api.TouchView_SetPadding.Invoke(InternalObj, value); } }
+    public Vector4 Padding { get { return Api.View_GetPadding.Invoke(InternalObj); } set { Api.View_SetPadding.Invoke(InternalObj, value); } }
     /// <summary>
     /// Adds a spacing between children. Better than adding margin to each child, if the same spacing is needed.
     /// </summary>
-    public int Gap { get { return Api.TouchView_GetGap.Invoke(InternalObj); } set { Api.TouchView_SetGap.Invoke(InternalObj, value); } }
+    public int Gap { get { return Api.View_GetGap.Invoke(InternalObj); } set { Api.View_SetGap.Invoke(InternalObj, value); } }
   }
   /// <summary>
-  /// <see href="https://github.com/adrianulima/TouchScreenAPI/blob/main/Data/Scripts/Lima/Touch/UiKit/Elements/TouchScrollView.cs"/>
+  /// <see href="https://github.com/adrianulima/TouchScreenAPI/blob/main/Data/Scripts/Lima/Touch/UiKit/Elements/ScrollView.cs"/>
   /// </summary>
-  public class TouchScrollView : TouchView
+  public class ScrollView : View
   {
-    private TouchBarContainer _scrollBar;
-    public TouchScrollView(ViewDirection direction = ViewDirection.Column, Color? bgColor = null) : base(Api.TouchScrollView_New((int)direction, bgColor)) { }
+    private BarContainer _scrollBar;
+    public ScrollView(ViewDirection direction = ViewDirection.Column, Color? bgColor = null) : base(Api.ScrollView_New((int)direction, bgColor)) { }
     /// <summary>
     /// Ratio from 0 to 1.
     /// </summary>
-    public float Scroll { get { return Api.TouchScrollView_GetScroll.Invoke(InternalObj); } set { Api.TouchScrollView_SetScroll.Invoke(InternalObj, value); } }
-    public bool ScrollAlwaysVisible { get { return Api.TouchScrollView_GetScrollAlwaysVisible.Invoke(InternalObj); } set { Api.TouchScrollView_SetScrollAlwaysVisible.Invoke(InternalObj, value); } }
-    public bool ScrollWheelEnabled { get { return Api.TouchScrollView_GetScrollWheelEnabled.Invoke(InternalObj); } set { Api.TouchScrollView_SetScrollWheelEnabled.Invoke(InternalObj, value); } }
-    public float ScrollWheelStep { get { return Api.TouchScrollView_GetScrollWheelStep.Invoke(InternalObj); } set { Api.TouchScrollView_SetScrollWheelStep.Invoke(InternalObj, value); } }
-    public TouchBarContainer ScrollBar { get { return _scrollBar ?? (_scrollBar = Wrap<TouchBarContainer>(Api.TouchScrollView_GetScrollBar.Invoke(InternalObj), (obj) => new TouchBarContainer(obj))); } }
+    public float Scroll { get { return Api.ScrollView_GetScroll.Invoke(InternalObj); } set { Api.ScrollView_SetScroll.Invoke(InternalObj, value); } }
+    public bool ScrollAlwaysVisible { get { return Api.ScrollView_GetScrollAlwaysVisible.Invoke(InternalObj); } set { Api.ScrollView_SetScrollAlwaysVisible.Invoke(InternalObj, value); } }
+    public bool ScrollWheelEnabled { get { return Api.ScrollView_GetScrollWheelEnabled.Invoke(InternalObj); } set { Api.ScrollView_SetScrollWheelEnabled.Invoke(InternalObj, value); } }
+    public float ScrollWheelStep { get { return Api.ScrollView_GetScrollWheelStep.Invoke(InternalObj); } set { Api.ScrollView_SetScrollWheelStep.Invoke(InternalObj, value); } }
+    public BarContainer ScrollBar { get { return _scrollBar ?? (_scrollBar = Wrap<BarContainer>(Api.ScrollView_GetScrollBar.Invoke(InternalObj), (obj) => new BarContainer(obj))); } }
   }
   /// <summary>
   /// <see href="https://github.com/adrianulima/TouchScreenAPI/blob/main/Data/Scripts/Lima/Touch/UiKit/Elements/TouchApp.cs"/>
   /// </summary>
-  public class TouchApp : TouchView
+  public class TouchApp : View
   {
     private TouchScreen _screen;
-    private TouchCursor _cursor;
-    private TouchTheme _theme;
+    private Cursor _cursor;
+    private Theme _theme;
     /// <summary>
     /// Instantiates the app, recommended to be called after a few seconds when used on a TSS.
     /// Can return null if the block and surface are not ready for TouchScreen, catch any exceptions.
@@ -777,258 +777,258 @@ namespace Lima.API.PB
     public TouchApp(object internalObject) : base(internalObject) { }
     public TouchScreen Screen { get { return _screen ?? (_screen = Wrap<TouchScreen>(Api.TouchApp_GetScreen.Invoke(InternalObj), (obj) => new TouchScreen(obj))); } }
     public RectangleF Viewport { get { return Api.TouchApp_GetViewport.Invoke(InternalObj); } }
-    public TouchCursor Cursor { get { return _cursor ?? (_cursor = Wrap<TouchCursor>(Api.TouchApp_GetCursor.Invoke(InternalObj), (obj) => new TouchCursor(obj))); } }
-    public TouchTheme Theme { get { return _theme ?? (_theme = Wrap<TouchTheme>(Api.TouchApp_GetTheme.Invoke(InternalObj), (obj) => new TouchTheme(obj))); } }
+    public Cursor Cursor { get { return _cursor ?? (_cursor = Wrap<Cursor>(Api.TouchApp_GetCursor.Invoke(InternalObj), (obj) => new Cursor(obj))); } }
+    public Theme Theme { get { return _theme ?? (_theme = Wrap<Theme>(Api.TouchApp_GetTheme.Invoke(InternalObj), (obj) => new Theme(obj))); } }
     /// <summary>
     /// If true, the app will present a nice background image.
     /// </summary>
     public bool DefaultBg { get { return Api.TouchApp_GetDefaultBg.Invoke(InternalObj); } set { Api.TouchApp_SetDefaultBg.Invoke(InternalObj, value); } }
   }
   /// <summary>
-  /// <see href="https://github.com/adrianulima/TouchScreenAPI/blob/main/Data/Scripts/Lima/Touch/UiKit/Elements/TouchEmptyButton.cs"/>
+  /// <see href="https://github.com/adrianulima/TouchScreenAPI/blob/main/Data/Scripts/Lima/Touch/UiKit/Elements/EmptyButton.cs"/>
   /// </summary>
-  public class TouchEmptyButton : TouchView
+  public class EmptyButton : View
   {
     private ClickHandler _handler;
-    public TouchEmptyButton(Action onChange) : base(Api.TouchEmptyButton_New(onChange)) { }
+    public EmptyButton(Action onChange) : base(Api.EmptyButton_New(onChange)) { }
     /// <summary>
     /// Do not call this ctor directly, unless you have the reference of the original object from the API.
     /// </summary>
-    public TouchEmptyButton(object internalObject) : base(internalObject) { }
-    public ClickHandler Handler { get { return _handler ?? (_handler = Wrap<ClickHandler>(Api.TouchEmptyButton_GetHandler.Invoke(InternalObj), (obj) => new ClickHandler(obj))); } }
-    public Action OnChange { set { Api.TouchEmptyButton_SetOnChange.Invoke(InternalObj, value); } }
+    public EmptyButton(object internalObject) : base(internalObject) { }
+    public ClickHandler Handler { get { return _handler ?? (_handler = Wrap<ClickHandler>(Api.EmptyButton_GetHandler.Invoke(InternalObj), (obj) => new ClickHandler(obj))); } }
+    public Action OnChange { set { Api.EmptyButton_SetOnChange.Invoke(InternalObj, value); } }
     /// <summary>
     /// If true, the button will not be clickable and will not fire the onChange event.
     /// </summary>
-    public bool Disabled { get { return Api.TouchEmptyButton_GetDisabled.Invoke(InternalObj); } set { Api.TouchEmptyButton_SetDisabled.Invoke(InternalObj, value); } }
+    public bool Disabled { get { return Api.EmptyButton_GetDisabled.Invoke(InternalObj); } set { Api.EmptyButton_SetDisabled.Invoke(InternalObj, value); } }
   }
   /// <summary>
-  /// <see href="https://github.com/adrianulima/TouchScreenAPI/blob/main/Data/Scripts/Lima/Touch/UiKit/Elements/TouchButton.cs"/>
+  /// <see href="https://github.com/adrianulima/TouchScreenAPI/blob/main/Data/Scripts/Lima/Touch/UiKit/Elements/Button.cs"/>
   /// </summary>
-  public class TouchButton : TouchEmptyButton
+  public class Button : EmptyButton
   {
-    private TouchLabel _label;
-    public TouchButton(string text, Action onChange) : base(Api.TouchButton_New(text, onChange)) { }
+    private Label _label;
+    public Button(string text, Action onChange) : base(Api.Button_New(text, onChange)) { }
     /// <summary>
     /// Do not call this ctor directly, unless you have the reference of the original object from the API.
     /// </summary>
-    public TouchButton(object internalObject) : base(internalObject) { }
-    public TouchLabel Label { get { return _label ?? (_label = Wrap<TouchLabel>(Api.TouchButton_GetLabel.Invoke(InternalObj), (obj) => new TouchLabel(obj))); } }
+    public Button(object internalObject) : base(internalObject) { }
+    public Label Label { get { return _label ?? (_label = Wrap<Label>(Api.Button_GetLabel.Invoke(InternalObj), (obj) => new Label(obj))); } }
   }
   /// <summary>
-  /// <see href="https://github.com/adrianulima/TouchScreenAPI/blob/main/Data/Scripts/Lima/Touch/UiKit/Elements/TouchCheckbox.cs"/>
+  /// <see href="https://github.com/adrianulima/TouchScreenAPI/blob/main/Data/Scripts/Lima/Touch/UiKit/Elements/Checkbox.cs"/>
   /// </summary>
-  public class TouchCheckbox : TouchView
+  public class Checkbox : View
   {
-    private TouchEmptyElement _checkMark;
-    public TouchCheckbox(Action<bool> onChange, bool value = false) : base(Api.TouchCheckbox_New(onChange, value)) { }
+    private EmptyElement _checkMark;
+    public Checkbox(Action<bool> onChange, bool value = false) : base(Api.Checkbox_New(onChange, value)) { }
     /// <summary>
     /// Do not call this ctor directly, unless you have the reference of the original object from the API.
     /// </summary>
-    public TouchCheckbox(object internalObject) : base(internalObject) { }
-    public bool Value { get { return Api.TouchCheckbox_GetValue.Invoke(InternalObj); } set { Api.TouchCheckbox_SetValue.Invoke(InternalObj, value); } }
-    public Action<bool> OnChange { set { Api.TouchCheckbox_SetOnChange.Invoke(InternalObj, value); } }
-    public TouchEmptyElement CheckMark { get { return _checkMark ?? (_checkMark = Wrap<TouchEmptyElement>(Api.TouchCheckbox_GetCheckMark.Invoke(InternalObj), (obj) => new TouchEmptyElement(obj))); } }
+    public Checkbox(object internalObject) : base(internalObject) { }
+    public bool Value { get { return Api.Checkbox_GetValue.Invoke(InternalObj); } set { Api.Checkbox_SetValue.Invoke(InternalObj, value); } }
+    public Action<bool> OnChange { set { Api.Checkbox_SetOnChange.Invoke(InternalObj, value); } }
+    public EmptyElement CheckMark { get { return _checkMark ?? (_checkMark = Wrap<EmptyElement>(Api.Checkbox_GetCheckMark.Invoke(InternalObj), (obj) => new EmptyElement(obj))); } }
   }
   public enum LabelEllipsis : byte { None = 0, Left = 1, Right = 2 }
   /// <summary>
-  /// <see href="https://github.com/adrianulima/TouchScreenAPI/blob/main/Data/Scripts/Lima/Touch/UiKit/Elements/TouchLabel.cs"/>
+  /// <see href="https://github.com/adrianulima/TouchScreenAPI/blob/main/Data/Scripts/Lima/Touch/UiKit/Elements/Label.cs"/>
   /// </summary>
-  public class TouchLabel : TouchElementBase
+  public class Label : ElementBase
   {
-    public TouchLabel(string text, float fontSize = 0.5f, TextAlignment alignment = TextAlignment.CENTER) : base(Api.TouchLabel_New(text, fontSize, alignment)) { }
+    public Label(string text, float fontSize = 0.5f, TextAlignment alignment = TextAlignment.CENTER) : base(Api.Label_New(text, fontSize, alignment)) { }
     /// <summary>
     /// Do not call this ctor directly, unless you have the reference of the original object from the API.
     /// </summary>
-    public TouchLabel(object internalObject) : base(internalObject) { }
-    public bool AutoBreakLine { get { return Api.TouchLabel_GetAutoBreakLine.Invoke(InternalObj); } set { Api.TouchLabel_SetAutoBreakLine.Invoke(InternalObj, value); } }
+    public Label(object internalObject) : base(internalObject) { }
+    public bool AutoBreakLine { get { return Api.Label_GetAutoBreakLine.Invoke(InternalObj); } set { Api.Label_SetAutoBreakLine.Invoke(InternalObj, value); } }
     /// <summary>
     /// If true, text will not be shortened if bigger than size.
     /// </summary>
-    public LabelEllipsis AutoEllipsis { get { return (LabelEllipsis)Api.TouchLabel_GetAutoEllipsis.Invoke(InternalObj); } set { Api.TouchLabel_SetAutoEllipsis.Invoke(InternalObj, (byte)value); } }
+    public LabelEllipsis AutoEllipsis { get { return (LabelEllipsis)Api.Label_GetAutoEllipsis.Invoke(InternalObj); } set { Api.Label_SetAutoEllipsis.Invoke(InternalObj, (byte)value); } }
     /// <summary>
     /// If <see cref="AutoEllipsis" /> is false and the text was limited to fit the size and added an ellipsis.
     /// </summary>
-    public bool HasEllipsis { get { return Api.TouchLabel_GetHasEllipsis.Invoke(InternalObj); } }
-    public string Text { get { return Api.TouchLabel_GetText.Invoke(InternalObj); } set { Api.TouchLabel_SetText.Invoke(InternalObj, value); } }
-    public Color? TextColor { get { return Api.TouchLabel_GetTextColor.Invoke(InternalObj); } set { Api.TouchLabel_SetTextColor.Invoke(InternalObj, (Color)value); } }
-    public float FontSize { get { return Api.TouchLabel_GetFontSize.Invoke(InternalObj); } set { Api.TouchLabel_SetFontSize.Invoke(InternalObj, value); } }
-    public TextAlignment Alignment { get { return Api.TouchLabel_GetAlignment.Invoke(InternalObj); } set { Api.TouchLabel_SetAlignment.Invoke(InternalObj, value); } }
-    public int Lines { get { return Api.TouchLabel_GetLines.Invoke(InternalObj); } }
-    public int MaxLines { get { return Api.TouchLabel_GetMaxLines.Invoke(InternalObj); } set { Api.TouchLabel_SetMaxLines.Invoke(InternalObj, value); } }
+    public bool HasEllipsis { get { return Api.Label_GetHasEllipsis.Invoke(InternalObj); } }
+    public string Text { get { return Api.Label_GetText.Invoke(InternalObj); } set { Api.Label_SetText.Invoke(InternalObj, value); } }
+    public Color? TextColor { get { return Api.Label_GetTextColor.Invoke(InternalObj); } set { Api.Label_SetTextColor.Invoke(InternalObj, (Color)value); } }
+    public float FontSize { get { return Api.Label_GetFontSize.Invoke(InternalObj); } set { Api.Label_SetFontSize.Invoke(InternalObj, value); } }
+    public TextAlignment Alignment { get { return Api.Label_GetAlignment.Invoke(InternalObj); } set { Api.Label_SetAlignment.Invoke(InternalObj, value); } }
+    public int Lines { get { return Api.Label_GetLines.Invoke(InternalObj); } }
+    public int MaxLines { get { return Api.Label_GetMaxLines.Invoke(InternalObj); } set { Api.Label_SetMaxLines.Invoke(InternalObj, value); } }
   }
   /// <summary>
-  /// <see href="https://github.com/adrianulima/TouchScreenAPI/blob/main/Data/Scripts/Lima/Touch/UiKit/Elements/TouchBarContainer.cs"/>
+  /// <see href="https://github.com/adrianulima/TouchScreenAPI/blob/main/Data/Scripts/Lima/Touch/UiKit/Elements/BarContainer.cs"/>
   /// </summary>
-  public class TouchBarContainer : TouchView
+  public class BarContainer : View
   {
-    private TouchView _bar;
-    public TouchBarContainer(bool vertical = false) : base(Api.TouchBarContainer_New(vertical)) { }
+    private View _bar;
+    public BarContainer(bool vertical = false) : base(Api.BarContainer_New(vertical)) { }
     /// <summary>
     /// Do not call this ctor directly, unless you have the reference of the original object from the API.
     /// </summary>
-    public TouchBarContainer(object internalObject) : base(internalObject) { }
-    public bool IsVertical { get { return Api.TouchBarContainer_GetIsVertical.Invoke(InternalObj); } set { Api.TouchBarContainer_SetIsVertical.Invoke(InternalObj, value); } }
+    public BarContainer(object internalObject) : base(internalObject) { }
+    public bool IsVertical { get { return Api.BarContainer_GetIsVertical.Invoke(InternalObj); } set { Api.BarContainer_SetIsVertical.Invoke(InternalObj, value); } }
     /// <summary>
     /// Ratio from 0 to 1. Relative size of the inner bar.
     /// </summary>
-    public float Ratio { get { return Api.TouchBarContainer_GetRatio.Invoke(InternalObj); } set { Api.TouchBarContainer_SetRatio.Invoke(InternalObj, value); } }
+    public float Ratio { get { return Api.BarContainer_GetRatio.Invoke(InternalObj); } set { Api.BarContainer_SetRatio.Invoke(InternalObj, value); } }
     /// <summary>
     /// Ratio from 0 to 1. Relative position of the inner bar. Limited by the remaining space of the container.
     /// </summary>
-    public float Offset { get { return Api.TouchBarContainer_GetOffset.Invoke(InternalObj); } set { Api.TouchBarContainer_SetOffset.Invoke(InternalObj, value); } }
-    public TouchView Bar { get { return _bar ?? (_bar = Wrap<TouchView>(Api.TouchBarContainer_GetBar.Invoke(InternalObj), (obj) => new TouchView(obj))); } }
+    public float Offset { get { return Api.BarContainer_GetOffset.Invoke(InternalObj); } set { Api.BarContainer_SetOffset.Invoke(InternalObj, value); } }
+    public View Bar { get { return _bar ?? (_bar = Wrap<View>(Api.BarContainer_GetBar.Invoke(InternalObj), (obj) => new View(obj))); } }
   }
   /// <summary>
-  /// <see href="https://github.com/adrianulima/TouchScreenAPI/blob/main/Data/Scripts/Lima/Touch/UiKit/Elements/TouchProgressBar.cs"/>
+  /// <see href="https://github.com/adrianulima/TouchScreenAPI/blob/main/Data/Scripts/Lima/Touch/UiKit/Elements/ProgressBar.cs"/>
   /// </summary>
-  public class TouchProgressBar : TouchBarContainer
+  public class ProgressBar : BarContainer
   {
-    private TouchLabel _label;
-    public TouchProgressBar(float min, float max, bool vertical = false, float barsGap = 0) : base(Api.TouchProgressBar_New(min, max, vertical, barsGap)) { }
+    private Label _label;
+    public ProgressBar(float min, float max, bool vertical = false, float barsGap = 0) : base(Api.ProgressBar_New(min, max, vertical, barsGap)) { }
     /// <summary>
     /// Do not call this ctor directly, unless you have the reference of the original object from the API.
     /// </summary>
-    public TouchProgressBar(object internalObject) : base(internalObject) { }
-    public float Value { get { return Api.TouchProgressBar_GetValue.Invoke(InternalObj); } set { Api.TouchProgressBar_SetValue.Invoke(InternalObj, value); } }
-    public float MaxValue { get { return Api.TouchProgressBar_GetMaxValue.Invoke(InternalObj); } set { Api.TouchProgressBar_SetMaxValue.Invoke(InternalObj, value); } }
-    public float MinValue { get { return Api.TouchProgressBar_GetMinValue.Invoke(InternalObj); } set { Api.TouchProgressBar_SetMinValue.Invoke(InternalObj, value); } }
-    public float BarsGap { get { return Api.TouchProgressBar_GetBarsGap.Invoke(InternalObj); } set { Api.TouchProgressBar_SetBarsGap.Invoke(InternalObj, value); } }
-    public TouchLabel Label { get { return _label ?? (_label = Wrap<TouchLabel>(Api.TouchProgressBar_GetLabel.Invoke(InternalObj), (obj) => new TouchLabel(obj))); } }
+    public ProgressBar(object internalObject) : base(internalObject) { }
+    public float Value { get { return Api.ProgressBar_GetValue.Invoke(InternalObj); } set { Api.ProgressBar_SetValue.Invoke(InternalObj, value); } }
+    public float MaxValue { get { return Api.ProgressBar_GetMaxValue.Invoke(InternalObj); } set { Api.ProgressBar_SetMaxValue.Invoke(InternalObj, value); } }
+    public float MinValue { get { return Api.ProgressBar_GetMinValue.Invoke(InternalObj); } set { Api.ProgressBar_SetMinValue.Invoke(InternalObj, value); } }
+    public float BarsGap { get { return Api.ProgressBar_GetBarsGap.Invoke(InternalObj); } set { Api.ProgressBar_SetBarsGap.Invoke(InternalObj, value); } }
+    public Label Label { get { return _label ?? (_label = Wrap<Label>(Api.ProgressBar_GetLabel.Invoke(InternalObj), (obj) => new Label(obj))); } }
   }
   /// <summary>
-  /// <see href="https://github.com/adrianulima/TouchScreenAPI/blob/main/Data/Scripts/Lima/Touch/UiKit/Elements/TouchSelector.cs"/>
+  /// <see href="https://github.com/adrianulima/TouchScreenAPI/blob/main/Data/Scripts/Lima/Touch/UiKit/Elements/Selector.cs"/>
   /// </summary>
-  public class TouchSelector : TouchView
+  public class Selector : View
   {
-    public TouchSelector(List<string> labels, Action<int, string> onChange, bool loop = true) : base(Api.TouchSelector_New(labels, onChange, loop)) { }
+    public Selector(List<string> labels, Action<int, string> onChange, bool loop = true) : base(Api.Selector_New(labels, onChange, loop)) { }
     /// <summary>
     /// Do not call this ctor directly, unless you have the reference of the original object from the API.
     /// </summary>
-    public TouchSelector(object internalObject) : base(internalObject) { }
-    public bool Loop { get { return Api.TouchSelector_GetLoop.Invoke(InternalObj); } set { Api.TouchSelector_SetLoop.Invoke(InternalObj, value); } }
-    public int Selected { get { return Api.TouchSelector_GetSelected.Invoke(InternalObj); } set { Api.TouchSelector_SetSelected.Invoke(InternalObj, value); } }
-    public Action<int, string> OnChange { set { Api.TouchSelector_SetOnChange.Invoke(InternalObj, value); } }
+    public Selector(object internalObject) : base(internalObject) { }
+    public bool Loop { get { return Api.Selector_GetLoop.Invoke(InternalObj); } set { Api.Selector_SetLoop.Invoke(InternalObj, value); } }
+    public int Selected { get { return Api.Selector_GetSelected.Invoke(InternalObj); } set { Api.Selector_SetSelected.Invoke(InternalObj, value); } }
+    public Action<int, string> OnChange { set { Api.Selector_SetOnChange.Invoke(InternalObj, value); } }
   }
   /// <summary>
-  /// <see href="https://github.com/adrianulima/TouchScreenAPI/blob/main/Data/Scripts/Lima/Touch/UiKit/Elements/TouchSlider.cs"/>
+  /// <see href="https://github.com/adrianulima/TouchScreenAPI/blob/main/Data/Scripts/Lima/Touch/UiKit/Elements/Slider.cs"/>
   /// </summary>
-  public class TouchSlider : TouchView
+  public class Slider : View
   {
-    private TouchBarContainer _bar;
-    private TouchEmptyElement _thumb;
-    private TouchTextField _textInput;
-    public TouchSlider(float min, float max, Action<float> onChange) : base(Api.TouchSlider_New(min, max, onChange)) { }
+    private BarContainer _bar;
+    private EmptyElement _thumb;
+    private TextField _textInput;
+    public Slider(float min, float max, Action<float> onChange) : base(Api.Slider_New(min, max, onChange)) { }
     /// <summary>
     /// Do not call this ctor directly, unless you have the reference of the original object from the API.
     /// </summary>
-    public TouchSlider(object internalObject) : base(internalObject) { }
-    public float MaxValue { get { return Api.TouchSlider_GetMaxValue.Invoke(InternalObj); } set { Api.TouchSlider_SetMaxValue.Invoke(InternalObj, value); } }
-    public float MinValue { get { return Api.TouchSlider_GetMinValue.Invoke(InternalObj); } set { Api.TouchSlider_SetMinValue.Invoke(InternalObj, value); } }
-    public float Value { get { return Api.TouchSlider_GetValue.Invoke(InternalObj); } set { Api.TouchSlider_SetValue.Invoke(InternalObj, value); } }
-    public bool IsInteger { get { return Api.TouchSlider_GetIsInteger.Invoke(InternalObj); } set { Api.TouchSlider_SetIsInteger.Invoke(InternalObj, value); } }
+    public Slider(object internalObject) : base(internalObject) { }
+    public float MaxValue { get { return Api.Slider_GetMaxValue.Invoke(InternalObj); } set { Api.Slider_SetMaxValue.Invoke(InternalObj, value); } }
+    public float MinValue { get { return Api.Slider_GetMinValue.Invoke(InternalObj); } set { Api.Slider_SetMinValue.Invoke(InternalObj, value); } }
+    public float Value { get { return Api.Slider_GetValue.Invoke(InternalObj); } set { Api.Slider_SetValue.Invoke(InternalObj, value); } }
+    public bool IsInteger { get { return Api.Slider_GetIsInteger.Invoke(InternalObj); } set { Api.Slider_SetIsInteger.Invoke(InternalObj, value); } }
     /// <summary>
     /// If true, user can Hold Ctrl and click to manually type a number.
     /// </summary>
-    public bool AllowInput { get { return Api.TouchSlider_GetAllowInput.Invoke(InternalObj); } set { Api.TouchSlider_SetAllowInput.Invoke(InternalObj, value); } }
-    public Action<float> OnChange { set { Api.TouchSlider_SetOnChange.Invoke(InternalObj, value); } }
-    public TouchBarContainer Bar { get { return _bar ?? (_bar = Wrap<TouchBarContainer>(Api.TouchSlider_GetBar.Invoke(InternalObj), (obj) => new TouchBarContainer(obj))); } }
-    public TouchEmptyElement Thumb { get { return _thumb ?? (_thumb = Wrap<TouchEmptyElement>(Api.TouchSlider_GetThumb.Invoke(InternalObj), (obj) => new TouchEmptyElement(obj))); } }
-    public TouchTextField TextInput { get { return _textInput ?? (_textInput = Wrap<TouchTextField>(Api.TouchSlider_GetTextInput.Invoke(InternalObj), (obj) => new TouchTextField(obj))); } }
+    public bool AllowInput { get { return Api.Slider_GetAllowInput.Invoke(InternalObj); } set { Api.Slider_SetAllowInput.Invoke(InternalObj, value); } }
+    public Action<float> OnChange { set { Api.Slider_SetOnChange.Invoke(InternalObj, value); } }
+    public BarContainer Bar { get { return _bar ?? (_bar = Wrap<BarContainer>(Api.Slider_GetBar.Invoke(InternalObj), (obj) => new BarContainer(obj))); } }
+    public EmptyElement Thumb { get { return _thumb ?? (_thumb = Wrap<EmptyElement>(Api.Slider_GetThumb.Invoke(InternalObj), (obj) => new EmptyElement(obj))); } }
+    public TextField TextInput { get { return _textInput ?? (_textInput = Wrap<TextField>(Api.Slider_GetTextInput.Invoke(InternalObj), (obj) => new TextField(obj))); } }
   }
   /// <summary>
-  /// <see href="https://github.com/adrianulima/TouchScreenAPI/blob/main/Data/Scripts/Lima/Touch/UiKit/Elements/TouchSliderRange.cs"/>
+  /// <see href="https://github.com/adrianulima/TouchScreenAPI/blob/main/Data/Scripts/Lima/Touch/UiKit/Elements/SliderRange.cs"/>
   /// </summary>
-  public class TouchSliderRange : TouchSlider
+  public class SliderRange : Slider
   {
-    private TouchEmptyElement _thumbLower;
-    public TouchSliderRange(float min, float max, Action<float, float> onChange) : base(Api.TouchSliderRange_NewR(min, max, onChange)) { }
+    private EmptyElement _thumbLower;
+    public SliderRange(float min, float max, Action<float, float> onChange) : base(Api.SliderRange_NewR(min, max, onChange)) { }
     /// <summary>
     /// Do not call this ctor directly, unless you have the reference of the original object from the API.
     /// </summary>
-    public TouchSliderRange(object internalObject) : base(internalObject) { }
-    public float ValueLower { get { return Api.TouchSliderRange_GetValueLower.Invoke(InternalObj); } set { Api.TouchSliderRange_SetValueLower.Invoke(InternalObj, value); } }
-    public Action<float, float> OnChangeRange { set { Api.TouchSliderRange_SetOnChangeR.Invoke(InternalObj, value); } }
-    public TouchEmptyElement ThumbLower { get { return _thumbLower ?? (_thumbLower = Wrap<TouchEmptyElement>(Api.TouchSliderRange_GetThumbLower.Invoke(InternalObj), (obj) => new TouchEmptyElement(obj))); } }
+    public SliderRange(object internalObject) : base(internalObject) { }
+    public float ValueLower { get { return Api.SliderRange_GetValueLower.Invoke(InternalObj); } set { Api.SliderRange_SetValueLower.Invoke(InternalObj, value); } }
+    public Action<float, float> OnChangeRange { set { Api.SliderRange_SetOnChangeR.Invoke(InternalObj, value); } }
+    public EmptyElement ThumbLower { get { return _thumbLower ?? (_thumbLower = Wrap<EmptyElement>(Api.SliderRange_GetThumbLower.Invoke(InternalObj), (obj) => new EmptyElement(obj))); } }
   }
   /// <summary>
-  /// <see href="https://github.com/adrianulima/TouchScreenAPI/blob/main/Data/Scripts/Lima/Touch/UiKit/Elements/TouchSwitch.cs"/>
+  /// <see href="https://github.com/adrianulima/TouchScreenAPI/blob/main/Data/Scripts/Lima/Touch/UiKit/Elements/Switch.cs"/>
   /// </summary>
-  public class TouchSwitch : TouchView
+  public class Switch : View
   {
-    private TouchButton[] _buttons;
-    public TouchSwitch(string[] labels, int index = 0, Action<int> onChange = null) : base(Api.TouchSwitch_New(labels, index, onChange)) { }
+    private Button[] _buttons;
+    public Switch(string[] labels, int index = 0, Action<int> onChange = null) : base(Api.Switch_New(labels, index, onChange)) { }
     /// <summary>
     /// Do not call this ctor directly, unless you have the reference of the original object from the API.
     /// </summary>
-    public TouchSwitch(object internalObject) : base(internalObject) { }
-    public int Index { get { return Api.TouchSwitch_GetIndex.Invoke(InternalObj); } set { Api.TouchSwitch_SetIndex.Invoke(InternalObj, value); } }
-    public TouchButton[] Buttons { get { return _buttons ?? (_buttons = WrapArray<TouchButton>(Api.TouchSwitch_GetButtons.Invoke(InternalObj), (obj) => new TouchButton(obj))); } }
-    public Action<int> OnChange { set { Api.TouchSwitch_SetOnChange.Invoke(InternalObj, value); } }
+    public Switch(object internalObject) : base(internalObject) { }
+    public int Index { get { return Api.Switch_GetIndex.Invoke(InternalObj); } set { Api.Switch_SetIndex.Invoke(InternalObj, value); } }
+    public Button[] Buttons { get { return _buttons ?? (_buttons = WrapArray<Button>(Api.Switch_GetButtons.Invoke(InternalObj), (obj) => new Button(obj))); } }
+    public Action<int> OnChange { set { Api.Switch_SetOnChange.Invoke(InternalObj, value); } }
   }
   /// <summary>
-  /// <see href="https://github.com/adrianulima/TouchScreenAPI/blob/main/Data/Scripts/Lima/Touch/UiKit/Elements/TouchTextField.cs"/>
+  /// <see href="https://github.com/adrianulima/TouchScreenAPI/blob/main/Data/Scripts/Lima/Touch/UiKit/Elements/TextField.cs"/>
   /// </summary>
-  public class TouchTextField : TouchView
+  public class TextField : View
   {
-    private TouchLabel _label;
-    public TouchTextField() : base(Api.TouchTextField_New()) { }
+    private Label _label;
+    public TextField() : base(Api.TextField_New()) { }
     /// <summary>
     /// Do not call this ctor directly, unless you have the reference of the original object from the API.
     /// </summary>
-    public TouchTextField(object internalObject) : base(internalObject) { }
-    public bool IsEditing { get { return Api.TouchTextField_GetIsEditing.Invoke(InternalObj); } }
-    public string Text { get { return Api.TouchTextField_GetText.Invoke(InternalObj); } set { Api.TouchTextField_SetText.Invoke(InternalObj, value); } }
-    public bool IsNumeric { get { return Api.TouchTextField_GetIsNumeric.Invoke(InternalObj); } set { Api.TouchTextField_SetIsNumeric.Invoke(InternalObj, value); } }
-    public bool IsInteger { get { return Api.TouchTextField_GetIsInteger.Invoke(InternalObj); } set { Api.TouchTextField_SetIsInteger.Invoke(InternalObj, value); } }
-    public bool AllowNegative { get { return Api.TouchTextField_GetAllowNegative.Invoke(InternalObj); } set { Api.TouchTextField_SetAllowNegative.Invoke(InternalObj, value); } }
-    public TouchLabel Label { get { return _label ?? (_label = Wrap<TouchLabel>(Api.TouchTextField_GetLabel.Invoke(InternalObj), (obj) => new TouchLabel(obj))); } }
-    public Action<string> OnSubmit { set { Api.TouchTextField_SetOnSubmit.Invoke(InternalObj, value); } }
-    public bool RevertOnBlur { get { return Api.TouchTextField_GetRevertOnBlur.Invoke(InternalObj); } set { Api.TouchTextField_SetRevertOnBlur.Invoke(InternalObj, value); } }
-    public bool SubmitOnBlur { get { return Api.TouchTextField_GetSubmitOnBlur.Invoke(InternalObj); } set { Api.TouchTextField_SetSubmitOnBlur.Invoke(InternalObj, value); } }
-    public void Blur() => Api.TouchTextField_Blur.Invoke(InternalObj);
-    public void Focus() => Api.TouchTextField_Focus.Invoke(InternalObj);
+    public TextField(object internalObject) : base(internalObject) { }
+    public bool IsEditing { get { return Api.TextField_GetIsEditing.Invoke(InternalObj); } }
+    public string Text { get { return Api.TextField_GetText.Invoke(InternalObj); } set { Api.TextField_SetText.Invoke(InternalObj, value); } }
+    public bool IsNumeric { get { return Api.TextField_GetIsNumeric.Invoke(InternalObj); } set { Api.TextField_SetIsNumeric.Invoke(InternalObj, value); } }
+    public bool IsInteger { get { return Api.TextField_GetIsInteger.Invoke(InternalObj); } set { Api.TextField_SetIsInteger.Invoke(InternalObj, value); } }
+    public bool AllowNegative { get { return Api.TextField_GetAllowNegative.Invoke(InternalObj); } set { Api.TextField_SetAllowNegative.Invoke(InternalObj, value); } }
+    public Label Label { get { return _label ?? (_label = Wrap<Label>(Api.TextField_GetLabel.Invoke(InternalObj), (obj) => new Label(obj))); } }
+    public Action<string> OnSubmit { set { Api.TextField_SetOnSubmit.Invoke(InternalObj, value); } }
+    public bool RevertOnBlur { get { return Api.TextField_GetRevertOnBlur.Invoke(InternalObj); } set { Api.TextField_SetRevertOnBlur.Invoke(InternalObj, value); } }
+    public bool SubmitOnBlur { get { return Api.TextField_GetSubmitOnBlur.Invoke(InternalObj); } set { Api.TextField_SetSubmitOnBlur.Invoke(InternalObj, value); } }
+    public void Blur() => Api.TextField_Blur.Invoke(InternalObj);
+    public void Focus() => Api.TextField_Focus.Invoke(InternalObj);
   }
   /// <summary>
-  /// <see href="https://github.com/adrianulima/TouchScreenAPI/blob/main/Data/Scripts/Lima/Touch/UiKit/Elements/TouchWindowBar.cs"/>
+  /// <see href="https://github.com/adrianulima/TouchScreenAPI/blob/main/Data/Scripts/Lima/Touch/UiKit/Elements/WindowBar.cs"/>
   /// </summary>
-  public class TouchWindowBar : TouchView
+  public class WindowBar : View
   {
-    private TouchLabel _label;
-    public TouchWindowBar(string text) : base(Api.TouchWindowBar_New(text)) { }
+    private Label _label;
+    public WindowBar(string text) : base(Api.WindowBar_New(text)) { }
     /// <summary>
     /// Do not call this ctor directly, unless you have the reference of the original object from the API.
     /// </summary>
-    public TouchWindowBar(object internalObject) : base(internalObject) { }
-    public TouchLabel Label { get { return _label ?? (_label = Wrap<TouchLabel>(Api.TouchWindowBar_GetLabel.Invoke(InternalObj), (obj) => new TouchLabel(obj))); } }
+    public WindowBar(object internalObject) : base(internalObject) { }
+    public Label Label { get { return _label ?? (_label = Wrap<Label>(Api.WindowBar_GetLabel.Invoke(InternalObj), (obj) => new Label(obj))); } }
   }
   /// <summary>
-  /// <see href="https://github.com/adrianulima/TouchScreenAPI/blob/main/Data/Scripts/Lima/Touch/UiKit/Elements/TouchChart.cs"/>
+  /// <see href="https://github.com/adrianulima/TouchScreenAPI/blob/main/Data/Scripts/Lima/Touch/UiKit/Elements/Chart.cs"/>
   /// </summary>
-  public class TouchChart : TouchElementBase
+  public class Chart : ElementBase
   {
-    public TouchChart(int intervals) : base(Api.TouchChart_New(intervals)) { }
+    public Chart(int intervals) : base(Api.Chart_New(intervals)) { }
     /// <summary>
     /// Do not call this ctor directly, unless you have the reference of the original object from the API.
     /// </summary>
-    public TouchChart(object internalObject) : base(internalObject) { }
-    public List<float[]> DataSets { get { return Api.TouchChart_GetDataSets.Invoke(InternalObj); } }
-    public List<Color> DataColors { get { return Api.TouchChart_GetDataColors.Invoke(InternalObj); } }
-    public int GridHorizontalLines { get { return Api.TouchChart_GetGridHorizontalLines.Invoke(InternalObj); } set { Api.TouchChart_SetGridHorizontalLines.Invoke(InternalObj, value); } }
-    public int GridVerticalLines { get { return Api.TouchChart_GetGridVerticalLines.Invoke(InternalObj); } set { Api.TouchChart_SetGridVerticalLines.Invoke(InternalObj, value); } }
-    public float MaxValue { get { return Api.TouchChart_GetMaxValue.Invoke(InternalObj); } }
-    public float MinValue { get { return Api.TouchChart_GetMinValue.Invoke(InternalObj); } }
-    public Color? GridColor { get { return Api.TouchChart_GetGridColor.Invoke(InternalObj); } set { Api.TouchChart_SetGridColor.Invoke(InternalObj, (Color)value); } }
+    public Chart(object internalObject) : base(internalObject) { }
+    public List<float[]> DataSets { get { return Api.Chart_GetDataSets.Invoke(InternalObj); } }
+    public List<Color> DataColors { get { return Api.Chart_GetDataColors.Invoke(InternalObj); } }
+    public int GridHorizontalLines { get { return Api.Chart_GetGridHorizontalLines.Invoke(InternalObj); } set { Api.Chart_SetGridHorizontalLines.Invoke(InternalObj, value); } }
+    public int GridVerticalLines { get { return Api.Chart_GetGridVerticalLines.Invoke(InternalObj); } set { Api.Chart_SetGridVerticalLines.Invoke(InternalObj, value); } }
+    public float MaxValue { get { return Api.Chart_GetMaxValue.Invoke(InternalObj); } }
+    public float MinValue { get { return Api.Chart_GetMinValue.Invoke(InternalObj); } }
+    public Color? GridColor { get { return Api.Chart_GetGridColor.Invoke(InternalObj); } set { Api.Chart_SetGridColor.Invoke(InternalObj, (Color)value); } }
   }
   /// <summary>
-  /// <see href="https://github.com/adrianulima/TouchScreenAPI/blob/main/Data/Scripts/Lima/Touch/UiKit/Elements/TouchEmptyElement.cs"/>
+  /// <see href="https://github.com/adrianulima/TouchScreenAPI/blob/main/Data/Scripts/Lima/Touch/UiKit/Elements/EmptyElement.cs"/>
   /// </summary>
-  public class TouchEmptyElement : TouchElementBase
+  public class EmptyElement : ElementBase
   {
-    public TouchEmptyElement() : base(Api.TouchEmptyElement_New()) { }
+    public EmptyElement() : base(Api.EmptyElement_New()) { }
     /// <summary>
     /// Do not call this ctor directly, unless you have the reference of the original object from the API.
     /// </summary>
-    public TouchEmptyElement(object internalObject) : base(internalObject) { }
+    public EmptyElement(object internalObject) : base(internalObject) { }
   }
 }

@@ -5,20 +5,20 @@ using VRageMath;
 
 namespace Lima.Touch.UiKit.Elements
 {
-  public class TouchSelector : TouchView
+  public class Selector : View
   {
     public int Selected = 0;
     public readonly List<string> Labels;
     public Action<int, string> OnChange;
     public bool Loop;
 
-    public TouchEmptyButton LeftButton;
-    public TouchEmptyButton RightButton;
-    public TouchEmptyElement LeftArrow;
-    public TouchEmptyElement RightArrow;
-    public TouchLabel Label;
+    public EmptyButton LeftButton;
+    public EmptyButton RightButton;
+    public EmptyElement LeftArrow;
+    public EmptyElement RightArrow;
+    public Label Label;
 
-    public TouchSelector(List<string> labels, Action<int, string> onChange, bool loop = true)
+    public Selector(List<string> labels, Action<int, string> onChange, bool loop = true)
     {
       Labels = labels;
       OnChange = onChange;
@@ -31,19 +31,19 @@ namespace Lima.Touch.UiKit.Elements
       Flex = new Vector2(1, 0);
       Pixels = new Vector2(0, 24);
 
-      LeftButton = new TouchEmptyButton(Prev);
+      LeftButton = new EmptyButton(Prev);
       LeftButton.Pixels = new Vector2(24, 0);
       LeftButton.Flex = new Vector2(0, 1);
       AddChild(LeftButton);
-      LeftArrow = new TouchEmptyElement();
+      LeftArrow = new EmptyElement();
       LeftButton.AddChild(LeftArrow);
-      Label = new TouchLabel(Labels[Selected], 0.6f, TextAlignment.CENTER);
+      Label = new Label(Labels[Selected], 0.6f, TextAlignment.CENTER);
       AddChild(Label);
-      RightButton = new TouchEmptyButton(Next);
+      RightButton = new EmptyButton(Next);
       RightButton.Pixels = new Vector2(24, 0);
       RightButton.Flex = new Vector2(0, 1);
       AddChild(RightButton);
-      RightArrow = new TouchEmptyElement();
+      RightArrow = new EmptyElement();
       RightButton.AddChild(RightArrow);
     }
 

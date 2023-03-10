@@ -10,7 +10,7 @@ namespace Lima.Touch.UiKit.Elements
   {
     None = 0, Left = 1, Right = 2
   }
-  public class TouchLabel : TouchElementBase
+  public class Label : ElementBase
   {
     public string Text;
     private float _fontSize;
@@ -43,7 +43,7 @@ namespace Lima.Touch.UiKit.Elements
       }
     }
 
-    public TouchLabel(string text, float fontSize = 0.5f, TextAlignment alignment = TextAlignment.CENTER)
+    public Label(string text, float fontSize = 0.5f, TextAlignment alignment = TextAlignment.CENTER)
     {
       Text = text;
       FontSize = fontSize;

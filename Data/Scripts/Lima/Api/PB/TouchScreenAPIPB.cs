@@ -85,15 +85,15 @@ namespace Lima.API.PB.UI
         AssignMethod(out ApiDelegator.TouchScreen_GetRotation, delegates["TouchScreen_GetRotation"]);
         AssignMethod(out ApiDelegator.TouchScreen_CompareWithBlockAndSurface, delegates["TouchScreen_CompareWithBlockAndSurface"]);
         AssignMethod(out ApiDelegator.TouchScreen_ForceDispose, delegates["TouchScreen_ForceDispose"]);
-        AssignMethod(out ApiDelegator.TouchCursor_New, delegates["TouchCursor_New"]);
-        AssignMethod(out ApiDelegator.TouchCursor_GetEnabled, delegates["TouchCursor_GetEnabled"]);
-        AssignMethod(out ApiDelegator.TouchCursor_SetEnabled, delegates["TouchCursor_SetEnabled"]);
-        AssignMethod(out ApiDelegator.TouchCursor_GetScale, delegates["TouchCursor_GetScale"]);
-        AssignMethod(out ApiDelegator.TouchCursor_SetScale, delegates["TouchCursor_SetScale"]);
-        AssignMethod(out ApiDelegator.TouchCursor_GetPosition, delegates["TouchCursor_GetPosition"]);
-        AssignMethod(out ApiDelegator.TouchCursor_IsInsideArea, delegates["TouchCursor_IsInsideArea"]);
-        AssignMethod(out ApiDelegator.TouchCursor_GetSprites, delegates["TouchCursor_GetSprites"]);
-        AssignMethod(out ApiDelegator.TouchCursor_ForceDispose, delegates["TouchCursor_ForceDispose"]);
+        AssignMethod(out ApiDelegator.Cursor_New, delegates["Cursor_New"]);
+        AssignMethod(out ApiDelegator.Cursor_GetEnabled, delegates["Cursor_GetEnabled"]);
+        AssignMethod(out ApiDelegator.Cursor_SetEnabled, delegates["Cursor_SetEnabled"]);
+        AssignMethod(out ApiDelegator.Cursor_GetScale, delegates["Cursor_GetScale"]);
+        AssignMethod(out ApiDelegator.Cursor_SetScale, delegates["Cursor_SetScale"]);
+        AssignMethod(out ApiDelegator.Cursor_GetPosition, delegates["Cursor_GetPosition"]);
+        AssignMethod(out ApiDelegator.Cursor_IsInsideArea, delegates["Cursor_IsInsideArea"]);
+        AssignMethod(out ApiDelegator.Cursor_GetSprites, delegates["Cursor_GetSprites"]);
+        AssignMethod(out ApiDelegator.Cursor_ForceDispose, delegates["Cursor_ForceDispose"]);
         AssignMethod(out ApiDelegator.ClickHandler_New, delegates["ClickHandler_New"]);
         AssignMethod(out ApiDelegator.ClickHandler_GetHitArea, delegates["ClickHandler_GetHitArea"]);
         AssignMethod(out ApiDelegator.ClickHandler_SetHitArea, delegates["ClickHandler_SetHitArea"]);
@@ -120,15 +120,15 @@ namespace Lima.API.PB.UI
     public Func<object, int> TouchScreen_GetRotation;
     public Func<object, IngameIMyCubeBlock, IngameIMyTextSurface, bool> TouchScreen_CompareWithBlockAndSurface;
     public Action<object> TouchScreen_ForceDispose;
-    public Func<object, object> TouchCursor_New;
-    public Func<object, bool> TouchCursor_GetEnabled;
-    public Action<object, bool> TouchCursor_SetEnabled;
-    public Func<object, float> TouchCursor_GetScale;
-    public Action<object, float> TouchCursor_SetScale;
-    public Func<object, Vector2> TouchCursor_GetPosition;
-    public Func<object, float, float, float, float, bool> TouchCursor_IsInsideArea;
-    public Func<object, List<MySprite>> TouchCursor_GetSprites;
-    public Action<object> TouchCursor_ForceDispose;
+    public Func<object, object> Cursor_New;
+    public Func<object, bool> Cursor_GetEnabled;
+    public Action<object, bool> Cursor_SetEnabled;
+    public Func<object, float> Cursor_GetScale;
+    public Action<object, float> Cursor_SetScale;
+    public Func<object, Vector2> Cursor_GetPosition;
+    public Func<object, float, float, float, float, bool> Cursor_IsInsideArea;
+    public Func<object, List<MySprite>> Cursor_GetSprites;
+    public Action<object> Cursor_ForceDispose;
     public Func<object> ClickHandler_New;
     public Func<object, Vector4> ClickHandler_GetHitArea;
     public Action<object, Vector4> ClickHandler_SetHitArea;
@@ -170,22 +170,22 @@ namespace Lima.API.PB.UI
     public bool CompareWithBlockAndSurface(IngameIMyCubeBlock block, IngameIMyTextSurface surface) => Api.TouchScreen_CompareWithBlockAndSurface.Invoke(InternalObj, block, surface);
     public void ForceDispose() => Api.TouchScreen_ForceDispose.Invoke(InternalObj);
   }
-  public class TouchCursor : WrapperBase<TouchApiDelegator>
+  public class Cursor : WrapperBase<TouchApiDelegator>
   {
-    public TouchCursor(TouchScreen screen) : base(Api.TouchCursor_New(screen.InternalObj)) { }
+    public Cursor(TouchScreen screen) : base(Api.Cursor_New(screen.InternalObj)) { }
     /// <summary>
     /// Do not call this ctor directly, unless you have the reference of the original object from the API.
     /// </summary>
-    public TouchCursor(object internalObject) : base(internalObject) { }
-    public bool Enabled { get { return Api.TouchCursor_GetEnabled.Invoke(InternalObj); } set { Api.TouchCursor_SetEnabled.Invoke(InternalObj, value); } }
-    public float Scale { get { return Api.TouchCursor_GetScale.Invoke(InternalObj); } set { Api.TouchCursor_SetScale.Invoke(InternalObj, value); } }
-    public Vector2 Position { get { return Api.TouchCursor_GetPosition.Invoke(InternalObj); } }
-    public bool IsInsideArea(float x, float y, float z, float w) => Api.TouchCursor_IsInsideArea.Invoke(InternalObj, x, y, z, w);
-    public List<MySprite> GetSprites() => Api.TouchCursor_GetSprites.Invoke(InternalObj);
+    public Cursor(object internalObject) : base(internalObject) { }
+    public bool Enabled { get { return Api.Cursor_GetEnabled.Invoke(InternalObj); } set { Api.Cursor_SetEnabled.Invoke(InternalObj, value); } }
+    public float Scale { get { return Api.Cursor_GetScale.Invoke(InternalObj); } set { Api.Cursor_SetScale.Invoke(InternalObj, value); } }
+    public Vector2 Position { get { return Api.Cursor_GetPosition.Invoke(InternalObj); } }
+    public bool IsInsideArea(float x, float y, float z, float w) => Api.Cursor_IsInsideArea.Invoke(InternalObj, x, y, z, w);
+    public List<MySprite> GetSprites() => Api.Cursor_GetSprites.Invoke(InternalObj);
     /// <summary>
     /// Force a call to Cursor Dispose, that clears sprites.
     /// </summary>
-    public void ForceDispose() => Api.TouchCursor_ForceDispose.Invoke(InternalObj);
+    public void ForceDispose() => Api.Cursor_ForceDispose.Invoke(InternalObj);
   }
   public class ClickHandler : WrapperBase<TouchApiDelegator>
   {
