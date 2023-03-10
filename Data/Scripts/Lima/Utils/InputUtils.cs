@@ -62,6 +62,7 @@ namespace Lima.Utils
           _controlUseIDs = new List<string>(2);
           _controlUseIDs.Add(MyControlsSpace.USE.String);
           _controlUseIDs.Add(MyControlsSpace.PRIMARY_TOOL_ACTION.String);
+          _controlUseIDs.Add(MyControlsSpace.SECONDARY_TOOL_ACTION.String);
         }
 
         TouchSession.Instance?.BlacklistStateHandler?.SetPlayerInputBlacklistState(_controlUseIDs, MyAPIGateway.Session.Player.IdentityId, !blocked);
