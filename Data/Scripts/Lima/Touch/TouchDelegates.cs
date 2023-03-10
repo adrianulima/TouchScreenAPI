@@ -154,14 +154,13 @@ namespace Lima.Touch
         { "TouchScrollView_SetScrollWheelStep", new Action<object, float>(TouchScrollView_SetScrollWheelStep) },
         { "TouchScrollView_GetScrollBar", new Func<object, object>(TouchScrollView_GetScrollBar) },
 
-        { "TouchApp_New", new Func<TouchApp>(TouchApp_New) },
+        { "TouchApp_New", new Func<IngameIMyCubeBlock, IngameIMyTextSurface, TouchApp>(TouchApp_New) },
         { "TouchApp_GetScreen", new Func<object, TouchScreen>(TouchApp_GetScreen) },
         { "TouchApp_GetViewport", new Func<object, RectangleF>(TouchApp_GetViewport) },
         { "TouchApp_GetCursor", new Func<object, TouchCursor>(TouchApp_GetCursor) },
         { "TouchApp_GetTheme", new Func<object, TouchTheme>(TouchApp_GetTheme) },
         { "TouchApp_GetDefaultBg", new Func<object, bool>(TouchApp_GetDefaultBg) },
         { "TouchApp_SetDefaultBg", new Action<object, bool>(TouchApp_SetDefaultBg) },
-        { "TouchApp_InitApp", new Action<object, IngameIMyCubeBlock, IngameIMyTextSurface>(TouchApp_InitApp) },
 
         { "TouchEmptyButton_New", new Func<Action, object>(TouchEmptyButton_New) },
         { "TouchEmptyButton_GetHandler", new Func<object, object>(TouchEmptyButton_GetHandler) },
@@ -451,21 +450,20 @@ namespace Lima.Touch
     private void TouchScrollView_SetScrollWheelStep(object obj, float step) => (obj as TouchScrollView).ScrollWheelStep = step;
     private TouchBarContainer TouchScrollView_GetScrollBar(object obj) => (obj as TouchScrollView).ScrollBar;
 
-    private TouchApp TouchApp_New() => new TouchApp();
+    private TouchApp TouchApp_New(IngameIMyCubeBlock block, IngameIMyTextSurface surface)
+    {
+      var castBlock = block as IMyCubeBlock;
+      var castSurface = surface as IMyTextSurface;
+      if (castBlock == null || castSurface == null)
+        return null;
+      return new TouchApp(castBlock, castSurface);
+    }
     private TouchScreen TouchApp_GetScreen(object obj) => (obj as TouchApp).Screen;
     private RectangleF TouchApp_GetViewport(object obj) => (obj as TouchApp).Viewport;
     private TouchCursor TouchApp_GetCursor(object obj) => (obj as TouchApp).Cursor;
     private TouchTheme TouchApp_GetTheme(object obj) => (obj as TouchApp).Theme;
     private bool TouchApp_GetDefaultBg(object obj) => (obj as TouchApp).DefaultBg;
     private void TouchApp_SetDefaultBg(object obj, bool defaultBg) => (obj as TouchApp).DefaultBg = defaultBg;
-    private void TouchApp_InitApp(object obj, IngameIMyCubeBlock block, IngameIMyTextSurface surface)
-    {
-      var castBlock = block as IMyCubeBlock;
-      var castSurface = surface as IMyTextSurface;
-      if (castBlock == null || castSurface == null)
-        return;
-      (obj as TouchApp).InitApp(castBlock, castSurface);
-    }
 
     private TouchCursor TouchCursor_New(object screen) => new TouchCursor(screen as TouchScreen);
     private bool TouchCursor_GetActive(object obj) => (obj as TouchCursor).Active;

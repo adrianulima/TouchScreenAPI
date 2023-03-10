@@ -26,9 +26,7 @@ namespace Lima.Touch.UiKit.Elements
 
     private AlertPanel _alertPanel;
 
-    public TouchApp() { }
-
-    public virtual void InitApp(IMyCubeBlock block, IMyTextSurface surface)
+    public TouchApp(IMyCubeBlock block, IMyTextSurface surface)
     {
       Screen = new TouchScreen(block, surface);
       TouchSession.Instance.TouchMan.RemoveScreen(block, surface);

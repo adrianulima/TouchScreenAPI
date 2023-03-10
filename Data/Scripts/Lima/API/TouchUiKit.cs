@@ -119,7 +119,6 @@ namespace Lima.API
       AssignMethod(delegates, "TouchApp_GetTheme", ref apiDel.TouchApp_GetTheme);
       AssignMethod(delegates, "TouchApp_GetDefaultBg", ref apiDel.TouchApp_GetDefaultBg);
       AssignMethod(delegates, "TouchApp_SetDefaultBg", ref apiDel.TouchApp_SetDefaultBg);
-      AssignMethod(delegates, "TouchApp_InitApp", ref apiDel.TouchApp_InitApp);
       AssignMethod(delegates, "TouchEmptyButton_New", ref apiDel.TouchEmptyButton_New);
       AssignMethod(delegates, "TouchEmptyButton_GetHandler", ref apiDel.TouchEmptyButton_GetHandler);
       AssignMethod(delegates, "TouchEmptyButton_SetOnChange", ref apiDel.TouchEmptyButton_SetOnChange);
@@ -306,14 +305,13 @@ namespace Lima.API
     public Action<object, float> TouchScrollView_SetScrollWheelStep;
     public Func<object, object> TouchScrollView_GetScrollBar;
 
-    public Func<object> TouchApp_New;
+    public Func<IngameIMyCubeBlock, IngameIMyTextSurface, object> TouchApp_New;
     public Func<object, object> TouchApp_GetScreen;
     public Func<object, RectangleF> TouchApp_GetViewport;
     public Func<object, object> TouchApp_GetCursor;
     public Func<object, object> TouchApp_GetTheme;
     public Func<object, bool> TouchApp_GetDefaultBg;
     public Action<object, bool> TouchApp_SetDefaultBg;
-    public Action<object, IngameIMyCubeBlock, IngameIMyTextSurface> TouchApp_InitApp;
 
     public Func<Action, object> TouchEmptyButton_New;
     public Func<object, object> TouchEmptyButton_GetHandler;
@@ -629,7 +627,11 @@ namespace Lima.API
     private TouchScreen _screen;
     private TouchCursor _cursor;
     private TouchTheme _theme;
-    public TouchApp() : base(Api.TouchApp_New()) { }
+    /// <summary>
+    /// Instantiates the app, recommended to be called after a few seconds when used on a TSS.
+    /// Can return null if the block and surface are not ready for TouchScreen, catch any exceptions.
+    /// </summary>
+    public TouchApp(IngameIMyCubeBlock block, IngameIMyTextSurface surface) : base(Api.TouchApp_New(block, surface)) { }
     /// <summary>
     /// Do not call this ctor directly, unless you have the reference of the original object from the API.
     /// </summary>
@@ -642,11 +644,6 @@ namespace Lima.API
     /// If true, the app will present a nice background image.
     /// </summary>
     public bool DefaultBg { get { return Api.TouchApp_GetDefaultBg.Invoke(InternalObj); } set { Api.TouchApp_SetDefaultBg.Invoke(InternalObj, value); } }
-    /// <summary>
-    /// Initiates the app, recommended to be called after a few seconds when used on a TSS.
-    /// This method can fail if the block and surface are not ready for TouchScreen, catch any exceptions.
-    /// </summary>
-    public virtual void InitApp(IngameIMyCubeBlock block, IngameIMyTextSurface surface) => Api.TouchApp_InitApp.Invoke(InternalObj, block, surface);
   }
   /// <summary>
   /// <see href="https://github.com/adrianulima/TouchScreenAPI/blob/main/Data/Scripts/Lima/Touch/UiKit/Elements/TouchEmptyButton.cs"/>

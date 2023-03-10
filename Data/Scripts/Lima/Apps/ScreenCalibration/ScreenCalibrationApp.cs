@@ -32,13 +32,10 @@ namespace Lima.Apps.ScreenCalibration
     private Vector3D _vertex2;
     // private Vector3D _normal;
 
-    public ScreenCalibrationApp()
+    public ScreenCalibrationApp(IMyCubeBlock block, IMyTextSurface surface) : base(block, surface)
     {
       DefaultBg = true;
-    }
 
-    public void CreateElements()
-    {
       Cursor.Active = false;
 
       _overlayView = new TouchView();

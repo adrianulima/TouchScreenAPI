@@ -40,9 +40,7 @@ namespace Lima.Apps.ScreenCalibration
         return;
       _init = true;
 
-      _app = new ScreenCalibrationApp();
-      _app.InitApp(_block, _surface);
-      _app.CreateElements();
+      _app = new ScreenCalibrationApp(_block, _surface);
       _app.Theme.Scale = Math.Min(Math.Max(Math.Min(this.Surface.SurfaceSize.X, this.Surface.SurfaceSize.Y) / 512, 0.75f), 2);
       _app.Cursor.Scale = _app.Theme.Scale;
 
