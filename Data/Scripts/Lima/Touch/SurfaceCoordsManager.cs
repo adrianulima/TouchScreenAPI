@@ -24,7 +24,6 @@ namespace Lima.Touch
 
     public void LoadData()
     {
-      // TODO: Consider loading this list from SBC or config file
       var coords = new List<string>()
       {
         "TOUCH:LargeLCDPanel:0:-1.23463:1.23463:-1.02366:-1.23463:-1.23463:-1.02366:1.23463:-1.23463:-1.02366",

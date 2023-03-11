@@ -10,6 +10,7 @@ using VRage;
 using VRageMath;
 using BlendTypeEnum = VRageRender.MyBillboard.BlendTypeEnum;
 using IntersectionFlags = VRage.Game.Components.IntersectionFlags;
+using Lima.Utils;
 
 namespace Lima.Apps.ScreenCalibration
 {
@@ -51,7 +52,7 @@ namespace Lima.Apps.ScreenCalibration
       _view = new View();
       _view.Alignment = ViewAlignment.Start;
       _view.Anchor = ViewAnchor.Start;
-      _view.Padding = new Vector4(20);
+      _view.Padding = new Vector4(15);
       AddChild(_view);
 
       _button = new Button("Click", () =>
@@ -63,6 +64,10 @@ namespace Lima.Apps.ScreenCalibration
       _view.AddChild(_button);
 
       this.UpdateAtSimulationEvent += UpdateCrossHair;
+    }
+
+    protected override void CreateAlertPanel()
+    {
     }
 
     private void UpdateCrossHair()
@@ -98,21 +103,26 @@ namespace Lima.Apps.ScreenCalibration
       var text = "Calibration failed, reset the App.\n";
       if (_calibrating)
       {
-        text = $"{_tryAgain}\n{Screen.SubtypeId}:{Screen.Index}";
+        text = "";
+        if (_step == 0)
+          text = $"{text}Click the button in the upper left";
         if (_step == 1)
-          text = $"{text}\n:{Format(_vertex0)}";
+          text = $"{text}Click the button in the lower left";
         if (_step == 2)
-          text = $"{text}\n:{Format(_vertex0)}\n:{Format(_vertex1)}";
+          text = $"{text}Click the button in the lower right";
       }
       else if (_step == 3)
-        text = $"Calibration success, added to Storage.\n\n{Screen.SubtypeId}:{Screen.Index}\n:{Format(_vertex0)}\n:{Format(_vertex1)}\n:{Format(_vertex2)}";
-
-      if (_step == 0 && Cursor.Position != Vector2.Zero)
       {
-        text = $"Only use this App for modded LCDs.\nThis screen is already calibrated!\n Changes will override current.\n\n{text}";
+        if (MyAPIGateway.Input.IsAnyCtrlKeyPressed())
+          text = "Copy calibration to share\nwith others. They can use\n'/touch {coords}' chat command.\n";
+        else
+          text = "Calibration success. You are done!\n\nHold Ctrl to see extra options.\n";
       }
 
-      _button.Enabled = _calibrating || _step == 3;
+      if (_step == 0 && Cursor.Position != Vector2.Zero)
+        text = $"Only use this App for modded LCDs.\nThis screen is already calibrated!\n Changes will override current.\n\n{text}";
+
+      _button.Enabled = _calibrating || (_step == 3 && MyAPIGateway.Input.IsAnyCtrlKeyPressed());
       _label.Text = text;
     }
 
@@ -133,6 +143,7 @@ namespace Lima.Apps.ScreenCalibration
         MyIntersectionResultLineTriangleEx? triangleEx;
         if ((Screen.Block as IMyCubeBlock).GetIntersectionWithLine(ref line, out triangleEx, IntersectionFlags.DIRECT_TRIANGLES))
         {
+          InputUtils.SetPlayerUseBlacklistState(true);
           if (!_wasPressed && MyAPIGateway.Input.IsAnyMouseOrJoystickPressed())
           {
             var localPos = triangleEx?.IntersectionPointInObjectSpace ?? default(Vector3);
@@ -152,20 +163,26 @@ namespace Lima.Apps.ScreenCalibration
 
               UpdateButton();
             }
-            else if (_step == 3)
-            {
-              _tryAgain = "== Try again! ==";
-              _step = 0;
-            }
+            // else if (_step == 3)
+            // {
+            //   _tryAgain = "== Try again! ==\n";
+            //   _step = 0;
+            // }
           }
         }
-        else if (_wasPressed)
+        else
         {
-          _calibrating = false;
-          _step = 0;
+          InputUtils.SetPlayerUseBlacklistState(false);
+          if (_wasPressed)
+          {
+            _calibrating = false;
+            _step = 0;
+          }
         }
         _wasPressed = MyAPIGateway.Input.IsAnyMouseOrJoystickPressed();
       }
+      else if (!Cursor.Enabled)
+        InputUtils.SetPlayerUseBlacklistState(false);
     }
 
     private void UpdateButton()
@@ -213,10 +230,10 @@ namespace Lima.Apps.ScreenCalibration
       return vert;
     }
 
-    private string Format(Vector3D vertex)
-    {
-      return $"{vertex.X.ToString("0.#####")}:{vertex.Y.ToString("0.#####")}:{vertex.Z.ToString("0.#####")}";
-    }
+    // private string Format(Vector3D vertex)
+    // {
+    //   return $"{vertex.X.ToString("0.#####")}:{vertex.Y.ToString("0.#####")}:{vertex.Z.ToString("0.#####")}";
+    // }
 
     // private Vector3D CalculateNormal()
     // {

@@ -7,6 +7,7 @@ using VRage.ModAPI;
 using VRage.Utils;
 using VRageMath;
 using VRage.Game.GUI.TextPanel;
+using Lima.Utils;
 
 namespace Lima.Apps.ScreenCalibration
 {
@@ -58,6 +59,7 @@ namespace Lima.Apps.ScreenCalibration
 
     void BlockMarkedForClose(IMyEntity ent)
     {
+      InputUtils.SetPlayerUseBlacklistState(false);
       Dispose();
     }
 

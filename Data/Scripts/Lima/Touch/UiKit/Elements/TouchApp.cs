@@ -46,6 +46,11 @@ namespace Lima.Touch.UiKit.Elements
 
       App = this;
 
+      CreateAlertPanel();
+    }
+
+    protected virtual void CreateAlertPanel()
+    {
       if (Screen.Coords == SurfaceCoords.Zero)
       {
         _alertPanel = new AlertPanel("Use 'Screen Calibration' app to calibrate this screen");
