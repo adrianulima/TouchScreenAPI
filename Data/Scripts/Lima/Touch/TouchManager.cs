@@ -25,6 +25,8 @@ namespace Lima.Touch
       {
         CurrentScreen = null;
 
+        var toolEquipped = MyAPIGateway.Session?.Player?.Character.EquippedTool != null;
+
         if (!TouchSession.Instance.ModEnabled
         || MyAPIGateway.Session == null
         // || !MyAPIGateway.Session.CameraController.IsInFirstPersonView
@@ -74,7 +76,7 @@ namespace Lima.Touch
 
           screen.UpdateScreenCoord();
 
-          if (screen.IsOnScreen && (closestDist < 0 || dist < closestDist))
+          if (!toolEquipped && screen.IsOnScreen && (closestDist < 0 || dist < closestDist))
           {
             if (CurrentScreen != null)
               CurrentScreen.IsPlayerAiming = false;
