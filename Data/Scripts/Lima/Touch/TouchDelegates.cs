@@ -315,7 +315,7 @@ namespace Lima.Touch
         { "TouchScreen_CompareWithBlockAndSurface", new Func<object, IngameIMyCubeBlock, IngameIMyTextSurface, bool>(TouchScreen_CompareWithBlockAndSurface) },
         { "TouchScreen_ForceDispose", new Action<object>(TouchScreen_ForceDispose) },
 
-        { "Cursor_New", new Func<object, Cursor>(Cursor_New) },
+        { "Cursor_New", new Func<object, object>(Cursor_New) },
         { "Cursor_GetEnabled", new Func<object, bool>(Cursor_GetEnabled) },
         { "Cursor_SetEnabled", new Action<object, bool>(Cursor_SetEnabled) },
         { "Cursor_GetScale", new Func<object, float>(Cursor_GetScale) },

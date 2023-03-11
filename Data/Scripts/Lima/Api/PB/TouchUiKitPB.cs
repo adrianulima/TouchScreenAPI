@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System;
 using VRage.Game.GUI.TextPanel;
 using VRageMath;
-using IngameIMyTextSurface = Sandbox.ModAPI.Ingame.IMyTextSurface;
-using IngameIMyCubeBlock = VRage.Game.ModAPI.Ingame.IMyCubeBlock;
+using IMyTextSurface = Sandbox.ModAPI.Ingame.IMyTextSurface;
+using IMyCubeBlock = VRage.Game.ModAPI.Ingame.IMyCubeBlock;
 
 namespace Lima.API.PB
 {
@@ -13,8 +13,8 @@ namespace Lima.API.PB
   public class TouchUiKit
   {
     public bool IsReady { get; protected set; }
-    private Func<IngameIMyCubeBlock, IngameIMyTextSurface, object> _createTouchScreen;
-    private Action<IngameIMyCubeBlock, IngameIMyTextSurface> _removeTouchScreen;
+    private Func<IMyCubeBlock, IMyTextSurface, object> _createTouchScreen;
+    private Action<IMyCubeBlock, IMyTextSurface> _removeTouchScreen;
     private Action<string> _addSurfaceCoords;
     private Action<string> _removeSurfaceCoords;
     /// <summary>
@@ -26,13 +26,13 @@ namespace Lima.API.PB
     /// <param name="block">The block the touch point will be calculated.</param>
     /// <param name="surface">The surface the user will handle touch.</param>
     /// <returns></returns>
-    public object CreateTouchScreen(IngameIMyCubeBlock block, IngameIMyTextSurface surface) => _createTouchScreen?.Invoke(block, surface);
+    public object CreateTouchScreen(IMyCubeBlock block, IMyTextSurface surface) => _createTouchScreen?.Invoke(block, surface);
     /// <summary>
     /// Dispose the instance of TouchScreen related to given block and surface. And also removes from Touch Manager.
     /// </summary>
     /// <param name="block">The related block.</param>
     /// <param name="surface">The related surface.</param>
-    public void RemoveTouchScreen(IngameIMyCubeBlock block, IngameIMyTextSurface surface) => _removeTouchScreen?.Invoke(block, surface);
+    public void RemoveTouchScreen(IMyCubeBlock block, IMyTextSurface surface) => _removeTouchScreen?.Invoke(block, surface);
     /// <summary>
     /// This add surface coordinates to Touch Manager, it is a string similar to how GPS strings work.
     /// This same feature is also available using chat message commands with prefix /touch [string].
@@ -291,8 +291,8 @@ namespace Lima.API.PB
   }
   public class UiKitDelegator
   {
-    public Func<object, IngameIMyCubeBlock> TouchScreen_GetBlock;
-    public Func<object, IngameIMyTextSurface> TouchScreen_GetSurface;
+    public Func<object, IMyCubeBlock> TouchScreen_GetBlock;
+    public Func<object, IMyTextSurface> TouchScreen_GetSurface;
     public Func<object, int> TouchScreen_GetIndex;
     public Func<object, bool> TouchScreen_IsOnScreen;
     public Func<object, object> TouchScreen_GetMouse1;
@@ -301,7 +301,7 @@ namespace Lima.API.PB
     public Func<object, float> TouchScreen_GetInteractiveDistance;
     public Action<object, float> TouchScreen_SetInteractiveDistance;
     public Func<object, int> TouchScreen_GetRotation;
-    public Func<object, IngameIMyCubeBlock, IngameIMyTextSurface, bool> TouchScreen_CompareWithBlockAndSurface;
+    public Func<object, IMyCubeBlock, IMyTextSurface, bool> TouchScreen_CompareWithBlockAndSurface;
     public Action<object> TouchScreen_ForceDispose;
     public Func<object, object> Cursor_New;
     public Func<object, bool> Cursor_GetEnabled;
@@ -395,7 +395,7 @@ namespace Lima.API.PB
     public Func<object, float> ScrollView_GetScrollWheelStep;
     public Action<object, float> ScrollView_SetScrollWheelStep;
     public Func<object, object> ScrollView_GetScrollBar;
-    public Func<IngameIMyCubeBlock, IngameIMyTextSurface, object> TouchApp_New;
+    public Func<IMyCubeBlock, IMyTextSurface, object> TouchApp_New;
     public Func<object, object> TouchApp_GetScreen;
     public Func<object, RectangleF> TouchApp_GetViewport;
     public Func<object, object> TouchApp_GetCursor;
@@ -537,8 +537,8 @@ namespace Lima.API.PB
     /// Do not call this ctor directly, unless you have the reference of the original object from the API.
     /// </summary>
     public TouchScreen(object internalObject) : base(internalObject) { }
-    public IngameIMyCubeBlock Block { get { return Api.TouchScreen_GetBlock.Invoke(InternalObj); } }
-    public IngameIMyTextSurface Surface { get { return Api.TouchScreen_GetSurface.Invoke(InternalObj); } }
+    public IMyCubeBlock Block { get { return Api.TouchScreen_GetBlock.Invoke(InternalObj); } }
+    public IMyTextSurface Surface { get { return Api.TouchScreen_GetSurface.Invoke(InternalObj); } }
     public int Index { get { return Api.TouchScreen_GetIndex.Invoke(InternalObj); } }
     public bool IsOnScreen { get { return Api.TouchScreen_IsOnScreen.Invoke(InternalObj); } }
     public ButtonState Mouse1 { get { return _mouse1 ?? (_mouse1 = Wrap<ButtonState>(Api.TouchScreen_GetMouse1.Invoke(InternalObj), (obj) => new ButtonState(obj))); } }
@@ -547,7 +547,7 @@ namespace Lima.API.PB
     public float InteractiveDistance { get { return Api.TouchScreen_GetInteractiveDistance.Invoke(InternalObj); } }
     public void SetInteractiveDistance(float distance) => Api.TouchScreen_SetInteractiveDistance.Invoke(InternalObj, distance);
     public int Rotation { get { return Api.TouchScreen_GetRotation.Invoke(InternalObj); } }
-    public bool CompareWithBlockAndSurface(IngameIMyCubeBlock block, IngameIMyTextSurface surface) => Api.TouchScreen_CompareWithBlockAndSurface.Invoke(InternalObj, block, surface);
+    public bool CompareWithBlockAndSurface(IMyCubeBlock block, IMyTextSurface surface) => Api.TouchScreen_CompareWithBlockAndSurface.Invoke(InternalObj, block, surface);
     /// <summary>
     /// Force a call to Cursor Dispose, that clears sprites.
     /// </summary>
@@ -799,7 +799,7 @@ namespace Lima.API.PB
     /// Instantiates the app, recommended to be called after a few seconds when used on a TSS.
     /// Can return null if the block and surface are not ready for TouchScreen, catch any exceptions.
     /// </summary>
-    public TouchApp(IngameIMyCubeBlock block, IngameIMyTextSurface surface) : base(Api.TouchApp_New(block, surface)) { }
+    public TouchApp(IMyCubeBlock block, IMyTextSurface surface) : base(Api.TouchApp_New(block, surface)) { }
     /// <summary>
     /// Do not call this ctor directly, unless you have the reference of the original object from the API.
     /// </summary>
