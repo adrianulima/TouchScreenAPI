@@ -76,11 +76,15 @@ namespace Lima.Touch
 
           if (screen.IsOnScreen && (closestDist < 0 || dist < closestDist))
           {
-            closestDist = dist;
+            if (CurrentScreen != null)
+              CurrentScreen.IsPlayerAiming = false;
             CurrentScreen = screen;
+            closestDist = dist;
             blockClick = true;
             _doubleCheckBlockStateTick = 60;
           }
+          else
+            screen.IsPlayerAiming = false;
 
           screen.UpdateAtSimulation();
         }

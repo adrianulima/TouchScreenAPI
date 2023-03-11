@@ -60,7 +60,7 @@ namespace Lima.Utils
         if (_controlUseIDs == null)
         {
           _controlUseIDs = new List<string>(2);
-          _controlUseIDs.Add(MyControlsSpace.USE.String);
+          // _controlUseIDs.Add(MyControlsSpace.USE.String);
           _controlUseIDs.Add(MyControlsSpace.PRIMARY_TOOL_ACTION.String);
           _controlUseIDs.Add(MyControlsSpace.SECONDARY_TOOL_ACTION.String);
         }

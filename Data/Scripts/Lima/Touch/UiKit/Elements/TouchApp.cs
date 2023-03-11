@@ -103,7 +103,8 @@ namespace Lima.Touch.UiKit.Elements
     {
       base.GetSprites();
 
-      Sprites.AddRange(Cursor.GetSprites());
+      if (Screen.IsOnScreen)
+        Sprites.AddRange(Cursor.GetSprites());
 
       return Sprites;
     }

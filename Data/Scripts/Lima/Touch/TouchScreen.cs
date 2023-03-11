@@ -11,7 +11,17 @@ namespace Lima.Touch
 {
   public class TouchScreen
   {
-    public bool Enabled { get; set; }
+    public bool _enabled = true;
+    public bool Enabled
+    {
+      get { return _enabled; }
+      set
+      {
+        if (!value)
+          IsPlayerAiming = false;
+        _enabled = value;
+      }
+    }
 
     public event Action UpdateAtSimulationEvent;
 
@@ -30,6 +40,18 @@ namespace Lima.Touch
     {
       get { return _interactiveDistance; }
       set { _interactiveDistance = value > 0 ? value : 0; }
+    }
+
+    public bool _isPlayerAiming = false;
+    public bool IsPlayerAiming
+    {
+      get { return _isPlayerAiming; }
+      set
+      {
+        if (!value)
+          IsOnScreen = false;
+        _isPlayerAiming = value;
+      }
     }
 
     private int _rotation = -1;
@@ -175,7 +197,7 @@ namespace Lima.Touch
       var mousePressed = !MyAPIGateway.Gui.IsCursorVisible && (
         WasPressedSinceLastUpdate ||
         MyAPIGateway.Input.IsLeftMousePressed() ||
-        MyAPIGateway.Input.IsMiddleMousePressed() ||
+        // MyAPIGateway.Input.IsMiddleMousePressed() ||
         MyAPIGateway.Input.IsJoystickButtonPressed(MyJoystickButtonsEnum.J06)
       );
       var mouse2Pressed = !MyAPIGateway.Gui.IsCursorVisible && (
