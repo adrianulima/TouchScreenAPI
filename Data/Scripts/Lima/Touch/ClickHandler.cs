@@ -1,4 +1,5 @@
 using Sandbox.ModAPI;
+using VRage.Input;
 using VRageMath;
 
 namespace Lima.Touch
@@ -32,8 +33,11 @@ namespace Lima.Touch
 
       if (HitArea != Vector4.Zero)
       {
-        // var mousePressed = MyAPIGateway.Input.IsMousePressed(MyMouseButtonsEnum.Left)
-        var mousePressed = !MyAPIGateway.Gui.IsCursorVisible && (MyAPIGateway.Input.IsLeftMousePressed() || MyAPIGateway.Input.IsMiddleMousePressed());
+        var mousePressed = !MyAPIGateway.Gui.IsCursorVisible && (
+          MyAPIGateway.Input.IsLeftMousePressed() ||
+          MyAPIGateway.Input.IsMiddleMousePressed() ||
+          MyAPIGateway.Input.IsJoystickButtonPressed(MyJoystickButtonsEnum.J06)
+        );
         if (screen.IsInsideArea(
             HitArea.X,
             HitArea.Y,
