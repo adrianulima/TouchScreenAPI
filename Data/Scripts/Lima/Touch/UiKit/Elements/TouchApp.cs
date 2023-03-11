@@ -62,6 +62,7 @@ namespace Lima.Touch.UiKit.Elements
     {
       Screen.WasPressedSinceLastUpdate = simLoop && Screen.Mouse1.IsPressed;
       Screen.WasPressed2SinceLastUpdate = simLoop && Screen.Mouse2.IsPressed;
+      Screen.WasPressed3SinceLastUpdate = simLoop && Screen.Mouse3.IsPressed;
     }
 
     public virtual void UpdateAtSimulation()

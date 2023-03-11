@@ -8,6 +8,7 @@ namespace Lima.Touch
 
     public ButtonState Mouse1 = new ButtonState();
     public ButtonState Mouse2 = new ButtonState();
+    public ButtonState Mouse3 = new ButtonState();
 
     public ClickHandler() { }
 
@@ -15,12 +16,10 @@ namespace Lima.Touch
     {
       if (HitArea != Vector4.Zero)
       {
-        var mousePressed = screen.Mouse1.IsPressed;
-        var mouse2Pressed = screen.Mouse2.IsPressed;
         var isInsideArea = screen.IsInsideArea(HitArea.X, HitArea.Y, HitArea.Z, HitArea.W);
-
-        Mouse1.Update(mousePressed, isInsideArea);
-        Mouse2.Update(mouse2Pressed, isInsideArea);
+        Mouse1.Update(screen.Mouse1.IsPressed, isInsideArea);
+        Mouse2.Update(screen.Mouse2.IsPressed, isInsideArea);
+        Mouse3.Update(screen.Mouse3.IsPressed, isInsideArea);
       }
     }
 

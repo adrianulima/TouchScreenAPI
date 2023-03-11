@@ -157,6 +157,7 @@ namespace Lima.API
       AssignMethod(delegates, "TouchScreen_IsOnScreen", ref ApiDelegator.TouchScreen_IsOnScreen);
       AssignMethod(delegates, "TouchScreen_GetMouse1", ref ApiDelegator.TouchScreen_GetMouse1);
       AssignMethod(delegates, "TouchScreen_GetMouse2", ref ApiDelegator.TouchScreen_GetMouse2);
+      AssignMethod(delegates, "TouchScreen_GetMouse3", ref ApiDelegator.TouchScreen_GetMouse3);
       AssignMethod(delegates, "TouchScreen_GetCursorPosition", ref ApiDelegator.TouchScreen_GetCursorPosition);
       AssignMethod(delegates, "TouchScreen_GetInteractiveDistance", ref ApiDelegator.TouchScreen_GetInteractiveDistance);
       AssignMethod(delegates, "TouchScreen_SetInteractiveDistance", ref ApiDelegator.TouchScreen_SetInteractiveDistance);
@@ -178,6 +179,7 @@ namespace Lima.API
       AssignMethod(delegates, "ClickHandler_Update", ref ApiDelegator.ClickHandler_Update);
       AssignMethod(delegates, "ClickHandler_GetMouse1", ref ApiDelegator.ClickHandler_GetMouse1);
       AssignMethod(delegates, "ClickHandler_GetMouse2", ref ApiDelegator.ClickHandler_GetMouse2);
+      AssignMethod(delegates, "ClickHandler_GetMouse3", ref ApiDelegator.ClickHandler_GetMouse3);
       AssignMethod(delegates, "ButtonState_New", ref ApiDelegator.ButtonState_New);
       AssignMethod(delegates, "ButtonState_IsReleased", ref ApiDelegator.ButtonState_IsReleased);
       AssignMethod(delegates, "ButtonState_IsOver", ref ApiDelegator.ButtonState_IsOver);
@@ -213,6 +215,7 @@ namespace Lima.API
     public Func<object, bool> TouchScreen_IsOnScreen;
     public Func<object, object> TouchScreen_GetMouse1;
     public Func<object, object> TouchScreen_GetMouse2;
+    public Func<object, object> TouchScreen_GetMouse3;
     public Func<object, Vector2> TouchScreen_GetCursorPosition;
     public Func<object, float> TouchScreen_GetInteractiveDistance;
     public Action<object, float> TouchScreen_SetInteractiveDistance;
@@ -236,6 +239,7 @@ namespace Lima.API
     public Action<object, object> ClickHandler_Update;
     public Func<object, object> ClickHandler_GetMouse1;
     public Func<object, object> ClickHandler_GetMouse2;
+    public Func<object, object> ClickHandler_GetMouse3;
 
     public Func<object> ButtonState_New;
     public Func<object, bool> ButtonState_IsReleased;
@@ -274,6 +278,7 @@ namespace Lima.API
   {
     private ButtonState _mouse1;
     private ButtonState _mouse2;
+    private ButtonState _mouse3;
     /// <summary>
     /// Do not call this ctor directly, unless you have the reference of the original object from the API.
     /// </summary>
@@ -284,6 +289,7 @@ namespace Lima.API
     public bool IsOnScreen { get { return Api.TouchScreen_IsOnScreen.Invoke(InternalObj); } }
     public ButtonState Mouse1 { get { return _mouse1 ?? (_mouse1 = Wrap<ButtonState>(Api.TouchScreen_GetMouse1.Invoke(InternalObj), (obj) => new ButtonState(obj))); } }
     public ButtonState Mouse2 { get { return _mouse2 ?? (_mouse2 = Wrap<ButtonState>(Api.TouchScreen_GetMouse2.Invoke(InternalObj), (obj) => new ButtonState(obj))); } }
+    public ButtonState Mouse3 { get { return _mouse3 ?? (_mouse3 = Wrap<ButtonState>(Api.TouchScreen_GetMouse3.Invoke(InternalObj), (obj) => new ButtonState(obj))); } }
     public Vector2 CursorPosition { get { return Api.TouchScreen_GetCursorPosition.Invoke(InternalObj); } }
     public float InteractiveDistance { get { return Api.TouchScreen_GetInteractiveDistance.Invoke(InternalObj); } set { Api.TouchScreen_SetInteractiveDistance.Invoke(InternalObj, value); } }
     public int Rotation { get { return Api.TouchScreen_GetRotation.Invoke(InternalObj); } }
@@ -318,6 +324,7 @@ namespace Lima.API
   {
     private ButtonState _mouse1;
     private ButtonState _mouse2;
+    private ButtonState _mouse3;
     public ClickHandler() : base(Api.ClickHandler_New()) { }
     /// <summary>
     /// Do not call this ctor directly, unless you have the reference of the original object from the API.
@@ -333,6 +340,7 @@ namespace Lima.API
     public void Update(TouchScreen screen) => Api.ClickHandler_Update.Invoke(InternalObj, screen.InternalObj);
     public ButtonState Mouse1 { get { return _mouse1 ?? (_mouse1 = Wrap<ButtonState>(Api.ClickHandler_GetMouse1.Invoke(InternalObj), (obj) => new ButtonState(obj))); } }
     public ButtonState Mouse2 { get { return _mouse2 ?? (_mouse2 = Wrap<ButtonState>(Api.ClickHandler_GetMouse2.Invoke(InternalObj), (obj) => new ButtonState(obj))); } }
+    public ButtonState Mouse3 { get { return _mouse3 ?? (_mouse3 = Wrap<ButtonState>(Api.ClickHandler_GetMouse3.Invoke(InternalObj), (obj) => new ButtonState(obj))); } }
   }
   /// <summary>
   /// Responsible for holding calculating and holding button state.

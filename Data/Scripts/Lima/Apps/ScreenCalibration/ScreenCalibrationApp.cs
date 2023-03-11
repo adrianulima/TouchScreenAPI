@@ -116,7 +116,7 @@ namespace Lima.Apps.ScreenCalibration
         if (MyAPIGateway.Input.IsAnyCtrlKeyPressed())
           text = "Copy calibration to share\nwith others. They can use\n'/touch {coords}' chat command.\n";
         else
-          text = "Calibration success. You are done!\n\nHold Ctrl to see extra options.\n";
+          text = "Calibration successful. You are done!\n\nHold Ctrl to see extra options.\n";
       }
 
       if (_step == 0 && Cursor.Position != Vector2.Zero)

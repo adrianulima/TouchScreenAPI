@@ -28,7 +28,7 @@ namespace Lima.Touch.UiKit.Elements
         Handler.HitArea = new Vector4(Position.X, Position.Y, Position.X + size.X, Position.Y + size.Y);
         Handler.Update(App.Screen);
 
-        if (Handler.Mouse1.JustReleased)
+        if (Handler.Mouse1.JustReleased && OnChange != null)
           OnChange();
       }
 

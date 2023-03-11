@@ -78,9 +78,11 @@ namespace Lima.Touch
 
     public ButtonState Mouse1 = new ButtonState();
     public ButtonState Mouse2 = new ButtonState();
+    public ButtonState Mouse3 = new ButtonState();
 
     public bool WasPressedSinceLastUpdate = false;
     public bool WasPressed2SinceLastUpdate = false;
+    public bool WasPressed3SinceLastUpdate = false;
 
     public TouchScreen(IMyCubeBlock block, IMyTextSurface surface)
     {
@@ -194,20 +196,28 @@ namespace Lima.Touch
 
     private void UpdateMouseButtons()
     {
+      var joystickRB = MyAPIGateway.Input.IsJoystickButtonPressed(MyJoystickButtonsEnum.J06);
+      var joystickLB = MyAPIGateway.Input.IsJoystickButtonPressed(MyJoystickButtonsEnum.J05);
+
       var mousePressed = !MyAPIGateway.Gui.IsCursorVisible && (
         WasPressedSinceLastUpdate ||
         MyAPIGateway.Input.IsLeftMousePressed() ||
-        // MyAPIGateway.Input.IsMiddleMousePressed() ||
-        MyAPIGateway.Input.IsJoystickButtonPressed(MyJoystickButtonsEnum.J06)
+        (joystickRB && !joystickLB)
       );
       var mouse2Pressed = !MyAPIGateway.Gui.IsCursorVisible && (
         WasPressed2SinceLastUpdate ||
         MyAPIGateway.Input.IsRightMousePressed() ||
-        MyAPIGateway.Input.IsJoystickButtonPressed(MyJoystickButtonsEnum.J05)
+        (!joystickRB && joystickLB)
+      );
+      var mouse3Pressed = !MyAPIGateway.Gui.IsCursorVisible && (
+        WasPressed3SinceLastUpdate ||
+        MyAPIGateway.Input.IsMiddleMousePressed() ||
+        (joystickRB && joystickLB)
       );
 
       Mouse1.Update(mousePressed, IsOnScreen);
       Mouse2.Update(mouse2Pressed, IsOnScreen);
+      Mouse3.Update(mouse3Pressed, IsOnScreen);
     }
 
     public void UpdateAtSimulation()

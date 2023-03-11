@@ -308,6 +308,7 @@ namespace Lima.Touch
         { "TouchScreen_IsOnScreen", new Func<object, bool>(TouchScreen_IsOnScreen) },
         { "TouchScreen_GetMouse1", new Func<object, object>(TouchScreen_GetMouse1) },
         { "TouchScreen_GetMouse2", new Func<object, object>(TouchScreen_GetMouse2) },
+        { "TouchScreen_GetMouse3", new Func<object, object>(TouchScreen_GetMouse3) },
         { "TouchScreen_GetCursorPosition", new Func<object, Vector2>(TouchScreen_GetCursorPosition) },
         { "TouchScreen_GetInteractiveDistance", new Func<object, float>(TouchScreen_GetInteractiveDistance) },
         { "TouchScreen_SetInteractiveDistance", new Action<object, float>(TouchScreen_SetInteractiveDistance) },
@@ -331,6 +332,7 @@ namespace Lima.Touch
         { "ClickHandler_Update", new Action<object, object>(ClickHandler_Update) },
         { "ClickHandler_GetMouse1", new Func<object, object>(ClickHandler_GetMouse1) },
         { "ClickHandler_GetMouse2", new Func<object, object>(ClickHandler_GetMouse2) },
+        { "ClickHandler_GetMouse3", new Func<object, object>(ClickHandler_GetMouse3) },
 
         { "ButtonState_New", new Func<object>(ButtonState_New) },
         { "ButtonState_IsReleased", new Func<object, bool>(ButtonState_IsReleased) },
@@ -386,6 +388,7 @@ namespace Lima.Touch
     private bool TouchScreen_IsOnScreen(object obj) => (obj as TouchScreen).IsOnScreen;
     private ButtonState TouchScreen_GetMouse1(object obj) => (obj as TouchScreen).Mouse1;
     private ButtonState TouchScreen_GetMouse2(object obj) => (obj as TouchScreen).Mouse2;
+    private ButtonState TouchScreen_GetMouse3(object obj) => (obj as TouchScreen).Mouse3;
     private Vector2 TouchScreen_GetCursorPosition(object obj) => (obj as TouchScreen).CursorPosition;
     private float TouchScreen_GetInteractiveDistance(object obj) => (obj as TouchScreen).InteractiveDistance;
     private void TouchScreen_SetInteractiveDistance(object obj, float distance) => (obj as TouchScreen).InteractiveDistance = distance;
@@ -518,6 +521,7 @@ namespace Lima.Touch
     private void ClickHandler_Update(object obj, object screen) => (obj as ClickHandler).Update(screen as TouchScreen);
     private ButtonState ClickHandler_GetMouse1(object obj) => (obj as ClickHandler).Mouse1;
     private ButtonState ClickHandler_GetMouse2(object obj) => (obj as ClickHandler).Mouse2;
+    private ButtonState ClickHandler_GetMouse3(object obj) => (obj as ClickHandler).Mouse3;
 
     private ButtonState ButtonState_New() => new ButtonState();
     private bool ButtonState_IsReleased(object obj) => (obj as ButtonState).IsReleased;
