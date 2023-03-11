@@ -95,6 +95,7 @@ namespace Lima.Touch
       Index = SurfaceUtils.GetSurfaceIndex(provider, surface);
 
       RefreshCoords();
+
       Enabled = true;
       Viewport = new RectangleF(
         (surface.TextureSize - surface.SurfaceSize) * 0.5f,
@@ -114,6 +115,13 @@ namespace Lima.Touch
       }
 
       Coords = coords;
+
+      if (Coords != null && !Coords.IsEmpty())
+      {
+        var inches = Vector3.Distance(Coords.TopLeft, Coords.BottomRight) * 1.75f;
+        var min = (inches < 1) ? 2.5f : 5;
+        InteractiveDistance = MathHelper.Clamp(inches, min, 15);
+      }
     }
 
     public void ForceRotationUpdate()
