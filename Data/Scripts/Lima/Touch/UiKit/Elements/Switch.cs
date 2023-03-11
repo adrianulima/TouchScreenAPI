@@ -69,9 +69,9 @@ namespace Lima.Touch.UiKit.Elements
         else
         {
           Buttons[i].Label.TextColor = App.Theme.MainColor_8;
-          if (Buttons[i].Handler.IsMousePressed)
+          if (Buttons[i].Handler.Mouse1.IsPressed)
             Buttons[i].BgColor = App.Theme.MainColor_4;
-          else if (Buttons[i].Handler.IsMouseOver)
+          else if (Buttons[i].Handler.Mouse1.IsOver)
             Buttons[i].BgColor = App.Theme.MainColor_5;
           else
             Buttons[i].BgColor = App.Theme.MainColor_2;

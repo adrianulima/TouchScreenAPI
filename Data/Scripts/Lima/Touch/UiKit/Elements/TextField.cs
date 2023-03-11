@@ -149,7 +149,7 @@ namespace Lima.Touch.UiKit.Elements
       var size = GetBoundaries();
 
       Handler.HitArea = new Vector4(Position.X, Position.Y, Position.X + size.X, Position.Y + size.Y);
-      Handler.UpdateStatus(App.Screen);
+      Handler.Update(App.Screen);
 
       if (IsEditing)
         Blink();
@@ -157,9 +157,9 @@ namespace Lima.Touch.UiKit.Elements
       if (UseThemeColors)
         ApplyThemeStyle();
 
-      if (Handler.JustPressed)
+      if (Handler.Mouse1.JustPressed)
         ToggleEdit(false, false, false);
-      else if (IsEditing && ((!Handler.IsMouseOver && Handler.WasPressedOutside) || !App.Screen.IsOnScreen))
+      else if (IsEditing && ((!Handler.Mouse1.IsOver && Handler.Mouse1.WasPressedOutside) || !App.Screen.IsOnScreen))
         ToggleEdit(true, false, true);
 
       Label.Text = Text;
@@ -191,7 +191,7 @@ namespace Lima.Touch.UiKit.Elements
     {
       if (IsEditing)
         BgColor = App.Theme.MainColor_3;//_blink ? App.Theme.MainColor_3 : App.Theme.MainColor_2;
-      else if (Handler.IsMouseOver)
+      else if (Handler.Mouse1.IsOver)
         BgColor = App.Theme.MainColor_3;
       else
         BgColor = App.Theme.MainColor_2;

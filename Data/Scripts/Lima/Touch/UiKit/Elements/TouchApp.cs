@@ -58,14 +58,22 @@ namespace Lima.Touch.UiKit.Elements
       }
     }
 
+    public void UpdateClick(bool simLoop = false)
+    {
+      Screen.WasPressedSinceLastUpdate = simLoop && Screen.Mouse1.IsPressed;
+      Screen.WasPressed2SinceLastUpdate = simLoop && Screen.Mouse2.IsPressed;
+    }
+
     public virtual void UpdateAtSimulation()
     {
+      UpdateClick(true);
       UpdateAtSimulationEvent?.Invoke();
     }
 
     public override void Update()
     {
       base.Update();
+      UpdateClick(false);
 
       if (_alertPanel != null)
         MoveChild(_alertPanel, Children.Count - 1);

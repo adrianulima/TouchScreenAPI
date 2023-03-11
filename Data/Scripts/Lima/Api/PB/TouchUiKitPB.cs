@@ -68,6 +68,8 @@ namespace Lima.API.PB
         AssignMethod(out _apiDel.TouchScreen_GetSurface, delegates["TouchScreen_GetSurface"]);
         AssignMethod(out _apiDel.TouchScreen_GetIndex, delegates["TouchScreen_GetIndex"]);
         AssignMethod(out _apiDel.TouchScreen_IsOnScreen, delegates["TouchScreen_IsOnScreen"]);
+        AssignMethod(out _apiDel.TouchScreen_GetMouse1, delegates["TouchScreen_GetMouse1"]);
+        AssignMethod(out _apiDel.TouchScreen_GetMouse2, delegates["TouchScreen_GetMouse2"]);
         AssignMethod(out _apiDel.TouchScreen_GetCursorPosition, delegates["TouchScreen_GetCursorPosition"]);
         AssignMethod(out _apiDel.TouchScreen_GetInteractiveDistance, delegates["TouchScreen_GetInteractiveDistance"]);
         AssignMethod(out _apiDel.TouchScreen_SetInteractiveDistance, delegates["TouchScreen_SetInteractiveDistance"]);
@@ -86,12 +88,16 @@ namespace Lima.API.PB
         AssignMethod(out _apiDel.ClickHandler_New, delegates["ClickHandler_New"]);
         AssignMethod(out _apiDel.ClickHandler_GetHitArea, delegates["ClickHandler_GetHitArea"]);
         AssignMethod(out _apiDel.ClickHandler_SetHitArea, delegates["ClickHandler_SetHitArea"]);
-        AssignMethod(out _apiDel.ClickHandler_IsMouseReleased, delegates["ClickHandler_IsMouseReleased"]);
-        AssignMethod(out _apiDel.ClickHandler_IsMouseOver, delegates["ClickHandler_IsMouseOver"]);
-        AssignMethod(out _apiDel.ClickHandler_IsMousePressed, delegates["ClickHandler_IsMousePressed"]);
-        AssignMethod(out _apiDel.ClickHandler_JustReleased, delegates["ClickHandler_JustReleased"]);
-        AssignMethod(out _apiDel.ClickHandler_JustPressed, delegates["ClickHandler_JustPressed"]);
-        AssignMethod(out _apiDel.ClickHandler_UpdateStatus, delegates["ClickHandler_UpdateStatus"]);
+        AssignMethod(out _apiDel.ClickHandler_Update, delegates["ClickHandler_Update"]);
+        AssignMethod(out _apiDel.ClickHandler_GetMouse1, delegates["ClickHandler_GetMouse1"]);
+        AssignMethod(out _apiDel.ClickHandler_GetMouse2, delegates["ClickHandler_GetMouse2"]);
+        AssignMethod(out _apiDel.ButtonState_New, delegates["ButtonState_New"]);
+        AssignMethod(out _apiDel.ButtonState_IsReleased, delegates["ButtonState_IsReleased"]);
+        AssignMethod(out _apiDel.ButtonState_IsOver, delegates["ButtonState_IsOver"]);
+        AssignMethod(out _apiDel.ButtonState_IsPressed, delegates["ButtonState_IsPressed"]);
+        AssignMethod(out _apiDel.ButtonState_JustReleased, delegates["ButtonState_JustReleased"]);
+        AssignMethod(out _apiDel.ButtonState_JustPressed, delegates["ButtonState_JustPressed"]);
+        AssignMethod(out _apiDel.ButtonState_Update, delegates["ButtonState_Update"]);
         AssignMethod(out _apiDel.Theme_GetBgColor, delegates["Theme_GetBgColor"]);
         AssignMethod(out _apiDel.Theme_GetWhiteColor, delegates["Theme_GetWhiteColor"]);
         AssignMethod(out _apiDel.Theme_GetMainColor, delegates["Theme_GetMainColor"]);
@@ -289,6 +295,8 @@ namespace Lima.API.PB
     public Func<object, IngameIMyTextSurface> TouchScreen_GetSurface;
     public Func<object, int> TouchScreen_GetIndex;
     public Func<object, bool> TouchScreen_IsOnScreen;
+    public Func<object, object> TouchScreen_GetMouse1;
+    public Func<object, object> TouchScreen_GetMouse2;
     public Func<object, Vector2> TouchScreen_GetCursorPosition;
     public Func<object, float> TouchScreen_GetInteractiveDistance;
     public Action<object, float> TouchScreen_SetInteractiveDistance;
@@ -307,12 +315,16 @@ namespace Lima.API.PB
     public Func<object> ClickHandler_New;
     public Func<object, Vector4> ClickHandler_GetHitArea;
     public Action<object, Vector4> ClickHandler_SetHitArea;
-    public Func<object, bool> ClickHandler_IsMouseReleased;
-    public Func<object, bool> ClickHandler_IsMouseOver;
-    public Func<object, bool> ClickHandler_IsMousePressed;
-    public Func<object, bool> ClickHandler_JustReleased;
-    public Func<object, bool> ClickHandler_JustPressed;
-    public Action<object, object> ClickHandler_UpdateStatus;
+    public Action<object, object> ClickHandler_Update;
+    public Func<object, object> ClickHandler_GetMouse1;
+    public Func<object, object> ClickHandler_GetMouse2;
+    public Func<object> ButtonState_New;
+    public Func<object, bool> ButtonState_IsReleased;
+    public Func<object, bool> ButtonState_IsOver;
+    public Func<object, bool> ButtonState_IsPressed;
+    public Func<object, bool> ButtonState_JustReleased;
+    public Func<object, bool> ButtonState_JustPressed;
+    public Action<object, bool, bool> ButtonState_Update;
     public Func<object, Color> Theme_GetBgColor;
     public Func<object, Color> Theme_GetWhiteColor;
     public Func<object, Color> Theme_GetMainColor;
@@ -519,6 +531,8 @@ namespace Lima.API.PB
   }
   public class TouchScreen : WrapperBase<UiKitDelegator>
   {
+    private ButtonState _mouse1;
+    private ButtonState _mouse2;
     /// <summary>
     /// Do not call this ctor directly, unless you have the reference of the original object from the API.
     /// </summary>
@@ -527,6 +541,8 @@ namespace Lima.API.PB
     public IngameIMyTextSurface Surface { get { return Api.TouchScreen_GetSurface.Invoke(InternalObj); } }
     public int Index { get { return Api.TouchScreen_GetIndex.Invoke(InternalObj); } }
     public bool IsOnScreen { get { return Api.TouchScreen_IsOnScreen.Invoke(InternalObj); } }
+    public ButtonState Mouse1 { get { return _mouse1 ?? (_mouse1 = Wrap<ButtonState>(Api.TouchScreen_GetMouse1.Invoke(InternalObj), (obj) => new ButtonState(obj))); } }
+    public ButtonState Mouse2 { get { return _mouse2 ?? (_mouse2 = Wrap<ButtonState>(Api.TouchScreen_GetMouse2.Invoke(InternalObj), (obj) => new ButtonState(obj))); } }
     public Vector2 CursorPosition { get { return Api.TouchScreen_GetCursorPosition.Invoke(InternalObj); } }
     public float InteractiveDistance { get { return Api.TouchScreen_GetInteractiveDistance.Invoke(InternalObj); } }
     public void SetInteractiveDistance(float distance) => Api.TouchScreen_SetInteractiveDistance.Invoke(InternalObj, distance);
@@ -553,6 +569,8 @@ namespace Lima.API.PB
   }
   public class ClickHandler : WrapperBase<UiKitDelegator>
   {
+    private ButtonState _mouse1;
+    private ButtonState _mouse2;
     public ClickHandler() : base(Api.ClickHandler_New()) { }
     /// <summary>
     /// Do not call this ctor directly, unless you have the reference of the original object from the API.
@@ -562,15 +580,26 @@ namespace Lima.API.PB
     /// A Vector4 representing the area on screen that should check for cursor position.
     /// </summary>
     public Vector4 HitArea { get { return Api.ClickHandler_GetHitArea.Invoke(InternalObj); } set { Api.ClickHandler_SetHitArea.Invoke(InternalObj, value); } }
-    public bool IsMouseReleased { get { return Api.ClickHandler_IsMouseReleased.Invoke(InternalObj); } }
-    public bool IsMouseOver { get { return Api.ClickHandler_IsMouseOver.Invoke(InternalObj); } }
-    public bool IsMousePressed { get { return Api.ClickHandler_IsMousePressed.Invoke(InternalObj); } }
-    public bool JustReleased { get { return Api.ClickHandler_JustReleased.Invoke(InternalObj); } }
-    public bool JustPressed { get { return Api.ClickHandler_JustPressed.Invoke(InternalObj); } }
     /// <summary>
     /// This is already called internally by the Touch Manager, only call this if you wanna override the handler status.
     /// </summary>
-    public void UpdateStatus(TouchScreen screen) => Api.ClickHandler_UpdateStatus.Invoke(InternalObj, screen.InternalObj);
+    public void Update(TouchScreen screen) => Api.ClickHandler_Update.Invoke(InternalObj, screen.InternalObj);
+    public ButtonState Mouse1 { get { return _mouse1 ?? (_mouse1 = Wrap<ButtonState>(Api.ClickHandler_GetMouse1.Invoke(InternalObj), (obj) => new ButtonState(obj))); } }
+    public ButtonState Mouse2 { get { return _mouse2 ?? (_mouse2 = Wrap<ButtonState>(Api.ClickHandler_GetMouse2.Invoke(InternalObj), (obj) => new ButtonState(obj))); } }
+  }
+  public class ButtonState : WrapperBase<UiKitDelegator>
+  {
+    public ButtonState() : base(Api.ButtonState_New()) { }
+    /// <summary>
+    /// Do not call this ctor directly, unless you have the reference of the original object from the API.
+    /// </summary>
+    public ButtonState(object internalObject) : base(internalObject) { }
+    public bool IsReleased { get { return Api.ButtonState_IsReleased.Invoke(InternalObj); } }
+    public bool IsOver { get { return Api.ButtonState_IsOver.Invoke(InternalObj); } }
+    public bool IsPressed { get { return Api.ButtonState_IsPressed.Invoke(InternalObj); } }
+    public bool JustReleased { get { return Api.ButtonState_JustReleased.Invoke(InternalObj); } }
+    public bool JustPressed { get { return Api.ButtonState_JustPressed.Invoke(InternalObj); } }
+    public void Update(bool isPressed, bool isInsideArea) => Api.ButtonState_Update.Invoke(InternalObj, isPressed, isInsideArea);
   }
   /// <summary>
   /// <see href="https://github.com/adrianulima/TouchScreenAPI/blob/main/Data/Scripts/Lima/Touch/UiKit/Theme.cs"/>

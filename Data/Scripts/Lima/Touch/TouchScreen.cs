@@ -2,6 +2,7 @@ using Lima.Utils;
 using Sandbox.ModAPI;
 using System;
 using VRage.Game.ModAPI;
+using VRage.Input;
 // using VRage.Game;
 // using VRage.Utils;
 using VRageMath;
@@ -52,6 +53,12 @@ namespace Lima.Touch
         return _rotation;
       }
     }
+
+    public ButtonState Mouse1 = new ButtonState();
+    public ButtonState Mouse2 = new ButtonState();
+
+    public bool WasPressedSinceLastUpdate = false;
+    public bool WasPressed2SinceLastUpdate = false;
 
     public TouchScreen(IMyCubeBlock block, IMyTextSurface surface)
     {
@@ -163,8 +170,27 @@ namespace Lima.Touch
       return (Block == block) && (Surface == surface || Index == SurfaceUtils.GetSurfaceIndex(provider, surface));
     }
 
+    private void UpdateMouseButtons()
+    {
+      var mousePressed = !MyAPIGateway.Gui.IsCursorVisible && (
+        WasPressedSinceLastUpdate ||
+        MyAPIGateway.Input.IsLeftMousePressed() ||
+        MyAPIGateway.Input.IsMiddleMousePressed() ||
+        MyAPIGateway.Input.IsJoystickButtonPressed(MyJoystickButtonsEnum.J06)
+      );
+      var mouse2Pressed = !MyAPIGateway.Gui.IsCursorVisible && (
+        WasPressed2SinceLastUpdate ||
+        MyAPIGateway.Input.IsRightMousePressed() ||
+        MyAPIGateway.Input.IsJoystickButtonPressed(MyJoystickButtonsEnum.J05)
+      );
+
+      Mouse1.Update(mousePressed, IsOnScreen);
+      Mouse2.Update(mouse2Pressed, IsOnScreen);
+    }
+
     public void UpdateAtSimulation()
     {
+      UpdateMouseButtons();
       UpdateAtSimulationEvent?.Invoke();
     }
 

@@ -112,7 +112,6 @@ namespace Lima.Apps.ScreenCalibration
           using (var frame = m_surface.DrawFrame())
           {
             frame.AddRange(GetProgressSprite((float)(ticks - 2) / 6f));
-            frame.Dispose();
           }
           return;
         }
@@ -129,7 +128,6 @@ namespace Lima.Apps.ScreenCalibration
         {
           _app.Update();
           frame.AddRange(_app.GetSprites());
-          frame.Dispose();
         }
       }
       catch (Exception e)

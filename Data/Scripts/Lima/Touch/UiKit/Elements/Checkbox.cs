@@ -34,13 +34,13 @@ namespace Lima.Touch.UiKit.Elements
       var size = GetBoundaries();
 
       Handler.HitArea = new Vector4(Position.X, Position.Y, Position.X + size.X, Position.Y + size.Y);
-      Handler.UpdateStatus(App.Screen);
+      Handler.Update(App.Screen);
 
       if (UseThemeColors)
         ApplyThemeStyle();
 
 
-      if (Handler.JustReleased)
+      if (Handler.Mouse1.JustReleased)
       {
         Value = !Value;
         OnChange(Value);
@@ -76,12 +76,12 @@ namespace Lima.Touch.UiKit.Elements
 
     private void ApplyThemeStyle()
     {
-      if (Handler.IsMousePressed)
+      if (Handler.Mouse1.IsPressed)
       {
         BorderColor = App.Theme.MainColor_8;
         BgColor = App.Theme.MainColor_6;
       }
-      else if (Handler.IsMouseOver)
+      else if (Handler.Mouse1.IsOver)
       {
         BorderColor = App.Theme.MainColor_5;
         BgColor = App.Theme.MainColor_3;

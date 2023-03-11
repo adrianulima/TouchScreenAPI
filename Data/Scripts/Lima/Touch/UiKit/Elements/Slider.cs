@@ -61,12 +61,12 @@ namespace Lima.Touch.UiKit.Elements
         return;
       }
 
-      Handler.UpdateStatus(App.Screen);
+      Handler.Update(App.Screen);
 
       var size = GetSize();
       Handler.HitArea = new Vector4(Position.X, Position.Y, Position.X + size.X, Position.Y + size.Y);
 
-      if (Handler.IsMousePressed)
+      if (Handler.Mouse1.IsPressed)
       {
         var offset = size.Y / size.X;
         var cursorRatio = (App.Cursor.Position.X - Handler.HitArea.X) / (Handler.HitArea.Z - Handler.HitArea.X);
@@ -127,9 +127,9 @@ namespace Lima.Touch.UiKit.Elements
     {
       Bar.Bar.BgColor = App.Theme.MainColor_5;
 
-      if (Handler.IsMousePressed)
+      if (Handler.Mouse1.IsPressed)
         Bar.BgColor = App.Theme.MainColor_3;
-      else if (Handler.IsMouseOver)
+      else if (Handler.Mouse1.IsOver)
         Bar.BgColor = App.Theme.MainColor_3;
       else
         Bar.BgColor = App.Theme.MainColor_2;

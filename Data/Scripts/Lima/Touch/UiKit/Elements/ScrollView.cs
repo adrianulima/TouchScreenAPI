@@ -96,13 +96,13 @@ namespace Lima.Touch.UiKit.Elements
       {
         var bgPos = ScrollBar.Position;
         Handler.HitArea = new Vector4(bgPos.X, bgPos.Y, bgPos.X + ScrollBar.Pixels.X * ThemeScale, bgPos.Y + ScrollBar.Pixels.Y * ThemeScale);
-        Handler.UpdateStatus(App.Screen);
+        Handler.Update(App.Screen);
 
         var barSize = 1 - (-_flexSize.Y / (ScrollBar.Pixels.Y * ThemeScale));
         ScrollBar.Ratio = MathHelper.Clamp(barSize, 0.1f, 0.9f);
 
         var step = ((ScrollWheelStep / -_flexSize.Y));
-        if (Handler.IsMousePressed)
+        if (Handler.Mouse1.IsPressed)
         {
           var cursorRatio = (App.Cursor.Position.Y - Handler.HitArea.Y) / (Handler.HitArea.W - Handler.HitArea.Y);
           Scroll = cursorRatio * (1 + ScrollBar.Ratio) - (ScrollBar.Ratio * 0.5f);
@@ -113,9 +113,9 @@ namespace Lima.Touch.UiKit.Elements
         else
         {
           HandlerContent.HitArea = new Vector4(Position.X, Position.Y, bgPos.X, bgPos.Y + ScrollBar.Pixels.Y * ThemeScale);
-          HandlerContent.UpdateStatus(App.Screen);
+          HandlerContent.Update(App.Screen);
 
-          _mouseOver = HandlerContent.IsMouseOver;
+          _mouseOver = HandlerContent.Mouse1.IsOver;
           if (_mouseOver && _delta != 0)
           {
             var wheel = step * ((float)_delta);
@@ -146,9 +146,9 @@ namespace Lima.Touch.UiKit.Elements
     private void ApplyThemeStyle()
     {
       ScrollBar.BgColor = App.Theme.MainColor_2;
-      if (Handler.IsMousePressed)
+      if (Handler.Mouse1.IsPressed)
         ScrollBar.Bar.BgColor = App.Theme.MainColor_5;
-      else if (Handler.IsMouseOver)
+      else if (Handler.Mouse1.IsOver)
         ScrollBar.Bar.BgColor = App.Theme.MainColor_5;
       else
         ScrollBar.Bar.BgColor = App.Theme.MainColor_4;

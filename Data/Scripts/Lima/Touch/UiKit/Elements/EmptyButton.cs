@@ -26,9 +26,9 @@ namespace Lima.Touch.UiKit.Elements
       {
         var size = GetBoundaries();
         Handler.HitArea = new Vector4(Position.X, Position.Y, Position.X + size.X, Position.Y + size.Y);
-        Handler.UpdateStatus(App.Screen);
+        Handler.Update(App.Screen);
 
-        if (Handler.JustReleased)
+        if (Handler.Mouse1.JustReleased)
           OnChange();
       }
 
@@ -46,9 +46,9 @@ namespace Lima.Touch.UiKit.Elements
         return;
       }
 
-      if (Handler.IsMousePressed)
+      if (Handler.Mouse1.IsPressed)
         BgColor = App.Theme.MainColor_8;
-      else if (Handler.IsMouseOver)
+      else if (Handler.Mouse1.IsOver)
         BgColor = App.Theme.MainColor_5;
       else
         BgColor = App.Theme.MainColor_4;

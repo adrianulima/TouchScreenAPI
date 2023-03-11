@@ -306,6 +306,8 @@ namespace Lima.Touch
         { "TouchScreen_GetSurface", new Func<object, IngameIMyTextSurface>(TouchScreen_GetSurface) },
         { "TouchScreen_GetIndex", new Func<object, int>(TouchScreen_GetIndex) },
         { "TouchScreen_IsOnScreen", new Func<object, bool>(TouchScreen_IsOnScreen) },
+        { "TouchScreen_GetMouse1", new Func<object, object>(TouchScreen_GetMouse1) },
+        { "TouchScreen_GetMouse2", new Func<object, object>(TouchScreen_GetMouse2) },
         { "TouchScreen_GetCursorPosition", new Func<object, Vector2>(TouchScreen_GetCursorPosition) },
         { "TouchScreen_GetInteractiveDistance", new Func<object, float>(TouchScreen_GetInteractiveDistance) },
         { "TouchScreen_SetInteractiveDistance", new Action<object, float>(TouchScreen_SetInteractiveDistance) },
@@ -326,12 +328,17 @@ namespace Lima.Touch
         { "ClickHandler_New", new Func<object>(ClickHandler_New) },
         { "ClickHandler_GetHitArea", new Func<object, Vector4>(ClickHandler_GetHitArea) },
         { "ClickHandler_SetHitArea", new Action<object, Vector4>(ClickHandler_SetHitArea) },
-        { "ClickHandler_IsMouseReleased", new Func<object, bool>(ClickHandler_IsMouseReleased) },
-        { "ClickHandler_IsMouseOver", new Func<object, bool>(ClickHandler_IsMouseOver) },
-        { "ClickHandler_IsMousePressed", new Func<object, bool>(ClickHandler_IsMousePressed) },
-        { "ClickHandler_JustReleased", new Func<object, bool>(ClickHandler_JustReleased) },
-        { "ClickHandler_JustPressed", new Func<object, bool>(ClickHandler_JustPressed) },
-        { "ClickHandler_UpdateStatus", new Action<object, object>(ClickHandler_UpdateStatus) },
+        { "ClickHandler_Update", new Action<object, object>(ClickHandler_Update) },
+        { "ClickHandler_GetMouse1", new Func<object, object>(ClickHandler_GetMouse1) },
+        { "ClickHandler_GetMouse2", new Func<object, object>(ClickHandler_GetMouse2) },
+
+        { "ButtonState_New", new Func<object>(ButtonState_New) },
+        { "ButtonState_IsReleased", new Func<object, bool>(ButtonState_IsReleased) },
+        { "ButtonState_IsOver", new Func<object, bool>(ButtonState_IsOver) },
+        { "ButtonState_IsPressed", new Func<object, bool>(ButtonState_IsPressed) },
+        { "ButtonState_JustReleased", new Func<object, bool>(ButtonState_JustReleased) },
+        { "ButtonState_JustPressed", new Func<object, bool>(ButtonState_JustPressed) },
+        { "ButtonState_Update", new Action<object, bool, bool>(ButtonState_Update) },
       };
 
       return dict;
@@ -377,6 +384,8 @@ namespace Lima.Touch
     private IngameIMyTextSurface TouchScreen_GetSurface(object obj) => (obj as TouchScreen).Surface;
     private int TouchScreen_GetIndex(object obj) => (obj as TouchScreen).Index;
     private bool TouchScreen_IsOnScreen(object obj) => (obj as TouchScreen).IsOnScreen;
+    private ButtonState TouchScreen_GetMouse1(object obj) => (obj as TouchScreen).Mouse1;
+    private ButtonState TouchScreen_GetMouse2(object obj) => (obj as TouchScreen).Mouse2;
     private Vector2 TouchScreen_GetCursorPosition(object obj) => (obj as TouchScreen).CursorPosition;
     private float TouchScreen_GetInteractiveDistance(object obj) => (obj as TouchScreen).InteractiveDistance;
     private void TouchScreen_SetInteractiveDistance(object obj, float distance) => (obj as TouchScreen).InteractiveDistance = distance;
@@ -506,12 +515,17 @@ namespace Lima.Touch
     private ClickHandler ClickHandler_New() => new ClickHandler();
     private Vector4 ClickHandler_GetHitArea(object obj) => (obj as ClickHandler).HitArea;
     private void ClickHandler_SetHitArea(object obj, Vector4 hitArea) => (obj as ClickHandler).HitArea = hitArea;
-    private bool ClickHandler_IsMouseReleased(object obj) => (obj as ClickHandler).IsMouseReleased;
-    private bool ClickHandler_IsMouseOver(object obj) => (obj as ClickHandler).IsMouseOver;
-    private bool ClickHandler_IsMousePressed(object obj) => (obj as ClickHandler).IsMousePressed;
-    private bool ClickHandler_JustReleased(object obj) => (obj as ClickHandler).JustReleased;
-    private bool ClickHandler_JustPressed(object obj) => (obj as ClickHandler).JustPressed;
-    private void ClickHandler_UpdateStatus(object obj, object screen) => (obj as ClickHandler).UpdateStatus(screen as TouchScreen);
+    private void ClickHandler_Update(object obj, object screen) => (obj as ClickHandler).Update(screen as TouchScreen);
+    private ButtonState ClickHandler_GetMouse1(object obj) => (obj as ClickHandler).Mouse1;
+    private ButtonState ClickHandler_GetMouse2(object obj) => (obj as ClickHandler).Mouse2;
+
+    private ButtonState ButtonState_New() => new ButtonState();
+    private bool ButtonState_IsReleased(object obj) => (obj as ButtonState).IsReleased;
+    private bool ButtonState_IsOver(object obj) => (obj as ButtonState).IsOver;
+    private bool ButtonState_IsPressed(object obj) => (obj as ButtonState).IsPressed;
+    private bool ButtonState_JustReleased(object obj) => (obj as ButtonState).JustReleased;
+    private bool ButtonState_JustPressed(object obj) => (obj as ButtonState).JustPressed;
+    private void ButtonState_Update(object obj, bool isPressed, bool isInsideArea) => (obj as ButtonState).Update(isPressed, isInsideArea);
 
     private EmptyButton EmptyButton_New(Action onChange) => new EmptyButton(onChange);
     private ClickHandler EmptyButton_GetHandler(object obj) => (obj as EmptyButton).Handler;
