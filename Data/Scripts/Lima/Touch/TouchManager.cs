@@ -20,12 +20,12 @@ namespace Lima.Touch
 
     public void UpdateAtSimulation()
     {
-      var blockClick = false;
       try
       {
+        var blockClick = false;
         CurrentScreen = null;
 
-        var toolEquipped = MyAPIGateway.Session?.Player?.Character.EquippedTool != null;
+        var toolEquipped = MyAPIGateway.Session?.Player?.Character?.EquippedTool != null;
 
         if (!TouchSession.Instance.ModEnabled
         || MyAPIGateway.Session == null
@@ -90,6 +90,16 @@ namespace Lima.Touch
 
           screen.UpdateAtSimulation();
         }
+
+        if (_blockClick != blockClick)
+        {
+          InputUtils.SetPlayerUseBlacklistState(blockClick);
+          _blockClick = blockClick;
+        }
+        else if (!blockClick && _doubleCheckBlockStateTick-- == 0)
+        {
+          InputUtils.SetPlayerUseBlacklistState(false);
+        }
       }
       catch (Exception e)
       {
@@ -97,16 +107,6 @@ namespace Lima.Touch
 
         if (MyAPIGateway.Session?.Player != null)
           MyAPIGateway.Utilities.ShowNotification($"[ ERROR: {GetType().FullName}: {e.Message} ]", 5000, MyFontEnum.Red);
-      }
-
-      if (_blockClick != blockClick)
-      {
-        InputUtils.SetPlayerUseBlacklistState(blockClick);
-        _blockClick = blockClick;
-      }
-      else if (!blockClick && _doubleCheckBlockStateTick-- == 0)
-      {
-        InputUtils.SetPlayerUseBlacklistState(false);
       }
     }
 
