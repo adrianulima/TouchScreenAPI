@@ -57,7 +57,8 @@ namespace Lima.Apps.ScreenCalibration
 
       _button = new Button("Click", () =>
       {
-        MyClipboardHelper.SetClipboard(_newCoords);
+        if (_step == 3 && MyAPIGateway.Input.IsAnyCtrlKeyPressed())
+          MyClipboardHelper.SetClipboard(_newCoords.ToString());
       });
       _button.Flex = Vector2.Zero;
       _button.Pixels = new Vector2(60, 24);
