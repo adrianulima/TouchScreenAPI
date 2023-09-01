@@ -15,7 +15,7 @@ namespace Lima.Touch
     private readonly List<string> _coordsList = new List<string>();
     private readonly List<string> _customCoordsList = new List<string>();
 
-    private FileStorage<SurfaceCoordsFile> _fileHandler = new FileStorage<SurfaceCoordsFile>("SurfaceCoords.xml");
+    private readonly FileStorage<SurfaceCoordsFile> _fileHandler = new FileStorage<SurfaceCoordsFile>("SurfaceCoords.xml");
 
     public void Init()
     {
@@ -102,7 +102,25 @@ namespace Lima.Touch
         "TOUCH:LargeTurretControlBlock:3:0.34654:-0.199998:0.073605:0.34654:-0.405104:0.278711:0.520536:-0.405104:0.278711",
         "TOUCH:SmallTurretControlBlock:0:-0.143935:0.235472:-0.306565:-0.143935:0.235472:-0.091221:0.144789:0.235472:-0.091221",
         "TOUCH:LargeBlockStandingCockpit:0:-0.372228:-0.08327:-1.12346:-0.372228:-0.156863:-1.06368:-0.111456:-0.156863:-1.06368",
-        "TOUCH:LargeBlockStandingCockpit:1:-0.434899:-0.205596:-0.989841:-0.434899:-0.251315:-0.819213:-0.014451:-0.251315:-0.819213"
+        "TOUCH:LargeBlockStandingCockpit:1:-0.434899:-0.205596:-0.989841:-0.434899:-0.251315:-0.819213:-0.014451:-0.251315:-0.819213",
+        "TOUCH:EmotionControllerLarge:0:1.22559:1.13086:1.13086:1.22559:-1.13086:1.13086:1.22559:-1.13086:-1.13086",
+        "TOUCH:EmotionControllerLarge:1:-0.09949:0.52588:0.72754:-0.09949:0.00616:0.8667:0.4939:0.00616:0.8667",
+        "TOUCH:EmotionControllerLarge:2:-0.08331:-0.12225:1:-0.08331:-0.26782:1.14453:0.47827:-0.26782:1.14453",
+        "TOUCH:LargeProgrammableBlockReskin:0:0.29712:0.86475:-0.55811:0.29712:0.4021:-0.55859:0.55859:0.4021:-0.29712",
+        "TOUCH:LargeProgrammableBlockReskin:1:0.25024:-0.05444:-0.44922:0.17676:-0.17944:-0.37573:0.37378:-0.18054:-0.17761",
+        "TOUCH:LargeFullBlockLCDPanel:0:1.25:1.19434:1.25:1.25:-1.19434:1.25:1.25:-1.19434:-1.25",
+        "TOUCH:LargeDiagonalLCDPanel:0:1.25:1.19434:1.25:1.25:-1.19434:1.25:-1.25:-1.19434:-1.25",
+        "TOUCH:LargeCurvedLCDPanel:0:1.22852:1.19434:0.92383:1.22852:-1.19434:0.92383:-0.92383:-1.19434:-1.22852",
+        "TOUCH:LargeBlockInsetEntertainmentCorner:0:0.84619:0.72314:-0.99854:0.84619:-0.25879:-0.99854:-0.84277:-0.25879:-0.99854",
+        "TOUCH:LargeBlockInsetButtonPanel:0:1.08106:0.56592:0.69238:1.08106:-0.23901:0.69238:1.08106:-0.23901:-0.69238",
+        "TOUCH:LargeBlockInsetButtonPanel:1:0.77637:0.33179:-0.93213:0.77637:-0.10138:-0.93213:0.03107:-0.10138:-0.93213",
+        "TOUCH:LargeBlockInsetButtonPanel:2:-0.03345:0.33179:-0.93213:-0.03345:-0.10138:-0.93213:-0.77881:-0.10138:-0.93213",
+        "TOUCH:LargeMedicalRoomReskin:0:1.25195:0.44702:-1.4082:1.21484:0.23706:-1.4082:1.21484:0.23706:-1.00977",
+        "TOUCH:SmallBlockCapCockpit:0:-0.51563:0.68359:-0.427:-0.51563:0.6333:-0.45605:-0.30518:0.6333:-0.45605",
+        "TOUCH:SmallBlockCapCockpit:1:-0.46753:0.23303:-0.3999:-0.46704:0.04352:-0.34863:-0.20093:0.04227:-0.4375",
+        "TOUCH:SmallBlockCapCockpit:2:-0.15991:0.22644:-0.47192:-0.16016:0.08759:-0.43677:0.16016:0.08759:-0.43677",
+        "TOUCH:SmallBlockCapCockpit:3:0.20105:0.2323:-0.48755:0.20093:0.04227:-0.4375:0.46704:0.04352:-0.34863",
+        "TOUCH:HoloLCDLarge:0:-1.25:1.25:-0.82324:-1.25:-1.25:-0.82324:1.25:-1.25:-0.82324"
       };
       _coordsList.AddRange(coords);
 

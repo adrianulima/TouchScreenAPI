@@ -67,7 +67,7 @@ namespace Lima.Touch
             var builder = (Block.GetObjectBuilderCubeBlock() as Sandbox.Common.ObjectBuilders.MyObjectBuilder_TextPanel);
             if (builder != null)
             {
-              _rotation = (int)builder.SelectedRotationIndex;
+              _rotation = builder.SelectedRotationIndex ?? 0;
               return _rotation;
             }
           }
