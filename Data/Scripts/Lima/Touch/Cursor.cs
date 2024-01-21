@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Sandbox.ModAPI;
 using VRage.Game.GUI.TextPanel;
 using VRageMath;
 
@@ -7,7 +8,7 @@ namespace Lima.Touch
   public class Cursor
   {
     protected readonly List<MySprite> Sprites = new List<MySprite>();
-    private TouchScreen _screen;
+    private readonly TouchScreen _screen;
 
     private MySprite _cursorSprite;
 

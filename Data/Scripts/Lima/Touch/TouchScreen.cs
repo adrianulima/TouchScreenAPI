@@ -1,5 +1,6 @@
 using Lima.Utils;
 using Sandbox.ModAPI;
+using Sandbox.ModAPI.Interfaces;
 using System;
 using VRage.Game.ModAPI;
 using VRage.Input;
@@ -64,12 +65,9 @@ namespace Lima.Touch
           _rotation = 0;
           if (Block is IMyTextPanel)
           {
-            var builder = (Block.GetObjectBuilderCubeBlock() as Sandbox.Common.ObjectBuilders.MyObjectBuilder_TextPanel);
-            if (builder != null)
-            {
-              _rotation = builder.SelectedRotationIndex ?? 0;
-              return _rotation;
-            }
+            var terminalBlock = (IMyTerminalBlock)Block;
+            var rotate = (int)terminalBlock.GetValue<Single>("Rotate");
+            _rotation = rotate > 0 ? rotate / 90 : 0;
           }
         }
         return _rotation;
@@ -105,6 +103,7 @@ namespace Lima.Touch
 
     public void RefreshCoords()
     {
+      ForceRotationUpdate();
       SurfaceCoords coords = SurfaceCoords.Zero;
       var coordString = TouchSession.Instance.SurfaceCoordsMan.GetSurfaceCoords(SubtypeId, Index);
       if (coordString != "")
@@ -178,7 +177,7 @@ namespace Lima.Touch
 
       if (screenCoord.X >= 0 && screenCoord.X <= width && screenCoord.Y >= 0 && screenCoord.Y <= height)
       {
-        var rotatedCoord = SurfaceUtils.RotateScreenCoord(new Vector2(((screenCoord.X / width)), ((screenCoord.Y / height))), Rotation);
+        var rotatedCoord = SurfaceUtils.RotateScreenCoord(new Vector2(screenCoord.X / width, screenCoord.Y / height), Rotation);
         var pX = rotatedCoord.X * Viewport.Width + Viewport.X;
         var pY = rotatedCoord.Y * Viewport.Height + Viewport.Y;
 

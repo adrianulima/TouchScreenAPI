@@ -23,8 +23,8 @@ namespace Lima.Touch.UiKit.Elements
     }
     private Vector2 _flexSize;
 
-    bool _mouseOver = false;
-    int _delta = 0;
+    private bool _mouseOver = false;
+    private int _delta = 0;
 
     public ScrollView(ViewDirection direction = ViewDirection.Column, Color? bgColor = null) : base(direction, bgColor)
     {

@@ -26,7 +26,7 @@ namespace Lima.Touch.UiKit.Elements
     {
       foreach (var child in Children)
       {
-        if (child.IsValidated = ValidateChild((child)))
+        if (child.IsValidated = ValidateChild(child))
           child.Update();
       }
       base.Update();
